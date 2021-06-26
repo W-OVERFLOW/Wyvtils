@@ -4,6 +4,7 @@ import gg.essential.universal.ChatColor
 import net.minecraft.client.Minecraft
 import net.minecraft.command.CommandBase
 import net.minecraft.command.ICommandSender
+import net.minecraft.util.ChatComponentText
 import net.minecraft.util.EnumChatFormatting
 import net.wyvest.wyvtilities.Wyvtilities
 import net.wyvest.wyvtilities.config.WyvtilsConfig
@@ -35,10 +36,11 @@ class WyvtilsCommands : CommandBase() {
                 return
             }
         }
+        val mc = Minecraft.getMinecraft()
         when (args!![0].lowercase(Locale.getDefault())) {
-            "help" -> Minecraft.getMinecraft().thePlayer.sendChatMessage(
+            "help" -> Wyvtilities.sendMessage(
                 """
-            ${ChatColor.DARK_PURPLE}[Wyvtilities] ${ChatColor.LIGHT_PURPLE}Command Help
+            ${EnumChatFormatting.GREEN}Command Help
             /wyvtilities - Open Config Menu
             /wyvtilities help - Shows help for command usage
             /wyvtilities config - Open Config Menu
@@ -53,11 +55,12 @@ class WyvtilsCommands : CommandBase() {
                         WyvtilsConfig.apiKey = args[1]
                         WyvtilsConfig.markDirty()
                         WyvtilsConfig.writeData()
-                        Minecraft.getMinecraft().thePlayer.sendChatMessage(ChatColor.DARK_PURPLE.toString() + "[Wyvtilities] " + EnumChatFormatting.GREEN.toString() + "Successfully saved the API key.")
+                        Wyvtilities.sendMessage(EnumChatFormatting.GREEN.toString() + "Saved API key successfully!")
                     } else {
-                        Minecraft.getMinecraft().thePlayer.sendChatMessage(ChatColor.DARK_PURPLE.toString() + "[Wyvtilities] " + EnumChatFormatting.RED.toString() + "Invalid API key.")
+                        Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "Invalid API key! Please try again.")
                     }
                 } catch (ex: Throwable) {
+                    Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "Invalid API key! Please try again.")
                     ex.printStackTrace()
                 }
             }.run()
@@ -74,7 +77,7 @@ class WyvtilsCommands : CommandBase() {
                 }
             }
             "aliases" -> Wyvtilities.sendMessage(commandAliases.toString())
-            else -> Minecraft.getMinecraft().thePlayer.sendChatMessage(ChatColor.DARK_PURPLE.toString() + "[Wyvtilities] " + ChatColor.LIGHT_PURPLE + "Unknown argument. Type /wyvtilities help for correct usage.")
+            else -> mc.ingameGUI.chatGUI.printChatMessage(ChatComponentText(EnumChatFormatting.DARK_PURPLE.toString() + "[Wyvtilities] " + EnumChatFormatting.LIGHT_PURPLE + "Unknown argument. Type /wyvtilities help for correct usage."))
         }
     }
 

@@ -1,24 +1,21 @@
 package net.wyvest.wyvtilities
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import gg.essential.universal.ChatColor
-import gg.essential.universal.ChatColor.Companion.translateAlternateColorCodes
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
+import net.minecraft.util.ChatComponentText
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
-import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.wyvest.wyvtilities.commands.WyvtilsCommands
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.utils.APIUtil
 import net.wyvest.wyvtilities.utils.Notifications
+import net.wyvest.wyvtilities.utils.Utils
 import java.util.concurrent.atomic.AtomicBoolean
 
 
@@ -31,7 +28,7 @@ class Wyvtilities {
     companion object {
         const val MODID = "wyvtilities"
         const val MOD_NAME = "Wyvtilities"
-        const val VERSION = "0.1.1"
+        const val VERSION = "0.1.2"
 
         @JvmStatic
         val mc: Minecraft
@@ -43,10 +40,7 @@ class Wyvtilities {
         var displayScreen: GuiScreen? = null
 
         fun sendMessage(message: String?) {
-            mc.thePlayer.sendChatMessage(
-                ChatColor.DARK_PURPLE.toString() + "[Hytilities] " +
-                        message?.let { translateAlternateColorCodes('&', it) }
-            )
+            mc.ingameGUI.chatGUI.printChatMessage(ChatComponentText(EnumChatFormatting.DARK_PURPLE.toString() + "[Wyvtilities] " + message))
         }
     }
     @Mod.EventHandler
@@ -56,7 +50,6 @@ class Wyvtilities {
         MinecraftForge.EVENT_BUS.register(this)
         MinecraftForge.EVENT_BUS.register(Notifications)
         ClientCommandHandler.instance.registerCommand(WyvtilsCommands())
-
     }
 
     @SubscribeEvent
@@ -83,7 +76,10 @@ class Wyvtilities {
                 if (!APIUtil.getJSONResponse("https://api.hypixel.net/key?key=$tempApiKey").get("success")
                         .asBoolean
                 ) {
-                    sendMessage(EnumChatFormatting.RED.toString() + "The API Key was... invalid? Make sure you're running this command on Hypixel.")
+                    Utils.checkForHypixel()
+                    if (Utils.isOnHypixel) {
+                        sendMessage(EnumChatFormatting.RED.toString() + "You are not running this command on Hypixel! This mod needs an Hypixel API key!")
+                    }
                     shouldReturn.set(true)
                 }
             }.run()
