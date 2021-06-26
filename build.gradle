@@ -7,7 +7,7 @@ plugins {
 
 ext.kotlin_version = "1.5.20"
 
-version = "0.0.1"
+version = "0.1.1"
 group = "net.wyvest"
 archivesBaseName = "Wyvtilities"
 
@@ -37,7 +37,7 @@ dependencies {
     // you can use implementation (This will not add the library to your jar decreasing the size)
     // The Kotlin Stdlib is about 2MB
     include "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation("gg.essential:Vigilance:123-10809-SNAPSHOT") {
+    include("gg.essential:Vigilance:123-10809-SNAPSHOT") {
         exclude module: "kotlin-reflect"
         exclude module: "kotlin-stdlib-jdk8"
     }

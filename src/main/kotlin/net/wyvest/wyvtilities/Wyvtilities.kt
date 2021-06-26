@@ -31,7 +31,7 @@ class Wyvtilities {
     companion object {
         const val MODID = "wyvtilities"
         const val MOD_NAME = "Wyvtilities"
-        const val VERSION = "0.0.1"
+        const val VERSION = "0.1.1"
 
         @JvmStatic
         val mc: Minecraft
@@ -57,10 +57,6 @@ class Wyvtilities {
         MinecraftForge.EVENT_BUS.register(Notifications)
         ClientCommandHandler.instance.registerCommand(WyvtilsCommands())
 
-    }
-    @Mod.EventHandler
-    fun onFMLLoadComplete(event: FMLLoadCompleteEvent) {
-        Notifications.push("Wyvest", "a", null)
     }
 
     @SubscribeEvent
