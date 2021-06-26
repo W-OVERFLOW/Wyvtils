@@ -1,7 +1,5 @@
-## How to pull from `upstream`
+# Wyvtilities
 
-To set up pulling from the upstream remote 
-run `git remote add upstream https://github.com/Asbyth/ForgeTemplate`. You only need to run this once!
+(also known as Wyvtils)
 
-### To actually pull from upstream:
-`git pull upstream master --rebase` (No merge commits `>:(`)
+A set of utilities for Minecraft Forge 1.8.9, with things like easy GEXP finding and more to come in the future.
