@@ -1,14 +1,14 @@
 [
   {
-    "modid": "forgetemplate",
-    "name": "ForgeTemplate",
-    "description": "An example template",
+    "modid": "wyvtilities",
+    "name": "Wyvtilities",
+    "description": "Utilities by Wyvest.",
     "version": "${version}",
     "mcversion": "${mcversion}",
     "url": "",
     "updateUrl": "",
     "authorList": [
-      ""
+      "Wyvest"
     ],
     "credits": "",
     "logoFile": "",

@@ -1,4 +1,4 @@
-package com.example.template.adapter
+package net.wyvest.wyvtilities.adapter
 
 import net.minecraftforge.fml.common.FMLModContainer
 import net.minecraftforge.fml.common.ILanguageAdapter

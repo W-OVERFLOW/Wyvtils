@@ -2,15 +2,20 @@ plugins {
     id "java"
     id "com.github.johnrengelman.shadow" version "6.1.0"
     id "net.minecraftforge.gradle.forge" version "86b2392"
-    id "org.jetbrains.kotlin.jvm" version "1.4.32"
+    id "org.jetbrains.kotlin.jvm" version "1.5.20"
 }
 
-version = "1.0.0"
-group = "com.example"
-archivesBaseName = "ForgeTemplate"
+ext.kotlin_version = "1.5.20"
 
-sourceCompatibility = targetCompatibility = 1.8
-compileJava.options.encoding = "UTF-8"
+version = "0.0.1"
+group = "net.wyvest"
+archivesBaseName = "Wyvtilities"
+
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
 
 minecraft {
     version = "1.8.9-11.15.1.2318-1.8.9"
@@ -26,10 +31,16 @@ configurations {
 }
 
 dependencies {
+    implementation 'org.projectlombok:lombok:1.18.18'
+
     // WARNING: If you are confident the Kotlin Stdlib will already be on the classpath
     // you can use implementation (This will not add the library to your jar decreasing the size)
     // The Kotlin Stdlib is about 2MB
     include "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation("gg.essential:Vigilance:123-10809-SNAPSHOT") {
+        exclude module: "kotlin-reflect"
+        exclude module: "kotlin-stdlib-jdk8"
+    }
     // How to normally add a dependency (If you don"t want it to be added to the jar)
     // implementation "com.example:example:1.0.0"
     // If you would like to include it (have the library inside your jar) instead use
@@ -58,19 +69,6 @@ processResources {
     }
 }
 
-/**
- * This task simply moves resources so they can be accessed at runtime, Forge is quite weird isn"t it
- */
-task moveResources {
-    doLast {
-        ant.move file: "${buildDir}/resources/main",
-            todir: "${buildDir}/classes/java"
-    }
-}
-
-moveResources.dependsOn processResources
-classes.dependsOn moveResources
-
 // This forces the build task to run shadowJar after
 tasks.reobfJar.dependsOn(tasks.shadowJar)
 
@@ -83,17 +81,48 @@ shadowJar {
 
     exclude 'META-INF', 'META-INF/**'
     exclude 'org/jetbrains/annotations', 'org/jetbrains/annotations/**'
+    relocate("gg.essential", "wyvtilities.essentialgg")
+
+    exclude "LICENSE.md"
+    exclude "pack.mcmeta"
+    exclude "dummyThing"
+    exclude "**/module-info.class"
+    exclude "*.so"
+    exclude "*.dylib"
+    exclude "*.dll"
+    exclude "*.jnilib"
+    exclude "ibxm/**"
+    exclude "com/jcraft/**"
+    exclude "org/lwjgl/**"
+    exclude "net/java/**"
+
+    exclude "META-INF/proguard/**"
+    exclude "META-INF/maven/**"
+    exclude "META-INF/versions/**"
+    exclude "META-INF/com.android.tools/**"
+
+    exclude "fabric.mod.json"
 }
+
+sourceSets {
+    main {
+        output.resourcesDir = file("${buildDir}/classes/kotlin/main")
+    }
+}
+
 repositories {
     mavenCentral()
+    maven { url "https://repo.sk1er.club/repository/maven-public/" }
 }
 compileKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
     }
 }
 compileTestKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
     }
 }
