@@ -48,7 +48,7 @@ object GexpUtils {
             null
         }
     }
-//HAVE MOZZILLA / 5.3252 WYVEST THING YES
+
     fun getGEXP(username: String?): String? {
         var gexp: String? = null
         var uuid: String? = null
