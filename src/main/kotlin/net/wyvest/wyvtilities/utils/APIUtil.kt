@@ -41,6 +41,12 @@ object APIUtil {
             if (response.statusLine.statusCode == 200) {
                 return parser.parse(EntityUtils.toString(entity)).asJsonObject
             } else {
+                if (urlString.startsWith(
+                        "https://api.ashcon.app/mojang/v2/user/"
+                    ) || urlString.startsWith(
+                        "https://api.hypixel.net/"
+                    )
+                ) {
                     val errorStream = entity.content
                     Scanner(errorStream).use { scanner ->
                         scanner.useDelimiter("\\Z")
@@ -50,6 +56,7 @@ object APIUtil {
                         }
                     }
                 }
+            }
         } catch (ex: Throwable) {
             ex.printStackTrace()
             mc.ingameGUI.chatGUI.printChatMessage(ChatComponentText("§cAn error has occured whilst fetching a resource. See logs for more details."))
@@ -58,8 +65,13 @@ object APIUtil {
         }
         return JsonObject()
     }
+
     fun getUUID(username: String): String? {
-        val uuidResponse = getJSONResponse("https://api.mojang.com/users/profiles/minecraft/$username")
-        return uuidResponse["id"].asString
+        val uuidResponse = getJSONResponse("https://api.ashcon.app/mojang/v2/user/$username")
+        if (uuidResponse.has("error")) {
+            mc.ingameGUI.chatGUI.printChatMessage(ChatComponentText("§cFailed with error: ${uuidResponse["reason"].asString}"))
+            return null
+        }
+        return uuidResponse["uuid"].asString.replace("-", "")
     }
 }

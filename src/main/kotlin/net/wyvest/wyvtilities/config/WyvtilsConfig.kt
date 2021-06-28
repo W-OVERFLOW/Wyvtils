@@ -20,6 +20,10 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     @Property(type = PropertyType.TEXT, name = "API Key", description = "The API key, used for some features.", category = "API")
     var apiKey = ""
 
+    @kotlin.jvm.JvmField
+    @Property(type = PropertyType.SWITCH, name = "Automatically Check GEXP", description = "Automatically check your GEXP after you win a Hypixel game. \n Only available for winning games at the time due to API restrictions and requires an API key..", category = "GEXP")
+    var autoGetGEXP = true
+
     @Property(type = PropertyType.PARAGRAPH, name = "TGMDevelopment", description = "Utilities", category = "Information", subcategory = "Credits")
     var credits1 = ""
 

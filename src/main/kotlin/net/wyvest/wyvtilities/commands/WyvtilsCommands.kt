@@ -12,6 +12,7 @@ import net.wyvest.wyvtilities.utils.APIUtil
 import net.wyvest.wyvtilities.utils.GexpUtils
 import net.wyvest.wyvtilities.utils.Notifications
 import java.util.*
+import kotlin.Exception
 
 
 class WyvtilsCommands : CommandBase() {
@@ -48,9 +49,10 @@ class WyvtilsCommands : CommandBase() {
             """.trimIndent()
             )
             "config" -> Wyvtilities.displayScreen = WyvtilsConfig.gui()
-            "setkey" -> Thread {
+            "setkey" -> Wyvtilities.threadPool.submit {
                 try {
-                    if (args.size == 1 && APIUtil.getJSONResponse("https://api.hypixel.net/key?key=" + args[1]).get("success").asBoolean
+                    if (args.size == 1 && APIUtil.getJSONResponse("https://api.hypixel.net/key?key=" + args[1])
+                            .get("success").asBoolean
                     ) {
                         WyvtilsConfig.apiKey = args[1]
                         WyvtilsConfig.markDirty()
@@ -63,16 +65,38 @@ class WyvtilsCommands : CommandBase() {
                     Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "Invalid API key! Please try again.")
                     ex.printStackTrace()
                 }
-            }.run()
+            }
             "gexp" -> {
                 if (WyvtilsConfig.apiKey == "") {
                     Wyvtilities.sendMessage(ChatColor.RED.toString() + "You need to provide a valid API key to run this command! Type /api new to autoset a key.")
                 } else {
-
                     if (args.size <= 1) {
-                        Notifications.push("Wyvtilities", "You currently have " + GexpUtils.getGEXP() + " guild EXP.")
+                        var gexp: String? = null
+                        try {
+                            gexp = GexpUtils.getGEXP().toString()
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                        if (gexp != null) {
+                            Notifications.push("Wyvtilities", "You currently have $gexp guild EXP.")
+                        } else {
+                            Notifications.push("Wyvtilities", "There was an error trying to get your guild EXP.")
+                        }
                     } else {
-                        Notifications.push("Wyvtilities", args[1] + " currently has " + GexpUtils.getGEXP(args[1]) + " guild EXP.")
+                        var gexp: String? = null
+                        try {
+                            gexp = GexpUtils.getGEXP(args[1]).toString()
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                        if (gexp != null) {
+                            Notifications.push("Wyvtilities", args[1] + " currently has " + gexp + " guild EXP.")
+                        } else {
+                            Notifications.push(
+                                "Wyvtilities",
+                                "There was error trying to get " + args[1] + "'s guild EXP."
+                            )
+                        }
                     }
                 }
             }
