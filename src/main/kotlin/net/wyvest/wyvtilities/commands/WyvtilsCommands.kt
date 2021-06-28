@@ -71,32 +71,9 @@ class WyvtilsCommands : CommandBase() {
                     Wyvtilities.sendMessage(ChatColor.RED.toString() + "You need to provide a valid API key to run this command! Type /api new to autoset a key.")
                 } else {
                     if (args.size <= 1) {
-                        var gexp: String? = null
-                        try {
-                            gexp = GexpUtils.getGEXP().toString()
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                        if (gexp != null) {
-                            Notifications.push("Wyvtilities", "You currently have $gexp guild EXP.")
-                        } else {
-                            Notifications.push("Wyvtilities", "There was an error trying to get your guild EXP.")
-                        }
+                        Notifications.push("Wyvtilities", "You currently have " + GexpUtils.getGEXP()+ " guild EXP.")
                     } else {
-                        var gexp: String? = null
-                        try {
-                            gexp = GexpUtils.getGEXP(args[1]).toString()
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                        if (gexp != null) {
-                            Notifications.push("Wyvtilities", args[1] + " currently has " + gexp + " guild EXP.")
-                        } else {
-                            Notifications.push(
-                                "Wyvtilities",
-                                "There was error trying to get " + args[1] + "'s guild EXP."
-                            )
-                        }
+                        Notifications.push("Wyvtilities", args[1] + " currently has " + GexpUtils.getGEXP(args[1]) + " guild EXP.")
                     }
                 }
             }

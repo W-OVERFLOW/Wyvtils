@@ -41,11 +41,8 @@ object APIUtil {
             if (response.statusLine.statusCode == 200) {
                 return parser.parse(EntityUtils.toString(entity)).asJsonObject
             } else {
-                if (urlString.startsWith(
-                        "https://api.ashcon.app/mojang/v2/user/"
-                    ) || urlString.startsWith(
-                        "https://api.hypixel.net/"
-                    )
+                if (urlString.startsWithAny("https://api.ashcon.app/mojang/v2/user/",
+                        "https://api.hypixel.net/")
                 ) {
                     val errorStream = entity.content
                     Scanner(errorStream).use { scanner ->
