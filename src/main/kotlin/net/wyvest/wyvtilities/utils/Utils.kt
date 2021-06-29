@@ -2,6 +2,7 @@ package net.wyvest.wyvtilities.utils
 
 import net.minecraft.client.Minecraft
 
+
 object Utils {
     @JvmField
     var isOnHypixel = false

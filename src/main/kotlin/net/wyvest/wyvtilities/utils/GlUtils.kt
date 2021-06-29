@@ -12,39 +12,6 @@ import org.lwjgl.opengl.GL11
  * https://github.com/TGMDevelopment/TGMLib/blob/main/LICENSE
  */
 object GlUtils {
-    /**
-     * @param x      The x coordinate to start the box.
-     * @param y      The y coordinate to start the box.
-     * @param width  The width of the box.
-     * @param height The height of the box.
-     * @author MatthewTGM
-     */
-    fun startScissorBox(x: Int, y: Int, width: Int, height: Int) {
-        GL11.glPushMatrix()
-        GL11.glEnable(GL11.GL_SCISSOR_TEST)
-        GL11.glScissor(x, y, width, height)
-    }
-
-    /**
-     * @param x      The x coordinate to start the box.
-     * @param y      The y coordinate to start the box.
-     * @param width  The width of the box.
-     * @param height The height of the box.
-     * @author MatthewTGM
-     */
-    fun startScissorBox(x: Float, y: Float, width: Float, height: Float) {
-        GL11.glPushMatrix()
-        GL11.glEnable(GL11.GL_SCISSOR_TEST)
-        GL11.glScissor(x.toInt(), y.toInt(), width.toInt(), height.toInt())
-    }
-
-    /**
-     * @author MatthewTGM
-     */
-    fun endScissorBox() {
-        GL11.glDisable(GL11.GL_SCISSOR_TEST)
-        GL11.glPopMatrix()
-    }
 
     fun totalScissor(xPosition: Float, yPosition: Float, width: Float, height: Float) {
         val scaledResolution = ScaledResolution(Minecraft.getMinecraft())

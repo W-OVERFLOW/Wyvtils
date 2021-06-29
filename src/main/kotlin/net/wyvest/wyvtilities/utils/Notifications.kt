@@ -11,9 +11,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent
 import net.wyvest.wyvtilities.utils.ColorRGB.ColorRGB
+import net.wyvest.wyvtilities.utils.GlUtils.drawRectangle
+import net.wyvest.wyvtilities.utils.GlUtils.totalScissor
 import org.lwjgl.opengl.GL11
 import java.awt.Color
-import kotlin.collections.ArrayList
+
 
 /**
  * Adapted from TGMLib under GPLv3
@@ -70,8 +72,8 @@ object Notifications {
             (paddingHeight * 2 + textLines * mc.fontRendererObj.FONT_HEIGHT + (textLines - 1) * textDistance).toFloat()
         val rectX = res.scaledWidth / 2f - rectWidth / 2f
         val rectY = 5f
-        val mouseX: Int = MouseUtils.getMouseX()
-        val mouseY: Int = MouseUtils.getMouseY()
+        val mouseX: Float = MouseUtils.getMouseX().toFloat()
+        val mouseY: Float = MouseUtils.getMouseY().toFloat()
         val mouseOver =
             mouseX >= rectX && mouseX <= rectX + rectWidth && mouseY >= rectY && mouseY <= rectY + rectHeight
         notification.mouseOverAdd =
@@ -81,17 +83,13 @@ object Notifications {
         GlStateManager.enableBlend()
         GlStateManager.enableAlpha()
         GlStateManager.enableDepth()
-        GlUtils.drawRectangle(
-            rectX,
-            rectY,
-            rectWidth,
-            rectHeight,
+        drawRectangle(rectX, rectY, rectWidth, rectHeight,
             ColorRGB(0, 0, 0, MathUtils.clamp(opacity, 5, 255).toInt()) to ColorRGB
         )
         if (notification.time > 0.1f) {
             GL11.glEnable(GL11.GL_SCISSOR_TEST)
-            GlUtils.totalScissor(rectX, rectY, rectWidth, rectHeight)
-            val color: Int = Color(255, 255, 255, MathUtils.clamp(opacity, 2, 255).toInt()).rgb
+            totalScissor(rectX, rectY, rectWidth, rectHeight)
+            val color = Color(255, 255, 255, MathUtils.clamp(opacity, 2, 255).toInt()).rgb
             var i = 0
             for (line in wrappedTitle) {
                 mc.fontRendererObj.drawString(
@@ -129,7 +127,7 @@ object Notifications {
 
     private fun wrapTextLines(text: String, fontRenderer: FontRenderer, lineWidth: Int, split: String): List<String> {
         val wrapped = wrapText(text, fontRenderer, lineWidth, split)
-        return if (wrapped == "") ArrayList() else listOf(wrapped)
+        return if (wrapped == "") emptyList() else wrapped.split("\n".toRegex()).toList()
     }
 
     private fun wrapText(text: String, fontRenderer: FontRenderer, lineWidth: Int, split: String): String {
@@ -139,7 +137,7 @@ object Notifications {
         for (i in words.indices) {
             var word = words[i]
             if (i != words.size - 1) word += split
-            val wordLength: Int = fontRenderer.getStringWidth(word)
+            val wordLength = fontRenderer.getStringWidth(word)
             if (lineLength + wordLength <= lineWidth) {
                 output.append(word)
                 lineLength += wordLength

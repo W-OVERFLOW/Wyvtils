@@ -67,7 +67,6 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude "mcmod.info"
     }
-    rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
 // This forces the build task to run shadowJar after
@@ -125,12 +124,5 @@ compileTestKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
         freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
-    }
-}
-
-jar {
-    manifest {
-        attributes "ModSide": "CLIENT",
-                'FMLAT': 'wyvtilities_at.cfg'
     }
 }

@@ -1,7 +1,5 @@
 package net.wyvest.wyvtilities.listener
 
-import gg.essential.universal.ChatColor
-import net.minecraft.client.Minecraft
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.event.world.WorldEvent
@@ -12,7 +10,6 @@ import net.wyvest.wyvtilities.utils.APIUtil
 import net.wyvest.wyvtilities.utils.GexpUtils
 import net.wyvest.wyvtilities.utils.Notifications
 import net.wyvest.wyvtilities.utils.Utils
-import java.lang.Exception
 import java.util.concurrent.atomic.AtomicBoolean
 
 
@@ -26,28 +23,7 @@ object ChatListener {
             Adapted from Moulberry's NotEnoughUpdates, under the Attribution-NonCommercial 3.0 license.
             https://github.com/Moulberry/NotEnoughUpdates
          */
-        if (Minecraft.getMinecraft().ingameGUI.displayedTitle.contains("victory", true)) {
-            if (WyvtilsConfig.autoGetGEXP && !victoryDetected) {
-                victoryDetected = true
-                if (WyvtilsConfig.apiKey == "") {
-                    Wyvtilities.sendMessage(ChatColor.RED.toString() + "You need to provide a valid API key to run this command! Type /api new to autoset a key.")
-                } else {
-                    var gexp : String? = null
-                    Wyvtilities.threadPool.submit{
-                        try {
-                            gexp = GexpUtils.getGEXP().toString()
-                        } catch (e : Exception) {
-                            e.printStackTrace()
-                        }
-                    }
-                    if (gexp != null) {
-                        Notifications.push("Wyvtilities", "You currently have $gexp guild EXP.")
-                    } else {
-                        Notifications.push("Wyvtilities", "There was an error trying to get your guild EXP.")
-                    }
-                }
-            }
-        }
+        //Stolen code starts here
         if (unformattedText.startsWith("Your new API key is ")) {
             val tempApiKey = unformattedText.substring("Your new API key is ".length)
             val shouldReturn = AtomicBoolean(false)
@@ -67,7 +43,20 @@ object ChatListener {
             WyvtilsConfig.markDirty()
             WyvtilsConfig.writeData()
             Wyvtilities.sendMessage(EnumChatFormatting.GREEN.toString() + "Your API Key has been automatically configured.")
+            return
+        }
+        //Stolen code ends here
 
+        if (WyvtilsConfig.autoGetGEXP) {
+            for (trigger in Wyvtilities.autoGGRegex) {
+                val triggerPattern = trigger.asString.toPattern()
+                if (triggerPattern.matcher(unformattedText).matches()) {
+                    Wyvtilities.threadPool.submit{
+                        GexpUtils.getGEXP()
+                        Notifications.push("Wyvtilities", "You currently have " + GexpUtils.gexp + " guild EXP.")
+                    }
+                }
+            }
         }
     }
 

@@ -4,6 +4,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import net.minecraft.client.Minecraft
 import net.minecraft.util.ChatComponentText
+import net.minecraft.util.EnumChatFormatting
 import net.wyvest.wyvtilities.Wyvtilities
 import org.apache.http.HttpRequest
 import org.apache.http.HttpResponse
@@ -56,7 +57,7 @@ object APIUtil {
             }
         } catch (ex: Throwable) {
             ex.printStackTrace()
-            mc.ingameGUI.chatGUI.printChatMessage(ChatComponentText("§cAn error has occured whilst fetching a resource. See logs for more details."))
+            Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "An error has occured whilst fetching a resource. See logs for more details.")
         } finally {
             client.close()
         }
@@ -66,7 +67,7 @@ object APIUtil {
     fun getUUID(username: String): String? {
         val uuidResponse = getJSONResponse("https://api.ashcon.app/mojang/v2/user/$username")
         if (uuidResponse.has("error")) {
-            mc.ingameGUI.chatGUI.printChatMessage(ChatComponentText("§cFailed with error: ${uuidResponse["reason"].asString}"))
+            Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "Failed with error: ${uuidResponse["reason"].asString}")
             return null
         }
         return uuidResponse["uuid"].asString.replace("-", "")

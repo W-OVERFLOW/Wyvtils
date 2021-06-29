@@ -21,7 +21,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     var apiKey = ""
 
     @kotlin.jvm.JvmField
-    @Property(type = PropertyType.SWITCH, name = "Automatically Check GEXP", description = "Automatically check your GEXP after you win a Hypixel game. \n Only available for winning games at the time due to API restrictions and requires an API key..", category = "GEXP")
+    @Property(type = PropertyType.SWITCH, name = "Automatically Check GEXP", description = "Automatically check your GEXP after you win a Hypixel game. Requires an API Key.", category = "GEXP")
     var autoGetGEXP = true
 
     @Property(type = PropertyType.PARAGRAPH, name = "TGMDevelopment", description = "Utilities", category = "Information", subcategory = "Credits")
@@ -41,6 +41,8 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
             "Credits",
             "This mod would not be possible without OSS projects and other forms of help. This page lists the people who helped make this mod."
         )
+        addDependency("apiKey", "modToggled")
+        addDependency("autoGetGEXP", "modToggled")
     }
 
     private object ConfigSorting : SortingBehavior() {
@@ -48,7 +50,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
             return Comparator { o1, o2 ->
                 if (o1.name == "General") return@Comparator -1
                 if (o2.name == "General") return@Comparator 1
-                else compareValuesBy(o2,o1) {
+                else compareValuesBy(o1, o2) {
                     it.name
                 }
             }

@@ -12,7 +12,6 @@ import net.wyvest.wyvtilities.utils.APIUtil
 import net.wyvest.wyvtilities.utils.GexpUtils
 import net.wyvest.wyvtilities.utils.Notifications
 import java.util.*
-import kotlin.Exception
 
 
 class WyvtilsCommands : CommandBase() {
@@ -71,9 +70,15 @@ class WyvtilsCommands : CommandBase() {
                     Wyvtilities.sendMessage(ChatColor.RED.toString() + "You need to provide a valid API key to run this command! Type /api new to autoset a key.")
                 } else {
                     if (args.size <= 1) {
-                        Notifications.push("Wyvtilities", "You currently have " + GexpUtils.getGEXP()+ " guild EXP.")
+                        Wyvtilities.threadPool.submit{
+                            GexpUtils.getGEXP()
+                            Notifications.push("Wyvtilities", "You currently have " + GexpUtils.gexp + " guild EXP.")
+                        }
                     } else {
-                        Notifications.push("Wyvtilities", args[1] + " currently has " + GexpUtils.getGEXP(args[1]) + " guild EXP.")
+                        Wyvtilities.threadPool.submit{
+                            GexpUtils.getGEXP(args[1])
+                            Notifications.push("Wyvtilities", args[1] + " currently have " + GexpUtils.gexp + " guild EXP.")
+                        }
                     }
                 }
             }
