@@ -7,7 +7,7 @@ plugins {
 
 ext.kotlin_version = "1.5.20"
 
-version = "0.3.2"
+version = "0.3.3"
 group = "net.wyvest"
 archivesBaseName = "Wyvtilities"
 
@@ -32,11 +32,7 @@ configurations {
 
 dependencies {
     implementation 'org.projectlombok:lombok:1.18.18'
-    include "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.20"
-    include("gg.essential:Vigilance:125-10809-SNAPSHOT") {
-        exclude module: "kotlin-reflect"
-        exclude module: "kotlin-stdlib-jdk8"
-    }
+    include("gg.essential:Vigilance:125-10809-SNAPSHOT")
 }
 
 /**

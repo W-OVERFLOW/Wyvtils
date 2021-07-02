@@ -11,7 +11,7 @@ import java.io.File
 
 object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities", sortingBehavior = ConfigSorting)  {
 
-    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.3.2, made by Wyvest.", category = "Information")
+    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.3.3, made by Wyvest.", category = "Information")
     var paragraph = ""
 
     @kotlin.jvm.JvmField
