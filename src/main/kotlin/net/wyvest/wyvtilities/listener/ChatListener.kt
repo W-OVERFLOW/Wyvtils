@@ -62,21 +62,24 @@ object ChatListener {
         }
 
         if (WyvtilsConfig.autoGetGEXP && WyvtilsConfig.isRegexLoaded) {
-            for (trigger in Wyvtilities.autoGGRegex) {
-                val triggerPattern = Pattern.compile(trigger.toString())
-                if (triggerPattern.matcher(unformattedText).matches()) {
-                    Wyvtilities.threadPool.submit {
-                        GexpUtils.getGEXP()
-                        Notifications.push("Wyvtilities", "You currently have " + GexpUtils.gexp + " guild EXP.")
+            if (!victoryDetected) {
+                for (trigger in Wyvtilities.autoGGRegex) {
+                    val triggerPattern = Pattern.compile(trigger.toString())
+                    if (triggerPattern.matcher(unformattedText).matches()) {
+                        victoryDetected = true
+                        Wyvtilities.threadPool.submit {
+                            GexpUtils.getGEXP()
+                            Notifications.push("Wyvtilities", "You currently have " + GexpUtils.gexp + " guild EXP.")
+                        }
+                        return
                     }
-                    return
                 }
             }
-            if (mc.ingameGUI.displayedTitle.containsAny("win", "won", "over", "end") && !victoryDetected) {
+            if (mc.ingameGUI.displayedTitle.containsAny("win", "won", "over", "end", "victory") && !victoryDetected) {
+                victoryDetected = true
                 Wyvtilities.threadPool.submit {
                     GexpUtils.getGEXP()
                     Notifications.push("Wyvtilities", "You currently have " + GexpUtils.gexp + " guild EXP.")
-                    victoryDetected = true
                 }
                 return
             }
@@ -85,7 +88,7 @@ object ChatListener {
     }
 
     @SubscribeEvent
-    fun onWorldEnter(event: WorldEvent.Load) {
+    fun onWorldEnter(event: WorldEvent.Unload) {
         victoryDetected = false
     }
 
