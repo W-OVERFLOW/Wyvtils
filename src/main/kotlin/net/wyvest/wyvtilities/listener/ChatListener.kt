@@ -10,10 +10,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.wyvest.wyvtilities.Wyvtilities
 import net.wyvest.wyvtilities.Wyvtilities.Companion.mc
 import net.wyvest.wyvtilities.config.WyvtilsConfig
-import net.wyvest.wyvtilities.utils.APIUtil
-import net.wyvest.wyvtilities.utils.GexpUtils
-import net.wyvest.wyvtilities.utils.Notifications
-import net.wyvest.wyvtilities.utils.Utils
+import net.wyvest.wyvtilities.utils.*
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.regex.Pattern
@@ -74,6 +71,14 @@ object ChatListener {
                     }
                     return
                 }
+            }
+            if (mc.ingameGUI.displayedTitle.containsAny("win", "won", "over", "end") && !victoryDetected) {
+                Wyvtilities.threadPool.submit {
+                    GexpUtils.getGEXP()
+                    Notifications.push("Wyvtilities", "You currently have " + GexpUtils.gexp + " guild EXP.")
+                    victoryDetected = true
+                }
+                return
             }
         }
         return

@@ -33,7 +33,7 @@ class Wyvtilities {
     companion object {
         const val MODID = "wyvtilities"
         const val MOD_NAME = "Wyvtilities"
-        const val VERSION = "0.3.0"
+        const val VERSION = "0.3.1"
         @JvmStatic
         val mc: Minecraft
             get() = Minecraft.getMinecraft()
@@ -62,7 +62,7 @@ class Wyvtilities {
         isConfigInitialized = true
         if (WyvtilsConfig.showUpdateNotification) {
             try {
-                latestVersion = APIUtil.getJSONResponse("https://wyvest.net/wyvtilities.json").get("latest").asString
+                latestVersion = APIUtil.getJSONResponse("https://raw.githubusercontent.com/wyvest/wyvest.net/master/wyvtilities.json").get("latest").asString
             } catch (e : Exception) {
                 e.printStackTrace()
                 Notifications.push("Wyvtilities", "Wyvtilities was unable to fetch the latest version, so you will not be notified of any updates this launch.")
@@ -94,22 +94,22 @@ class Wyvtilities {
         MinecraftForge.EVENT_BUS.register(ChatListener)
         ClientCommandHandler.instance.registerCommand(WyvtilsCommands())
         try {
-            autoGGRegex = APIUtil.getJSONResponse("https://wyvest.net/wyvtilities.json").getAsJsonArray("triggers")
+            autoGGRegex = APIUtil.getJSONResponse("https://raw.githubusercontent.com/wyvest/wyvest.net/master/wyvtilities.json").getAsJsonArray("triggers")
             WyvtilsConfig.isRegexLoaded = true
             WyvtilsConfig.markDirty()
             WyvtilsConfig.writeData()
         } catch (e : Exception) {
             e.printStackTrace()
+            Notifications.push("Wyvtilities", "Wyvtilities failed to get regexes required for the Auto Get GEXP feature!")
             WyvtilsConfig.isRegexLoaded = false
             WyvtilsConfig.markDirty()
             WyvtilsConfig.writeData()
-            Notifications.push("Wyvtilities", "Wyvtilities failed to get regexes required for the Auto Get GEXP feature, so it was disabled.")
         }
     }
 
     @Mod.EventHandler
     fun onPostInitialization(event: FMLPostInitializationEvent) {
-        if (VERSION != latestVersion && latestVersion != null && WyvtilsConfig.showUpdateNotification) {
+        if (VERSION != latestVersion && WyvtilsConfig.showUpdateNotification && latestVersion != null) {
             Notifications.push("Wyvtilities", "Wyvtilities is outdated! Update to the latest version by clicking here!", this::openDownloadURI)
         }
     }

@@ -11,7 +11,7 @@ import java.io.File
 
 object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities", sortingBehavior = ConfigSorting)  {
 
-    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.3.0, made by Wyvest.", category = "Information")
+    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.3.1, made by Wyvest.", category = "Information")
     var paragraph = ""
 
     @kotlin.jvm.JvmField
@@ -19,12 +19,12 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     var apiKey = ""
 
     @kotlin.jvm.JvmField
-    @Property(type = PropertyType.SWITCH, name = "is regex loaded", category = "GEXP", hidden = true)
-    var isRegexLoaded = true
-
-    @kotlin.jvm.JvmField
     @Property(type = PropertyType.SWITCH, name = "Automatically Check GEXP", description = "Automatically check your GEXP after you win a Hypixel game. Requires an API Key.", category = "GEXP")
     var autoGetGEXP = true
+
+    @kotlin.jvm.JvmField
+    @Property(type = PropertyType.SWITCH, name = "is regex loaded", category = "GEXP", hidden = true)
+    var isRegexLoaded = true
 
     @kotlin.jvm.JvmField
     @Property(type = PropertyType.SWITCH, name = "Show Update Notification", description = "Show a notification when you start Minecraft informing you of new updates.", category = "General")
@@ -73,8 +73,8 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
                 _: Int ->
             ChatListener.changeTextColor = true
         }
-        addDependency("autoGetGEXP", "isRegexLoaded")
         addDependency("textColor", "highlightName")
+        addDependency("autoGetGEXP", "isRegexLoaded")
     }
 
     private object ConfigSorting : SortingBehavior() {
