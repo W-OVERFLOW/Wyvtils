@@ -44,7 +44,7 @@ class WyvtilsCommands : CommandBase() {
             /wyvtilities - Open Config Menu
             /wyvtilities help - Shows help for command usage
             /wyvtilities config - Open Config Menu
-            /wyvtilities aliases - Shows aliases for this command.
+            /wyvtilities aliases - Shows aliases for /wyvtilities.
             """.trimIndent()
             )
             "config" -> Wyvtilities.displayScreen = WyvtilsConfig.gui()

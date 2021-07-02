@@ -2,8 +2,6 @@ package net.wyvest.wyvtilities.utils
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import net.minecraft.client.Minecraft
-import net.minecraft.util.ChatComponentText
 import net.minecraft.util.EnumChatFormatting
 import net.wyvest.wyvtilities.Wyvtilities
 import org.apache.http.HttpRequest
@@ -23,10 +21,9 @@ import java.util.*
  */
 object APIUtil {
     private val parser = JsonParser()
-    private val mc = Minecraft.getMinecraft()
 
     private val builder: HttpClientBuilder =
-        HttpClients.custom().setUserAgent("Wyvtilities/" + Wyvtilities.VERSION)
+        HttpClients.custom().setUserAgent("Wyvtilities/" + Wyvtilities.VERSION + " (Mozilla Firefox)")
             .addInterceptorFirst { request: HttpRequest, _: HttpContext? ->
                 if (!request.containsHeader("Pragma")) request.addHeader("Pragma", "no-cache")
                 if (!request.containsHeader("Cache-Control")) request.addHeader("Cache-Control", "no-cache")
@@ -63,7 +60,6 @@ object APIUtil {
         }
         return JsonObject()
     }
-
     fun getUUID(username: String): String? {
         val uuidResponse = getJSONResponse("https://api.ashcon.app/mojang/v2/user/$username")
         if (uuidResponse.has("error")) {

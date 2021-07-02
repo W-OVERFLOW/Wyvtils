@@ -7,7 +7,7 @@ plugins {
 
 ext.kotlin_version = "1.5.20"
 
-version = "0.2.0"
+version = "0.3.0"
 group = "net.wyvest"
 archivesBaseName = "Wyvtilities"
 
@@ -32,19 +32,11 @@ configurations {
 
 dependencies {
     implementation 'org.projectlombok:lombok:1.18.18'
-
-    // WARNING: If you are confident the Kotlin Stdlib will already be on the classpath
-    // you can use implementation (This will not add the library to your jar decreasing the size)
-    // The Kotlin Stdlib is about 2MB
     include "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    include("gg.essential:Vigilance:123-10809-SNAPSHOT") {
+    include("gg.essential:Vigilance:125-10809-SNAPSHOT") {
         exclude module: "kotlin-reflect"
         exclude module: "kotlin-stdlib-jdk8"
     }
-    // How to normally add a dependency (If you don"t want it to be added to the jar)
-    // implementation "com.example:example:1.0.0"
-    // If you would like to include it (have the library inside your jar) instead use
-    // include "com.example:example:1.0.0"
 }
 
 /**
@@ -113,6 +105,8 @@ sourceSets {
 repositories {
     mavenCentral()
     maven { url "https://repo.sk1er.club/repository/maven-public/" }
+    jcenter()
+    maven { url 'https://jitpack.io' }
 }
 compileKotlin {
     kotlinOptions {
