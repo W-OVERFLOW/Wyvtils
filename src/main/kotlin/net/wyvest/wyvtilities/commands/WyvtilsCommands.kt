@@ -45,6 +45,8 @@ class WyvtilsCommands : CommandBase() {
             /wyvtilities help - Shows help for command usage
             /wyvtilities config - Open Config Menu
             /wyvtilities aliases - Shows aliases for /wyvtilities.
+            /wyvtilities gexp [username] - Shows the GEXP of the specified username. If username isn't present, it will default to your GEXP.
+            /wyvtilities setkey {api} - Sets the API key.
             """.trimIndent()
             )
             "config" -> Wyvtilities.displayScreen = WyvtilsConfig.gui()
