@@ -58,7 +58,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     @Property(
         type = PropertyType.SELECTOR,
         name = "Text Color",
-        description = "Change the text color for the HUD.",
+        description = "Change the text color for the highlight.",
         category = "Chat",
         options = ["Black", "Dark Blue", "Dark Green", "Dark Aqua", "Dark Red", "Dark Purple", "Gold", "Gray", "Dark Gray", "Blue", "Green", "Aqua", "Red", "Light Purple", "Yellow", "White"]
     )
