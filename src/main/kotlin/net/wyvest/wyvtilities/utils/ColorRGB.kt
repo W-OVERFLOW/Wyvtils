@@ -6,6 +6,7 @@ import java.awt.Color
  * Adapted from TGMLib under GPLv3
  * https://github.com/TGMDevelopment/TGMLib/blob/main/LICENSE
  */
+@Suppress("unused")
 object ColorRGB {
     private var r = 0
     private var g = 0

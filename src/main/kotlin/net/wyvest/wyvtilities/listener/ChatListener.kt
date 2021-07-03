@@ -19,19 +19,10 @@ import java.util.regex.Pattern
 
 object ChatListener {
     private var victoryDetected = false
-    lateinit var color : String
+    lateinit var color: String
     var changeTextColor = false
-    //stolen regexes from Hychat (ty moulberry)
-    private const val PARTY_TALK = "Party > (.*)"
-    private const val PARTY_TALK_HYTILS = "P > (.*)"
 
-    //ok now these are mine although very based off of hychat regex
-    private const val GUILD_TALK = "Guild > (.*)"
-    private const val GUILD_TALK_HYTILS = "G > (.*)"
-    private const val OFFICER_TALK = "Officer > (.*)"
-    private const val OFFICER_TALK_HYTILS = "O > (.*)"
-
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     fun onMessageReceived(event: ClientChatReceivedEvent) {
         val unformattedText = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.unformattedText)
         val name: String = mc.thePlayer.name.lowercase(Locale.ENGLISH)
@@ -39,7 +30,15 @@ object ChatListener {
         if (WyvtilsConfig.highlightName) {
             if (text.contains(name)) {
                 event.isCanceled = true
-                mc.ingameGUI.chatGUI.printChatMessage(ChatComponentText(event.message.formattedText.replace(mc.thePlayer.name, color + mc.thePlayer.name + EnumChatFormatting.RESET.toString(), true)))
+                mc.ingameGUI.chatGUI.printChatMessage(
+                    ChatComponentText(
+                        event.message.formattedText.replace(
+                            mc.thePlayer.name,
+                            color + mc.thePlayer.name + EnumChatFormatting.RESET.toString(),
+                            true
+                        )
+                    )
+                )
             }
         }
         if (WyvtilsConfig.autoGetAPI) {
@@ -72,32 +71,6 @@ object ChatListener {
             //Stolen code ends here
         }
 
-        if (WyvtilsConfig.removeDiscordInvites) {
-            if (Pattern.compile("(.*)(?i)discord.gg(?-i)/(.*)").matcher(unformattedText).matches()) {
-                if (WyvtilsConfig.showInPartyChat) {
-                    val partyPattern = Pattern.compile(PARTY_TALK)
-                    val partyHytilsPattern = Pattern.compile(PARTY_TALK_HYTILS)
-                    if (partyHytilsPattern.matcher(unformattedText).matches() || partyPattern.matcher(unformattedText).matches()) {
-                        return
-                    }
-                } else if (WyvtilsConfig.showInGuildChat) {
-                    val guildPattern = Pattern.compile(GUILD_TALK)
-                    val guildHytilsPattern = Pattern.compile(GUILD_TALK_HYTILS)
-                    if (guildPattern.matcher(unformattedText).matches() || guildHytilsPattern.matcher(unformattedText).matches()) {
-                        return
-                    }
-                } else if (WyvtilsConfig.showInOfficerChat) {
-                    val officerPattern = Pattern.compile(OFFICER_TALK)
-                    val officerHytilsPattern = Pattern.compile(OFFICER_TALK_HYTILS)
-                    if (officerPattern.matcher(unformattedText).matches() || officerHytilsPattern.matcher(unformattedText).matches()) {
-                        return
-                    }
-                }
-                event.isCanceled = true
-                Notifications.push("Wyvtilities", "Wyvtilities just prevented a discord invite being shown on your screen!")
-            }
-        }
-
         if (WyvtilsConfig.autoGetGEXP && WyvtilsConfig.isRegexLoaded) {
             if (!victoryDetected) {
                 for (trigger in Wyvtilities.autoGGRegex) {
@@ -122,6 +95,49 @@ object ChatListener {
             }
         }
         return
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    fun discordInviteCheck(event: ClientChatReceivedEvent) {
+        val unformattedText = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.unformattedText)
+        if (WyvtilsConfig.removeDiscordInvites) {
+            Utils.checkForHypixel()
+            if (Utils.isOnHypixel) {
+                val pattern =
+                    Pattern.compile("^(?:[\\w\\- ]+ )?(?:(?<chatTypePrefix>[A-Za-z]+) > |)(?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>\\w{1,16})(?: [\\w\\- ]+)?: (?<message>.+)\$")
+                        .matcher(unformattedText)
+                if (pattern.matches()) {
+                    if (!pattern.group("message").contains("discord.gg/")) return
+                    if (WyvtilsConfig.showInPartyChat) {
+                        if (pattern.group("chatTypePrefix").startsWith("P")) {
+                            return
+                        }
+                    } else if (WyvtilsConfig.showInGuildChat) {
+                        if (pattern.group("chatTypePrefix").startsWith("G")) {
+                            return
+                        }
+                    } else if (WyvtilsConfig.showInOfficerChat) {
+                        if (pattern.group("chatTypePrefix").startsWith("O")) {
+                            return
+                        }
+                    }
+                    if (pattern.group("senderUsername") == mc.session.username) return
+                    event.isCanceled = true
+                    Notifications.push(
+                        "Wyvtilities",
+                        "Wyvtilities just prevented a discord invite being shown on your screen!"
+                    )
+                }
+            } else {
+                if (unformattedText.contains("discord.gg/")) {
+                    event.isCanceled = true
+                    Notifications.push(
+                        "Wyvtilities",
+                        "Wyvtilities just prevented a discord invite being shown on your screen!"
+                    )
+                }
+            }
+        }
     }
 
     @SubscribeEvent

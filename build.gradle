@@ -7,7 +7,7 @@ plugins {
 
 ext.kotlin_version = "1.5.20"
 
-version = "0.4.1"
+version = "0.4.2"
 group = "net.wyvest"
 archivesBaseName = "Wyvtilities"
 
