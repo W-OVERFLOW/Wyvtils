@@ -12,6 +12,10 @@ import java.net.URI;
 import java.net.URL;
 import java.util.Map;
 
+/**
+ * Adapted from Skytils under AGPLv3
+ * https://github.com/Skytils/SkytilsMod/blob/1.x/LICENSE.md
+ */
 public class FMLLoadingPlugin implements IFMLLoadingPlugin {
 
     public FMLLoadingPlugin() {

@@ -5,6 +5,7 @@ import net.minecraft.util.ChatComponentText
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.event.world.WorldEvent
+import net.minecraftforge.fml.common.eventhandler.EventPriority
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.wyvest.wyvtilities.Wyvtilities
@@ -21,16 +22,16 @@ object ChatListener {
     lateinit var color : String
     var changeTextColor = false
     //stolen regexes from Hychat (ty moulberry)
-    const val PARTY_TALK = "Party > (.*)"
-    const val PARTY_TALK_HYTILS = "P > (.*)"
+    private const val PARTY_TALK = "Party > (.*)"
+    private const val PARTY_TALK_HYTILS = "P > (.*)"
 
     //ok now these are mine although very based off of hychat regex
-    const val GUILD_TALK = "Guild > (.*)"
-    const val GUILD_TALK_HYTILS = "G > (.*)"
-    const val OFFICER_TALK = "Officer > (.*)"
-    const val OFFICER_TALK_HYTILS = "O > (.*)"
+    private const val GUILD_TALK = "Guild > (.*)"
+    private const val GUILD_TALK_HYTILS = "G > (.*)"
+    private const val OFFICER_TALK = "Officer > (.*)"
+    private const val OFFICER_TALK_HYTILS = "O > (.*)"
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     fun onMessageReceived(event: ClientChatReceivedEvent) {
         val unformattedText = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.unformattedText)
         val name: String = mc.thePlayer.name.lowercase(Locale.ENGLISH)
