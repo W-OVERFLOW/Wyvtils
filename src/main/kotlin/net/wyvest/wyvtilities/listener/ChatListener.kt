@@ -20,6 +20,16 @@ object ChatListener {
     private var victoryDetected = false
     lateinit var color : String
     var changeTextColor = false
+    //stolen regexes from Hychat (ty moulberry)
+    const val PARTY_TALK = "Party > (.*)"
+    const val PARTY_TALK_HYTILS = "P > (.*)"
+
+    //ok now these are mine although very based off of hychat regex
+    const val GUILD_TALK = "Guild > (.*)"
+    const val GUILD_TALK_HYTILS = "G > (.*)"
+    const val OFFICER_TALK = "Officer > (.*)"
+    const val OFFICER_TALK_HYTILS = "O > (.*)"
+
     @SubscribeEvent
     fun onMessageReceived(event: ClientChatReceivedEvent) {
         val unformattedText = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.unformattedText)
@@ -61,6 +71,32 @@ object ChatListener {
             //Stolen code ends here
         }
 
+        if (WyvtilsConfig.removeDiscordInvites) {
+            if (Pattern.compile("(.*)(?i)discord.gg(?-i)/(.*)").matcher(unformattedText).matches()) {
+                if (WyvtilsConfig.showInPartyChat) {
+                    val partyPattern = Pattern.compile(PARTY_TALK)
+                    val partyHytilsPattern = Pattern.compile(PARTY_TALK_HYTILS)
+                    if (partyHytilsPattern.matcher(unformattedText).matches() || partyPattern.matcher(unformattedText).matches()) {
+                        return
+                    }
+                } else if (WyvtilsConfig.showInGuildChat) {
+                    val guildPattern = Pattern.compile(GUILD_TALK)
+                    val guildHytilsPattern = Pattern.compile(GUILD_TALK_HYTILS)
+                    if (guildPattern.matcher(unformattedText).matches() || guildHytilsPattern.matcher(unformattedText).matches()) {
+                        return
+                    }
+                } else if (WyvtilsConfig.showInOfficerChat) {
+                    val officerPattern = Pattern.compile(OFFICER_TALK)
+                    val officerHytilsPattern = Pattern.compile(OFFICER_TALK_HYTILS)
+                    if (officerPattern.matcher(unformattedText).matches() || officerHytilsPattern.matcher(unformattedText).matches()) {
+                        return
+                    }
+                }
+                event.isCanceled = true
+                Notifications.push("Wyvtilities", "Wyvtilities just prevented a discord invite being shown on your screen!")
+            }
+        }
+
         if (WyvtilsConfig.autoGetGEXP && WyvtilsConfig.isRegexLoaded) {
             if (!victoryDetected) {
                 for (trigger in Wyvtilities.autoGGRegex) {
@@ -88,7 +124,9 @@ object ChatListener {
     }
 
     @SubscribeEvent
-    fun onWorldEnter(event: WorldEvent.Unload) {
+    fun onWorldLeave(event: WorldEvent.Unload) {
+        mc.ingameGUI.displayedTitle = ""
+        mc.ingameGUI.displayedSubTitle = ""
         victoryDetected = false
     }
 

@@ -61,7 +61,7 @@ object APIUtil {
         return JsonObject()
     }
     fun getUUID(username: String): String? {
-        val uuidResponse = getJSONResponse("https://api.ashcon.app/mojang/v2/user/$username")
+        val uuidResponse = getJSONResponse("https://api.mojang.com/users/profiles/minecraft/$username")
         if (uuidResponse.has("error")) {
             Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "Failed with error: ${uuidResponse["reason"].asString}")
             return null

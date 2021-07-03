@@ -33,7 +33,7 @@ class Wyvtilities {
     companion object {
         const val MODID = "wyvtilities"
         const val MOD_NAME = "Wyvtilities"
-        const val VERSION = "0.3.3"
+        const val VERSION = "0.4.0"
         @JvmStatic
         val mc: Minecraft
             get() = Minecraft.getMinecraft()

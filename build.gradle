@@ -7,7 +7,7 @@ plugins {
 
 ext.kotlin_version = "1.5.20"
 
-version = "0.3.3"
+version = "0.4.0"
 group = "net.wyvest"
 archivesBaseName = "Wyvtilities"
 
@@ -22,6 +22,7 @@ minecraft {
     runDir = "run"
     mappings = "stable_22"
     makeObfSourceJar = false
+    clientJvmArgs += "-Dfml.coreMods.load=net.wyvest.wyvtilities.tweaker.FMLLoadingPlugin"
 }
 
 configurations {
@@ -102,8 +103,6 @@ sourceSets {
 repositories {
     mavenCentral()
     maven { url "https://repo.sk1er.club/repository/maven-public/" }
-    jcenter()
-    maven { url 'https://jitpack.io' }
 }
 compileKotlin {
     kotlinOptions {
@@ -121,6 +120,9 @@ compileTestKotlin {
 jar {
     manifest {
         attributes "ModSide": "CLIENT",
-                'FMLAT': 'wyvtilities_at.cfg'
+                'FMLAT': 'wyvtilities_at.cfg',
+                "FMLCorePlugin": "net.wyvest.wyvtilities.tweaker.FMLLoadingPlugin",
+                "FMLCorePluginContainsFMLMod": "no",
+                "ForceLoadAsMod": true
     }
 }

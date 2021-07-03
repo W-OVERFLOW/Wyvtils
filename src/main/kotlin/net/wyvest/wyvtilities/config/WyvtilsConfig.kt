@@ -11,7 +11,7 @@ import java.io.File
 
 object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities", sortingBehavior = ConfigSorting)  {
 
-    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.3.3, made by Wyvest.", category = "Information")
+    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.4.0, made by Wyvest.", category = "Information")
     var paragraph = ""
 
     @kotlin.jvm.JvmField
@@ -21,6 +21,22 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     @kotlin.jvm.JvmField
     @Property(type = PropertyType.SWITCH, name = "Automatically Check GEXP", description = "Automatically check your GEXP after you win a Hypixel game. Requires an API Key.", category = "GEXP")
     var autoGetGEXP = true
+
+    @kotlin.jvm.JvmField
+    @Property(type = PropertyType.SWITCH, name = "Block Discord Invites", description = "Filter out discord invites in chat.", category = "Chat", subcategory = "Discord")
+    var removeDiscordInvites = true
+
+    @kotlin.jvm.JvmField
+    @Property(type = PropertyType.SWITCH, name = "Don't Block in Party Chat", description = "Disables the discord invite blocking feature in party chat.", category = "Chat", subcategory = "Discord")
+    var showInPartyChat = true
+
+    @kotlin.jvm.JvmField
+    @Property(type = PropertyType.SWITCH, name = "Don't Block in Guild Chat", description = "Disables the discord invite blocking feature in guild chat.", category = "Chat", subcategory = "Discord")
+    var showInGuildChat = true
+
+    @kotlin.jvm.JvmField
+    @Property(type = PropertyType.SWITCH, name = "Don't Block in Officer Chat", description = "Disables the discord invite blocking feature in officer chat.", category = "Chat", subcategory = "Discord")
+    var showInOfficerChat = true
 
     @kotlin.jvm.JvmField
     @Property(type = PropertyType.SWITCH, name = "is regex loaded", category = "GEXP", hidden = true)
@@ -75,6 +91,9 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         }
         addDependency("textColor", "highlightName")
         addDependency("autoGetGEXP", "isRegexLoaded")
+        addDependency("showInPartyChat", "removeDiscordInvites")
+        addDependency("showInGuildChat", "removeDiscordInvites")
+        addDependency("showInOfficerChat", "removeDiscordInvites")
     }
 
     private object ConfigSorting : SortingBehavior() {
