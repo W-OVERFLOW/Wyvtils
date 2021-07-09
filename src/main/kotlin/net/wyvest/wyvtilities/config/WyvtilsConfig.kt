@@ -5,9 +5,8 @@ import gg.essential.vigilance.data.Category
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
 import gg.essential.vigilance.data.SortingBehavior
-import net.wyvest.wyvtilities.listener.ChatListener
+import net.wyvest.wyvtilities.chat.ChatListener
 import java.io.File
-
 
 object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities", sortingBehavior = ConfigSorting)  {
 
@@ -64,6 +63,30 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     )
     var textColor = 0
 
+    @JvmField
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Sound Boost",
+        description = "Make the volume of sounds that are important for PVP louder.",
+        category = "Sound",
+    )
+    var soundBoost = false
+
+    @JvmField
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Sound Multiplier",
+        description = "Wyvest",
+        category = "Sound",
+        max = 400
+    )
+    var soundMultiplier = 1
+
+
+
+
+
+
     @Property(type = PropertyType.PARAGRAPH, name = "TGMDevelopment", description = "Utilities", category = "Information", subcategory = "Credits")
     var credits1 = ""
 
@@ -91,6 +114,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         }
         addDependency("textColor", "highlightName")
         addDependency("autoGetGEXP", "isRegexLoaded")
+        addDependency("soundMultiplier", "soundBoost")
         addDependency("showInPartyChat", "removeDiscordInvites")
         addDependency("showInGuildChat", "removeDiscordInvites")
         addDependency("showInOfficerChat", "removeDiscordInvites")

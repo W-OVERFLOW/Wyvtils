@@ -7,6 +7,7 @@ import net.minecraftforge.fml.relauncher.Side
 import java.lang.reflect.Field
 import java.lang.reflect.Method
 
+@Suppress("unused")
 class KotlinLanguageAdapter : ILanguageAdapter {
     override fun supportsStatics() = false
 

@@ -1,4 +1,4 @@
-package net.wyvest.wyvtilities.listener
+package net.wyvest.wyvtilities.chat
 
 import gg.essential.universal.ChatColor
 import net.minecraft.util.ChatComponentText
@@ -9,9 +9,13 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.wyvest.wyvtilities.Wyvtilities
-import net.wyvest.wyvtilities.Wyvtilities.Companion.mc
+import net.wyvest.wyvtilities.Wyvtilities.mc
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.utils.*
+import xyz.matthewtgm.tgmlib.util.ApiHelper
+import xyz.matthewtgm.tgmlib.util.Multithreading
+import xyz.matthewtgm.tgmlib.util.Notifications
+import xyz.matthewtgm.tgmlib.util.ServerHelper
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.regex.Pattern
@@ -50,12 +54,11 @@ object ChatListener {
             if (unformattedText.startsWith("Your new API key is ")) {
                 val tempApiKey = unformattedText.substring("Your new API key is ".length)
                 val shouldReturn = AtomicBoolean(false)
-                Wyvtilities.threadPool.submit {
-                    if (!APIUtil.getJSONResponse("https://api.hypixel.net/key?key=$tempApiKey").get("success")
+                Multithreading.runAsync {
+                    if (!ApiHelper.getParsedJsonOnline("https://api.hypixel.net/key?key=$tempApiKey").asJsonObject.get("success")
                             .asBoolean
                     ) {
-                        Utils.checkForHypixel()
-                        if (!Utils.isOnHypixel) {
+                        if (!ServerHelper.hypixel()) {
                             Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "You are not running this command on Hypixel! This mod needs an Hypixel API key!")
                         }
                         shouldReturn.set(true)
@@ -77,7 +80,7 @@ object ChatListener {
                     val triggerPattern = Pattern.compile(trigger.toString())
                     if (triggerPattern.matcher(unformattedText).matches()) {
                         victoryDetected = true
-                        Wyvtilities.threadPool.submit {
+                        Multithreading.runAsync {
                             GexpUtils.getGEXP()
                             Notifications.push("Wyvtilities", "You currently have " + GexpUtils.gexp + " guild EXP.")
                         }
@@ -87,7 +90,7 @@ object ChatListener {
             }
             if (mc.ingameGUI.displayedTitle.containsAny("win", "won", "over", "end", "victory") && !victoryDetected) {
                 victoryDetected = true
-                Wyvtilities.threadPool.submit {
+                Multithreading.runAsync {
                     GexpUtils.getGEXP()
                     Notifications.push("Wyvtilities", "You currently have " + GexpUtils.gexp + " guild EXP.")
                 }
@@ -101,8 +104,7 @@ object ChatListener {
     fun discordInviteCheck(event: ClientChatReceivedEvent) {
         val unformattedText = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.unformattedText)
         if (WyvtilsConfig.removeDiscordInvites) {
-            Utils.checkForHypixel()
-            if (Utils.isOnHypixel) {
+            if (ServerHelper.hypixel()) {
                 val pattern =
                     Pattern.compile("^(?:[\\w\\- ]+ )?(?:(?<chatTypePrefix>[A-Za-z]+) > |)(?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>\\w{1,16})(?: [\\w\\- ]+)?: (?<message>.+)\$")
                         .matcher(unformattedText)
@@ -174,5 +176,6 @@ object ChatListener {
                 changeTextColor = false
             }
         }
+
     }
 }

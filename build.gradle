@@ -3,6 +3,7 @@ plugins {
     id "com.github.johnrengelman.shadow" version "6.1.0"
     id "net.minecraftforge.gradle.forge" version "86b2392"
     id "org.jetbrains.kotlin.jvm" version "1.5.20"
+    id "org.spongepowered.mixin" version "d5f9873d60"
 }
 
 ext.kotlin_version = "1.5.20"
@@ -17,12 +18,22 @@ tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+    }
+}
+
 minecraft {
     version = "1.8.9-11.15.1.2318-1.8.9"
     runDir = "run"
     mappings = "stable_22"
     makeObfSourceJar = false
-    clientJvmArgs += "-Dfml.coreMods.load=net.wyvest.wyvtilities.tweaker.FMLLoadingPlugin"
+    clientJvmArgs += "-Dfml.coreMods.load=net.wyvest.wyvtilities.mixin.WyvtilsLoadingPlugin"
+    clientJvmArgs += "-Delementa.dev=true"
+    clientRunArgs += "--tweakClass org.spongepowered.asm.launch.MixinTweaker"
+    clientRunArgs += "--mixin mixins.wyvtils.json"
 }
 
 configurations {
@@ -33,7 +44,30 @@ configurations {
 
 dependencies {
     implementation 'org.projectlombok:lombok:1.18.18'
-    include("gg.essential:Vigilance:125-10809-SNAPSHOT")
+    implementation("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
+        transitive = false
+    }
+
+    annotationProcessor("org.spongepowered:mixin:0.7.11-SNAPSHOT")
+    implementation("gg.essential:Vigilance:127-10809-SNAPSHOT")
+
+    implementation('xyz.matthewtgm:TGMLib:2.1.6')
+
+
+}
+
+jar {
+    manifest {
+        attributes "ModSide": "CLIENT",
+                'FMLAT': 'wyvtilities_at.cfg',
+                "FMLCorePlugin": "net.wyvest.wyvtilities.mixin.WyvtilsLoadingPlugin",
+                "FMLCorePluginContainsFMLMod": "no",
+                "ForceLoadAsMod": true,
+                "MixinConfigs": "mixins.wyvtils.json",
+                "TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
+                "TweakOrder": "0"
+    }
+    enabled = false
 }
 
 /**
@@ -94,35 +128,32 @@ shadowJar {
     exclude "fabric.mod.json"
 }
 
+repositories {
+    mavenCentral()
+    maven { url "https://repo.sk1er.club/repository/maven-public/" }
+    maven {
+        name = "JitPack"
+        url = 'https://jitpack.io/'
+    }
+    maven { url "https://repo.spongepowered.org/repository/maven-public/" }
+}
+
+mixin {
+    disableRefMapWarning = true
+    defaultObfuscationEnv searge
+    add sourceSets.main, "mixins.wyvtils.refmap.json"
+}
+
+reobf {
+    shadowJar {
+        classpath = sourceSets.main.compileClasspath
+        mappingType = "SEARGE"
+    }
+}
 sourceSets {
     main {
+        ext.refMap = "mixins.wyvtils.refmap.json"
         output.resourcesDir = file("${buildDir}/classes/kotlin/main")
     }
 }
 
-repositories {
-    mavenCentral()
-    maven { url "https://repo.sk1er.club/repository/maven-public/" }
-}
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
-    }
-}
-compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
-    }
-}
-
-jar {
-    manifest {
-        attributes "ModSide": "CLIENT",
-                'FMLAT': 'wyvtilities_at.cfg',
-                "FMLCorePlugin": "net.wyvest.wyvtilities.tweaker.FMLLoadingPlugin",
-                "FMLCorePluginContainsFMLMod": "no",
-                "ForceLoadAsMod": true
-    }
-}

@@ -1,0 +1,12 @@
+{
+  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.7",
+  "plugin": "net.wyvest.wyvtilities.tweaker.WyvtilsMixinPlugin",
+  "package": "net.wyvest.wyvtilities.mixin",
+  "refmap": "mixins.wyvtils.refmap.json",
+  "mixins": [
+    "MixinGuiIngame",
+    "MixinGuiIngameForge"
+  ],
+  "verbose": true
+}
