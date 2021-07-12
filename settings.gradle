@@ -1,19 +1,13 @@
 pluginManagement {
     repositories {
-        mavenCentral()
         gradlePluginPortal()
-
-        // Add the Forge Repository (ForgeGradle fetches most of its stuff from here)
+        mavenCentral()
         maven {
-            name = "Forge"
-            url = "https://maven.minecraftforge.net"
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots"
         }
-
-        // Add the Jitpack Repository (We fetch ForgeGradle from this)
-        maven {
-            name = "Jitpack"
-            url = "https://jitpack.io/"
-        }
+        maven { url "https://maven.minecraftforge.net/" }
+        maven { url "https://jitpack.io" }
     }
     resolutionStrategy {
         eachPlugin {

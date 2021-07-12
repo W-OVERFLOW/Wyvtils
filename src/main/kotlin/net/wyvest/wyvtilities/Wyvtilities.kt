@@ -1,24 +1,21 @@
 package net.wyvest.wyvtilities
 
+import com.google.gson.JsonArray
 import gg.essential.universal.ChatColor
 import gg.essential.universal.UDesktop
 import gg.essential.vigilance.Vigilance
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiScreen
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.wyvest.wyvtilities.chat.ChatListener
 import net.wyvest.wyvtilities.commands.WyvtilsCommands
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.sounds.SoundListener
-import xyz.matthewtgm.json.entities.JsonArray
-import xyz.matthewtgm.lib.TGMLibInstaller
+import net.wyvest.wyvtilities.utils.APIUtil
+import xyz.matthewtgm.tgmlib.TGMLibInstaller
 import xyz.matthewtgm.tgmlib.commands.CommandManager
-import xyz.matthewtgm.tgmlib.util.ApiHelper
 import xyz.matthewtgm.tgmlib.util.ChatHelper
 import xyz.matthewtgm.tgmlib.util.ForgeHelper
 import xyz.matthewtgm.tgmlib.util.Notifications
@@ -34,14 +31,12 @@ import java.net.URI
 object Wyvtilities {
     const val MODID = "wyvtilities"
     const val MOD_NAME = "Wyvtilities"
-    const val VERSION = "0.4.2"
+    const val VERSION = "0.5.0-BETA1"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
 
     lateinit var config: WyvtilsConfig
     lateinit var autoGGRegex : JsonArray
-    @JvmField
-    var displayScreen: GuiScreen? = null
 
     @JvmField
     var isConfigInitialized = false
@@ -59,7 +54,7 @@ object Wyvtilities {
         isConfigInitialized = true
         if (WyvtilsConfig.showUpdateNotification) {
             try {
-                latestVersion = ApiHelper.getParsedJsonOnline("https://raw.githubusercontent.com/wyvest/wyvest.net/master/wyvtilities.json").asJsonObject.get("latest").asString
+                latestVersion = APIUtil.getJSONResponse("https://raw.githubusercontent.com/wyvest/wyvest.net/master/wyvtilities.json").asJsonObject.get("latest").asString
             } catch (e : Exception) {
                 e.printStackTrace()
                 Notifications.push("Wyvtilities", "Wyvtilities was unable to fetch the latest version, so you will not be notified of any updates this launch.")
@@ -89,8 +84,9 @@ object Wyvtilities {
         TGMLibInstaller.load(Minecraft.getMinecraft().mcDataDir)
         ForgeHelper.registerEventListeners(this, ChatListener, SoundListener)
         CommandManager.register(WyvtilsCommands().javaClass)
+        println("NUTs")
         try {
-            autoGGRegex = ApiHelper.getParsedJsonOnline("https://raw.githubusercontent.com/wyvest/wyvest.net/master/wyvtilities.json").asJsonObject.getArray("triggers") //currently broken because JsonTGM
+            autoGGRegex = APIUtil.getJSONResponse("https://raw.githubusercontent.com/wyvest/wyvest.net/master/wyvtilities.json").asJsonObject.getAsJsonArray("triggers")
             WyvtilsConfig.isRegexLoaded = true
             WyvtilsConfig.markDirty()
             WyvtilsConfig.writeData()
@@ -108,15 +104,11 @@ object Wyvtilities {
         if (VERSION != latestVersion && WyvtilsConfig.showUpdateNotification && latestVersion != null) {
             Notifications.push("Wyvtilities", "Wyvtilities is outdated! Update to the latest version by clicking here!", this::openDownloadURI)
         }
-    }
-
-    @SubscribeEvent
-    fun onTick(event: TickEvent.ClientTickEvent) {
-        if (event.phase != TickEvent.Phase.START) return
-
-        if (displayScreen != null) {
-            mc.displayGuiScreen(displayScreen)
-            displayScreen = null
+        if (ForgeHelper.isModLoaded("bossbar_customizer")) {
+            WyvtilsConfig.bossBarCustomization = false
+            WyvtilsConfig.markDirty()
+            WyvtilsConfig.writeData()
+            Notifications.push("Wyvtilities", "Nuts")
         }
     }
 

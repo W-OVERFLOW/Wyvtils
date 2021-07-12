@@ -11,9 +11,11 @@ object SoundListener {
     //if making a fork, do not touch this right now as i am currently working on this feature!
     @SubscribeEvent
     fun onPlaySound(e : PlaySoundEvent) {
-        if (e.result is PositionedSound) {
-            if (e.name.equalsAny("random.successful_hit", "random.break", "random.drink", "random.eat", "random.bow", "random.bowhit", "mob.ghast.fireball", "mob.ghast.charge") || e.name.startsWithAny("dig.", "step.", "game.player.")) {
-                (e.result as PositionedSound).volume *= WyvtilsConfig.soundMultiplier
+        if (WyvtilsConfig.soundBoost) {
+            if (e.result is PositionedSound) {
+                if (e.name.equalsAny("random.successful_hit", "random.break", "random.drink", "random.eat", "random.bow", "random.bowhit", "mob.ghast.fireball", "mob.ghast.charge") || e.name.startsWithAny("dig.", "step.", "game.player.")) {
+                    (e.result as PositionedSound).volume *= WyvtilsConfig.soundMultiplier
+                }
             }
         }
     }

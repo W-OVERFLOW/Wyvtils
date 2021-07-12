@@ -12,7 +12,6 @@ import net.wyvest.wyvtilities.Wyvtilities
 import net.wyvest.wyvtilities.Wyvtilities.mc
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.utils.*
-import xyz.matthewtgm.tgmlib.util.ApiHelper
 import xyz.matthewtgm.tgmlib.util.Multithreading
 import xyz.matthewtgm.tgmlib.util.Notifications
 import xyz.matthewtgm.tgmlib.util.ServerHelper
@@ -55,7 +54,7 @@ object ChatListener {
                 val tempApiKey = unformattedText.substring("Your new API key is ".length)
                 val shouldReturn = AtomicBoolean(false)
                 Multithreading.runAsync {
-                    if (!ApiHelper.getParsedJsonOnline("https://api.hypixel.net/key?key=$tempApiKey").asJsonObject.get("success")
+                    if (!APIUtil.getJSONResponse("https://api.hypixel.net/key?key=$tempApiKey").asJsonObject.get("success")
                             .asBoolean
                     ) {
                         if (!ServerHelper.hypixel()) {

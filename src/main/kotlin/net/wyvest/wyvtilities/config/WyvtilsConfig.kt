@@ -5,12 +5,15 @@ import gg.essential.vigilance.data.Category
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
 import gg.essential.vigilance.data.SortingBehavior
+import net.wyvest.wyvtilities.bossbar.BossHealthGui
 import net.wyvest.wyvtilities.chat.ChatListener
+import xyz.matthewtgm.tgmlib.util.GuiHelper
+import java.awt.Color
 import java.io.File
 
 object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities", sortingBehavior = ConfigSorting)  {
 
-    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.4.2, made by Wyvest.", category = "Information")
+    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.5.0-BETA1, made by Wyvest.", category = "Information")
     var paragraph = ""
 
     @kotlin.jvm.JvmField
@@ -76,15 +79,89 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     @Property(
         type = PropertyType.NUMBER,
         name = "Sound Multiplier",
-        description = "Wyvest",
+        description = "How much louder the sound is. There is a volume limit, so it doesn't break your ears.",
         category = "Sound",
+        min = 1,
         max = 400
     )
-    var soundMultiplier = 1
+    var soundMultiplier = 10
 
+    @JvmField
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Bossbar Customization",
+        description = "Toggle Bossbar customization",
+        category = "Bossbar"
+    )
+    var bossBarCustomization = true
 
+    @JvmField
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Bossbar",
+        description = "Toggle the bossbar.",
+        category = "Bossbar"
+    )
+    var bossBar = true
 
+    @JvmField
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Shadow",
+        description = "Toggle the text shadow for the bossbar.",
+        category = "Bossbar"
+    )
+    var bossBarShadow = true
 
+    @JvmField
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Bossbar Color",
+        description = "Change the color of the bossbar..",
+        category = "Bossbar"
+    )
+    var bossBarColor : Color = Color.WHITE
+
+    @Property(
+        type = PropertyType.BUTTON,
+        name = "Bossbar Editor",
+        description = "Change the position of the bossbar.",
+        category = "Bossbar"
+    )
+    @Suppress("unused")
+    fun openBossHealthGui() {
+        GuiHelper.open(BossHealthGui)
+    }
+
+    @JvmField
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Bossbar X",
+        description = "X",
+        category = "Bossbar",
+        hidden = true
+    )
+    var bossBarX : Int = 0
+
+    @JvmField
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Bossbar Y",
+        description = "Y",
+        category = "Bossbar",
+        hidden = true
+    )
+    var bossBarY : Int = 12
+
+    @JvmField
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "first launch",
+        description = "a",
+        category = "General",
+        hidden = true
+    )
+    var firstLaunch = true
 
 
     @Property(type = PropertyType.PARAGRAPH, name = "TGMDevelopment", description = "Utilities", category = "Information", subcategory = "Credits")
@@ -93,15 +170,32 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     @Property(type = PropertyType.PARAGRAPH, name = "Skytils", description = "Even more utilities", category = "Information", subcategory = "Credits")
     var credits2 = ""
 
-    @Property(type = PropertyType.PARAGRAPH, name = "isXander", description = "Notifications", category = "Information", subcategory = "Credits")
-    var credits3 = ""
-
     init {
         initialize()
 
         setCategoryDescription(
             "General",
-            "This category is for configuring general parts of the timer."
+            "This category is for configuring general parts of Wyvtils."
+        )
+        setCategoryDescription(
+            "Chat",
+            "Configure chat-related features in Wyvtils."
+        )
+        setCategoryDescription(
+            "GEXP",
+            "Configure GEXP-related features in Wyvtils."
+        )
+        setCategoryDescription(
+            "Discord",
+            "Configure discord-related features in Wyvtils."
+        )
+        setCategoryDescription(
+            "Bossbar",
+            "Configure bossbar-related features in Wyvtils."
+        )
+        setCategoryDescription(
+            "Sound",
+            "Configure sound-related features in Wyvtils."
         )
         setSubcategoryDescription(
             "Information",
@@ -118,6 +212,9 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         addDependency("showInPartyChat", "removeDiscordInvites")
         addDependency("showInGuildChat", "removeDiscordInvites")
         addDependency("showInOfficerChat", "removeDiscordInvites")
+        addDependency("bossBar", "bossBarCustomization")
+        addDependency("bossBarShadow", "bossBarCustomization")
+        addDependency("bossBarColor", "bossBarCustomization")
     }
 
     private object ConfigSorting : SortingBehavior() {
