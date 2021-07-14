@@ -44,7 +44,7 @@ configurations {
 
 dependencies {
     implementation 'org.projectlombok:lombok:1.18.18'
-    implementation("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
+    include("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
         transitive = false
     }
 
@@ -101,7 +101,7 @@ tasks.reobfJar.dependsOn(tasks.shadowJar)
 // This adds support to ("embed", "shade", "include") libraries into our JAR
 shadowJar {
     archiveClassifier.set("")
-    configurations = [project.configurations.implementation]
+    configurations = [project.configurations.include]
     duplicatesStrategy DuplicatesStrategy.EXCLUDE
 
     relocate("gg.essential", "wyvest.essentialgg")
