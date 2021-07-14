@@ -6,14 +6,14 @@ import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
 import gg.essential.vigilance.data.SortingBehavior
 import net.wyvest.wyvtilities.bossbar.BossHealthGui
-import net.wyvest.wyvtilities.chat.ChatListener
+import net.wyvest.wyvtilities.listeners.ChatListener
 import xyz.matthewtgm.tgmlib.util.GuiHelper
 import java.awt.Color
 import java.io.File
 
 object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities", sortingBehavior = ConfigSorting)  {
 
-    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.5.0-BETA1, made by Wyvest.", category = "Information")
+    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.5.0-BETA2, made by Wyvest.", category = "Information")
     var paragraph = ""
 
     @kotlin.jvm.JvmField
@@ -77,14 +77,14 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
 
     @JvmField
     @Property(
-        type = PropertyType.NUMBER,
+        type = PropertyType.SLIDER,
         name = "Sound Multiplier",
         description = "How much louder the sound is. There is a volume limit, so it doesn't break your ears.",
         category = "Sound",
-        min = 1,
-        max = 400
+        min = 0,
+        max = 4
     )
-    var soundMultiplier = 10
+    var soundMultiplier = 1
 
     @JvmField
     @Property(

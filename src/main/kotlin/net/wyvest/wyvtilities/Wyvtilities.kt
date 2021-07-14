@@ -1,6 +1,5 @@
 package net.wyvest.wyvtilities
 
-import com.google.gson.JsonArray
 import gg.essential.universal.ChatColor
 import gg.essential.universal.UDesktop
 import gg.essential.vigilance.Vigilance
@@ -9,11 +8,14 @@ import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
-import net.wyvest.wyvtilities.chat.ChatListener
 import net.wyvest.wyvtilities.commands.WyvtilsCommands
 import net.wyvest.wyvtilities.config.WyvtilsConfig
-import net.wyvest.wyvtilities.sounds.SoundListener
-import net.wyvest.wyvtilities.utils.APIUtil
+import net.wyvest.wyvtilities.listeners.ChatListener
+import net.wyvest.wyvtilities.listeners.TitleListener
+import net.wyvest.wyvtilities.utils.equalsAny
+import net.wyvest.wyvtilities.utils.startsWithAny
+import xyz.matthewtgm.json.entities.JsonArray
+import xyz.matthewtgm.json.util.JsonApiHelper
 import xyz.matthewtgm.tgmlib.TGMLibInstaller
 import xyz.matthewtgm.tgmlib.commands.CommandManager
 import xyz.matthewtgm.tgmlib.util.ChatHelper
@@ -31,7 +33,7 @@ import java.net.URI
 object Wyvtilities {
     const val MODID = "wyvtilities"
     const val MOD_NAME = "Wyvtilities"
-    const val VERSION = "0.5.0-BETA1"
+    const val VERSION = "0.5.0-BETA2"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
 
@@ -54,7 +56,7 @@ object Wyvtilities {
         isConfigInitialized = true
         if (WyvtilsConfig.showUpdateNotification) {
             try {
-                latestVersion = APIUtil.getJSONResponse("https://raw.githubusercontent.com/wyvest/wyvest.net/master/wyvtilities.json").asJsonObject.get("latest").asString
+                latestVersion = JsonApiHelper.getJsonObject("https://raw.githubusercontent.com/wyvest/wyvest.net/master/wyvtilities.json").get("latest").asString
             } catch (e : Exception) {
                 e.printStackTrace()
                 Notifications.push("Wyvtilities", "Wyvtilities was unable to fetch the latest version, so you will not be notified of any updates this launch.")
@@ -82,11 +84,10 @@ object Wyvtilities {
             }
         }
         TGMLibInstaller.load(Minecraft.getMinecraft().mcDataDir)
-        ForgeHelper.registerEventListeners(this, ChatListener, SoundListener)
+        ForgeHelper.registerEventListeners(this, ChatListener, TitleListener)
         CommandManager.register(WyvtilsCommands().javaClass)
-        println("NUTs")
         try {
-            autoGGRegex = APIUtil.getJSONResponse("https://raw.githubusercontent.com/wyvest/wyvest.net/master/wyvtilities.json").asJsonObject.getAsJsonArray("triggers")
+            autoGGRegex = JsonApiHelper.getJsonObject("https://wyvest.net/wyvtilities.json", true).get("triggers").asJsonArray
             WyvtilsConfig.isRegexLoaded = true
             WyvtilsConfig.markDirty()
             WyvtilsConfig.writeData()
@@ -108,12 +109,41 @@ object Wyvtilities {
             WyvtilsConfig.bossBarCustomization = false
             WyvtilsConfig.markDirty()
             WyvtilsConfig.writeData()
-            Notifications.push("Wyvtilities", "Nuts")
+            Notifications.push("Wyvtilities", "Bossbar Customizer (the mod) has been detected, and so the Wyvtils Bossbar related features have been disabled.")
         }
     }
 
     private fun openDownloadURI() {
         UDesktop.browse(URI("https://github.com/wyvest/Wyvtilities/releases/latest"))
+    }
+
+    fun sendHelpMessage() {
+        sendMessage(
+            """
+            ${EnumChatFormatting.GREEN}Command Help
+            /wyvtilities - Open Config Menu
+            /wyvtilities help - Shows help for command usage
+            /wyvtilities config - Open Config Menu
+            /wyvtilities aliases - Shows aliases for /wyvtilities.
+            /wyvtilities gexp [username] - Shows the GEXP of the specified username. If username isn't present, it will default to your GEXP.
+            /wyvtilities setkey {api} - Sets the API key.
+            """.trimIndent())
+    }
+    fun checkSound(name : String) : Boolean {
+        if (name.equalsAny(
+                "random.successful_hit",
+                "random.break",
+                "random.drink",
+                "random.eat",
+                "random.bow",
+                "random.bowhit",
+                "mob.ghast.fireball",
+                "mob.ghast.charge"
+            ) || name.startsWithAny("dig.", "step.", "game.player.")
+        ) {
+            return true
+        }
+        return false
     }
 
 }

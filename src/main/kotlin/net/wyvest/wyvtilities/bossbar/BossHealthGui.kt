@@ -5,6 +5,7 @@ import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.util.EnumChatFormatting
 import net.wyvest.wyvtilities.config.WyvtilsConfig
+import org.lwjgl.opengl.GL11
 import xyz.matthewtgm.tgmlib.util.GuiHelper
 import java.io.IOException
 
@@ -28,13 +29,20 @@ object BossHealthGui : GuiScreen() {
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         updatePos(mouseX, mouseY)
+        mc.textureManager.bindTexture(icons)
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0)
+        mc.mcProfiler.startSection("bossHealth")
+        GlStateManager.enableBlend()
         BossHealth.renderBossHealth()
+        GlStateManager.disableBlend()
+        mc.mcProfiler.endSection()
+
         val scale = 1
         GlStateManager.pushMatrix()
         GlStateManager.scale(scale.toFloat(), scale.toFloat(), 0f)
         drawCenteredString(
             fontRendererObj,
-            EnumChatFormatting.WHITE.toString() + "(drag hud to edit position!)",
+            EnumChatFormatting.WHITE.toString() + "(drag bossbar to edit position!)",
             width / 2 / scale,
             5 / scale + 55,
             -1
@@ -55,8 +63,8 @@ object BossHealthGui : GuiScreen() {
 
     private fun updatePos(x: Int, y: Int) {
         if (dragging) {
-            WyvtilsConfig.bossBarX = prevX - 10
-            WyvtilsConfig.bossBarY = this.prevY - 10
+            WyvtilsConfig.bossBarX = prevX
+            WyvtilsConfig.bossBarY = this.prevY
         }
         prevX = x
         this.prevY = y

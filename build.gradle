@@ -2,13 +2,13 @@ plugins {
     id "java"
     id "com.github.johnrengelman.shadow" version "6.1.0"
     id "net.minecraftforge.gradle.forge" version "86b2392"
-    id "org.jetbrains.kotlin.jvm" version "1.5.20"
+    id "org.jetbrains.kotlin.jvm" version "1.5.21"
     id "org.spongepowered.mixin" version "d5f9873d60"
 }
 
-ext.kotlin_version = "1.5.20"
+ext.kotlin_version = "1.5.21"
 
-version = "0.5.0-BETA1"
+version = "0.5.0-BETA2"
 group = "net.wyvest"
 archivesBaseName = "Wyvtilities"
 
@@ -44,22 +44,25 @@ configurations {
 
 dependencies {
     implementation 'org.projectlombok:lombok:1.18.18'
-    include("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
+    implementation("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
         transitive = false
     }
 
     annotationProcessor("org.spongepowered:mixin:0.7.11-SNAPSHOT")
-    include("gg.essential:Vigilance:127-10809-SNAPSHOT")
-
-    implementation ('xyz.matthewtgm:TGMLib:2.1.8') {
-        transitive = false
+    implementation("gg.essential:Vigilance:138-10809-SNAPSHOT") {
+        exclude module: "kotlin-reflect"
+        exclude module: "kotlin-stdlib-jdk8"
     }
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+
+    implementation('xyz.matthewtgm:TGMLib:2.2.5')
 }
 
 jar {
     manifest {
         attributes "ModSide": "CLIENT",
-                'FMLAT': 'wyvtilities_at.cfg',
                 "FMLCorePlugin": "net.wyvest.wyvtilities.mixin.WyvtilsLoadingPlugin",
                 "FMLCorePluginContainsFMLMod": "Wyvest",
                 "ForceLoadAsMod": true,
@@ -90,7 +93,6 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude "mcmod.info"
     }
-    rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
 // This forces the build task to run shadowJar after
@@ -99,7 +101,7 @@ tasks.reobfJar.dependsOn(tasks.shadowJar)
 // This adds support to ("embed", "shade", "include") libraries into our JAR
 shadowJar {
     archiveClassifier.set("")
-    configurations = [project.configurations.include]
+    configurations = [project.configurations.implementation]
     duplicatesStrategy DuplicatesStrategy.EXCLUDE
 
     relocate("gg.essential", "wyvest.essentialgg")

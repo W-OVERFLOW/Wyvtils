@@ -6,7 +6,7 @@
   "refmap": "mixins.wyvtils.refmap.json",
   "mixins": [
     "MixinGuiIngame",
-    "MixinGuiIngameForge"
+    "MixinSoundManager"
   ],
   "verbose": true
 }

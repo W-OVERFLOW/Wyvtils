@@ -2,6 +2,7 @@ package net.wyvest.wyvtilities.mixin;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
+import net.minecraftforge.client.GuiIngameForge;
 import net.wyvest.wyvtilities.bossbar.BossHealth;
 import net.wyvest.wyvtilities.bossbar.BossHealthGui;
 import net.wyvest.wyvtilities.config.WyvtilsConfig;

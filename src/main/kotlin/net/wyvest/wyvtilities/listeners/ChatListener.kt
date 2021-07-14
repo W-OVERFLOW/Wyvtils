@@ -1,4 +1,4 @@
-package net.wyvest.wyvtilities.chat
+package net.wyvest.wyvtilities.listeners
 
 import gg.essential.universal.ChatColor
 import net.minecraft.util.ChatComponentText
@@ -12,6 +12,7 @@ import net.wyvest.wyvtilities.Wyvtilities
 import net.wyvest.wyvtilities.Wyvtilities.mc
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.utils.*
+import xyz.matthewtgm.json.util.JsonApiHelper
 import xyz.matthewtgm.tgmlib.util.Multithreading
 import xyz.matthewtgm.tgmlib.util.Notifications
 import xyz.matthewtgm.tgmlib.util.ServerHelper
@@ -21,7 +22,8 @@ import java.util.regex.Pattern
 
 
 object ChatListener {
-    private var victoryDetected = false
+    var worldLeft: Boolean = false
+    var victoryDetected = false
     lateinit var color: String
     var changeTextColor = false
 
@@ -54,8 +56,7 @@ object ChatListener {
                 val tempApiKey = unformattedText.substring("Your new API key is ".length)
                 val shouldReturn = AtomicBoolean(false)
                 Multithreading.runAsync {
-                    if (!APIUtil.getJSONResponse("https://api.hypixel.net/key?key=$tempApiKey").asJsonObject.get("success")
-                            .asBoolean
+                    if (!JsonApiHelper.getJsonObject("https://api.hypixel.net/key?key=$tempApiKey").get("success").asBoolean
                     ) {
                         if (!ServerHelper.hypixel()) {
                             Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "You are not running this command on Hypixel! This mod needs an Hypixel API key!")
@@ -87,14 +88,6 @@ object ChatListener {
                     }
                 }
             }
-            if (mc.ingameGUI.displayedTitle.containsAny("win", "won", "over", "end", "victory") && !victoryDetected) {
-                victoryDetected = true
-                Multithreading.runAsync {
-                    GexpUtils.getGEXP()
-                    Notifications.push("Wyvtilities", "You currently have " + GexpUtils.gexp + " guild EXP.")
-                }
-                return
-            }
         }
         return
     }
@@ -108,8 +101,10 @@ object ChatListener {
                     Pattern.compile("^(?:[\\w\\- ]+ )?(?:(?<chatTypePrefix>[A-Za-z]+) > |)(?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>\\w{1,16})(?: [\\w\\- ]+)?: (?<message>.+)\$")
                         .matcher(unformattedText)
                 if (pattern.matches()) {
-                    if (!pattern.group("message").contains("discord.gg/")) return
-                    if (WyvtilsConfig.showInPartyChat) {
+                    if (pattern.group("senderUsername") == mc.session.username) return
+                    if (pattern.group("senderUsername") == null) return
+                    if (pattern.group("senderUsername") != null && !pattern.group("message").contains("discord.gg/")) return
+                    if (WyvtilsConfig.showInPartyChat && pattern.group("chatTypePrefix") != null) {
                         if (pattern.group("chatTypePrefix").startsWith("P")) {
                             return
                         }
@@ -122,7 +117,6 @@ object ChatListener {
                             return
                         }
                     }
-                    if (pattern.group("senderUsername") == mc.session.username) return
                     event.isCanceled = true
                     Notifications.push(
                         "Wyvtilities",
@@ -143,9 +137,8 @@ object ChatListener {
 
     @SubscribeEvent
     fun onWorldLeave(event: WorldEvent.Unload) {
-        mc.ingameGUI.displayedTitle = ""
-        mc.ingameGUI.displayedSubTitle = ""
         victoryDetected = false
+        worldLeft = true
     }
 
     @SubscribeEvent
