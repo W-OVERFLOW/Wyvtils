@@ -7,7 +7,6 @@
   "mixins": [
     "AccessorPositionedSound",
     "MixinGuiIngame",
-    "AccessorHytilitiesConfig",
     "MixinSoundManager"
   ],
   "verbose": true
