@@ -5,7 +5,9 @@
   "package": "net.wyvest.wyvtilities.mixin",
   "refmap": "mixins.wyvtils.refmap.json",
   "mixins": [
+    "AccessorPositionedSound",
     "MixinGuiIngame",
+    "AccessorHytilitiesConfig",
     "MixinSoundManager"
   ],
   "verbose": true

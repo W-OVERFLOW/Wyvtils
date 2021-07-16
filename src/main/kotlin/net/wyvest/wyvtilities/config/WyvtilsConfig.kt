@@ -11,9 +11,10 @@ import xyz.matthewtgm.tgmlib.util.GuiHelper
 import java.awt.Color
 import java.io.File
 
+@Suppress("unused")
 object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities", sortingBehavior = ConfigSorting)  {
 
-    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.5.0-BETA2, made by Wyvest.", category = "Information")
+    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.5.0-BETA3, made by Wyvest.", category = "Information")
     var paragraph = ""
 
     @kotlin.jvm.JvmField
@@ -128,9 +129,8 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         description = "Change the position of the bossbar.",
         category = "Bossbar"
     )
-    @Suppress("unused")
     fun openBossHealthGui() {
-        GuiHelper.open(BossHealthGui)
+        if (bossBarCustomization) GuiHelper.open(BossHealthGui)
     }
 
     @JvmField

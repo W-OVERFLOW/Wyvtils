@@ -1,5 +1,6 @@
 package net.wyvest.wyvtilities.listeners
 
+import gg.essential.api.EssentialAPI
 import gg.essential.universal.ChatColor
 import net.minecraft.util.ChatComponentText
 import net.minecraft.util.EnumChatFormatting
@@ -11,7 +12,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.wyvest.wyvtilities.Wyvtilities
 import net.wyvest.wyvtilities.Wyvtilities.mc
 import net.wyvest.wyvtilities.config.WyvtilsConfig
-import net.wyvest.wyvtilities.utils.*
+import net.wyvest.wyvtilities.utils.GexpUtils
 import xyz.matthewtgm.json.util.JsonApiHelper
 import xyz.matthewtgm.tgmlib.util.Multithreading
 import xyz.matthewtgm.tgmlib.util.Notifications
@@ -35,6 +36,22 @@ object ChatListener {
         if (WyvtilsConfig.highlightName) {
             if (text.contains(name)) {
                 event.isCanceled = true
+                if (EssentialAPI.getMinecraftUtil().isHypixel() && false ) { //false is a temp value as i dont have hytils compatability working
+                    val pattern = Pattern.compile("^(?:[\\w\\- ]+ )?(?:(?<chatTypePrefix>[A-Za-z]+) > |)(?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>\\w{1,16})(?: [\\w\\- ]+)?: (?<message>.+)\$")
+                        .matcher(unformattedText)
+                    if (pattern.matches()) {
+                        mc.ingameGUI.chatGUI.printChatMessage(
+                            ChatComponentText(
+                                event.message.formattedText.replace(
+                                    mc.thePlayer.name,
+                                    color + mc.thePlayer.name + EnumChatFormatting.RESET.toString(),
+                                    true
+                                ).replace(pattern.group("chatTypePrefix"), "N")
+                            )
+                        )
+                        return
+                    }
+                }
                 mc.ingameGUI.chatGUI.printChatMessage(
                     ChatComponentText(
                         event.message.formattedText.replace(

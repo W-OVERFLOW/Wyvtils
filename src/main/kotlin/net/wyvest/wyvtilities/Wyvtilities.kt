@@ -1,8 +1,8 @@
 package net.wyvest.wyvtilities
 
+import gg.essential.api.EssentialAPI
 import gg.essential.universal.ChatColor
 import gg.essential.universal.UDesktop
-import gg.essential.vigilance.Vigilance
 import net.minecraft.client.Minecraft
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.fml.common.Mod
@@ -17,10 +17,8 @@ import net.wyvest.wyvtilities.utils.startsWithAny
 import xyz.matthewtgm.json.entities.JsonArray
 import xyz.matthewtgm.json.util.JsonApiHelper
 import xyz.matthewtgm.tgmlib.TGMLibInstaller
-import xyz.matthewtgm.tgmlib.commands.CommandManager
 import xyz.matthewtgm.tgmlib.util.ChatHelper
 import xyz.matthewtgm.tgmlib.util.ForgeHelper
-import xyz.matthewtgm.tgmlib.util.Notifications
 import java.net.URI
 
 
@@ -33,7 +31,7 @@ import java.net.URI
 object Wyvtilities {
     const val MODID = "wyvtilities"
     const val MOD_NAME = "Wyvtilities"
-    const val VERSION = "0.5.0-BETA2"
+    const val VERSION = "0.5.0-BETA3"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
 
@@ -48,18 +46,17 @@ object Wyvtilities {
     }
     var latestVersion : String? = null
 
+
     @Mod.EventHandler
     fun onFMLInitialization(event: FMLInitializationEvent) {
-        Vigilance.initialize()
-        config = WyvtilsConfig
-        config.preload()
+        WyvtilsConfig.preload()
         isConfigInitialized = true
         if (WyvtilsConfig.showUpdateNotification) {
             try {
                 latestVersion = JsonApiHelper.getJsonObject("https://raw.githubusercontent.com/wyvest/wyvest.net/master/wyvtilities.json").get("latest").asString
             } catch (e : Exception) {
                 e.printStackTrace()
-                Notifications.push("Wyvtilities", "Wyvtilities was unable to fetch the latest version, so you will not be notified of any updates this launch.")
+                EssentialAPI.getNotifications().push("Wyvtilities", "Wyvtilities was unable to fetch the latest version, so you will not be notified of any updates this launch.")
             }
         }
         if (WyvtilsConfig.highlightName) {
@@ -85,7 +82,7 @@ object Wyvtilities {
         }
         TGMLibInstaller.load(Minecraft.getMinecraft().mcDataDir)
         ForgeHelper.registerEventListeners(this, ChatListener, TitleListener)
-        CommandManager.register(WyvtilsCommands().javaClass)
+        WyvtilsCommands.register()
         try {
             autoGGRegex = JsonApiHelper.getJsonObject("https://wyvest.net/wyvtilities.json", true).get("triggers").asJsonArray
             WyvtilsConfig.isRegexLoaded = true
@@ -93,7 +90,7 @@ object Wyvtilities {
             WyvtilsConfig.writeData()
         } catch (e : Exception) {
             e.printStackTrace()
-            Notifications.push("Wyvtilities", "Wyvtilities failed to get regexes required for the Auto Get GEXP feature!")
+            EssentialAPI.getNotifications().push("Wyvtilities", "Wyvtilities failed to get regexes required for the Auto Get GEXP feature!")
             WyvtilsConfig.isRegexLoaded = false
             WyvtilsConfig.markDirty()
             WyvtilsConfig.writeData()
@@ -103,13 +100,13 @@ object Wyvtilities {
     @Mod.EventHandler
     fun onPostInitialization(event: FMLPostInitializationEvent) {
         if (VERSION != latestVersion && WyvtilsConfig.showUpdateNotification && latestVersion != null) {
-            Notifications.push("Wyvtilities", "Wyvtilities is outdated! Update to the latest version by clicking here!", this::openDownloadURI)
+            EssentialAPI.getNotifications().push("Wyvtilities", "Wyvtilities is outdated! Update to the latest version by clicking here!", this::openDownloadURI)
         }
         if (ForgeHelper.isModLoaded("bossbar_customizer")) {
             WyvtilsConfig.bossBarCustomization = false
             WyvtilsConfig.markDirty()
             WyvtilsConfig.writeData()
-            Notifications.push("Wyvtilities", "Bossbar Customizer (the mod) has been detected, and so the Wyvtils Bossbar related features have been disabled.")
+            EssentialAPI.getNotifications().push("Wyvtilities", "Bossbar Customizer (the mod) has been detected, and so the Wyvtils Bossbar related features have been disabled.")
         }
     }
 
@@ -117,18 +114,6 @@ object Wyvtilities {
         UDesktop.browse(URI("https://github.com/wyvest/Wyvtilities/releases/latest"))
     }
 
-    fun sendHelpMessage() {
-        sendMessage(
-            """
-            ${EnumChatFormatting.GREEN}Command Help
-            /wyvtilities - Open Config Menu
-            /wyvtilities help - Shows help for command usage
-            /wyvtilities config - Open Config Menu
-            /wyvtilities aliases - Shows aliases for /wyvtilities.
-            /wyvtilities gexp [username] - Shows the GEXP of the specified username. If username isn't present, it will default to your GEXP.
-            /wyvtilities setkey {api} - Sets the API key.
-            """.trimIndent())
-    }
     fun checkSound(name : String) : Boolean {
         if (name.equalsAny(
                 "random.successful_hit",
