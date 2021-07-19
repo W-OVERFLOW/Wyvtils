@@ -38,7 +38,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     var autoGetAPI = true
 
     @kotlin.jvm.JvmField
-    @Property(type = PropertyType.SWITCH, name = "Highlight Name", description = "Highlight your name.", category = "Chat")
+    @Property(type = PropertyType.SWITCH, name = "Highlight Name", description = "Highlight your name.", category = "Text")
     var highlightName = false
 
     @kotlin.jvm.JvmField
@@ -46,7 +46,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         type = PropertyType.SELECTOR,
         name = "Text Color",
         description = "Change the text color for the highlight.",
-        category = "Chat",
+        category = "Text",
         options = ["Black", "Dark Blue", "Dark Green", "Dark Aqua", "Dark Red", "Dark Purple", "Gold", "Gray", "Dark Gray", "Blue", "Green", "Aqua", "Red", "Light Purple", "Yellow", "White"]
     )
     var textColor = 0
@@ -180,8 +180,8 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
             "This category is for configuring general parts of Wyvtils."
         )
         setCategoryDescription(
-            "Chat",
-            "Configure chat-related features in Wyvtils."
+            "Text",
+            "Configure text-related features in Wyvtils."
         )
         setCategoryDescription(
             "GEXP",
