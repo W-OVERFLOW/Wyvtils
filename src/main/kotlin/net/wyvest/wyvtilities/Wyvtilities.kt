@@ -3,15 +3,20 @@ package net.wyvest.wyvtilities
 import gg.essential.api.EssentialAPI
 import gg.essential.universal.ChatColor
 import gg.essential.universal.UDesktop
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import net.minecraft.client.Minecraft
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
+import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
+import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion
 import net.wyvest.wyvtilities.commands.WyvtilsCommands
 import net.wyvest.wyvtilities.config.WyvtilsConfig
-import net.wyvest.wyvtilities.listeners.ChatListener
-import net.wyvest.wyvtilities.listeners.TitleListener
+import net.wyvest.wyvtilities.listeners.Listener
 import net.wyvest.wyvtilities.utils.equalsAny
 import net.wyvest.wyvtilities.utils.startsWithAny
 import xyz.matthewtgm.json.entities.JsonArray
@@ -27,15 +32,14 @@ import java.net.URI
     version = Wyvtilities.VERSION,
     acceptedMinecraftVersions = "[1.8.9]",
     clientSideOnly = true,
-    modLanguageAdapter = "net.wyvest.wyvtilities.adapter.KotlinLanguageAdapter")
+    modLanguageAdapter = "gg.essential.api.utils.KotlinAdapter")
 object Wyvtilities {
     const val MODID = "wyvtilities"
     const val MOD_NAME = "Wyvtilities"
-    const val VERSION = "0.5.0-BETA3"
+    const val VERSION = "0.5.0-BETA4"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
 
-    lateinit var config: WyvtilsConfig
     lateinit var autoGGRegex : JsonArray
 
     @JvmField
@@ -44,23 +48,13 @@ object Wyvtilities {
     fun sendMessage(message: String?) {
         ChatHelper.sendMessage(EnumChatFormatting.DARK_PURPLE.toString() + "[Wyvtilities] ", message)
     }
-    var latestVersion : String? = null
-
 
     @Mod.EventHandler
     fun onFMLInitialization(event: FMLInitializationEvent) {
         WyvtilsConfig.preload()
         isConfigInitialized = true
-        if (WyvtilsConfig.showUpdateNotification) {
-            try {
-                latestVersion = JsonApiHelper.getJsonObject("https://raw.githubusercontent.com/wyvest/wyvest.net/master/wyvtilities.json").get("latest").asString
-            } catch (e : Exception) {
-                e.printStackTrace()
-                EssentialAPI.getNotifications().push("Wyvtilities", "Wyvtilities was unable to fetch the latest version, so you will not be notified of any updates this launch.")
-            }
-        }
         if (WyvtilsConfig.highlightName) {
-            ChatListener.color = when (WyvtilsConfig.textColor) {
+            Listener.color = when (WyvtilsConfig.textColor) {
                 0 -> ChatColor.BLACK.toString()
                 1 -> ChatColor.DARK_BLUE.toString()
                 2 -> ChatColor.DARK_GREEN.toString()
@@ -81,10 +75,10 @@ object Wyvtilities {
             }
         }
         TGMLibInstaller.load(Minecraft.getMinecraft().mcDataDir)
-        ForgeHelper.registerEventListeners(this, ChatListener, TitleListener)
+        ForgeHelper.registerEventListener(this)
         WyvtilsCommands.register()
         try {
-            autoGGRegex = JsonApiHelper.getJsonObject("https://wyvest.net/wyvtilities.json", true).get("triggers").asJsonArray
+            autoGGRegex = JsonApiHelper.getJsonObject("https://wyvest.net/wyvtilities.json", true).getArray("triggers")
             WyvtilsConfig.isRegexLoaded = true
             WyvtilsConfig.markDirty()
             WyvtilsConfig.writeData()
@@ -95,13 +89,11 @@ object Wyvtilities {
             WyvtilsConfig.markDirty()
             WyvtilsConfig.writeData()
         }
+        Listener.listen()
     }
 
     @Mod.EventHandler
     fun onPostInitialization(event: FMLPostInitializationEvent) {
-        if (VERSION != latestVersion && WyvtilsConfig.showUpdateNotification && latestVersion != null) {
-            EssentialAPI.getNotifications().push("Wyvtilities", "Wyvtilities is outdated! Update to the latest version by clicking here!", this::openDownloadURI)
-        }
         if (ForgeHelper.isModLoaded("bossbar_customizer")) {
             WyvtilsConfig.bossBarCustomization = false
             WyvtilsConfig.markDirty()
@@ -110,8 +102,42 @@ object Wyvtilities {
         }
     }
 
-    private fun openDownloadURI() {
-        UDesktop.browse(URI("https://github.com/wyvest/Wyvtilities/releases/latest"))
+    /**
+     * Adapted from SimpleToggleSprint under AGPLv3
+     * https://github.com/My-Name-Is-Jeff/SimpleToggleSprint/blob/1.8.9/LICENSE
+     */
+    @Mod.EventHandler
+    fun onFMLLoad(event : FMLLoadCompleteEvent) {
+        CoroutineScope(Dispatchers.IO + CoroutineName("Wyvtilities-UpdateChecker")).launch {
+            val latestRelease = JsonApiHelper.getJsonObject("https://api.github.com/repos/Wyvest/Wyvtilities/releases/latest")
+            val latestTag = latestRelease.get("tag_name").asString
+            val currentTag = VERSION
+
+            val currentVersion = DefaultArtifactVersion(currentTag.substringBefore("-"))
+            val latestVersion = DefaultArtifactVersion(latestTag.substringAfter("v").substringBefore("-"))
+
+            var updateUrl: String? = null
+            if (latestTag.contains("BETA") || (currentTag.contains("BETA") && currentVersion >= latestVersion)) {
+                var currentPre = 0.0
+                var latestPre = 0.0
+                if (currentTag.contains("BETA")) {
+                    currentPre = currentTag.substringAfter("BETA").toDouble()
+                }
+                if (latestTag.contains("BETA")) {
+                    latestPre = latestTag.substringAfter("BETA").toDouble()
+                }
+                if ((latestPre > currentPre) || (latestPre == 0.0 && currentVersion.compareTo(latestVersion) == 0)) {
+                    updateUrl = latestRelease.getArray("assets")[0].asJsonObject["browser_download_url"].asString
+                }
+            } else if (currentVersion < latestVersion) {
+                updateUrl = latestRelease.getArray("assets")[0].asJsonObject["browser_download_url"].asString
+            }
+            if (updateUrl != null) {
+                EssentialAPI.getNotifications().push("Mod Update", "Wyvtilities $latestTag is available!\nClick to open!", 5f) {
+                    UDesktop.browse(URI("https://github.com/wyvest/Wyvtilities/releases/latest"))
+                }
+            }
+        }
     }
 
     fun checkSound(name : String) : Boolean {
@@ -124,7 +150,7 @@ object Wyvtilities {
                 "random.bowhit",
                 "mob.ghast.fireball",
                 "mob.ghast.charge"
-            ) || name.startsWithAny("dig.", "step.", "game.player.")
+            ) || (name.startsWithAny("dig.", "step.", "game.player.") && name != "game.player.hurt")
         ) {
             return true
         }

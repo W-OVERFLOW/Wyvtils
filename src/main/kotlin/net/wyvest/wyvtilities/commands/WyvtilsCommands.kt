@@ -3,19 +3,19 @@ package net.wyvest.wyvtilities.commands
 import gg.essential.api.EssentialAPI
 import gg.essential.api.commands.Command
 import gg.essential.api.commands.DefaultHandler
+import gg.essential.api.commands.DisplayName
 import gg.essential.api.commands.SubCommand
 import gg.essential.api.utils.Multithreading
 import net.minecraft.util.EnumChatFormatting
 import net.wyvest.wyvtilities.Wyvtilities
 import net.wyvest.wyvtilities.config.WyvtilsConfig
-import net.wyvest.wyvtilities.utils.GexpUtils
+import net.wyvest.wyvtilities.utils.HypixelUtils
 import xyz.matthewtgm.json.util.JsonApiHelper
 
-
+@Suppress("unused")
 object WyvtilsCommands : Command("wyvtilities", true) {
 
-    override val commandAliases: Set<Alias>
-        get() = setOf(Alias("wyvtils"), Alias("wytils"))
+    override val commandAliases = setOf(Alias("wyvtils"), Alias("wytils"), Alias("wyvtil"), Alias("wytil"))
 
     @DefaultHandler
     fun handle() {
@@ -28,13 +28,13 @@ object WyvtilsCommands : Command("wyvtilities", true) {
     }
 
     @SubCommand("setkey", description = "Sets the API key for Wyvtils.")
-    fun setKey(args: Array<String>) {
+    fun setKey(@DisplayName("api key") apiKey : String) {
         Multithreading.runAsync {
             try {
-                if (args.size == 1 && JsonApiHelper.getJsonObject("https://api.hypixel.net/key?key=" + args[1])
+                if (JsonApiHelper.getJsonObject("https://api.hypixel.net/key?key=$apiKey")
                         .get("success").asBoolean
                 ) {
-                    WyvtilsConfig.apiKey = args[1]
+                    WyvtilsConfig.apiKey = apiKey
                     WyvtilsConfig.markDirty()
                     WyvtilsConfig.writeData()
                     Wyvtilities.sendMessage(EnumChatFormatting.GREEN.toString() + "Saved API key successfully!")
@@ -49,24 +49,65 @@ object WyvtilsCommands : Command("wyvtilities", true) {
     }
 
     @SubCommand("gexp", description = "Gets the GEXP of the player specified")
-    fun gexp(args: Array<String>) {
-        if (WyvtilsConfig.apiKey == "") {
+    fun gexp(@DisplayName("username") username : String?) {
+        if (WyvtilsConfig.apiKey.isEmpty()) {
             Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "You need to provide a valid API key to run this command! Type /api new to autoset a key.")
         } else {
-            if (args.size <= 1) {
+            try {
                 Multithreading.runAsync {
-                    GexpUtils.getGEXP()
-                    EssentialAPI.getNotifications()
-                        .push("Wyvtilities", "You currently have " + GexpUtils.gexp + " guild EXP.")
+                    if (username != null) {
+                        if (HypixelUtils.getGEXP(username)) {
+                            EssentialAPI.getNotifications()
+                                .push("Wyvtilities", "$username currently has " + HypixelUtils.gexp + " guild EXP.")
+                        } else {
+                            EssentialAPI.getNotifications()
+                                .push("Wyvtilities", "There was a problem trying to get $username's GEXP.")
+                        }
+                    } else {
+                        if (HypixelUtils.getGEXP()) {
+                            EssentialAPI.getNotifications().push("Wyvtilities", "You currently have " + HypixelUtils.gexp + " guild EXP.")
+                        } else {
+                            EssentialAPI.getNotifications().push("Wyvtilities", "There was a problem trying to get your GEXP.")
+                        }
+                    }
                 }
-            } else {
-                Multithreading.runAsync {
-                    GexpUtils.getGEXP(args[1])
-                    EssentialAPI.getNotifications()
-                        .push("Wyvtilities", args[1] + " currently have " + GexpUtils.gexp + " guild EXP.")
-                }
+            } catch (e : NullPointerException) {
+                e.printStackTrace()
             }
+
         }
     }
+    /*/
+    @SubCommand("winstreak", description = "Gets the winstreak of the player specified")
+    fun winstreak(@DisplayName("username") username : String?) {
+        if (WyvtilsConfig.apiKey.isEmpty()) {
+            Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "You need to provide a valid API key to run this command! Type /api new to autoset a key.")
+        } else {
+            try {
+                Multithreading.runAsync {
+                    if (username != null) {
+                        if (HypixelUtils.getWinstreak(username)) {
+                            EssentialAPI.getNotifications()
+                                .push("Wyvtilities", "$username currently has " + HypixelUtils.gexp + " guild EXP.")
+                        } else {
+                            EssentialAPI.getNotifications()
+                                .push("Wyvtilities", "There was a problem trying to get $username's GEXP.")
+                        }
+                    } else {
+                        if (HypixelUtils.getWinstreak()) {
+                            EssentialAPI.getNotifications().push("Wyvtilities", "You currently have " + HypixelUtils.gexp + " guild EXP.")
+                        } else {
+                            EssentialAPI.getNotifications().push("Wyvtilities", "There was a problem trying to get your GEXP.")
+                        }
+                    }
+                }
+            } catch (e : NullPointerException) {
+                e.printStackTrace()
+            }
+
+        }
+    }
+
+     */
 
 }

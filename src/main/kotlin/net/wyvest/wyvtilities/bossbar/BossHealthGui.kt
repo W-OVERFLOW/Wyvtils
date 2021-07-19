@@ -29,13 +29,15 @@ object BossHealthGui : GuiScreen() {
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         updatePos(mouseX, mouseY)
-        mc.textureManager.bindTexture(icons)
-        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0)
-        mc.mcProfiler.startSection("bossHealth")
-        GlStateManager.enableBlend()
-        BossHealth.renderBossHealth()
-        GlStateManager.disableBlend()
-        mc.mcProfiler.endSection()
+        if (WyvtilsConfig.bossBarBar) {
+            mc.textureManager.bindTexture(icons)
+            GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0)
+            mc.mcProfiler.startSection("bossHealth")
+            GlStateManager.enableBlend()
+            BossHealth.renderBossHealth()
+            GlStateManager.disableBlend()
+            mc.mcProfiler.endSection()
+        }
 
         val scale = 1
         GlStateManager.pushMatrix()

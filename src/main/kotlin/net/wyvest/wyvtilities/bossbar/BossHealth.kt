@@ -12,7 +12,6 @@ import net.wyvest.wyvtilities.config.WyvtilsConfig
 
 
 object BossHealth {
-    // bad practice - this is completely overwriting boss health rendering, will be redone in the future
     private var mc: Minecraft = Minecraft.getMinecraft()
     private var ingameGui: GuiIngame? = Minecraft.getMinecraft().ingameGUI
     fun renderBossHealth() {
@@ -43,18 +42,22 @@ object BossHealth {
                 BossStatus.bossName
             }
             val textX = WyvtilsConfig.bossBarX + (j / 2) - (fontrenderer.getStringWidth(s) / 2)
-            ingameGui?.drawTexturedModalRect(x, y, 0, 74, j, 5)
-            ingameGui?.drawTexturedModalRect(x, y, 0, 74, j, 5)
-            if (l > 0) {
-                ingameGui?.drawTexturedModalRect(x, y, 0, 79, l, 5)
+            if (WyvtilsConfig.bossBarBar) {
+                ingameGui?.drawTexturedModalRect(x, y, 0, 74, j, 5)
+                ingameGui?.drawTexturedModalRect(x, y, 0, 74, j, 5)
+                if (l > 0) {
+                    ingameGui?.drawTexturedModalRect(x, y, 0, 79, l, 5)
+                }
             }
-            fontrenderer.drawString(
-                EnumChatFormatting.getTextWithoutFormattingCodes(s),
-                textX.toFloat(), (y - 10).toFloat(),
-                WyvtilsConfig.bossBarColor.rgb, WyvtilsConfig.bossBarShadow
-            )
+            if (WyvtilsConfig.bossBarText) {
+                fontrenderer.drawString(
+                    EnumChatFormatting.getTextWithoutFormattingCodes(s),
+                    textX.toFloat(), (y - 10).toFloat(),
+                    WyvtilsConfig.bossBarColor.rgb, WyvtilsConfig.bossBarShadow
+                )
+            }
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
-            mc.textureManager.bindTexture(Gui.icons)
+            if (WyvtilsConfig.bossBarBar) mc.textureManager.bindTexture(Gui.icons)
         }
     }
 }

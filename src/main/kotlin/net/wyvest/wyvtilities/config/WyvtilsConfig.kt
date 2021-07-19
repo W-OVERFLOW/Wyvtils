@@ -6,7 +6,7 @@ import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
 import gg.essential.vigilance.data.SortingBehavior
 import net.wyvest.wyvtilities.bossbar.BossHealthGui
-import net.wyvest.wyvtilities.listeners.ChatListener
+import net.wyvest.wyvtilities.listeners.Listener
 import xyz.matthewtgm.tgmlib.util.GuiHelper
 import java.awt.Color
 import java.io.File
@@ -14,7 +14,7 @@ import java.io.File
 @Suppress("unused")
 object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities", sortingBehavior = ConfigSorting)  {
 
-    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.5.0-BETA3, made by Wyvest.", category = "Information")
+    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.5.0-BETA4, made by Wyvest.", category = "Information")
     var paragraph = ""
 
     @kotlin.jvm.JvmField
@@ -24,22 +24,6 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     @kotlin.jvm.JvmField
     @Property(type = PropertyType.SWITCH, name = "Automatically Check GEXP", description = "Automatically check your GEXP after you win a Hypixel game. Requires an API Key.", category = "GEXP")
     var autoGetGEXP = true
-
-    @kotlin.jvm.JvmField
-    @Property(type = PropertyType.SWITCH, name = "Block Discord Invites", description = "Filter out discord invites in chat.", category = "Chat", subcategory = "Discord")
-    var removeDiscordInvites = true
-
-    @kotlin.jvm.JvmField
-    @Property(type = PropertyType.SWITCH, name = "Don't Block in Party Chat", description = "Disables the discord invite blocking feature in party chat.", category = "Chat", subcategory = "Discord")
-    var showInPartyChat = true
-
-    @kotlin.jvm.JvmField
-    @Property(type = PropertyType.SWITCH, name = "Don't Block in Guild Chat", description = "Disables the discord invite blocking feature in guild chat.", category = "Chat", subcategory = "Discord")
-    var showInGuildChat = true
-
-    @kotlin.jvm.JvmField
-    @Property(type = PropertyType.SWITCH, name = "Don't Block in Officer Chat", description = "Disables the discord invite blocking feature in officer chat.", category = "Chat", subcategory = "Discord")
-    var showInOfficerChat = true
 
     @kotlin.jvm.JvmField
     @Property(type = PropertyType.SWITCH, name = "is regex loaded", category = "GEXP", hidden = true)
@@ -83,7 +67,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         description = "How much louder the sound is. There is a volume limit, so it doesn't break your ears.",
         category = "Sound",
         min = 0,
-        max = 4
+        max = 100
     )
     var soundMultiplier = 1
 
@@ -108,11 +92,29 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     @JvmField
     @Property(
         type = PropertyType.SWITCH,
+        name = "Toggle Text",
+        description = "Toggle the text for the bossbar.",
+        category = "Bossbar"
+    )
+    var bossBarText = true
+
+    @JvmField
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Toggle Shadow",
         description = "Toggle the text shadow for the bossbar.",
         category = "Bossbar"
     )
     var bossBarShadow = true
+
+    @JvmField
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Bar",
+        description = "Toggle the bar for the bossbar.",
+        category = "Bossbar"
+    )
+    var bossBarBar = true
 
     @JvmField
     @Property(
@@ -186,10 +188,6 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
             "Configure GEXP-related features in Wyvtils."
         )
         setCategoryDescription(
-            "Discord",
-            "Configure discord-related features in Wyvtils."
-        )
-        setCategoryDescription(
             "Bossbar",
             "Configure bossbar-related features in Wyvtils."
         )
@@ -204,16 +202,16 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         )
         registerListener("textColor") {
                 _: Int ->
-            ChatListener.changeTextColor = true
+            Listener.changeTextColor = true
         }
         addDependency("textColor", "highlightName")
         addDependency("autoGetGEXP", "isRegexLoaded")
         addDependency("soundMultiplier", "soundBoost")
-        addDependency("showInPartyChat", "removeDiscordInvites")
-        addDependency("showInGuildChat", "removeDiscordInvites")
-        addDependency("showInOfficerChat", "removeDiscordInvites")
         addDependency("bossBar", "bossBarCustomization")
+        addDependency("bossBarText", "bossBarCustomization")
+        addDependency("bossBarShadow", "bossBarText")
         addDependency("bossBarShadow", "bossBarCustomization")
+        addDependency("bossBarBar", "bossBarCustomization")
         addDependency("bossBarColor", "bossBarCustomization")
     }
 
