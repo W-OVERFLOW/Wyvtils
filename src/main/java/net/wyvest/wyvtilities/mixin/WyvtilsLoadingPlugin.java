@@ -1,12 +1,15 @@
-package net.wyvest.wyvtilities.tweaker;
+package net.wyvest.wyvtilities.mixin;
 
 import kotlin.KotlinVersion;
+import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+import xyz.matthewtgm.tgmlib.TGMLibInstaller;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
@@ -16,16 +19,24 @@ import java.util.Map;
  * Adapted from Skytils under AGPLv3
  * https://github.com/Skytils/SkytilsMod/blob/1.x/LICENSE.md
  */
-public class FMLLoadingPlugin implements IFMLLoadingPlugin {
+public class WyvtilsLoadingPlugin implements IFMLLoadingPlugin {
 
-    public FMLLoadingPlugin() {
+    public WyvtilsLoadingPlugin() {
         if (!KotlinVersion.CURRENT.isAtLeast(1, 5, 0)) {
-            showMessage();
+            showMessage(new File(new File(KotlinVersion.class.getProtectionDomain().getCodeSource().getLocation().toString()).getParentFile().getParentFile().getName()));
         }
     }
 
     @Override
     public String[] getASMTransformerClass() {
+        TGMLibInstaller.ReturnValue tgmLibInitialized = TGMLibInstaller.initialize(Launch.minecraftHome);
+        if (tgmLibInitialized != TGMLibInstaller.ReturnValue.SUCCESSFUL)
+            System.out.println("Failed to load TGMLib.");
+        else
+            System.out.println("Loaded TGMLib successfully.");
+
+        if (TGMLibInstaller.isLoaded())
+            return new String[] {"xyz.matthewtgm.tgmlib.tweaker.TGMLibClassTransformer"};
         return new String[0];
     }
 
@@ -49,7 +60,7 @@ public class FMLLoadingPlugin implements IFMLLoadingPlugin {
         return null;
     }
 
-    private void showMessage() {
+    private void showMessage(File file) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
@@ -77,7 +88,7 @@ public class FMLLoadingPlugin implements IFMLLoadingPlugin {
 
         Icon icon = null;
         try {
-            URL url = FMLLoadingPlugin.class.getResource("/assets/wyvtils/wyvest.png");
+            URL url = WyvtilsLoadingPlugin.class.getResource("/assets/wyvtils/wyvest.png");
             if (url != null) {
                 icon = new ImageIcon(Toolkit.getDefaultToolkit().createImage(url).getScaledInstance(50, 50, Image.SCALE_DEFAULT));
             }
@@ -96,7 +107,7 @@ public class FMLLoadingPlugin implements IFMLLoadingPlugin {
         Object[] options = new Object[]{discordLink, close};
         JOptionPane.showOptionDialog(
                 frame,
-                "<html><p>Wyvtilities has detected a mod with an older version of Kotlin.<br>The most common culprit is the ChatTriggers mod.<br>In order to resolve this conflict you must make Wyvtilities be<br>above this mod alphabetically in your mods folder.<br>This tricks Forge into loading Wyvtilities first.<br>You can do this by renaming your Wyvtilities jar to !Wyvtilities.jar,<br>or by renaming the other mod's jar to start with a Z.<br>If you have already done this and are still getting this error,<br>ask for support in the Discord.</p></html>",
+                "<html><p>Wyvtilities has detected a mod with an older version of Kotlin.<br>The culprit is " + file.toString() + ".<br>It packages version " + KotlinVersion.CURRENT + ".<br>In order to resolve this conflict you must make Wyvtilities be<br>above this mod alphabetically in your mods folder.<br>This tricks Forge into loading Wyvtilities first.<br>You can do this by renaming your Wyvtilities jar to !Wyvtilities.jar,<br>or by renaming the other mod's jar to start with a Z.<br>If you have already done this and are still getting this error,<br>ask for support in the Discord.</p></html>",
                 "Wyvtilities Error",
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.ERROR_MESSAGE,
