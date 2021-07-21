@@ -21,8 +21,8 @@ object BossHealth {
             val scaledresolution = ScaledResolution(mc)
             val i = scaledresolution.scaledWidth
             val j = 182
-            val x : Int = if (WyvtilsConfig.firstLaunch) {
-                WyvtilsConfig.firstLaunch = false
+            val x : Int = if (WyvtilsConfig.firstLaunchBossbar) {
+                WyvtilsConfig.firstLaunchBossbar = false
                 WyvtilsConfig.bossBarX = i / 2 - j / 2
                 WyvtilsConfig.markDirty()
                 WyvtilsConfig.writeData()

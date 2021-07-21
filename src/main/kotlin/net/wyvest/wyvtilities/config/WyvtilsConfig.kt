@@ -5,6 +5,8 @@ import gg.essential.vigilance.data.Category
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
 import gg.essential.vigilance.data.SortingBehavior
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.ScaledResolution
 import net.wyvest.wyvtilities.bossbar.BossHealthGui
 import net.wyvest.wyvtilities.listeners.Listener
 import xyz.matthewtgm.tgmlib.util.GuiHelper
@@ -17,31 +19,24 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.5.0-BETA4, made by Wyvest.", category = "Information")
     var paragraph = ""
 
-    @kotlin.jvm.JvmField
     @Property(type = PropertyType.TEXT, name = "API Key", description = "The API key, used for some features.", category = "General", protectedText = true)
     var apiKey = ""
 
-    @kotlin.jvm.JvmField
     @Property(type = PropertyType.SWITCH, name = "Automatically Check GEXP", description = "Automatically check your GEXP after you win a Hypixel game. Requires an API Key.", category = "GEXP")
     var autoGetGEXP = true
 
-    @kotlin.jvm.JvmField
     @Property(type = PropertyType.SWITCH, name = "is regex loaded", category = "GEXP", hidden = true)
     var isRegexLoaded = true
 
-    @kotlin.jvm.JvmField
     @Property(type = PropertyType.SWITCH, name = "Show Update Notification", description = "Show a notification when you start Minecraft informing you of new updates.", category = "General")
     var showUpdateNotification = true
 
-    @kotlin.jvm.JvmField
     @Property(type = PropertyType.SWITCH, name = "Automatically get API Key", description = "Automatically get the API Key when /api new is sent.", category = "General")
     var autoGetAPI = true
 
-    @kotlin.jvm.JvmField
     @Property(type = PropertyType.SWITCH, name = "Highlight Name", description = "Highlight your name.", category = "Text")
     var highlightName = false
 
-    @kotlin.jvm.JvmField
     @Property(
         type = PropertyType.SELECTOR,
         name = "Text Color",
@@ -51,16 +46,14 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     )
     var textColor = 0
 
-    @JvmField
     @Property(
         type = PropertyType.SWITCH,
         name = "Sound Boost",
         description = "Make the volume of sounds that are important for PVP louder.",
-        category = "Sound",
+        category = "Sound"
     )
     var soundBoost = false
 
-    @JvmField
     @Property(
         type = PropertyType.SLIDER,
         name = "Sound Multiplier",
@@ -71,7 +64,6 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     )
     var soundMultiplier = 1
 
-    @JvmField
     @Property(
         type = PropertyType.SWITCH,
         name = "Bossbar Customization",
@@ -80,7 +72,6 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     )
     var bossBarCustomization = true
 
-    @JvmField
     @Property(
         type = PropertyType.SWITCH,
         name = "Toggle Bossbar",
@@ -89,7 +80,6 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     )
     var bossBar = true
 
-    @JvmField
     @Property(
         type = PropertyType.SWITCH,
         name = "Toggle Text",
@@ -98,7 +88,6 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     )
     var bossBarText = true
 
-    @JvmField
     @Property(
         type = PropertyType.SWITCH,
         name = "Toggle Shadow",
@@ -107,7 +96,6 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     )
     var bossBarShadow = true
 
-    @JvmField
     @Property(
         type = PropertyType.SWITCH,
         name = "Toggle Bar",
@@ -116,7 +104,6 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     )
     var bossBarBar = true
 
-    @JvmField
     @Property(
         type = PropertyType.COLOR,
         name = "Bossbar Color",
@@ -135,7 +122,21 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         if (bossBarCustomization) GuiHelper.open(BossHealthGui)
     }
 
-    @JvmField
+    @Property(
+        type = PropertyType.BUTTON,
+        name = "Reset Position",
+        description = "Reset the position of the bossbar to its original position.",
+        category = "Bossbar"
+    )
+    fun resetBossbar() {
+        GuiHelper.open(null)
+        bossBarX = ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2 - 91
+        bossBarY = 12
+        WyvtilsConfig.markDirty()
+        WyvtilsConfig.writeData()
+        GuiHelper.open(this.gui())
+    }
+
     @Property(
         type = PropertyType.NUMBER,
         name = "Bossbar X",
@@ -145,7 +146,6 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     )
     var bossBarX : Int = 0
 
-    @JvmField
     @Property(
         type = PropertyType.NUMBER,
         name = "Bossbar Y",
@@ -155,16 +155,34 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     )
     var bossBarY : Int = 12
 
-    @JvmField
+
+
     @Property(
         type = PropertyType.SWITCH,
-        name = "first launch",
+        name = "bossbar first time",
         description = "a",
         category = "General",
         hidden = true
     )
-    var firstLaunch = true
+    var firstLaunchBossbar = true
 
+    /*/
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Action Bar Customization",
+        description = "Toggle customization of the action bar.",
+        category = "Action Bar"
+    )
+    var actionBarCustomization = false
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Action Bar",
+        description = "Toggle the action bar.",
+        category = "Action Bar"
+    )
+    var actionBar = true
+     */
 
     @Property(type = PropertyType.PARAGRAPH, name = "TGMDevelopment", description = "Utilities", category = "Information", subcategory = "Credits")
     var credits1 = ""

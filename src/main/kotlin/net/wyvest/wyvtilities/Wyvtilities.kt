@@ -3,6 +3,7 @@ package net.wyvest.wyvtilities
 import gg.essential.api.EssentialAPI
 import gg.essential.universal.ChatColor
 import gg.essential.universal.UDesktop
+import gg.essential.vigilance.Vigilance
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -51,6 +52,7 @@ object Wyvtilities {
 
     @Mod.EventHandler
     fun onFMLInitialization(event: FMLInitializationEvent) {
+        Vigilance.initialize()
         WyvtilsConfig.preload()
         isConfigInitialized = true
         if (WyvtilsConfig.highlightName) {

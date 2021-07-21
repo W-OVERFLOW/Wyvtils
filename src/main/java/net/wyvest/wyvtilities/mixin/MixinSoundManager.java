@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinSoundManager {
     @Inject(method = "getNormalizedVolume", at = @At("HEAD"), cancellable = true)
     public void getVolume(ISound sound, SoundPoolEntry entry, SoundCategory category, CallbackInfoReturnable<Float> cir) {
-        if (WyvtilsConfig.soundBoost) {
+        if (WyvtilsConfig.INSTANCE.getSoundBoost()) {
             if (sound instanceof PositionedSound) {
                 if (Wyvtilities.INSTANCE.checkSound(sound.getSoundLocation().getResourcePath())) {
                     cir.setReturnValue(1f);

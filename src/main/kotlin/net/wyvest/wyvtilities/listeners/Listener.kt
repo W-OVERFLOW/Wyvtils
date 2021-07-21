@@ -15,17 +15,14 @@ import net.wyvest.wyvtilities.Wyvtilities.mc
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.mixin.AccessorPositionedSound
 import net.wyvest.wyvtilities.utils.HypixelUtils
-import net.wyvest.wyvtilities.utils.containsAny
-import xyz.matthewtgm.json.util.JsonApiHelper
 import xyz.matthewtgm.tgmlib.events.StringRenderedEvent
-import xyz.matthewtgm.tgmlib.events.TitleEvent
+import xyz.matthewtgm.tgmlib.util.HypixelHelper
 import xyz.matthewtgm.tgmlib.util.ServerHelper
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.regex.Pattern
 
 
-object Listener {
-    private var timesTried: Int = 0
+ object Listener {
     private var worldLeft: Boolean = false
     private var victoryDetected = false
     lateinit var color: String
@@ -36,8 +33,9 @@ object Listener {
         val worldLeaveEvent = on<WorldEvent.Unload>()
         val tickEvent = on<TickEvent.ClientTickEvent>()
         val soundEvent = on<PlaySoundEvent>()
-        val titleEvent = on<TitleEvent>()
+        //val titleEvent = on<TitleEvent>()
         val stringRenderedEvent = on<StringRenderedEvent>()
+        //val actionBarEvent = on<ActionBarEvent>()
         if (WyvtilsConfig.autoGetAPI) {
             val shouldReturn = AtomicBoolean(false)
             /*/
@@ -49,10 +47,12 @@ object Listener {
                     val unformattedText = EnumChatFormatting.getTextWithoutFormattingCodes(it.message.unformattedText)
                     val tempApiKey = unformattedText.substring("Your new API key is ".length)
                     Multithreading.runAsync {
-                        if (!JsonApiHelper.getJsonObject("https://api.hypixel.net/key?key=$tempApiKey").get("success").asBoolean
+                        if (!HypixelHelper.HypixelAPI.isValidKey(tempApiKey)
                         ) {
                             if (!ServerHelper.hypixel()) {
-                                Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "You are not running this command on Hypixel! This mod needs an Hypixel API key!")
+                                Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "You are not running this command on Hypixel, and thus the API key was not saved.")
+                            } else {
+                                Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "The API key was not valid! Please try again.")
                             }
                             shouldReturn.set(true)
                         }
@@ -89,8 +89,9 @@ object Listener {
             .subscribe { victoryDetected = false }
         worldLeaveEvent.filter { worldLeft }
             .subscribe { victoryDetected = true }
-        tickEvent.filter { it.phase == TickEvent.Phase.START && changeTextColor }
+        tickEvent.filter { changeTextColor }
             .subscribe {
+                if (it.phase != TickEvent.Phase.START) return@subscribe
                 if (mc.currentScreen != WyvtilsConfig.gui()) {
                     color = when (WyvtilsConfig.textColor) {
                         0 -> ChatColor.BLACK.toString()
@@ -120,34 +121,12 @@ object Listener {
                     (it.result as PositionedSound as AccessorPositionedSound).volume *= WyvtilsConfig.soundMultiplier
                 }
         }
-        if (WyvtilsConfig.autoGetGEXP) {
-            titleEvent.filter { !victoryDetected && it.title.containsAny("win", "won", "over", "end", "victory") }
-                .subscribe { if (worldLeft) {
-                    worldLeft = false
-                    it.isCanceled = true
-                    return@subscribe
-                }
-                    victoryDetected = true
-                    Multithreading.runAsync {
-                        if (HypixelUtils.getGEXP()) {
-                            EssentialAPI.getNotifications().push("Wyvtilities", "You currently have " + HypixelUtils.gexp + " guild EXP.")
-                        } else {
-                            victoryDetected = false
-                            EssentialAPI.getNotifications().push("Wyvtilities", "There was a problem trying to get your GEXP.")
-                            if (timesTried == 3) {
-                                it.isCanceled = true
-                            }
-                            timesTried += 1
-                        }
-                    }
-                    return@subscribe
-                }
-        }
         if (WyvtilsConfig.highlightName) {
             stringRenderedEvent.filter { it.text != null && mc.theWorld != null && it.text.contains(mc.thePlayer.gameProfile.name) }
                 .subscribe {
                     it.text = it.text.replace(mc.thePlayer.gameProfile.name, color + mc.thePlayer.gameProfile.name + EnumChatFormatting.RESET)
                 }
         }
+        //actionBarEvent.subscribe { it.isCanceled = true }
     }
 }
