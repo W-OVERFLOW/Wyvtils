@@ -16,7 +16,7 @@ import java.io.File
 @Suppress("unused")
 object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities", sortingBehavior = ConfigSorting)  {
 
-    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.5.0-BETA4, made by Wyvest.", category = "Information")
+    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.5.0, made by Wyvest.", category = "Information")
     var paragraph = ""
 
     @Property(type = PropertyType.TEXT, name = "API Key", description = "The API key, used for some features.", category = "General", protectedText = true)
