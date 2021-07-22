@@ -50,10 +50,10 @@ configurations {
 
 dependencies {
     // Libraries
-    provided 'xyz.matthewtgm:TGMLib:2.5.2' 
+    provided 'xyz.matthewtgm:TGMLib:2.6.4'
     
     include 'gg.essential:loader-launchwrapper:1.0.2'
-    provided 'gg.essential:Essential:1229-10809-SNAPSHOT'
+    provided 'gg.essential:essential-1.8.9-forge:1234'
     
     include 'dev.isXander.kotlin-forge-api:forge-event-dsl:481f620'
     
