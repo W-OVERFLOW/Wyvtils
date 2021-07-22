@@ -7,15 +7,16 @@
 
 ### Features
 + Auto Get GEXP - Automatically checks your GEXP after you win a Hypixel game. Requires an API Key.
-+ Block Discord Invites - Automatically block discord invites from the chat
- - Don't Block In Party Chat - Disables the discord invite blocking feature in 
-   party chat.
- - Don't Block In Guild Chat - Disables the discord invite blocking feature in 
-   guild chat.
- - Don't Block In Officer Chat - Disables the discord invite blocking feature 
-   in officer chat.
++ Bossbar Customizer - Customize the bossbar in many ways.
+ - Toggle bossbar - Toggle the bossbar
+ - Toggle text - Toggle the text in the bossbar
+ - Toggle shadow - Toggle the shadow in the bossbar text
+ - Toggle bar - Toggle the bar in the bossbar
+ - Bossbar color - Change the color of the text.
 + Highlight Name - Highlights your name in chat
  - Text Color - Change the text color for the highlight.
++ Sound Boost - Boosts sounds important for PvP
+ - Sound Multiplier - Change the amount multiplied.
 
 ### Commands
 + /wyvtilities - Open Config Menu
