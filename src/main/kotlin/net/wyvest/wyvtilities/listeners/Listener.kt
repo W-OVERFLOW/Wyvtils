@@ -13,9 +13,9 @@ import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.wyvest.wyvtilities.Wyvtilities
 import net.wyvest.wyvtilities.Wyvtilities.mc
 import net.wyvest.wyvtilities.config.WyvtilsConfig
-import net.wyvest.wyvtilities.mixin.AccessorPositionedSound
 import net.wyvest.wyvtilities.utils.HypixelUtils
 import xyz.matthewtgm.tgmlib.events.StringRenderedEvent
+import xyz.matthewtgm.tgmlib.tweaker.hooks.TGMLibPositionedSoundAccessor
 import xyz.matthewtgm.tgmlib.util.HypixelHelper
 import xyz.matthewtgm.tgmlib.util.ServerHelper
 import java.util.concurrent.atomic.AtomicBoolean
@@ -118,7 +118,7 @@ import java.util.regex.Pattern
         if (WyvtilsConfig.soundBoost) {
             soundEvent.filter { it.result is PositionedSound && Wyvtilities.checkSound(it.name) }
                 .subscribe {
-                    (it.result as PositionedSound as AccessorPositionedSound).volume *= WyvtilsConfig.soundMultiplier
+                    (it.result as PositionedSound as TGMLibPositionedSoundAccessor).setVolume((it.result as PositionedSound).volume * WyvtilsConfig.soundMultiplier)
                 }
         }
         if (WyvtilsConfig.highlightName) {
