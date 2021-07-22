@@ -15,7 +15,7 @@
  - Toggle shadow - Toggle the shadow in the bossbar text
  - Toggle bar - Toggle the bar in the bossbar
  - Bossbar color - Change the color of the text.
-+ Highlight Name - Highlights your name in chat
++ Highlight Name - Highlights your name anywhere where text renders
  - Text Color - Change the text color for the highlight.
 + Sound Boost - Boosts sounds important for PvP
  - Sound Multiplier - Change the amount multiplied.
