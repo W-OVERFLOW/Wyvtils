@@ -12,7 +12,7 @@ plugins {
     id 'org.spongepowered.mixin' version '0.6-SNAPSHOT'
 }
 
-version = '0.5.0'
+version = '0.6.0-BETA1'
 group = 'net.wyvest'
 archivesBaseName = 'Wyvtilities'
 
@@ -50,10 +50,10 @@ configurations {
 
 dependencies {
     // Libraries
-    provided 'xyz.matthewtgm:TGMLib:2.6.4'
+    provided 'xyz.matthewtgm:TGMLib:2.6.6'
     
     include 'gg.essential:loader-launchwrapper:1.0.2'
-    provided 'gg.essential:essential-1.8.9-forge:1234'
+    provided 'gg.essential:essential-1.8.9-forge:1235'
     
     include 'dev.isXander.kotlin-forge-api:forge-event-dsl:481f620'
     

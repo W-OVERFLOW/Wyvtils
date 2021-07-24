@@ -1,5 +1,6 @@
 package net.wyvest.wyvtilities.config
 
+import gg.essential.api.EssentialAPI
 import gg.essential.vigilance.Vigilant
 import gg.essential.vigilance.data.Category
 import gg.essential.vigilance.data.Property
@@ -7,7 +8,8 @@ import gg.essential.vigilance.data.PropertyType
 import gg.essential.vigilance.data.SortingBehavior
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
-import net.wyvest.wyvtilities.bossbar.BossHealthGui
+import net.wyvest.wyvtilities.gui.ActionBarGui
+import net.wyvest.wyvtilities.gui.BossHealthGui
 import net.wyvest.wyvtilities.listeners.Listener
 import xyz.matthewtgm.tgmlib.util.GuiHelper
 import java.awt.Color
@@ -16,7 +18,7 @@ import java.io.File
 @Suppress("unused")
 object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities", sortingBehavior = ConfigSorting)  {
 
-    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.5.0, made by Wyvest.", category = "Information")
+    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.6.0-BETA1, made by Wyvest.", category = "Information")
     var paragraph = ""
 
     @Property(type = PropertyType.TEXT, name = "API Key", description = "The API key, used for some features.", category = "General", protectedText = true)
@@ -166,7 +168,6 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     )
     var firstLaunchBossbar = true
 
-    /*/
     @Property(
         type = PropertyType.SWITCH,
         name = "Action Bar Customization",
@@ -182,9 +183,47 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         category = "Action Bar"
     )
     var actionBar = true
-     */
 
-    @Property(type = PropertyType.PARAGRAPH, name = "TGMDevelopment", description = "Utilities", category = "Information", subcategory = "Credits")
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Action Bar Position",
+        description = "Toggle the action bar position customization.",
+        category = "Action Bar"
+    )
+    var actionBarPosition = false
+
+    @Property(
+        type = PropertyType.BUTTON,
+        name = "Action Bar Editor",
+        description = "Change the position of the action bar.",
+        category = "Action Bar"
+    )
+    fun openActionBarGui() {
+        EssentialAPI.getGuiUtil().openScreen(ActionBarGui)
+    }
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Action Bar X",
+        description = "X",
+        category = "Action Bar",
+        hidden = true
+    )
+    var actionBarX : Int = 0
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Action Bar Y",
+        description = "Y",
+        category = "Action Bar",
+        hidden = true
+    )
+    var actionBarY : Int = 12
+
+    @Property(type = PropertyType.PARAGRAPH, name = "Sk1er LLC", description = "Essential + Vigilance", category = "Information", subcategory = "Credits")
+    var credits0 = ""
+
+    @Property(type = PropertyType.PARAGRAPH, name = "TGMDevelopment", description = "TGMLib", category = "Information", subcategory = "Credits")
     var credits1 = ""
 
     @Property(type = PropertyType.PARAGRAPH, name = "Skytils", description = "Even more utilities", category = "Information", subcategory = "Credits")

@@ -37,7 +37,7 @@ import java.net.URI
 object Wyvtilities {
     const val MODID = "wyvtilities"
     const val MOD_NAME = "Wyvtilities"
-    const val VERSION = "0.5.0"
+    const val VERSION = "0.6.0-BETA1"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
 
@@ -94,22 +94,18 @@ object Wyvtilities {
         Listener.listen()
     }
 
-    @Mod.EventHandler
-    fun onPostInitialization(event: FMLPostInitializationEvent) {
-        if (ForgeHelper.isModLoaded("bossbar_customizer")) {
-            WyvtilsConfig.bossBarCustomization = false
-            WyvtilsConfig.markDirty()
-            WyvtilsConfig.writeData()
-            EssentialAPI.getNotifications().push("Wyvtilities", "Bossbar Customizer (the mod) has been detected, and so the Wyvtils Bossbar related features have been disabled.")
-        }
-    }
-
     /**
      * Adapted from SimpleToggleSprint under AGPLv3
      * https://github.com/My-Name-Is-Jeff/SimpleToggleSprint/blob/1.8.9/LICENSE
      */
     @Mod.EventHandler
     fun onFMLLoad(event : FMLLoadCompleteEvent) {
+        if (ForgeHelper.isModLoaded("bossbar_customizer")) {
+            WyvtilsConfig.bossBarCustomization = false
+            WyvtilsConfig.markDirty()
+            WyvtilsConfig.writeData()
+            EssentialAPI.getNotifications().push("Wyvtilities", "Bossbar Customizer (the mod) has been detected, and so the Wyvtils Bossbar related features have been disabled.")
+        }
         CoroutineScope(Dispatchers.IO + CoroutineName("Wyvtilities-UpdateChecker")).launch {
             val latestRelease = JsonApiHelper.getJsonObject("https://api.github.com/repos/Wyvest/Wyvtilities/releases/latest")
             val latestTag = latestRelease.get("tag_name").asString
