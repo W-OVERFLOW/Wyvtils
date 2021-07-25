@@ -12,7 +12,7 @@ plugins {
     id 'org.spongepowered.mixin' version '0.6-SNAPSHOT'
 }
 
-version = '0.6.0-BETA1'
+version = '0.6.0-BETA2'
 group = 'net.wyvest'
 archivesBaseName = 'Wyvtilities'
 
@@ -50,18 +50,17 @@ configurations {
 
 dependencies {
     // Libraries
-    provided 'xyz.matthewtgm:TGMLib:2.6.6'
+    provided 'xyz.matthewtgm:TGMLib:2.6.7'
     
     include 'gg.essential:loader-launchwrapper:1.0.2'
-    provided 'gg.essential:essential-1.8.9-forge:1235'
-    
-    include 'dev.isXander.kotlin-forge-api:forge-event-dsl:481f620'
+    provided 'gg.essential:essential-1.8.9-forge:1245'
+
     
     annotationProcessor 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
 
     // Languages
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-    implementation 'org.jetbrains.kotlin:kotlin-reflect'
+    provided 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    provided 'org.jetbrains.kotlin:kotlin-reflect'
     
     // Misc
     implementation 'org.projectlombok:lombok:1.18.18'

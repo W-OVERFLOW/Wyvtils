@@ -30,10 +30,11 @@ public class WyvtilsLoadingPlugin implements IFMLLoadingPlugin {
     @Override
     public String[] getASMTransformerClass() {
         TGMLibInstaller.ReturnValue tgmLibInitialized = TGMLibInstaller.initialize(Launch.minecraftHome);
-        if (tgmLibInitialized != TGMLibInstaller.ReturnValue.SUCCESSFUL)
+        if (tgmLibInitialized != TGMLibInstaller.ReturnValue.SUCCESSFUL) {
             System.out.println("Failed to load TGMLib.");
-        else
+        } else {
             System.out.println("Loaded TGMLib successfully.");
+        }
 
         if (TGMLibInstaller.isLoaded())
             return new String[] {"xyz.matthewtgm.tgmlib.tweaker.TGMLibClassTransformer"};
@@ -88,7 +89,7 @@ public class WyvtilsLoadingPlugin implements IFMLLoadingPlugin {
 
         Icon icon = null;
         try {
-            URL url = WyvtilsLoadingPlugin.class.getResource("/assets/wyvtils/wyvest.png");
+            URL url = WyvtilsLoadingPlugin.class.getResource("/assets/wyvtilities/wyvtilities.png");
             if (url != null) {
                 icon = new ImageIcon(Toolkit.getDefaultToolkit().createImage(url).getScaledInstance(50, 50, Image.SCALE_DEFAULT));
             }

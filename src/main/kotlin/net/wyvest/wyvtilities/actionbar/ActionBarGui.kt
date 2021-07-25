@@ -1,4 +1,4 @@
-package net.wyvest.wyvtilities.gui
+package net.wyvest.wyvtilities.actionbar
 
 import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.gui.GuiScreen
@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.GlStateManager
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.config.WyvtilsConfig.actionBarX
 import net.wyvest.wyvtilities.config.WyvtilsConfig.actionBarY
-import net.wyvest.wyvtilities.mixin.AccessorGuiIngame
 import xyz.matthewtgm.tgmlib.util.GuiHelper
 import java.awt.Color
 import java.io.IOException
@@ -34,7 +33,7 @@ object ActionBarGui : GuiScreen() {
         GlStateManager.pushMatrix()
         mc.fontRendererObj.drawString(
             "Example Text",
-            actionBarX - mc.fontRendererObj.getStringWidth((mc.ingameGUI as AccessorGuiIngame).recordPlaying) / 2,
+            actionBarX - mc.fontRendererObj.getStringWidth("Example Text") / 2,
             actionBarY,
             Color.WHITE.rgb
         )
@@ -45,7 +44,7 @@ object ActionBarGui : GuiScreen() {
     @Throws(IOException::class)
     override fun mouseClicked(mouseX: Int, mouseY: Int, mouseButton: Int) {
         super.mouseClicked(mouseX, mouseY, mouseButton)
-        prevX = mouseX
+        prevX = mouseX - mc.fontRendererObj.getStringWidth("Example Text") / 2
         prevY = mouseY
         if (mouseButton == 0) {
             dragging = true
@@ -57,7 +56,7 @@ object ActionBarGui : GuiScreen() {
             actionBarX = prevX
             actionBarY = prevY
         }
-        prevX = x
+        prevX = x - mc.fontRendererObj.getStringWidth("Example Text") / 2
         prevY = y
     }
 

@@ -3,7 +3,6 @@ package net.wyvest.wyvtilities
 import gg.essential.api.EssentialAPI
 import gg.essential.universal.ChatColor
 import gg.essential.universal.UDesktop
-import gg.essential.vigilance.Vigilance
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +12,6 @@ import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion
 import net.wyvest.wyvtilities.commands.WyvtilsCommands
 import net.wyvest.wyvtilities.config.WyvtilsConfig
@@ -35,9 +33,10 @@ import java.net.URI
     clientSideOnly = true,
     modLanguageAdapter = "gg.essential.api.utils.KotlinAdapter")
 object Wyvtilities {
+    var isRegexLoaded: Boolean = false
     const val MODID = "wyvtilities"
     const val MOD_NAME = "Wyvtilities"
-    const val VERSION = "0.6.0-BETA1"
+    const val VERSION = "0.6.0-BETA2"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
 
@@ -52,7 +51,6 @@ object Wyvtilities {
 
     @Mod.EventHandler
     fun onFMLInitialization(event: FMLInitializationEvent) {
-        Vigilance.initialize()
         WyvtilsConfig.preload()
         isConfigInitialized = true
         if (WyvtilsConfig.highlightName) {
@@ -77,21 +75,16 @@ object Wyvtilities {
             }
         }
         TGMLibInstaller.load(Minecraft.getMinecraft().mcDataDir)
-        ForgeHelper.registerEventListener(this)
+        ForgeHelper.registerEventListeners(this, Listener)
         WyvtilsCommands.register()
         try {
             autoGGRegex = JsonApiHelper.getJsonObject("https://wyvest.net/wyvtilities.json", true).getArray("triggers")
-            WyvtilsConfig.isRegexLoaded = true
-            WyvtilsConfig.markDirty()
-            WyvtilsConfig.writeData()
+            isRegexLoaded = true
         } catch (e : Exception) {
             e.printStackTrace()
+            isRegexLoaded = false
             EssentialAPI.getNotifications().push("Wyvtilities", "Wyvtilities failed to get regexes required for the Auto Get GEXP feature!")
-            WyvtilsConfig.isRegexLoaded = false
-            WyvtilsConfig.markDirty()
-            WyvtilsConfig.writeData()
         }
-        Listener.listen()
     }
 
     /**

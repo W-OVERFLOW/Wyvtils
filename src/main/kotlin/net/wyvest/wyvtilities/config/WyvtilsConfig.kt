@@ -8,8 +8,8 @@ import gg.essential.vigilance.data.PropertyType
 import gg.essential.vigilance.data.SortingBehavior
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
-import net.wyvest.wyvtilities.gui.ActionBarGui
-import net.wyvest.wyvtilities.gui.BossHealthGui
+import net.wyvest.wyvtilities.actionbar.ActionBarGui
+import net.wyvest.wyvtilities.bossbar.BossHealthGui
 import net.wyvest.wyvtilities.listeners.Listener
 import xyz.matthewtgm.tgmlib.util.GuiHelper
 import java.awt.Color
@@ -18,17 +18,17 @@ import java.io.File
 @Suppress("unused")
 object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities", sortingBehavior = ConfigSorting)  {
 
-    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.6.0-BETA1, made by Wyvest.", category = "Information")
+    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.6.0-BETA2, made by Wyvest.", category = "Information")
     var paragraph = ""
 
     @Property(type = PropertyType.TEXT, name = "API Key", description = "The API key, used for some features.", category = "General", protectedText = true)
     var apiKey = ""
 
-    @Property(type = PropertyType.SWITCH, name = "Automatically Check GEXP", description = "Automatically check your GEXP after you win a Hypixel game. Requires an API Key.", category = "GEXP")
+    @Property(type = PropertyType.SWITCH, name = "Automatically Check GEXP", description = "Automatically check your GEXP after you win a Hypixel game. Requires an API Key.", category = "Automatic")
     var autoGetGEXP = true
 
-    @Property(type = PropertyType.SWITCH, name = "is regex loaded", category = "GEXP", hidden = true)
-    var isRegexLoaded = true
+    @Property(type = PropertyType.SWITCH, name = "Automatically Check Winstreak", description = "Automatically check your winstreak after you win a Hypixel game. Requires an API Key.", category = "Automatic")
+    var autoGetWinstreak = false
 
     @Property(type = PropertyType.SWITCH, name = "Show Update Notification", description = "Show a notification when you start Minecraft informing you of new updates.", category = "General")
     var showUpdateNotification = true
@@ -186,6 +186,14 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
 
     @Property(
         type = PropertyType.SWITCH,
+        name = "Action Bar Shadow",
+        description = "Toggle the action bar shadow.",
+        category = "Action Bar"
+    )
+    var actionBarShadow = true
+
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Action Bar Position",
         description = "Toggle the action bar position customization.",
         category = "Action Bar"
@@ -262,7 +270,6 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
             Listener.changeTextColor = true
         }
         addDependency("textColor", "highlightName")
-        addDependency("autoGetGEXP", "isRegexLoaded")
         addDependency("soundMultiplier", "soundBoost")
         addDependency("bossBar", "bossBarCustomization")
         addDependency("bossBarText", "bossBarCustomization")

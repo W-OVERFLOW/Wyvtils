@@ -7,6 +7,7 @@ import net.wyvest.wyvtilities.Wyvtilities.mc
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import xyz.matthewtgm.json.parser.JsonParser
 import xyz.matthewtgm.tgmlib.util.HypixelHelper
+import xyz.matthewtgm.tgmlib.util.ServerHelper
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -62,21 +63,14 @@ object HypixelUtils {
                 uuid
             )
         ).asJsonObject["player"].asJsonObject["stats"]
-        return when (HypixelHelper.getLocraw().gameType) {
-            HypixelHelper.HypixelLocraw.GameType.BEDWARS -> {
-                winstreak = playerStats.asJsonObject["Bedwars"].asJsonObject["winstreak"].asInt.toString()
-                true
-            }
-            HypixelHelper.HypixelLocraw.GameType.SKYWARS -> {
-                winstreak = playerStats.asJsonObject["SkyWars"].asJsonObject["win_streak"].asInt.toString()
-                true
-            }
-            HypixelHelper.HypixelLocraw.GameType.DUELS -> {
-                winstreak = playerStats.asJsonObject["Duels"].asJsonObject["current_winstreak"].asInt.toString()
-                true
-            }
-            else -> false
+        if (!ServerHelper.hypixelBedwars()) return false
+        try {
+            winstreak = playerStats.asJsonObject["Bedwars"].asJsonObject["winstreak"].asInt.toString()
+        } catch (e : Exception) {
+            e.printStackTrace()
+            return false
         }
+        return true
     }
 
     fun getWinstreak(username: String): Boolean {

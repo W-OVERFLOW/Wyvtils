@@ -15,7 +15,12 @@ public class MixinSoundManager {
         if (WyvtilsConfig.INSTANCE.getSoundBoost()) {
             if (sound instanceof PositionedSound) {
                 if (Wyvtilities.INSTANCE.checkSound(sound.getSoundLocation().getResourcePath())) {
-                    cir.setReturnValue(1f);
+                    PositionedSound positionedSound = (PositionedSound) sound;
+                    if (positionedSound.getVolume() * WyvtilsConfig.INSTANCE.getSoundMultiplier() <= 1) {
+                        cir.setReturnValue(positionedSound.getVolume() * WyvtilsConfig.INSTANCE.getSoundMultiplier());
+                    } else {
+                        cir.setReturnValue(Float.parseFloat("1"));
+                    }
                 }
             }
         }

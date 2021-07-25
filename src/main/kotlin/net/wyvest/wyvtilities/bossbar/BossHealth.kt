@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.boss.BossStatus
 import net.minecraft.util.EnumChatFormatting
 import net.wyvest.wyvtilities.config.WyvtilsConfig
-import net.wyvest.wyvtilities.gui.BossHealthGui
 
 
 object BossHealth {
