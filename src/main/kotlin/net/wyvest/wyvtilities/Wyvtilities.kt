@@ -3,7 +3,6 @@ package net.wyvest.wyvtilities
 import gg.essential.api.EssentialAPI
 import gg.essential.universal.ChatColor
 import gg.essential.universal.UDesktop
-import gg.essential.vigilance.Vigilance
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +12,6 @@ import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion
 import net.wyvest.wyvtilities.commands.WyvtilsCommands
 import net.wyvest.wyvtilities.config.WyvtilsConfig
@@ -22,9 +20,10 @@ import net.wyvest.wyvtilities.utils.equalsAny
 import net.wyvest.wyvtilities.utils.startsWithAny
 import xyz.matthewtgm.json.entities.JsonArray
 import xyz.matthewtgm.json.util.JsonApiHelper
-import xyz.matthewtgm.tgmlib.TGMLibInstaller
+import xyz.matthewtgm.tgmlib.launchwrapper.TGMLibLaunchwrapper
 import xyz.matthewtgm.tgmlib.util.ChatHelper
 import xyz.matthewtgm.tgmlib.util.ForgeHelper
+import xyz.matthewtgm.tgmlib.util.Multithreading
 import java.net.URI
 
 
@@ -35,9 +34,10 @@ import java.net.URI
     clientSideOnly = true,
     modLanguageAdapter = "gg.essential.api.utils.KotlinAdapter")
 object Wyvtilities {
+    var isRegexLoaded: Boolean = false
     const val MODID = "wyvtilities"
     const val MOD_NAME = "Wyvtilities"
-    const val VERSION = "0.5.0"
+    const val VERSION = "0.6.0"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
 
@@ -52,7 +52,7 @@ object Wyvtilities {
 
     @Mod.EventHandler
     fun onFMLInitialization(event: FMLInitializationEvent) {
-        Vigilance.initialize()
+        TGMLibLaunchwrapper.initialize(Minecraft.getMinecraft().mcDataDir)
         WyvtilsConfig.preload()
         isConfigInitialized = true
         if (WyvtilsConfig.highlightName) {
@@ -76,31 +76,17 @@ object Wyvtilities {
                 else -> ""
             }
         }
-        TGMLibInstaller.load(Minecraft.getMinecraft().mcDataDir)
-        ForgeHelper.registerEventListener(this)
+        ForgeHelper.registerEventListeners(this, Listener)
         WyvtilsCommands.register()
-        try {
-            autoGGRegex = JsonApiHelper.getJsonObject("https://wyvest.net/wyvtilities.json", true).getArray("triggers")
-            WyvtilsConfig.isRegexLoaded = true
-            WyvtilsConfig.markDirty()
-            WyvtilsConfig.writeData()
-        } catch (e : Exception) {
-            e.printStackTrace()
-            EssentialAPI.getNotifications().push("Wyvtilities", "Wyvtilities failed to get regexes required for the Auto Get GEXP feature!")
-            WyvtilsConfig.isRegexLoaded = false
-            WyvtilsConfig.markDirty()
-            WyvtilsConfig.writeData()
-        }
-        Listener.listen()
-    }
-
-    @Mod.EventHandler
-    fun onPostInitialization(event: FMLPostInitializationEvent) {
-        if (ForgeHelper.isModLoaded("bossbar_customizer")) {
-            WyvtilsConfig.bossBarCustomization = false
-            WyvtilsConfig.markDirty()
-            WyvtilsConfig.writeData()
-            EssentialAPI.getNotifications().push("Wyvtilities", "Bossbar Customizer (the mod) has been detected, and so the Wyvtils Bossbar related features have been disabled.")
+        Multithreading.runAsync {
+            try {
+                autoGGRegex = JsonApiHelper.getJsonObject("https://wyvest.net/wyvtilities.json", true).getAsArray("triggers")
+                isRegexLoaded = true
+            } catch (e : Exception) {
+                e.printStackTrace()
+                isRegexLoaded = false
+                EssentialAPI.getNotifications().push("Wyvtilities", "Wyvtilities failed to get regexes required for the Auto Get GEXP feature!")
+            }
         }
     }
 
@@ -110,6 +96,12 @@ object Wyvtilities {
      */
     @Mod.EventHandler
     fun onFMLLoad(event : FMLLoadCompleteEvent) {
+        if (ForgeHelper.isModLoaded("bossbar_customizer")) {
+            WyvtilsConfig.bossBarCustomization = false
+            WyvtilsConfig.markDirty()
+            WyvtilsConfig.writeData()
+            EssentialAPI.getNotifications().push("Wyvtilities", "Bossbar Customizer (the mod) has been detected, and so the Wyvtils Bossbar related features have been disabled.")
+        }
         CoroutineScope(Dispatchers.IO + CoroutineName("Wyvtilities-UpdateChecker")).launch {
             val latestRelease = JsonApiHelper.getJsonObject("https://api.github.com/repos/Wyvest/Wyvtilities/releases/latest")
             val latestTag = latestRelease.get("tag_name").asString
@@ -119,20 +111,10 @@ object Wyvtilities {
             val latestVersion = DefaultArtifactVersion(latestTag.substringAfter("v").substringBefore("-"))
 
             var updateUrl: String? = null
-            if (latestTag.contains("BETA") || (currentTag.contains("BETA") && currentVersion >= latestVersion)) {
-                var currentPre = 0.0
-                var latestPre = 0.0
-                if (currentTag.contains("BETA")) {
-                    currentPre = currentTag.substringAfter("BETA").toDouble()
-                }
-                if (latestTag.contains("BETA")) {
-                    latestPre = latestTag.substringAfter("BETA").toDouble()
-                }
-                if ((latestPre > currentPre) || (latestPre == 0.0 && currentVersion.compareTo(latestVersion) == 0)) {
-                    updateUrl = latestRelease.getArray("assets")[0].asJsonObject["browser_download_url"].asString
-                }
+            if ((currentTag.contains("BETA") && currentVersion >= latestVersion)) {
+                return@launch
             } else if (currentVersion < latestVersion) {
-                updateUrl = latestRelease.getArray("assets")[0].asJsonObject["browser_download_url"].asString
+                updateUrl = latestRelease.getAsArray("assets")[0].asJsonObject["browser_download_url"].asString
             }
             if (updateUrl != null) {
                 EssentialAPI.getNotifications().push("Mod Update", "Wyvtilities $latestTag is available!\nClick to open!", 5f) {

@@ -1,5 +1,6 @@
 package net.wyvest.wyvtilities.config
 
+import gg.essential.api.EssentialAPI
 import gg.essential.vigilance.Vigilant
 import gg.essential.vigilance.data.Category
 import gg.essential.vigilance.data.Property
@@ -7,6 +8,9 @@ import gg.essential.vigilance.data.PropertyType
 import gg.essential.vigilance.data.SortingBehavior
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
+import net.wyvest.wyvtilities.Wyvtilities.MOD_NAME
+import net.wyvest.wyvtilities.Wyvtilities.VERSION
+import net.wyvest.wyvtilities.actionbar.ActionBarGui
 import net.wyvest.wyvtilities.bossbar.BossHealthGui
 import net.wyvest.wyvtilities.listeners.Listener
 import xyz.matthewtgm.tgmlib.util.GuiHelper
@@ -16,17 +20,17 @@ import java.io.File
 @Suppress("unused")
 object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities", sortingBehavior = ConfigSorting)  {
 
-    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.5.0, made by Wyvest.", category = "Information")
+    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using $MOD_NAME version $VERSION, made by Wyvest.", category = "Information")
     var paragraph = ""
 
     @Property(type = PropertyType.TEXT, name = "API Key", description = "The API key, used for some features.", category = "General", protectedText = true)
     var apiKey = ""
 
-    @Property(type = PropertyType.SWITCH, name = "Automatically Check GEXP", description = "Automatically check your GEXP after you win a Hypixel game. Requires an API Key.", category = "GEXP")
+    @Property(type = PropertyType.SWITCH, name = "Automatically Check GEXP", description = "Automatically check your GEXP after you win a Hypixel game. Requires an API Key.", category = "Automatic")
     var autoGetGEXP = true
 
-    @Property(type = PropertyType.SWITCH, name = "is regex loaded", category = "GEXP", hidden = true)
-    var isRegexLoaded = true
+    @Property(type = PropertyType.SWITCH, name = "Automatically Check Winstreak", description = "Automatically check your winstreak after you win a Hypixel game. Requires an API Key.", category = "Automatic")
+    var autoGetWinstreak = false
 
     @Property(type = PropertyType.SWITCH, name = "Show Update Notification", description = "Show a notification when you start Minecraft informing you of new updates.", category = "General")
     var showUpdateNotification = true
@@ -57,12 +61,24 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     @Property(
         type = PropertyType.SLIDER,
         name = "Sound Multiplier",
-        description = "How much louder the sound is. There is a volume limit, so it doesn't break your ears.",
+        description = "How much louder the sound is. There is a volume limit, so it doesn't break your ears.\n" +
+                "1 will make the sound the same.",
         category = "Sound",
         min = 0,
         max = 100
     )
     var soundMultiplier = 1
+
+    @Property(
+        type = PropertyType.SLIDER,
+        name = "Sound Decrease",
+        description = "How much quieter the non-important sounds are.\n" +
+                "1 will make the sound the same.",
+        category = "Sound",
+        min = 0,
+        max = 100
+    )
+    var soundDecrease = 1
 
     @Property(
         type = PropertyType.SWITCH,
@@ -120,6 +136,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     )
     fun openBossHealthGui() {
         if (bossBarCustomization) GuiHelper.open(BossHealthGui)
+        else EssentialAPI.getNotifications().push("Wyvtilities", "You can't do that, you haven't enabled Bossbar Customization!")
     }
 
     @Property(
@@ -166,7 +183,6 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     )
     var firstLaunchBossbar = true
 
-    /*/
     @Property(
         type = PropertyType.SWITCH,
         name = "Action Bar Customization",
@@ -182,9 +198,56 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         category = "Action Bar"
     )
     var actionBar = true
-     */
 
-    @Property(type = PropertyType.PARAGRAPH, name = "TGMDevelopment", description = "Utilities", category = "Information", subcategory = "Credits")
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Action Bar Shadow",
+        description = "Toggle the action bar shadow.",
+        category = "Action Bar"
+    )
+    var actionBarShadow = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Action Bar Position",
+        description = "Toggle the action bar position customization.",
+        category = "Action Bar"
+    )
+    var actionBarPosition = false
+
+    @Property(
+        type = PropertyType.BUTTON,
+        name = "Action Bar Editor",
+        description = "Change the position of the action bar.",
+        category = "Action Bar"
+    )
+    fun openActionBarGui() {
+        if (actionBarPosition && actionBarCustomization) EssentialAPI.getGuiUtil().openScreen(ActionBarGui)
+        else EssentialAPI.getNotifications().push("Wyvtilities", "You can't do that, you don't have Action Bar position enabled!")
+    }
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Action Bar X",
+        description = "X",
+        category = "Action Bar",
+        hidden = true
+    )
+    var actionBarX : Int = 0
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Action Bar Y",
+        description = "Y",
+        category = "Action Bar",
+        hidden = true
+    )
+    var actionBarY : Int = 12
+
+    @Property(type = PropertyType.PARAGRAPH, name = "Sk1er LLC", description = "Essential + Vigilance", category = "Information", subcategory = "Credits")
+    var credits0 = ""
+
+    @Property(type = PropertyType.PARAGRAPH, name = "TGMDevelopment", description = "TGMLib", category = "Information", subcategory = "Credits")
     var credits1 = ""
 
     @Property(type = PropertyType.PARAGRAPH, name = "Skytils", description = "Even more utilities", category = "Information", subcategory = "Credits")
@@ -196,6 +259,10 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         setCategoryDescription(
             "General",
             "This category is for configuring general parts of Wyvtils."
+        )
+        setCategoryDescription(
+            "Action Bar",
+            "Configure action bar-related features in Wyvtils."
         )
         setCategoryDescription(
             "Text",
@@ -216,21 +283,26 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         setSubcategoryDescription(
             "Information",
             "Credits",
-            "This mod would not be possible without OSS projects and other forms of help. This page lists the people who helped make this mod."
+            "This mod would not be possible without OSS projects and other forms of help. This page lists the people / organizations who helped make this mod."
         )
         registerListener("textColor") {
                 _: Int ->
             Listener.changeTextColor = true
         }
         addDependency("textColor", "highlightName")
-        addDependency("autoGetGEXP", "isRegexLoaded")
         addDependency("soundMultiplier", "soundBoost")
-        addDependency("bossBar", "bossBarCustomization")
-        addDependency("bossBarText", "bossBarCustomization")
-        addDependency("bossBarShadow", "bossBarText")
-        addDependency("bossBarShadow", "bossBarCustomization")
-        addDependency("bossBarBar", "bossBarCustomization")
-        addDependency("bossBarColor", "bossBarCustomization")
+        listOf(
+            "bossBar",
+            "bossBarText",
+            "bossBarShadow",
+            "bossBarBar",
+            "bossBarColor"
+        ).forEach { propertyName -> addDependency(propertyName, "bossBarCustomization") }
+        listOf(
+            "actionBar",
+            "actionBarShadow",
+            "actionBarPosition"
+        ).forEach { propertyName -> addDependency(propertyName, "actionBarCustomization") }
     }
 
     private object ConfigSorting : SortingBehavior() {

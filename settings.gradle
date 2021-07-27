@@ -2,21 +2,20 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         mavenCentral()
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots"
-        }
-        maven { url "https://maven.minecraftforge.net/" }
-        maven { url "https://jitpack.io" }
+        
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+        maven { url 'https://maven.minecraftforge.net' }
+        maven { url 'https://jitpack.io' }
     }
+    
     resolutionStrategy {
         eachPlugin {
             switch (requested.id.id) {
-                case "net.minecraftforge.gradle.forge":
-                    useModule("com.github.asbyth:ForgeGradle:${requested.version}")
+                case 'net.minecraftforge.gradle.forge':
+                    useModule "com.github.asbyth:ForgeGradle:${requested.version}"
                     break
-                case "org.spongepowered.mixin":
-                    useModule("com.github.Skytils:mixingradle:${requested.version}")
+                case 'org.spongepowered.mixin':
+                    useModule "com.github.xcfrg:mixingradle:${requested.version}"
                     break
             }
         }

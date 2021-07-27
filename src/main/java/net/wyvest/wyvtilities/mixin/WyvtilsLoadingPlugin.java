@@ -1,9 +1,8 @@
 package net.wyvest.wyvtilities.mixin;
 
 import kotlin.KotlinVersion;
-import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
-import xyz.matthewtgm.tgmlib.TGMLibInstaller;
+import xyz.matthewtgm.tgmlib.launchwrapper.TGMLibLaunchwrapper;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +12,8 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,15 +30,9 @@ public class WyvtilsLoadingPlugin implements IFMLLoadingPlugin {
 
     @Override
     public String[] getASMTransformerClass() {
-        TGMLibInstaller.ReturnValue tgmLibInitialized = TGMLibInstaller.initialize(Launch.minecraftHome);
-        if (tgmLibInitialized != TGMLibInstaller.ReturnValue.SUCCESSFUL)
-            System.out.println("Failed to load TGMLib.");
-        else
-            System.out.println("Loaded TGMLib successfully.");
-
-        if (TGMLibInstaller.isLoaded())
-            return new String[] {"xyz.matthewtgm.tgmlib.tweaker.TGMLibClassTransformer"};
-        return new String[0];
+        List<String> classTransformers = new ArrayList<>();
+        TGMLibLaunchwrapper.quickInject(classTransformers);
+        return classTransformers.toArray(new String[0]);
     }
 
     @Override
@@ -88,7 +83,7 @@ public class WyvtilsLoadingPlugin implements IFMLLoadingPlugin {
 
         Icon icon = null;
         try {
-            URL url = WyvtilsLoadingPlugin.class.getResource("/assets/wyvtils/wyvest.png");
+            URL url = WyvtilsLoadingPlugin.class.getResource("/assets/wyvtilities/wyvtilities.png");
             if (url != null) {
                 icon = new ImageIcon(Toolkit.getDefaultToolkit().createImage(url).getScaledInstance(50, 50, Image.SCALE_DEFAULT));
             }

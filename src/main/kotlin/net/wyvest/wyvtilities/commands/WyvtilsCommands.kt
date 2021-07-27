@@ -77,7 +77,6 @@ object WyvtilsCommands : Command("wyvtilities", true) {
 
         }
     }
-    /*/
     @SubCommand("winstreak", description = "Gets the winstreak of the player specified")
     fun winstreak(@DisplayName("username") username : String?) {
         if (WyvtilsConfig.apiKey.isEmpty()) {
@@ -88,16 +87,16 @@ object WyvtilsCommands : Command("wyvtilities", true) {
                     if (username != null) {
                         if (HypixelUtils.getWinstreak(username)) {
                             EssentialAPI.getNotifications()
-                                .push("Wyvtilities", "$username currently has " + HypixelUtils.gexp + " guild EXP.")
+                                .push("Wyvtilities", "$username currently has a " + HypixelUtils.winstreak + " winstreak.")
                         } else {
                             EssentialAPI.getNotifications()
-                                .push("Wyvtilities", "There was a problem trying to get $username's GEXP.")
+                                .push("Wyvtilities", "There was a problem trying to get $username's winstreak.")
                         }
                     } else {
                         if (HypixelUtils.getWinstreak()) {
-                            EssentialAPI.getNotifications().push("Wyvtilities", "You currently have " + HypixelUtils.gexp + " guild EXP.")
+                            EssentialAPI.getNotifications().push("Wyvtilities", "You currently have a " + HypixelUtils.winstreak + " winstreak.")
                         } else {
-                            EssentialAPI.getNotifications().push("Wyvtilities", "There was a problem trying to get your GEXP.")
+                            EssentialAPI.getNotifications().push("Wyvtilities", "There was a problem trying to get your winstreak.")
                         }
                     }
                 }
@@ -107,7 +106,5 @@ object WyvtilsCommands : Command("wyvtilities", true) {
 
         }
     }
-
-     */
 
 }
