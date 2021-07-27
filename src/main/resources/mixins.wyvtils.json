@@ -5,6 +5,7 @@
   "package": "net.wyvest.wyvtilities.mixin",
   "refmap": "mixins.wyvtils.refmap.json",
   "mixins": [
+    "AccessorGuiIngame",
     "MixinGuiIngame",
     "MixinGuiIngameForge",
     "MixinSoundManager"

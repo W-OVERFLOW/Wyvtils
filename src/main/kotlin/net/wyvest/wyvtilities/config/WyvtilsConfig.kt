@@ -8,6 +8,8 @@ import gg.essential.vigilance.data.PropertyType
 import gg.essential.vigilance.data.SortingBehavior
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
+import net.wyvest.wyvtilities.Wyvtilities.MOD_NAME
+import net.wyvest.wyvtilities.Wyvtilities.VERSION
 import net.wyvest.wyvtilities.actionbar.ActionBarGui
 import net.wyvest.wyvtilities.bossbar.BossHealthGui
 import net.wyvest.wyvtilities.listeners.Listener
@@ -18,7 +20,7 @@ import java.io.File
 @Suppress("unused")
 object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities", sortingBehavior = ConfigSorting)  {
 
-    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using Wyvtilities version 0.6.0-BETA2, made by Wyvest.", category = "Information")
+    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using $MOD_NAME version $VERSION, made by Wyvest.", category = "Information")
     var paragraph = ""
 
     @Property(type = PropertyType.TEXT, name = "API Key", description = "The API key, used for some features.", category = "General", protectedText = true)
@@ -59,12 +61,24 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     @Property(
         type = PropertyType.SLIDER,
         name = "Sound Multiplier",
-        description = "How much louder the sound is. There is a volume limit, so it doesn't break your ears.",
+        description = "How much louder the sound is. There is a volume limit, so it doesn't break your ears.\n" +
+                "1 will make the sound the same.",
         category = "Sound",
         min = 0,
         max = 100
     )
     var soundMultiplier = 1
+
+    @Property(
+        type = PropertyType.SLIDER,
+        name = "Sound Decrease",
+        description = "How much quieter the non-important sounds are.\n" +
+                "1 will make the sound the same.",
+        category = "Sound",
+        min = 0,
+        max = 100
+    )
+    var soundDecrease = 1
 
     @Property(
         type = PropertyType.SWITCH,

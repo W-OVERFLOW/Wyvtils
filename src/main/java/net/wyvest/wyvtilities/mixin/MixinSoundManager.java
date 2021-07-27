@@ -14,8 +14,8 @@ public class MixinSoundManager {
     public void getVolume(ISound sound, SoundPoolEntry entry, SoundCategory category, CallbackInfoReturnable<Float> cir) {
         if (WyvtilsConfig.INSTANCE.getSoundBoost()) {
             if (sound instanceof PositionedSound) {
+                PositionedSound positionedSound = (PositionedSound) sound;
                 if (Wyvtilities.INSTANCE.checkSound(sound.getSoundLocation().getResourcePath())) {
-                    PositionedSound positionedSound = (PositionedSound) sound;
                     if (positionedSound.getVolume() * WyvtilsConfig.INSTANCE.getSoundMultiplier() <= 1) {
                         cir.setReturnValue(positionedSound.getVolume() * WyvtilsConfig.INSTANCE.getSoundMultiplier());
                     } else {

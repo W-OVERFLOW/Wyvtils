@@ -2,7 +2,7 @@
   {
     "modid": "wyvtilities",
     "name": "Wyvtilities",
-    "description": "Utilities by Wyvest.",
+    "description": "Utilities, by Wyvest.",
     "version": "${version}",
     "mcversion": "${mcversion}",
     "url": "",

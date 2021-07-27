@@ -13,7 +13,9 @@ import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.wyvest.wyvtilities.Wyvtilities
 import net.wyvest.wyvtilities.Wyvtilities.mc
 import net.wyvest.wyvtilities.config.WyvtilsConfig
+import net.wyvest.wyvtilities.mixin.AccessorGuiIngame
 import net.wyvest.wyvtilities.utils.HypixelUtils
+import net.wyvest.wyvtilities.utils.containsAny
 import xyz.matthewtgm.json.util.JsonApiHelper
 import xyz.matthewtgm.tgmlib.events.StringRenderedEvent
 import xyz.matthewtgm.tgmlib.tweaker.hooks.TGMLibPositionedSoundAccessor
@@ -87,6 +89,35 @@ object Listener {
                         return
                     }
                 }
+                //if after all that, victory isnt detected, use title checking method
+                if (!victoryDetected) {
+                    if (EnumChatFormatting.getTextWithoutFormattingCodes((mc.ingameGUI as AccessorGuiIngame).displayedTitle).containsAny("win", "over", "won", "victory")) {
+                        victoryDetected = true
+                        Multithreading.runAsync {
+                            if (WyvtilsConfig.autoGetGEXP) {
+                                if (HypixelUtils.getGEXP()) {
+                                    EssentialAPI.getNotifications()
+                                        .push("Wyvtilities", "You currently have " + HypixelUtils.gexp + " guild EXP.")
+                                } else {
+                                    EssentialAPI.getNotifications()
+                                        .push("Wyvtilities", "There was a problem trying to get your GEXP.")
+                                }
+                            }
+                            if (WyvtilsConfig.autoGetWinstreak) {
+                                if (HypixelUtils.getWinstreak()) {
+                                    EssentialAPI.getNotifications().push(
+                                        "Wyvtilities",
+                                        "You currently have a " + HypixelUtils.winstreak + " winstreak."
+                                    )
+                                } else {
+                                    EssentialAPI.getNotifications()
+                                        .push("Wyvtilities", "There was a problem trying to get your winstreak.")
+                                }
+                            }
+                        }
+                        return
+                    }
+                }
             }
         }
     }
@@ -127,8 +158,13 @@ object Listener {
 
     @SubscribeEvent
     fun onSoundPlayed(e : PlaySoundEvent) {
-        if (e.result is PositionedSound && Wyvtilities.checkSound(e.name) && WyvtilsConfig.soundBoost) {
-            (e.result as PositionedSound as TGMLibPositionedSoundAccessor).setVolume((e.result as PositionedSound).volume * WyvtilsConfig.soundMultiplier)
+        if (e.result is PositionedSound) {
+            val positionedSound = (e.result as PositionedSound as TGMLibPositionedSoundAccessor)
+            if (Wyvtilities.checkSound(e.name) && WyvtilsConfig.soundBoost) {
+                positionedSound.setVolume((e.result as PositionedSound).volume * WyvtilsConfig.soundMultiplier)
+            } else if (WyvtilsConfig.soundBoost) {
+                positionedSound.setVolume((e.result as PositionedSound).volume / WyvtilsConfig.soundDecrease)
+            }
         }
     }
     @SubscribeEvent

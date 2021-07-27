@@ -20,9 +20,10 @@ import net.wyvest.wyvtilities.utils.equalsAny
 import net.wyvest.wyvtilities.utils.startsWithAny
 import xyz.matthewtgm.json.entities.JsonArray
 import xyz.matthewtgm.json.util.JsonApiHelper
-import xyz.matthewtgm.tgmlib.TGMLibInstaller
+import xyz.matthewtgm.tgmlib.launchwrapper.TGMLibLaunchwrapper
 import xyz.matthewtgm.tgmlib.util.ChatHelper
 import xyz.matthewtgm.tgmlib.util.ForgeHelper
+import xyz.matthewtgm.tgmlib.util.Multithreading
 import java.net.URI
 
 
@@ -36,7 +37,7 @@ object Wyvtilities {
     var isRegexLoaded: Boolean = false
     const val MODID = "wyvtilities"
     const val MOD_NAME = "Wyvtilities"
-    const val VERSION = "0.6.0-BETA2"
+    const val VERSION = "0.6.0"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
 
@@ -51,6 +52,7 @@ object Wyvtilities {
 
     @Mod.EventHandler
     fun onFMLInitialization(event: FMLInitializationEvent) {
+        TGMLibLaunchwrapper.initialize(Minecraft.getMinecraft().mcDataDir)
         WyvtilsConfig.preload()
         isConfigInitialized = true
         if (WyvtilsConfig.highlightName) {
@@ -74,16 +76,17 @@ object Wyvtilities {
                 else -> ""
             }
         }
-        TGMLibInstaller.load(Minecraft.getMinecraft().mcDataDir)
         ForgeHelper.registerEventListeners(this, Listener)
         WyvtilsCommands.register()
-        try {
-            autoGGRegex = JsonApiHelper.getJsonObject("https://wyvest.net/wyvtilities.json", true).getArray("triggers")
-            isRegexLoaded = true
-        } catch (e : Exception) {
-            e.printStackTrace()
-            isRegexLoaded = false
-            EssentialAPI.getNotifications().push("Wyvtilities", "Wyvtilities failed to get regexes required for the Auto Get GEXP feature!")
+        Multithreading.runAsync {
+            try {
+                autoGGRegex = JsonApiHelper.getJsonObject("https://wyvest.net/wyvtilities.json", true).getAsArray("triggers")
+                isRegexLoaded = true
+            } catch (e : Exception) {
+                e.printStackTrace()
+                isRegexLoaded = false
+                EssentialAPI.getNotifications().push("Wyvtilities", "Wyvtilities failed to get regexes required for the Auto Get GEXP feature!")
+            }
         }
     }
 
@@ -108,20 +111,10 @@ object Wyvtilities {
             val latestVersion = DefaultArtifactVersion(latestTag.substringAfter("v").substringBefore("-"))
 
             var updateUrl: String? = null
-            if (latestTag.contains("BETA") || (currentTag.contains("BETA") && currentVersion >= latestVersion)) {
-                var currentPre = 0.0
-                var latestPre = 0.0
-                if (currentTag.contains("BETA")) {
-                    currentPre = currentTag.substringAfter("BETA").toDouble()
-                }
-                if (latestTag.contains("BETA")) {
-                    latestPre = latestTag.substringAfter("BETA").toDouble()
-                }
-                if ((latestPre > currentPre) || (latestPre == 0.0 && currentVersion.compareTo(latestVersion) == 0)) {
-                    updateUrl = latestRelease.getArray("assets")[0].asJsonObject["browser_download_url"].asString
-                }
+            if ((currentTag.contains("BETA") && currentVersion >= latestVersion)) {
+                return@launch
             } else if (currentVersion < latestVersion) {
-                updateUrl = latestRelease.getArray("assets")[0].asJsonObject["browser_download_url"].asString
+                updateUrl = latestRelease.getAsArray("assets")[0].asJsonObject["browser_download_url"].asString
             }
             if (updateUrl != null) {
                 EssentialAPI.getNotifications().push("Mod Update", "Wyvtilities $latestTag is available!\nClick to open!", 5f) {
