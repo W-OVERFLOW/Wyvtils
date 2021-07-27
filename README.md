@@ -19,7 +19,11 @@
  - Text Color - Change the text color for the highlight.
 + Sound Boost - Boosts sounds important for PvP
  - Sound Multiplier - Change the amount multiplied.
-
+ - Sound Decrease - How much quieter the non-important sounds are.
++ Action Bar Customization - Customize the action bar in many ways.
+ - Action Bar Shadow
+ - Action Bar Position
++ Auto Get Winstreak - Automatically checks your winstreak after you win a Hypixel game. Requires an API Key. Only works in BedWars.
 ### Commands
 + /wyvtilities - Open Config Menu
 + /wyvtilities help - Shows help for command usage
