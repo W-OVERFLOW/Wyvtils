@@ -51,10 +51,7 @@ configurations {
 dependencies {
     // Libraries
     provided 'xyz.matthewtgm:TGMLib:2.6.11'
-    include('xyz.matthewtgm:TGMLibLaunchwrapper:1.5') {
-        transitive = false
-    }
-
+    include('xyz.matthewtgm:TGMLibLaunchwrapper:1.5')
     include ('gg.essential:loader-launchwrapper:1.0.2') {
         transitive = false
     }

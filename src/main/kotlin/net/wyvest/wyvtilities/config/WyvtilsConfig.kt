@@ -136,6 +136,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     )
     fun openBossHealthGui() {
         if (bossBarCustomization) GuiHelper.open(BossHealthGui)
+        else EssentialAPI.getNotifications().push("Wyvtilities", "You can't do that, you haven't enabled Bossbar Customization!")
     }
 
     @Property(
@@ -221,7 +222,8 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         category = "Action Bar"
     )
     fun openActionBarGui() {
-        EssentialAPI.getGuiUtil().openScreen(ActionBarGui)
+        if (actionBarPosition && actionBarCustomization) EssentialAPI.getGuiUtil().openScreen(ActionBarGui)
+        else EssentialAPI.getNotifications().push("Wyvtilities", "You can't do that, you don't have Action Bar position enabled!")
     }
 
     @Property(
@@ -259,6 +261,10 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
             "This category is for configuring general parts of Wyvtils."
         )
         setCategoryDescription(
+            "Action Bar",
+            "Configure action bar-related features in Wyvtils."
+        )
+        setCategoryDescription(
             "Text",
             "Configure text-related features in Wyvtils."
         )
@@ -277,7 +283,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         setSubcategoryDescription(
             "Information",
             "Credits",
-            "This mod would not be possible without OSS projects and other forms of help. This page lists the people who helped make this mod."
+            "This mod would not be possible without OSS projects and other forms of help. This page lists the people / organizations who helped make this mod."
         )
         registerListener("textColor") {
                 _: Int ->
@@ -285,12 +291,18 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         }
         addDependency("textColor", "highlightName")
         addDependency("soundMultiplier", "soundBoost")
-        addDependency("bossBar", "bossBarCustomization")
-        addDependency("bossBarText", "bossBarCustomization")
-        addDependency("bossBarShadow", "bossBarText")
-        addDependency("bossBarShadow", "bossBarCustomization")
-        addDependency("bossBarBar", "bossBarCustomization")
-        addDependency("bossBarColor", "bossBarCustomization")
+        listOf(
+            "bossBar",
+            "bossBarText",
+            "bossBarShadow",
+            "bossBarBar",
+            "bossBarColor"
+        ).forEach { propertyName -> addDependency(propertyName, "bossBarCustomization") }
+        listOf(
+            "actionBar",
+            "actionBarShadow",
+            "actionBarPosition"
+        ).forEach { propertyName -> addDependency(propertyName, "actionBarCustomization") }
     }
 
     private object ConfigSorting : SortingBehavior() {
