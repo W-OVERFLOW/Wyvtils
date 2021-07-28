@@ -54,6 +54,7 @@ dependencies {
         transitive = false
     }
     include ('gg.essential:vigilance-1.8.9-forge:154')
+    provided 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
     annotationProcessor 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
 
     // Languages
