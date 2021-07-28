@@ -1,7 +1,5 @@
 package net.wyvest.wyvtilities.listeners
 
-import gg.essential.api.EssentialAPI
-import gg.essential.api.utils.Multithreading
 import gg.essential.universal.ChatColor
 import net.minecraft.client.audio.PositionedSound
 import net.minecraft.util.EnumChatFormatting
@@ -19,6 +17,8 @@ import net.wyvest.wyvtilities.utils.containsAny
 import xyz.matthewtgm.json.util.JsonApiHelper
 import xyz.matthewtgm.tgmlib.events.StringRenderedEvent
 import xyz.matthewtgm.tgmlib.tweaker.hooks.TGMLibPositionedSoundAccessor
+import xyz.matthewtgm.tgmlib.util.Multithreading
+import xyz.matthewtgm.tgmlib.util.Notifications
 import xyz.matthewtgm.tgmlib.util.ServerHelper
 import java.util.regex.Pattern
 
@@ -67,21 +67,21 @@ object Listener {
                         Multithreading.runAsync {
                             if (WyvtilsConfig.autoGetGEXP) {
                                 if (HypixelUtils.getGEXP()) {
-                                    EssentialAPI.getNotifications()
+                                    Notifications
                                         .push("Wyvtilities", "You currently have " + HypixelUtils.gexp + " guild EXP.")
                                 } else {
-                                    EssentialAPI.getNotifications()
+                                    Notifications
                                         .push("Wyvtilities", "There was a problem trying to get your GEXP.")
                                 }
                             }
                             if (WyvtilsConfig.autoGetWinstreak) {
                                 if (HypixelUtils.getWinstreak()) {
-                                    EssentialAPI.getNotifications().push(
+                                    Notifications.push(
                                         "Wyvtilities",
-                                        "You currently have a " + HypixelUtils.winstreak + " winstreak."
+                                        "You currently have a " + HypixelUtils.winstreakString + " winstreak."
                                     )
                                 } else {
-                                    EssentialAPI.getNotifications()
+                                    Notifications
                                         .push("Wyvtilities", "There was a problem trying to get your winstreak.")
                                 }
                             }
@@ -96,21 +96,21 @@ object Listener {
                         Multithreading.runAsync {
                             if (WyvtilsConfig.autoGetGEXP) {
                                 if (HypixelUtils.getGEXP()) {
-                                    EssentialAPI.getNotifications()
+                                    Notifications
                                         .push("Wyvtilities", "You currently have " + HypixelUtils.gexp + " guild EXP.")
                                 } else {
-                                    EssentialAPI.getNotifications()
+                                    Notifications
                                         .push("Wyvtilities", "There was a problem trying to get your GEXP.")
                                 }
                             }
                             if (WyvtilsConfig.autoGetWinstreak) {
                                 if (HypixelUtils.getWinstreak()) {
-                                    EssentialAPI.getNotifications().push(
+                                    Notifications.push(
                                         "Wyvtilities",
-                                        "You currently have a " + HypixelUtils.winstreak + " winstreak."
+                                        "You currently have a " + HypixelUtils.winstreakString + " winstreak."
                                     )
                                 } else {
-                                    EssentialAPI.getNotifications()
+                                    Notifications
                                         .push("Wyvtilities", "There was a problem trying to get your winstreak.")
                                 }
                             }

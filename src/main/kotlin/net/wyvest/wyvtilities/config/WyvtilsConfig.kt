@@ -1,6 +1,5 @@
 package net.wyvest.wyvtilities.config
 
-import gg.essential.api.EssentialAPI
 import gg.essential.vigilance.Vigilant
 import gg.essential.vigilance.data.Category
 import gg.essential.vigilance.data.Property
@@ -14,6 +13,7 @@ import net.wyvest.wyvtilities.actionbar.ActionBarGui
 import net.wyvest.wyvtilities.bossbar.BossHealthGui
 import net.wyvest.wyvtilities.listeners.Listener
 import xyz.matthewtgm.tgmlib.util.GuiHelper
+import xyz.matthewtgm.tgmlib.util.Notifications
 import java.awt.Color
 import java.io.File
 
@@ -136,7 +136,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     )
     fun openBossHealthGui() {
         if (bossBarCustomization) GuiHelper.open(BossHealthGui)
-        else EssentialAPI.getNotifications().push("Wyvtilities", "You can't do that, you haven't enabled Bossbar Customization!")
+        else Notifications.push("Wyvtilities", "You can't do that, you haven't enabled Bossbar Customization!")
     }
 
     @Property(
@@ -222,8 +222,8 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         category = "Action Bar"
     )
     fun openActionBarGui() {
-        if (actionBarPosition && actionBarCustomization) EssentialAPI.getGuiUtil().openScreen(ActionBarGui)
-        else EssentialAPI.getNotifications().push("Wyvtilities", "You can't do that, you don't have Action Bar position enabled!")
+        if (actionBarPosition && actionBarCustomization) GuiHelper.open(ActionBarGui)
+        else Notifications.push("Wyvtilities", "You can't do that, you don't have Action Bar position enabled!")
     }
 
     @Property(

@@ -1,6 +1,5 @@
 package net.wyvest.wyvtilities
 
-import gg.essential.api.EssentialAPI
 import gg.essential.universal.ChatColor
 import gg.essential.universal.UDesktop
 import kotlinx.coroutines.CoroutineName
@@ -13,17 +12,19 @@ import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion
-import net.wyvest.wyvtilities.commands.WyvtilsCommands
+import net.wyvest.wyvtilities.commands.WyvtilsCommand
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.listeners.Listener
 import net.wyvest.wyvtilities.utils.equalsAny
 import net.wyvest.wyvtilities.utils.startsWithAny
 import xyz.matthewtgm.json.entities.JsonArray
 import xyz.matthewtgm.json.util.JsonApiHelper
+import xyz.matthewtgm.tgmlib.commands.CommandManager
 import xyz.matthewtgm.tgmlib.launchwrapper.TGMLibLaunchwrapper
 import xyz.matthewtgm.tgmlib.util.ChatHelper
 import xyz.matthewtgm.tgmlib.util.ForgeHelper
 import xyz.matthewtgm.tgmlib.util.Multithreading
+import xyz.matthewtgm.tgmlib.util.Notifications
 import java.net.URI
 
 
@@ -32,12 +33,12 @@ import java.net.URI
     version = Wyvtilities.VERSION,
     acceptedMinecraftVersions = "[1.8.9]",
     clientSideOnly = true,
-    modLanguageAdapter = "gg.essential.api.utils.KotlinAdapter")
+    modLanguageAdapter = "net.wyvest.wyvtilities.adapter.KotlinLanguageAdapter")
 object Wyvtilities {
     var isRegexLoaded: Boolean = false
     const val MODID = "wyvtilities"
     const val MOD_NAME = "Wyvtilities"
-    const val VERSION = "0.6.0"
+    const val VERSION = "0.6.1"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
 
@@ -77,7 +78,7 @@ object Wyvtilities {
             }
         }
         ForgeHelper.registerEventListeners(this, Listener)
-        WyvtilsCommands.register()
+        CommandManager.register(WyvtilsCommand.getInstance().javaClass)
         Multithreading.runAsync {
             try {
                 autoGGRegex = JsonApiHelper.getJsonObject("https://wyvest.net/wyvtilities.json", true).getAsArray("triggers")
@@ -85,7 +86,7 @@ object Wyvtilities {
             } catch (e : Exception) {
                 e.printStackTrace()
                 isRegexLoaded = false
-                EssentialAPI.getNotifications().push("Wyvtilities", "Wyvtilities failed to get regexes required for the Auto Get GEXP feature!")
+                Notifications.push("Wyvtilities", "Wyvtilities failed to get regexes required for the Auto Get GEXP feature!")
             }
         }
     }
@@ -100,7 +101,7 @@ object Wyvtilities {
             WyvtilsConfig.bossBarCustomization = false
             WyvtilsConfig.markDirty()
             WyvtilsConfig.writeData()
-            EssentialAPI.getNotifications().push("Wyvtilities", "Bossbar Customizer (the mod) has been detected, and so the Wyvtils Bossbar related features have been disabled.")
+            Notifications.push("Wyvtilities", "Bossbar Customizer (the mod) has been detected, and so the Wyvtils Bossbar related features have been disabled.")
         }
         CoroutineScope(Dispatchers.IO + CoroutineName("Wyvtilities-UpdateChecker")).launch {
             val latestRelease = JsonApiHelper.getJsonObject("https://api.github.com/repos/Wyvest/Wyvtilities/releases/latest")
@@ -117,9 +118,9 @@ object Wyvtilities {
                 updateUrl = latestRelease.getAsArray("assets")[0].asJsonObject["browser_download_url"].asString
             }
             if (updateUrl != null) {
-                EssentialAPI.getNotifications().push("Mod Update", "Wyvtilities $latestTag is available!\nClick to open!", 5f) {
+                Notifications.push("Mod Update", "Wyvtilities $latestTag is available!\nClick to open!", Runnable {
                     UDesktop.browse(URI("https://github.com/wyvest/Wyvtilities/releases/latest"))
-                }
+                })
             }
         }
     }

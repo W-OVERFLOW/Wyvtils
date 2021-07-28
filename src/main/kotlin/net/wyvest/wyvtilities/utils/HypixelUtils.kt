@@ -1,11 +1,11 @@
 package net.wyvest.wyvtilities.utils
 
-import gg.essential.api.utils.WebUtil
 import net.minecraft.util.EnumChatFormatting
 import net.wyvest.wyvtilities.Wyvtilities
 import net.wyvest.wyvtilities.Wyvtilities.mc
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import xyz.matthewtgm.json.parser.JsonParser
+import xyz.matthewtgm.json.util.JsonApiHelper
 import xyz.matthewtgm.tgmlib.util.HypixelHelper
 import xyz.matthewtgm.tgmlib.util.ServerHelper
 import java.text.SimpleDateFormat
@@ -13,7 +13,7 @@ import java.util.*
 
 
 object HypixelUtils {
-    lateinit var winstreak: String
+    lateinit var winstreakString: String //the reason this is called winstreakString is because java-kotlin integration is dumb
     var gexp: String? = null
     private fun getCurrentESTTime(): String? {
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -25,11 +25,12 @@ object HypixelUtils {
         var gexp : String? = null
         val uuid = mc.thePlayer.gameProfile.id.toString().replace("-", "")
         val guildData =
-            WebUtil.fetchJSON("https://api.hypixel.net/guild?key=" + WyvtilsConfig.apiKey + ";player=" + uuid)
-        val guildMembers = guildData.optJSONObject("guild").optJSONArray("members")
+            JsonApiHelper.getJsonObject("https://api.hypixel.net/guild?key=" + WyvtilsConfig.apiKey + ";player=" + uuid, true)
+        val guildMembers = guildData.getAsObject("guild").getAsArray("members")
         for (e in guildMembers) {
+            if (e.isString) continue //bypass a JsonParser bug or a problem on my end honestly idk anymore
             if (e.asJsonObject["uuid"].asString.equals(uuid)) {
-                gexp = e.asJsonObject["expHistory"].asJsonObject[getCurrentESTTime()].asString
+                gexp = e.asJsonObject["expHistory"].asJsonObject[getCurrentESTTime()].asInt.toString()
                 break
             }
         }
@@ -42,11 +43,12 @@ object HypixelUtils {
         var gexp : String? = null
         val uuid = getUUID(username)
         val guildData =
-            WebUtil.fetchJSON("https://api.hypixel.net/guild?key=" + WyvtilsConfig.apiKey + ";player=" + uuid)
-        val guildMembers = guildData.optJSONObject("guild").optJSONArray("members")
+            JsonApiHelper.getJsonObject("https://api.hypixel.net/guild?key=" + WyvtilsConfig.apiKey + ";player=" + uuid, true)
+        val guildMembers = guildData.getAsObject("guild").getAsArray("members")
         for (e in guildMembers) {
+            if (e.isString) continue //bypass a JsonParser bug or a problem on my end honestly idk anymore
             if (e.asJsonObject["uuid"].asString.equals(uuid)) {
-                gexp = e.asJsonObject["expHistory"].asJsonObject[getCurrentESTTime()].asString
+                gexp = e.asJsonObject["expHistory"].asJsonObject[getCurrentESTTime()].asInt.toString()
                 break
             }
         }
@@ -65,7 +67,7 @@ object HypixelUtils {
         ).asJsonObject["player"].asJsonObject["stats"]
         if (!ServerHelper.hypixelBedwars()) return false
         try {
-            winstreak = playerStats.asJsonObject["Bedwars"].asJsonObject["winstreak"].asInt.toString()
+            winstreakString = playerStats.asJsonObject["Bedwars"].asJsonObject["winstreak"].asInt.toString()
         } catch (e : Exception) {
             e.printStackTrace()
             return false
@@ -81,36 +83,29 @@ object HypixelUtils {
                 uuid
             )
         ).asJsonObject["player"].asJsonObject["stats"]
-        return when (HypixelHelper.getLocraw().gameType) {
-            HypixelHelper.HypixelLocraw.GameType.BEDWARS -> {
-                winstreak = playerStats.asJsonObject["Bedwars"].asJsonObject["winstreak"].asInt.toString()
-                true
-            }
-            HypixelHelper.HypixelLocraw.GameType.SKYWARS -> {
-                winstreak = playerStats.asJsonObject["SkyWars"].asJsonObject["win_streak"].asInt.toString()
-                true
-            }
-            HypixelHelper.HypixelLocraw.GameType.DUELS -> {
-                winstreak = playerStats.asJsonObject["Duels"].asJsonObject["current_winstreak"].asInt.toString()
-                true
-            }
-            else -> false
+        if (!ServerHelper.hypixelBedwars()) return false
+        try {
+            winstreakString = playerStats.asJsonObject["Bedwars"].asJsonObject["winstreak"].asInt.toString()
+        } catch (e : Exception) {
+            e.printStackTrace()
+            return false
         }
+        return true
     }
         //I really didn't want to use this and instead use one of essential's APIs, but then Mojang released an unannounced API change for the 69th time!
         private fun getUUID(username: String): String? {
-            val uuidResponse = WebUtil.fetchJSON("https://api.mojang.com/users/profiles/minecraft/$username")
+            val uuidResponse = JsonApiHelper.getJsonObject("https://api.mojang.com/users/profiles/minecraft/$username", true)
             if (uuidResponse.has("error")) {
                 Wyvtilities.sendMessage(
                     EnumChatFormatting.RED.toString() + "Failed with error: ${
-                        uuidResponse.optString(
+                        uuidResponse.getAsString(
                             "reason"
                         )
                     }"
                 )
                 return null
             }
-            return uuidResponse.optString("id").replace("-", "")
+            return uuidResponse.getAsString("id")
         }
 
     }
