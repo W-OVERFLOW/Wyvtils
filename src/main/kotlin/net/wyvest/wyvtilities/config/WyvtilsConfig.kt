@@ -10,11 +10,10 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
 import net.wyvest.wyvtilities.Wyvtilities.MOD_NAME
 import net.wyvest.wyvtilities.Wyvtilities.VERSION
-import net.wyvest.wyvtilities.actionbar.ActionBarGui
-import net.wyvest.wyvtilities.bossbar.BossHealthGui
+import net.wyvest.wyvtilities.gui.ActionBarGui
+import net.wyvest.wyvtilities.gui.BossHealthGui
 import net.wyvest.wyvtilities.listeners.Listener
 import xyz.matthewtgm.tgmlib.util.GuiHelper
-import java.awt.Color
 import java.io.File
 
 @Suppress("unused")
@@ -119,14 +118,6 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         category = "Bossbar"
     )
     var bossBarBar = true
-
-    @Property(
-        type = PropertyType.COLOR,
-        name = "Bossbar Color",
-        description = "Change the color of the bossbar..",
-        category = "Bossbar"
-    )
-    var bossBarColor : Color = Color.WHITE
 
     @Property(
         type = PropertyType.BUTTON,
@@ -244,6 +235,22 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     )
     var actionBarY : Int = 12
 
+    @Property(
+        type = PropertyType.PERCENT_SLIDER,
+        name = "Title Scale Percentage",
+        description = "Change the scale of the title.",
+        category = "Titles",
+    )
+    var titleScale = 1.0F
+
+    @Property(
+        type = PropertyType.PERCENT_SLIDER,
+        name = "Subtitle Scale Percentage",
+        description = "Change the scale of the subtitle.",
+        category = "Titles",
+    )
+    var subtitleScale = 1.0F
+
     @Property(type = PropertyType.PARAGRAPH, name = "Sk1er LLC", description = "Essential + Vigilance", category = "Information", subcategory = "Credits")
     var credits0 = ""
 
@@ -291,6 +298,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         }
         addDependency("textColor", "highlightName")
         addDependency("soundMultiplier", "soundBoost")
+        /*/
         listOf(
             "bossBar",
             "bossBarText",
@@ -303,6 +311,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
             "actionBarShadow",
             "actionBarPosition"
         ).forEach { propertyName -> addDependency(propertyName, "actionBarCustomization") }
+         */
     }
 
     private object ConfigSorting : SortingBehavior() {
