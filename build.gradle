@@ -11,7 +11,7 @@ plugins {
     id 'org.spongepowered.mixin' version '0.6-SNAPSHOT'
 }
 
-version = '1.0.0-BETA2'
+version = '1.0.0-BETA1'
 group = 'net.wyvest'
 archivesBaseName = 'Wyvtilities'
 
@@ -36,6 +36,7 @@ minecraft {
     makeObfSourceJar = false
 
     clientJvmArgs += '-Dfml.coreMods.load=net.wyvest.wyvtilities.mixin.WyvtilsLoadingPlugin'
+    clientJvmArgs += '-Delementa.dev=true'
     clientRunArgs += '--tweakClass gg.essential.loader.stage0.EssentialSetupTweaker'
     clientRunArgs += '--mixin mixins.wyvtils.json'
 }
@@ -55,7 +56,7 @@ dependencies {
     include ('gg.essential:loader-launchwrapper:1.0.2') {
         transitive = false
     }
-    provided 'gg.essential:essential-1.8.9-forge:1268'
+    provided 'gg.essential:essential-1.8.9-forge:1245'
 
 
     annotationProcessor 'org.spongepowered:mixin:0.7.11-SNAPSHOT'

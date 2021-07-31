@@ -138,7 +138,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     )
     fun resetBossbar() {
         GuiHelper.open(null)
-        bossBarX = ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2
+        bossBarX = ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2 - 91
         bossBarY = 12
         WyvtilsConfig.markDirty()
         WyvtilsConfig.writeData()
@@ -251,22 +251,6 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     )
     var subtitleScale = 1.0F
 
-    @Property(
-        type = PropertyType.SELECTOR,
-        name = "Chat Type 1",
-        category = "Chat Switcher",
-        options = ["All", "Party", "Guild", "Officer"]
-    )
-    var chatType1 = 0
-
-    @Property(
-        type = PropertyType.SELECTOR,
-        name = "Chat Type 2",
-        category = "Chat Switcher",
-        options = ["All", "Party", "Guild", "Officer", "None"]
-    )
-    var chatType2 = 0
-
     @Property(type = PropertyType.PARAGRAPH, name = "Sk1er LLC", description = "Essential + Vigilance", category = "Information", subcategory = "Credits")
     var credits0 = ""
 
@@ -314,17 +298,20 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         }
         addDependency("textColor", "highlightName")
         addDependency("soundMultiplier", "soundBoost")
+        /*/
         listOf(
             "bossBar",
             "bossBarText",
             "bossBarShadow",
             "bossBarBar",
+            "bossBarColor"
         ).forEach { propertyName -> addDependency(propertyName, "bossBarCustomization") }
         listOf(
             "actionBar",
             "actionBarShadow",
             "actionBarPosition"
         ).forEach { propertyName -> addDependency(propertyName, "actionBarCustomization") }
+         */
     }
 
     private object ConfigSorting : SortingBehavior() {

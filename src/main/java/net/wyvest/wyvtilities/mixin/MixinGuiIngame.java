@@ -5,8 +5,8 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.boss.BossStatus;
-import net.wyvest.wyvtilities.config.WyvtilsConfig;
 import net.wyvest.wyvtilities.gui.BossHealthGui;
+import net.wyvest.wyvtilities.config.WyvtilsConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -34,7 +34,7 @@ public class MixinGuiIngame {
                 checkFirstTime();
                 return fontRenderer.drawString(
                         BossStatus.bossName,
-                        Float.parseFloat(String.valueOf(WyvtilsConfig.INSTANCE.getBossBarX() - (fontRenderer.getStringWidth(text) / 2))), WyvtilsConfig.INSTANCE.getBossBarY() - 10,
+                        Float.parseFloat(String.valueOf(WyvtilsConfig.INSTANCE.getBossBarX() + 91 - (fontRenderer.getStringWidth(text) / 2))), WyvtilsConfig.INSTANCE.getBossBarY() - 10,
                         Color.WHITE.getRGB(), WyvtilsConfig.INSTANCE.getBossBarShadow()
                 );
             } else {
@@ -49,7 +49,7 @@ public class MixinGuiIngame {
     private void removeBar(GuiIngame guiIngame, int x, int y, int textureX, int textureY, int width, int height) {
         if (WyvtilsConfig.INSTANCE.getBossBarCustomization()) {
             if (WyvtilsConfig.INSTANCE.getBossBarBar()) {
-                Minecraft.getMinecraft().ingameGUI.drawTexturedModalRect(WyvtilsConfig.INSTANCE.getBossBarX() - 91, WyvtilsConfig.INSTANCE.getBossBarY(), textureX, textureY, width, height);
+                Minecraft.getMinecraft().ingameGUI.drawTexturedModalRect(WyvtilsConfig.INSTANCE.getBossBarX(), WyvtilsConfig.INSTANCE.getBossBarY(), textureX, textureY, width, height);
             }
         } else {
             Minecraft.getMinecraft().ingameGUI.drawTexturedModalRect(x, y, textureX, textureY, width, height);
@@ -59,7 +59,7 @@ public class MixinGuiIngame {
     private void checkFirstTime() {
         if (WyvtilsConfig.INSTANCE.getFirstLaunchBossbar()) {
             WyvtilsConfig.INSTANCE.setFirstLaunchBossbar(false);
-            WyvtilsConfig.INSTANCE.setBossBarX(new ScaledResolution(Minecraft.getMinecraft()).getScaledWidth() / 2);
+            WyvtilsConfig.INSTANCE.setBossBarX(new ScaledResolution(Minecraft.getMinecraft()).getScaledWidth() / 2 - 91);
             WyvtilsConfig.INSTANCE.setBossBarY(12);
             WyvtilsConfig.INSTANCE.markDirty();
             WyvtilsConfig.INSTANCE.writeData();
