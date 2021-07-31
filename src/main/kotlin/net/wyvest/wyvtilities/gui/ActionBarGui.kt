@@ -1,4 +1,4 @@
-package net.wyvest.wyvtilities.actionbar
+package net.wyvest.wyvtilities.gui
 
 import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.gui.GuiScreen
@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.GlStateManager
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.config.WyvtilsConfig.actionBarX
 import net.wyvest.wyvtilities.config.WyvtilsConfig.actionBarY
+import net.wyvest.wyvtilities.mixin.AccessorGuiIngame
 import xyz.matthewtgm.tgmlib.util.GuiHelper
 import java.awt.Color
 import java.io.IOException
@@ -29,11 +30,15 @@ object ActionBarGui : GuiScreen() {
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         updatePos(mouseX, mouseY)
-
+        val text = if ((mc.ingameGUI as AccessorGuiIngame).recordIsPlaying) {
+            (mc.ingameGUI as AccessorGuiIngame).recordPlaying
+        } else {
+            "Wyvtilities Action Bar"
+        }
         GlStateManager.pushMatrix()
         mc.fontRendererObj.drawString(
-            "Example Text",
-            actionBarX - mc.fontRendererObj.getStringWidth("Example Text") / 2,
+            text,
+            actionBarX - mc.fontRendererObj.getStringWidth(text) / 2,
             actionBarY,
             Color.WHITE.rgb
         )
@@ -44,7 +49,7 @@ object ActionBarGui : GuiScreen() {
     @Throws(IOException::class)
     override fun mouseClicked(mouseX: Int, mouseY: Int, mouseButton: Int) {
         super.mouseClicked(mouseX, mouseY, mouseButton)
-        prevX = mouseX - mc.fontRendererObj.getStringWidth("Example Text") / 2
+        prevX = mouseX - mc.fontRendererObj.getStringWidth("Wyvtilities Action Bar") / 2
         prevY = mouseY
         if (mouseButton == 0) {
             dragging = true
@@ -56,7 +61,7 @@ object ActionBarGui : GuiScreen() {
             actionBarX = prevX
             actionBarY = prevY
         }
-        prevX = x - mc.fontRendererObj.getStringWidth("Example Text") / 2
+        prevX = x - mc.fontRendererObj.getStringWidth("Wyvtilities Action Bar") / 2
         prevY = y
     }
 

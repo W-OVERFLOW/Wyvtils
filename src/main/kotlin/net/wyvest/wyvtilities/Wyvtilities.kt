@@ -15,11 +15,13 @@ import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion
 import net.wyvest.wyvtilities.commands.WyvtilsCommands
 import net.wyvest.wyvtilities.config.WyvtilsConfig
+import net.wyvest.wyvtilities.keybind.ChatKeybind
 import net.wyvest.wyvtilities.listeners.Listener
 import net.wyvest.wyvtilities.utils.equalsAny
 import net.wyvest.wyvtilities.utils.startsWithAny
 import xyz.matthewtgm.json.entities.JsonArray
 import xyz.matthewtgm.json.util.JsonApiHelper
+import xyz.matthewtgm.tgmlib.keybinds.KeyBindManager
 import xyz.matthewtgm.tgmlib.launchwrapper.TGMLibLaunchwrapper
 import xyz.matthewtgm.tgmlib.util.ChatHelper
 import xyz.matthewtgm.tgmlib.util.ForgeHelper
@@ -37,7 +39,7 @@ object Wyvtilities {
     var isRegexLoaded: Boolean = false
     const val MODID = "wyvtilities"
     const val MOD_NAME = "Wyvtilities"
-    const val VERSION = "0.6.0"
+    const val VERSION = "1.0.0-BETA2"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
 
@@ -88,6 +90,7 @@ object Wyvtilities {
                 EssentialAPI.getNotifications().push("Wyvtilities", "Wyvtilities failed to get regexes required for the Auto Get GEXP feature!")
             }
         }
+        KeyBindManager.register(ChatKeybind)
     }
 
     /**

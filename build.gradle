@@ -6,13 +6,12 @@ plugins {
     // Build
     id 'com.github.johnrengelman.shadow' version '6.1.0'
     id 'net.minecraftforge.gradle.forge' version '8708bf3e0'
-    id 'io.freefair.lombok' version '6.0.0-m2'
 
     // Libraries
     id 'org.spongepowered.mixin' version '0.6-SNAPSHOT'
 }
 
-version = '0.6.0'
+version = '1.0.0-BETA2'
 group = 'net.wyvest'
 archivesBaseName = 'Wyvtilities'
 
@@ -37,7 +36,6 @@ minecraft {
     makeObfSourceJar = false
 
     clientJvmArgs += '-Dfml.coreMods.load=net.wyvest.wyvtilities.mixin.WyvtilsLoadingPlugin'
-    clientJvmArgs += '-Delementa.dev=true'
     clientRunArgs += '--tweakClass gg.essential.loader.stage0.EssentialSetupTweaker'
     clientRunArgs += '--mixin mixins.wyvtils.json'
 }
@@ -51,21 +49,16 @@ configurations {
 dependencies {
     // Libraries
     provided 'xyz.matthewtgm:TGMLib:2.6.11'
-    include('xyz.matthewtgm:TGMLibLaunchwrapper:1.5')
+    include('xyz.matthewtgm:TGMLibLaunchwrapper:1.5') {
+        transitive = false
+    }
     include ('gg.essential:loader-launchwrapper:1.0.2') {
         transitive = false
     }
-    provided 'gg.essential:essential-1.8.9-forge:1245'
+    provided 'gg.essential:essential-1.8.9-forge:1268'
 
 
     annotationProcessor 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
-
-    // Languages
-    provided 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-    provided 'org.jetbrains.kotlin:kotlin-reflect'
-
-    // Misc
-    annotationProcessor ('org.projectlombok:lombok:1.18.18')
 }
 
 jar {
