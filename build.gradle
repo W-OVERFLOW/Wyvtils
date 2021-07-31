@@ -11,7 +11,7 @@ plugins {
     id 'org.spongepowered.mixin' version '0.6-SNAPSHOT'
 }
 
-version = '1.0.0-BETA1'
+version = '0.6.1'
 group = 'net.wyvest'
 archivesBaseName = 'Wyvtilities'
 

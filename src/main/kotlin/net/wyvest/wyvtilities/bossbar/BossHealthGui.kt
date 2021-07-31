@@ -1,18 +1,12 @@
-package net.wyvest.wyvtilities.gui
+package net.wyvest.wyvtilities.bossbar
 
-import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.*
+import net.minecraft.client.gui.GuiButton
+import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.entity.boss.BossStatus
 import net.minecraft.util.EnumChatFormatting
 import net.wyvest.wyvtilities.config.WyvtilsConfig
-import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarShadow
-import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarX
-import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarY
-import net.wyvest.wyvtilities.config.WyvtilsConfig.firstLaunchBossbar
 import org.lwjgl.opengl.GL11
 import xyz.matthewtgm.tgmlib.util.GuiHelper
-import java.awt.Color
 import java.io.IOException
 
 
@@ -35,43 +29,15 @@ object BossHealthGui : GuiScreen() {
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         updatePos(mouseX, mouseY)
-        mc.textureManager.bindTexture(icons)
-        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0)
-        mc.mcProfiler.startSection("bossHealthGui")
-        GlStateManager.enableBlend()
-        val fontrenderer: FontRenderer = mc.fontRendererObj
-        val j = 182
-        if (firstLaunchBossbar) {
-            firstLaunchBossbar = false
-            bossBarX = ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2 - 91
-            bossBarY = 12
-            WyvtilsConfig.markDirty()
-            WyvtilsConfig.writeData()
-        }
-        val x : Int = bossBarX
-        val y = bossBarY
-        val s = if (BossStatus.bossName == null && mc.currentScreen != null) {
-            "Example Text"
-        } else {
-            BossStatus.bossName
-        }
         if (WyvtilsConfig.bossBarBar) {
-            mc.ingameGUI?.drawTexturedModalRect(x, y, 0, 74, j, 5)
-            mc.ingameGUI?.drawTexturedModalRect(x, y, 0, 74, j, 5)
-            mc.ingameGUI?.drawTexturedModalRect(x, y, 0, 79, 1, 5)
+            mc.textureManager.bindTexture(icons)
+            GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0)
+            mc.mcProfiler.startSection("bossHealth")
+            GlStateManager.enableBlend()
+            BossHealth.renderBossHealth()
+            GlStateManager.disableBlend()
+            mc.mcProfiler.endSection()
         }
-        if (WyvtilsConfig.bossBarText) {
-            fontrenderer.drawString(
-                s,
-                (bossBarX + 91 - mc.fontRendererObj.getStringWidth(s) / 2).toString().toFloat(),
-                (bossBarY - 10).toFloat(),
-                Color.WHITE.rgb, bossBarShadow
-            )
-        }
-        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
-        if (WyvtilsConfig.bossBarBar) mc.textureManager.bindTexture(Gui.icons)
-        GlStateManager.disableBlend()
-        mc.mcProfiler.endSection()
 
         val scale = 1
         GlStateManager.pushMatrix()
@@ -99,8 +65,8 @@ object BossHealthGui : GuiScreen() {
 
     private fun updatePos(x: Int, y: Int) {
         if (dragging) {
-            bossBarX = prevX
-            bossBarY = prevY
+            WyvtilsConfig.bossBarX = prevX
+            WyvtilsConfig.bossBarY = prevY
         }
         prevX = x
         prevY = y

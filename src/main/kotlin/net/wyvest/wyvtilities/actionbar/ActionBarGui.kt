@@ -1,4 +1,4 @@
-package net.wyvest.wyvtilities.gui
+package net.wyvest.wyvtilities.actionbar
 
 import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.gui.GuiScreen
@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.GlStateManager
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.config.WyvtilsConfig.actionBarX
 import net.wyvest.wyvtilities.config.WyvtilsConfig.actionBarY
-import net.wyvest.wyvtilities.mixin.AccessorGuiIngame
 import xyz.matthewtgm.tgmlib.util.GuiHelper
 import java.awt.Color
 import java.io.IOException
@@ -30,15 +29,11 @@ object ActionBarGui : GuiScreen() {
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         updatePos(mouseX, mouseY)
-        val text = if ((mc.ingameGUI as AccessorGuiIngame).recordIsPlaying) {
-            (mc.ingameGUI as AccessorGuiIngame).recordPlaying
-        } else {
-            "Example Text"
-        }
+
         GlStateManager.pushMatrix()
         mc.fontRendererObj.drawString(
-            text,
-            actionBarX - mc.fontRendererObj.getStringWidth(text) / 2,
+            "Example Text",
+            actionBarX - mc.fontRendererObj.getStringWidth("Example Text") / 2,
             actionBarY,
             Color.WHITE.rgb
         )
