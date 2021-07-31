@@ -33,7 +33,7 @@ object ActionBarGui : GuiScreen() {
         val text = if ((mc.ingameGUI as AccessorGuiIngame).recordIsPlaying) {
             (mc.ingameGUI as AccessorGuiIngame).recordPlaying
         } else {
-            "Example Text"
+            "Wyvtilities Action Bar"
         }
         GlStateManager.pushMatrix()
         mc.fontRendererObj.drawString(
@@ -49,7 +49,7 @@ object ActionBarGui : GuiScreen() {
     @Throws(IOException::class)
     override fun mouseClicked(mouseX: Int, mouseY: Int, mouseButton: Int) {
         super.mouseClicked(mouseX, mouseY, mouseButton)
-        prevX = mouseX - mc.fontRendererObj.getStringWidth("Example Text") / 2
+        prevX = mouseX - mc.fontRendererObj.getStringWidth("Wyvtilities Action Bar") / 2
         prevY = mouseY
         if (mouseButton == 0) {
             dragging = true
@@ -61,7 +61,7 @@ object ActionBarGui : GuiScreen() {
             actionBarX = prevX
             actionBarY = prevY
         }
-        prevX = x - mc.fontRendererObj.getStringWidth("Example Text") / 2
+        prevX = x - mc.fontRendererObj.getStringWidth("Wyvtilities Action Bar") / 2
         prevY = y
     }
 

@@ -40,31 +40,29 @@ object BossHealthGui : GuiScreen() {
         mc.mcProfiler.startSection("bossHealthGui")
         GlStateManager.enableBlend()
         val fontrenderer: FontRenderer = mc.fontRendererObj
-        val j = 182
         if (firstLaunchBossbar) {
             firstLaunchBossbar = false
-            bossBarX = ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2 - 91
+            bossBarX = ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2
             bossBarY = 12
             WyvtilsConfig.markDirty()
             WyvtilsConfig.writeData()
         }
-        val x : Int = bossBarX
-        val y = bossBarY
         val s = if (BossStatus.bossName == null && mc.currentScreen != null) {
             "Example Text"
         } else {
             BossStatus.bossName
         }
         if (WyvtilsConfig.bossBarBar) {
-            mc.ingameGUI?.drawTexturedModalRect(x, y, 0, 74, j, 5)
-            mc.ingameGUI?.drawTexturedModalRect(x, y, 0, 74, j, 5)
-            mc.ingameGUI?.drawTexturedModalRect(x, y, 0, 79, 1, 5)
+            mc.ingameGUI?.drawTexturedModalRect(bossBarX - 91, bossBarY, 0, 74, 182, 5)
+            mc.ingameGUI?.drawTexturedModalRect(bossBarX - 91, bossBarY, 0, 74, 182, 5)
+            mc.ingameGUI?.drawTexturedModalRect(bossBarX - 91, bossBarY, 0, 79, 1, 5)
         }
         if (WyvtilsConfig.bossBarText) {
+            //fix this
             fontrenderer.drawString(
                 s,
-                (bossBarX + 91 - mc.fontRendererObj.getStringWidth(s) / 2).toString().toFloat(),
-                (bossBarY - 10).toFloat(),
+                (bossBarX- mc.fontRendererObj.getStringWidth(s) / 2).toString().toFloat(),
+                bossBarY.toFloat() - 10,
                 Color.WHITE.rgb, bossBarShadow
             )
         }
