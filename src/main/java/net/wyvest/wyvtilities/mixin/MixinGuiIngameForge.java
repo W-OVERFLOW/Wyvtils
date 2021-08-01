@@ -48,7 +48,7 @@ public class MixinGuiIngameForge {
                     GlStateManager.enableBlend();
                     GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
                     int color = (guiIngame.getRecordIsPlaying() ? Color.HSBtoRGB(hue / 50.0F, 0.7F, 0.6F) & Color.WHITE.getRGB() : Color.WHITE.getRGB());
-                    mc.fontRendererObj.drawString(guiIngame.getRecordPlaying(), newX, newY, color | (opacity << 24));
+                    mc.fontRendererObj.drawString(guiIngame.getRecordPlaying(), newX, newY, color | (opacity << 24), WyvtilsConfig.INSTANCE.getActionBarShadow());
                     GlStateManager.disableBlend();
                     GlStateManager.popMatrix();
                 }
@@ -60,7 +60,7 @@ public class MixinGuiIngameForge {
 
     @Inject(method = "renderTitle", at = @At("HEAD"), cancellable = true)
     private void removeTitle(int width, int height, float partialTicks, CallbackInfo ci) {
-        if ((WyvtilsConfig.INSTANCE.getActionBarCustomization() && !WyvtilsConfig.INSTANCE.getActionBar()) || Minecraft.getMinecraft().currentScreen instanceof ActionBarGui) {
+        if (!WyvtilsConfig.INSTANCE.getTitle()) {
             ci.cancel();
         }
     }

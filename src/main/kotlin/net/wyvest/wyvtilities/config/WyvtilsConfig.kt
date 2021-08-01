@@ -236,6 +236,14 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     var actionBarY : Int = 12
 
     @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Title",
+        description = "Toggle the title on or off.",
+        category = "Titles"
+    )
+    var title = true
+
+    @Property(
         type = PropertyType.PERCENT_SLIDER,
         name = "Title Scale Percentage",
         description = "Change the scale of the title.",
