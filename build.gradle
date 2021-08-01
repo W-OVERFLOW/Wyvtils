@@ -48,7 +48,7 @@ configurations {
 
 dependencies {
     // Libraries
-    provided 'xyz.matthewtgm:TGMLib:2.6.11'
+    provided 'xyz.matthewtgm:TGMLib:2.7.3'
     include('xyz.matthewtgm:TGMLibLaunchwrapper:1.5') {
         transitive = false
     }
