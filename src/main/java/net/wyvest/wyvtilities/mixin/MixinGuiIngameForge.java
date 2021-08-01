@@ -14,45 +14,47 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.*;
 
-@Mixin(value = GuiIngameForge.class, remap = false, priority = 2000)
+@Mixin(value = GuiIngameForge.class, remap = false)
 public class MixinGuiIngameForge {
 
     Minecraft mc = Minecraft.getMinecraft();
 
-    @Inject(method = "renderRecordOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/profiler/Profiler;startSection(Ljava/lang/String;)V"), cancellable = true)
+    @Inject(method = "renderRecordOverlay", at = @At(value = "HEAD"), cancellable = true)
     public void renderActionBar(int width, int height, float partialTicks, CallbackInfo ci) {
         if (WyvtilsConfig.INSTANCE.getActionBarCustomization()) {
             ci.cancel();
             if (!WyvtilsConfig.INSTANCE.getActionBar() || Minecraft.getMinecraft().currentScreen instanceof ActionBarGui) return;
             AccessorGuiIngame guiIngame = (AccessorGuiIngame) mc.ingameGUI;
-            mc.mcProfiler.startSection("overlayMessage");
-            float hue = (float)guiIngame.getRecordPlayingUpFor() - partialTicks;
-            int opacity = (int)(hue * 256.0F / 20.0F);
-            if (opacity > 255) opacity = 255;
+            if (guiIngame.getRecordPlayingUpFor() > 0) {
+                mc.mcProfiler.startSection("overlayMessage");
+                float hue = (float) guiIngame.getRecordPlayingUpFor() - partialTicks;
+                int opacity = (int) (hue * 256.0F / 20.0F);
+                if (opacity > 255) opacity = 255;
 
-            if (opacity > 0)
-            {
-                int newX;
-                int newY;
-                if (WyvtilsConfig.INSTANCE.getActionBarPosition()) {
-                    newX = WyvtilsConfig.INSTANCE.getActionBarX();
-                    newY = WyvtilsConfig.INSTANCE.getActionBarY();
-                } else {
-                    newX = -mc.fontRendererObj.getStringWidth(guiIngame.getRecordPlaying()) / 2;
-                    newY = -4;
+                if (opacity > 0) {
+                    int newX;
+                    int newY;
+                    if (WyvtilsConfig.INSTANCE.getActionBarPosition()) {
+                        newX = WyvtilsConfig.INSTANCE.getActionBarX();
+                        newY = WyvtilsConfig.INSTANCE.getActionBarY();
+                    } else {
+                        newX = -mc.fontRendererObj.getStringWidth(guiIngame.getRecordPlaying()) / 2;
+                        newY = -4;
+                    }
+
+                    GlStateManager.pushMatrix();
+                    if (!WyvtilsConfig.INSTANCE.getActionBarPosition() && WyvtilsConfig.INSTANCE.getActionBarCustomization())
+                        GlStateManager.translate((float) (width / 2), (float) (height - 68), 0.0F);
+                    GlStateManager.enableBlend();
+                    GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+                    int color = (guiIngame.getRecordIsPlaying() ? Color.HSBtoRGB(hue / 50.0F, 0.7F, 0.6F) & Color.WHITE.getRGB() : Color.WHITE.getRGB());
+                    mc.fontRendererObj.drawString(guiIngame.getRecordPlaying(), newX, newY, color | (opacity << 24));
+                    GlStateManager.disableBlend();
+                    GlStateManager.popMatrix();
                 }
 
-                GlStateManager.pushMatrix();
-                if (!WyvtilsConfig.INSTANCE.getActionBarPosition() && WyvtilsConfig.INSTANCE.getActionBarCustomization()) GlStateManager.translate((float)(width / 2), (float)(height - 68), 0.0F);
-                GlStateManager.enableBlend();
-                GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-                int color = (guiIngame.getRecordIsPlaying() ? Color.HSBtoRGB(hue / 50.0F, 0.7F, 0.6F) & Color.WHITE.getRGB() : Color.WHITE.getRGB());
-                mc.fontRendererObj.drawString(guiIngame.getRecordPlaying(), newX, newY, color | (opacity << 24));
-                GlStateManager.disableBlend();
-                GlStateManager.popMatrix();
+                mc.mcProfiler.endSection();
             }
-
-            mc.mcProfiler.endSection();
         }
     }
 
