@@ -1,56 +1,58 @@
 package net.wyvest.wyvtilities.mixin;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.GuiIngameForge;
-import net.wyvest.wyvtilities.gui.ActionBarGui;
 import net.wyvest.wyvtilities.config.WyvtilsConfig;
+import net.wyvest.wyvtilities.gui.ActionBarGui;
+import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.awt.*;
 
 @Mixin(value = GuiIngameForge.class, remap = false, priority = 2000)
 public class MixinGuiIngameForge {
 
-    @Inject(method = "renderRecordOverlay", at = @At("HEAD"), cancellable = true)
-    private void removeActionBar(int width, int height, float partialTicks, CallbackInfo ci) {
-        if ((WyvtilsConfig.INSTANCE.getActionBarCustomization() && !WyvtilsConfig.INSTANCE.getActionBar()) || Minecraft.getMinecraft().currentScreen instanceof ActionBarGui) {
+    Minecraft mc = Minecraft.getMinecraft();
+
+    @Inject(method = "renderRecordOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/profiler/Profiler;startSection(Ljava/lang/String;)V"), cancellable = true)
+    public void renderActionBar(int width, int height, float partialTicks, CallbackInfo ci) {
+        if (WyvtilsConfig.INSTANCE.getActionBarCustomization()) {
             ci.cancel();
-        }
-    }
+            if (!WyvtilsConfig.INSTANCE.getActionBar() || Minecraft.getMinecraft().currentScreen instanceof ActionBarGui) return;
+            AccessorGuiIngame guiIngame = (AccessorGuiIngame) mc.ingameGUI;
+            mc.mcProfiler.startSection("overlayMessage");
+            float hue = (float)guiIngame.getRecordPlayingUpFor() - partialTicks;
+            int opacity = (int)(hue * 256.0F / 20.0F);
+            if (opacity > 255) opacity = 255;
 
-    @Redirect(method = "renderRecordOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;translate(FFF)V"))
-    private void removeTranslation(float x, float y, float z) {
-        if (!WyvtilsConfig.INSTANCE.getActionBarPosition() && WyvtilsConfig.INSTANCE.getActionBarCustomization()) {
-            GlStateManager.translate(x / 2, y - 68, z);
-        }
-    }
+            if (opacity > 0)
+            {
+                int newX;
+                int newY;
+                if (WyvtilsConfig.INSTANCE.getActionBarPosition()) {
+                    newX = WyvtilsConfig.INSTANCE.getActionBarX();
+                    newY = WyvtilsConfig.INSTANCE.getActionBarY();
+                } else {
+                    newX = -mc.fontRendererObj.getStringWidth(guiIngame.getRecordPlaying()) / 2;
+                    newY = -4;
+                }
 
-    @Redirect(method = "renderRecordOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/FontRenderer;drawString(Ljava/lang/String;III)I"))
-    private int modifyDrawString(FontRenderer fontRenderer, String text, int x, int y, int color) {
-        if (!WyvtilsConfig.INSTANCE.getActionBarCustomization()) {
-            return fontRenderer.drawString(text, x, y, color);
-        } else {
-            int newX;
-            int newY;
-            if (WyvtilsConfig.INSTANCE.getActionBarPosition()) {
-                newX = WyvtilsConfig.INSTANCE.getActionBarX();
-                newY = WyvtilsConfig.INSTANCE.getActionBarY();
-            } else {
-                newX = x;
-                newY = y;
+                GlStateManager.pushMatrix();
+                if (!WyvtilsConfig.INSTANCE.getActionBarPosition() && WyvtilsConfig.INSTANCE.getActionBarCustomization()) GlStateManager.translate((float)(width / 2), (float)(height - 68), 0.0F);
+                GlStateManager.enableBlend();
+                GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+                int color = (guiIngame.getRecordIsPlaying() ? Color.HSBtoRGB(hue / 50.0F, 0.7F, 0.6F) & Color.WHITE.getRGB() : Color.WHITE.getRGB());
+                mc.fontRendererObj.drawString(guiIngame.getRecordPlaying(), newX, newY, color | (opacity << 24));
+                GlStateManager.disableBlend();
+                GlStateManager.popMatrix();
             }
-            return fontRenderer.drawString(
-                    text,
-                    newX,
-                    newY,
-                    color,
-                    WyvtilsConfig.INSTANCE.getActionBarShadow()
-            );
+
+            mc.mcProfiler.endSection();
         }
     }
 

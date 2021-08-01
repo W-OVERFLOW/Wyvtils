@@ -15,4 +15,7 @@ public interface AccessorGuiIngame {
 
     @Accessor
     String getDisplayedTitle();
+
+    @Accessor
+    int getRecordPlayingUpFor();
 }
