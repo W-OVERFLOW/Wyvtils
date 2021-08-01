@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = GuiIngameForge.class, remap = false)
+@Mixin(value = GuiIngameForge.class, remap = false, priority = 2000)
 public class MixinGuiIngameForge {
 
     @Inject(method = "renderRecordOverlay", at = @At("HEAD"), cancellable = true)

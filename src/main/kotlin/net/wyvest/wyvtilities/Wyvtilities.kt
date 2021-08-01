@@ -1,6 +1,7 @@
 package net.wyvest.wyvtilities
 
 import gg.essential.api.EssentialAPI
+import gg.essential.api.utils.Multithreading
 import gg.essential.universal.ChatColor
 import gg.essential.universal.UDesktop
 import kotlinx.coroutines.CoroutineName
@@ -25,7 +26,6 @@ import xyz.matthewtgm.tgmlib.keybinds.KeyBindManager
 import xyz.matthewtgm.tgmlib.launchwrapper.TGMLibLaunchwrapper
 import xyz.matthewtgm.tgmlib.util.ChatHelper
 import xyz.matthewtgm.tgmlib.util.ForgeHelper
-import xyz.matthewtgm.tgmlib.util.Multithreading
 import java.net.URI
 
 
