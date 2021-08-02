@@ -67,11 +67,11 @@ public class MixinGuiIngameForge {
 
     @ModifyArg(method = "renderTitle", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V"), index = 0)
     private float modifyTitleScale1(float x) {
-        if (x == 4) {
+        if (x == 4.0F) {
             //Title
             return x * WyvtilsConfig.INSTANCE.getTitleScale();
         }
-        if (x == 2) {
+        if (x == 2.0F) {
             //Subtitle
             return x * WyvtilsConfig.INSTANCE.getSubtitleScale();
         }
@@ -80,11 +80,11 @@ public class MixinGuiIngameForge {
 
     @ModifyArg(method = "renderTitle", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V"), index = 1)
     private float modifyTitleScale2(float x) {
-        if (x == 4) {
+        if (x == 4.0F) {
             //Title
             return x * WyvtilsConfig.INSTANCE.getTitleScale();
         }
-        if (x == 2) {
+        if (x == 2.0F) {
             //Subtitle
             return x * WyvtilsConfig.INSTANCE.getSubtitleScale();
         }
@@ -93,11 +93,11 @@ public class MixinGuiIngameForge {
 
     @ModifyArg(method = "renderTitle", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V"), index = 2)
     private float modifyTitleScale3(float x) {
-        if (x == 4) {
+        if (x == 4.0F) {
             //Title
             return x * WyvtilsConfig.INSTANCE.getTitleScale();
         }
-        if (x == 2) {
+        if (x == 2.0F) {
             //Subtitle
             return x * WyvtilsConfig.INSTANCE.getSubtitleScale();
         }
