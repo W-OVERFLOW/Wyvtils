@@ -23,7 +23,8 @@ public class MixinGuiIngameForge {
     public void renderActionBar(int width, int height, float partialTicks, CallbackInfo ci) {
         if (WyvtilsConfig.INSTANCE.getActionBarCustomization()) {
             ci.cancel();
-            if (!WyvtilsConfig.INSTANCE.getActionBar() || Minecraft.getMinecraft().currentScreen instanceof ActionBarGui) return;
+            if (!WyvtilsConfig.INSTANCE.getActionBar() || Minecraft.getMinecraft().currentScreen instanceof ActionBarGui)
+                return;
             AccessorGuiIngame guiIngame = (AccessorGuiIngame) mc.ingameGUI;
             if (guiIngame.getRecordPlayingUpFor() > 0) {
                 mc.mcProfiler.startSection("overlayMessage");

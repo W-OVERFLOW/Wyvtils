@@ -9,6 +9,7 @@ import java.util.List;
 
 public class RequisiteEssentialTweaker extends RequisiteLaunchwrapper {
     private final MixinTweaker mixinTweaker;
+
     public RequisiteEssentialTweaker() {
         mixinTweaker = new MixinTweaker();
     }
