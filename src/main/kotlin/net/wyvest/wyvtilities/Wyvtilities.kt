@@ -40,7 +40,7 @@ object Wyvtilities {
     var isRegexLoaded: Boolean = false
     const val MODID = "wyvtilities"
     const val MOD_NAME = "Wyvtilities"
-    const val VERSION = "1.0.0-BETA4"
+    const val VERSION = "1.0.0"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
 

@@ -176,7 +176,7 @@ object Listener {
     }
     @SubscribeEvent
     fun onStringRendered(e : FontRendererEvent.RenderEvent) {
-        if (e.text != null && mc.theWorld != null && e.text.contains(mc.thePlayer.gameProfile.name) && WyvtilsConfig.highlightName) {
+        if (e.text != null && mc.theWorld != null && e.text.contains(mc.thePlayer.gameProfile.name) && WyvtilsConfig.highlightName && !changeTextColor) {
             if (e.text.containsAny("§", "\u00A7")) {
                 var number = -1
                 var code : String? = null
