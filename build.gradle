@@ -49,10 +49,10 @@ configurations {
 dependencies {
     // Libraries
     provided 'xyz.matthewtgm:Requisite:1.0'
-    include ('com.github.Wyvest:RequisiteEssentialLaunchwrapper:9056d99dde') {
+    include('com.github.Wyvest:RequisiteEssentialLaunchwrapper:9056d99dde') {
         transitive = false
     }
-    include ('gg.essential:loader-launchwrapper:1.0.2') {
+    include('gg.essential:loader-launchwrapper:1.0.2') {
         transitive = false
     }
     provided 'gg.essential:essential-1.8.9-forge:1282'
@@ -62,7 +62,7 @@ dependencies {
 }
 
 jar {
-    manifest.attributes (
+    manifest.attributes(
             'ModSide': 'CLIENT',
             'FMLCorePlugin': 'net.wyvest.wyvtilities.mixin.WyvtilsLoadingPlugin',
             'FMLCorePluginContainsFMLMod': true,
@@ -82,7 +82,7 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
 
-        expand (
+        expand(
                 'version': project.version,
                 'mcversion': project.minecraft.version
         )

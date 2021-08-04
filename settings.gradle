@@ -2,12 +2,12 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         mavenCentral()
-        
+
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
         maven { url 'https://maven.minecraftforge.net' }
         maven { url 'https://jitpack.io' }
     }
-    
+
     resolutionStrategy {
         eachPlugin {
             switch (requested.id.id) {

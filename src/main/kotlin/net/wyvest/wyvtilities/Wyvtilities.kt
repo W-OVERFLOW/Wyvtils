@@ -30,12 +30,14 @@ import xyz.matthewtgm.requisite.util.ForgeHelper
 import java.net.URI
 
 
-@Mod(modid = Wyvtilities.MODID,
+@Mod(
+    modid = Wyvtilities.MODID,
     name = Wyvtilities.MOD_NAME,
     version = Wyvtilities.VERSION,
     acceptedMinecraftVersions = "[1.8.9]",
     clientSideOnly = true,
-    modLanguageAdapter = "gg.essential.api.utils.KotlinAdapter")
+    modLanguageAdapter = "gg.essential.api.utils.KotlinAdapter"
+)
 object Wyvtilities {
     var isRegexLoaded: Boolean = false
     const val MODID = "wyvtilities"
@@ -44,7 +46,7 @@ object Wyvtilities {
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
 
-    lateinit var autoGGRegex : JsonArray
+    lateinit var autoGGRegex: JsonArray
 
     @JvmField
     var isConfigInitialized = false
@@ -52,6 +54,7 @@ object Wyvtilities {
     fun sendMessage(message: String?) {
         ChatHelper.sendMessage(EnumChatFormatting.DARK_PURPLE.toString() + "[Wyvtilities] ", message)
     }
+
     val keybind = KeyBinding("Chat Swapper", Keyboard.KEY_V, "Wyvtilities")
 
     @Mod.EventHandler
@@ -83,12 +86,14 @@ object Wyvtilities {
         WyvtilsCommands.register()
         Multithreading.runAsync {
             try {
-                autoGGRegex = JsonApiHelper.getJsonObject("https://wyvest.net/wyvtilities.json", true).getAsArray("triggers")
+                autoGGRegex =
+                    JsonApiHelper.getJsonObject("https://wyvest.net/wyvtilities.json", true).getAsArray("triggers")
                 isRegexLoaded = true
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 e.printStackTrace()
                 isRegexLoaded = false
-                EssentialAPI.getNotifications().push("Wyvtilities", "Wyvtilities failed to get regexes required for the Auto Get GEXP feature!")
+                EssentialAPI.getNotifications()
+                    .push("Wyvtilities", "Wyvtilities failed to get regexes required for the Auto Get GEXP feature!")
             }
         }
         ClientRegistry.registerKeyBinding(keybind)
@@ -99,15 +104,19 @@ object Wyvtilities {
      * https://github.com/My-Name-Is-Jeff/SimpleToggleSprint/blob/1.8.9/LICENSE
      */
     @Mod.EventHandler
-    fun onFMLLoad(event : FMLLoadCompleteEvent) {
+    fun onFMLLoad(event: FMLLoadCompleteEvent) {
         if (ForgeHelper.isModLoaded("bossbar_customizer")) {
             WyvtilsConfig.bossBarCustomization = false
             WyvtilsConfig.markDirty()
             WyvtilsConfig.writeData()
-            EssentialAPI.getNotifications().push("Wyvtilities", "Bossbar Customizer (the mod) has been detected, and so the Wyvtils Bossbar related features have been disabled.")
+            EssentialAPI.getNotifications().push(
+                "Wyvtilities",
+                "Bossbar Customizer (the mod) has been detected, and so the Wyvtils Bossbar related features have been disabled."
+            )
         }
         CoroutineScope(Dispatchers.IO + CoroutineName("Wyvtilities-UpdateChecker")).launch {
-            val latestRelease = JsonApiHelper.getJsonObject("https://api.github.com/repos/Wyvest/Wyvtilities/releases/latest")
+            val latestRelease =
+                JsonApiHelper.getJsonObject("https://api.github.com/repos/Wyvest/Wyvtilities/releases/latest")
             val latestTag = latestRelease.get("tag_name").asString
             val currentTag = VERSION
 
@@ -121,14 +130,15 @@ object Wyvtilities {
                 updateUrl = latestRelease.getAsArray("assets")[0].asJsonObject["browser_download_url"].asString
             }
             if (updateUrl != null) {
-                EssentialAPI.getNotifications().push("Mod Update", "Wyvtilities $latestTag is available!\nClick to open!", 5f) {
-                    UDesktop.browse(URI("https://github.com/wyvest/Wyvtilities/releases/latest"))
-                }
+                EssentialAPI.getNotifications()
+                    .push("Mod Update", "Wyvtilities $latestTag is available!\nClick to open!", 5f) {
+                        UDesktop.browse(URI("https://github.com/wyvest/Wyvtilities/releases/latest"))
+                    }
             }
         }
     }
 
-    fun checkSound(name : String) : Boolean {
+    fun checkSound(name: String): Boolean {
         if (name.equalsAny(
                 "random.successful_hit",
                 "random.break",

@@ -38,7 +38,7 @@ object WyvtilsCommands : Command("wyvtilities", true) {
     }
 
     @SubCommand("setkey", description = "Sets the API key for Wyvtils.")
-    fun setKey(@DisplayName("api key") apiKey : String) {
+    fun setKey(@DisplayName("api key") apiKey: String) {
         Multithreading.runAsync {
             try {
                 if (JsonApiHelper.getJsonObject("https://api.hypixel.net/key?key=$apiKey")
@@ -59,7 +59,7 @@ object WyvtilsCommands : Command("wyvtilities", true) {
     }
 
     @SubCommand("gexp", description = "Gets the GEXP of the player specified")
-    fun gexp(@DisplayName("username") username : String?) {
+    fun gexp(@DisplayName("username") username: String?) {
         if (WyvtilsConfig.apiKey.isEmpty()) {
             Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "You need to provide a valid API key to run this command! Type /api new to autoset a key.")
         } else {
@@ -75,20 +75,23 @@ object WyvtilsCommands : Command("wyvtilities", true) {
                         }
                     } else {
                         if (HypixelUtils.getGEXP()) {
-                            EssentialAPI.getNotifications().push("Wyvtilities", "You currently have " + HypixelUtils.gexp + " guild EXP.")
+                            EssentialAPI.getNotifications()
+                                .push("Wyvtilities", "You currently have " + HypixelUtils.gexp + " guild EXP.")
                         } else {
-                            EssentialAPI.getNotifications().push("Wyvtilities", "There was a problem trying to get your GEXP.")
+                            EssentialAPI.getNotifications()
+                                .push("Wyvtilities", "There was a problem trying to get your GEXP.")
                         }
                     }
                 }
-            } catch (e : NullPointerException) {
+            } catch (e: NullPointerException) {
                 e.printStackTrace()
             }
 
         }
     }
+
     @SubCommand("winstreak", description = "Gets the winstreak of the player specified")
-    fun winstreak(@DisplayName("username") username : String?, @DisplayName("gamemode") gamemode : String?) {
+    fun winstreak(@DisplayName("username") username: String?, @DisplayName("gamemode") gamemode: String?) {
         if (WyvtilsConfig.apiKey.isEmpty()) {
             Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "You need to provide a valid API key to run this command! Type /api new to autoset a key.")
         } else {
@@ -98,15 +101,24 @@ object WyvtilsCommands : Command("wyvtilities", true) {
                         if (gamemode != null) {
                             if (HypixelUtils.getWinstreak(username, gamemode)) {
                                 EssentialAPI.getNotifications()
-                                    .push("Wyvtilities", "$username currently has a " + HypixelUtils.winstreak + " winstreak in $gamemode.")
+                                    .push(
+                                        "Wyvtilities",
+                                        "$username currently has a " + HypixelUtils.winstreak + " winstreak in $gamemode."
+                                    )
                             } else {
                                 EssentialAPI.getNotifications()
-                                    .push("Wyvtilities", "There was a problem trying to get $username's winstreak in $gamemode.")
+                                    .push(
+                                        "Wyvtilities",
+                                        "There was a problem trying to get $username's winstreak in $gamemode."
+                                    )
                             }
                         } else {
                             if (HypixelUtils.getWinstreak(username)) {
                                 EssentialAPI.getNotifications()
-                                    .push("Wyvtilities", "$username currently has a " + HypixelUtils.winstreak + " winstreak.")
+                                    .push(
+                                        "Wyvtilities",
+                                        "$username currently has a " + HypixelUtils.winstreak + " winstreak."
+                                    )
                             } else {
                                 EssentialAPI.getNotifications()
                                     .push("Wyvtilities", "There was a problem trying to get $username's winstreak.")
@@ -114,13 +126,15 @@ object WyvtilsCommands : Command("wyvtilities", true) {
                         }
                     } else {
                         if (HypixelUtils.getWinstreak()) {
-                            EssentialAPI.getNotifications().push("Wyvtilities", "You currently have a " + HypixelUtils.winstreak + " winstreak.")
+                            EssentialAPI.getNotifications()
+                                .push("Wyvtilities", "You currently have a " + HypixelUtils.winstreak + " winstreak.")
                         } else {
-                            EssentialAPI.getNotifications().push("Wyvtilities", "There was a problem trying to get your winstreak.")
+                            EssentialAPI.getNotifications()
+                                .push("Wyvtilities", "There was a problem trying to get your winstreak.")
                         }
                     }
                 }
-            } catch (e : NullPointerException) {
+            } catch (e: NullPointerException) {
                 e.printStackTrace()
             }
 
