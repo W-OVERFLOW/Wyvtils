@@ -11,11 +11,11 @@ public interface AccessorGuiIngame {
     String getRecordPlaying();
 
     @Accessor
-    int getRecordPlayingUpFor();
-
-    @Accessor
     boolean getRecordIsPlaying();
 
     @Accessor
     String getDisplayedTitle();
+
+    @Accessor
+    int getRecordPlayingUpFor();
 }

@@ -5,13 +5,13 @@ plugins {
 
     // Build
     id 'com.github.johnrengelman.shadow' version '6.1.0'
-    id 'net.minecraftforge.gradle.forge' version '8708bf3e0'
+    id 'net.minecraftforge.gradle.forge' version 'ddb1eb0'
 
     // Libraries
     id 'org.spongepowered.mixin' version '0.6-SNAPSHOT'
 }
 
-version = '0.6.1'
+version = '1.0.0'
 group = 'net.wyvest'
 archivesBaseName = 'Wyvtilities'
 
@@ -36,8 +36,7 @@ minecraft {
     makeObfSourceJar = false
 
     clientJvmArgs += '-Dfml.coreMods.load=net.wyvest.wyvtilities.mixin.WyvtilsLoadingPlugin'
-    clientJvmArgs += '-Delementa.dev=true'
-    clientRunArgs += '--tweakClass gg.essential.loader.stage0.EssentialSetupTweaker'
+    clientRunArgs += '--tweakClass net.wyvest.wyvtilities.mixin.RequisiteEssentialTweaker'
     clientRunArgs += '--mixin mixins.wyvtils.json'
 }
 
@@ -49,14 +48,9 @@ configurations {
 
 dependencies {
     // Libraries
-    provided 'xyz.matthewtgm:TGMLib:2.7.3'
-    include('xyz.matthewtgm:TGMLibLaunchwrapper:1.5') {
-        transitive = false
-    }
-    include ('gg.essential:loader-launchwrapper:1.0.2') {
-        transitive = false
-    }
-    provided 'gg.essential:essential-1.8.9-forge:1245'
+    provided 'xyz.matthewtgm:Requisite:1.0'
+    include 'com.github.Wyvest:RequisiteEssentialLaunchwrapper:41d4d37fd1'
+    provided 'gg.essential:essential-1.8.9-forge:1268'
 
 
     annotationProcessor 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
@@ -69,7 +63,7 @@ jar {
             'FMLCorePluginContainsFMLMod': true,
             'ForceLoadAsMod': true,
             'MixinConfigs': 'mixins.wyvtils.json',
-            'TweakClass': 'gg.essential.loader.stage0.EssentialSetupTweaker',
+            'TweakClass': 'net.wyvest.wyvtilities.mixin.RequisiteEssentialTweaker',
             'TweakOrder': '0'
     )
 

@@ -1,16 +1,17 @@
-package net.wyvest.wyvtilities.bossbar
+package net.wyvest.wyvtilities.gui
 
 import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.util.EnumChatFormatting
 import net.wyvest.wyvtilities.config.WyvtilsConfig
-import org.lwjgl.opengl.GL11
-import xyz.matthewtgm.tgmlib.util.GuiHelper
+import net.wyvest.wyvtilities.config.WyvtilsConfig.actionBarX
+import net.wyvest.wyvtilities.config.WyvtilsConfig.actionBarY
+import net.wyvest.wyvtilities.mixin.AccessorGuiIngame
+import xyz.matthewtgm.requisite.util.GuiHelper
+import java.awt.Color
 import java.io.IOException
 
-
-object BossHealthGui : GuiScreen() {
+object ActionBarGui : GuiScreen() {
 
     private var dragging = false
     private var prevX = 0
@@ -29,25 +30,17 @@ object BossHealthGui : GuiScreen() {
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         updatePos(mouseX, mouseY)
-        if (WyvtilsConfig.bossBarBar) {
-            mc.textureManager.bindTexture(icons)
-            GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0)
-            mc.mcProfiler.startSection("bossHealth")
-            GlStateManager.enableBlend()
-            BossHealth.renderBossHealth()
-            GlStateManager.disableBlend()
-            mc.mcProfiler.endSection()
+        val text = if ((mc.ingameGUI as AccessorGuiIngame).recordIsPlaying) {
+            (mc.ingameGUI as AccessorGuiIngame).recordPlaying
+        } else {
+            "Wyvtilities Action Bar"
         }
-
-        val scale = 1
         GlStateManager.pushMatrix()
-        GlStateManager.scale(scale.toFloat(), scale.toFloat(), 0f)
-        drawCenteredString(
-            fontRendererObj,
-            EnumChatFormatting.WHITE.toString() + "(drag bossbar to edit position!)",
-            width / 2 / scale,
-            5 / scale + 55,
-            -1
+        mc.fontRendererObj.drawString(
+            text,
+            actionBarX - mc.fontRendererObj.getStringWidth(text) / 2,
+            actionBarY,
+            Color.WHITE.rgb
         )
         GlStateManager.popMatrix()
         super.drawScreen(mouseX, mouseY, partialTicks)
@@ -56,7 +49,7 @@ object BossHealthGui : GuiScreen() {
     @Throws(IOException::class)
     override fun mouseClicked(mouseX: Int, mouseY: Int, mouseButton: Int) {
         super.mouseClicked(mouseX, mouseY, mouseButton)
-        prevX = mouseX
+        prevX = mouseX - mc.fontRendererObj.getStringWidth("Wyvtilities Action Bar") / 2
         prevY = mouseY
         if (mouseButton == 0) {
             dragging = true
@@ -65,10 +58,10 @@ object BossHealthGui : GuiScreen() {
 
     private fun updatePos(x: Int, y: Int) {
         if (dragging) {
-            WyvtilsConfig.bossBarX = prevX
-            WyvtilsConfig.bossBarY = prevY
+            actionBarX = prevX
+            actionBarY = prevY
         }
-        prevX = x
+        prevX = x - mc.fontRendererObj.getStringWidth("Wyvtilities Action Bar") / 2
         prevY = y
     }
 
