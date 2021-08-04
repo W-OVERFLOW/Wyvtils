@@ -9,7 +9,7 @@ import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.*;
@@ -65,43 +65,21 @@ public class MixinGuiIngameForge {
         }
     }
 
-    @ModifyArg(method = "renderTitle", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V"), index = 0)
-    private float modifyTitleScale1(float x) {
-        if (x == 4.0F) {
-            //Title
-            return x * WyvtilsConfig.INSTANCE.getTitleScale();
+    @Redirect(method = "renderTitle", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V"))
+    private void modifyTitleScale1(float x, float y, float z) {
+        if (WyvtilsConfig.INSTANCE.getTitleScale() == 1.0F && WyvtilsConfig.INSTANCE.getSubtitleScale() == 1.0F) {
+            GlStateManager.scale(x, y, z);
+        } else {
+            if (x == 4.0F) {
+                //Title
+                GlStateManager.scale(x * WyvtilsConfig.INSTANCE.getTitleScale(), y * WyvtilsConfig.INSTANCE.getTitleScale(), z * WyvtilsConfig.INSTANCE.getTitleScale());
+                return;
+            }
+            if (x == 2.0F) {
+                //Subtitle
+                GlStateManager.scale(x * WyvtilsConfig.INSTANCE.getSubtitleScale(), y * WyvtilsConfig.INSTANCE.getSubtitleScale(), z * WyvtilsConfig.INSTANCE.getSubtitleScale());
+            }
         }
-        if (x == 2.0F) {
-            //Subtitle
-            return x * WyvtilsConfig.INSTANCE.getSubtitleScale();
-        }
-        return x;
-    }
-
-    @ModifyArg(method = "renderTitle", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V"), index = 1)
-    private float modifyTitleScale2(float x) {
-        if (x == 4.0F) {
-            //Title
-            return x * WyvtilsConfig.INSTANCE.getTitleScale();
-        }
-        if (x == 2.0F) {
-            //Subtitle
-            return x * WyvtilsConfig.INSTANCE.getSubtitleScale();
-        }
-        return x;
-    }
-
-    @ModifyArg(method = "renderTitle", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V"), index = 2)
-    private float modifyTitleScale3(float x) {
-        if (x == 4.0F) {
-            //Title
-            return x * WyvtilsConfig.INSTANCE.getTitleScale();
-        }
-        if (x == 2.0F) {
-            //Subtitle
-            return x * WyvtilsConfig.INSTANCE.getSubtitleScale();
-        }
-        return x;
     }
 
 }

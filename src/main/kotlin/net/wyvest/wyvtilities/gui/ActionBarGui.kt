@@ -7,7 +7,7 @@ import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.config.WyvtilsConfig.actionBarX
 import net.wyvest.wyvtilities.config.WyvtilsConfig.actionBarY
 import net.wyvest.wyvtilities.mixin.AccessorGuiIngame
-import xyz.matthewtgm.tgmlib.util.GuiHelper
+import xyz.matthewtgm.requisite.util.GuiHelper
 import java.awt.Color
 import java.io.IOException
 

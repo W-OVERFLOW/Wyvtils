@@ -11,18 +11,25 @@ import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.wyvest.wyvtilities.Wyvtilities
+import net.wyvest.wyvtilities.Wyvtilities.keybind
 import net.wyvest.wyvtilities.Wyvtilities.mc
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.mixin.AccessorGuiIngame
 import net.wyvest.wyvtilities.utils.HypixelUtils
 import net.wyvest.wyvtilities.utils.containsAny
+import org.lwjgl.input.Keyboard
+import org.lwjgl.input.Mouse
 import xyz.matthewtgm.json.util.JsonApiHelper
-import xyz.matthewtgm.tgmlib.events.StringRenderedEvent
-import xyz.matthewtgm.tgmlib.tweaker.hooks.TGMLibPositionedSoundAccessor
-import xyz.matthewtgm.tgmlib.util.ServerHelper
+import xyz.matthewtgm.requisite.events.BetterInputEvent
+import xyz.matthewtgm.requisite.events.FontRendererEvent
+import xyz.matthewtgm.requisite.mixins.sound.PositionedSoundAccessor
+import xyz.matthewtgm.requisite.util.ServerHelper
+import xyz.matthewtgm.requisite.util.StringHelper
 import java.util.regex.Pattern
 
+
 object Listener {
+    private var current: Int = 1
     private var victoryDetected = false
     lateinit var color: String
     var changeTextColor = false
@@ -159,7 +166,7 @@ object Listener {
     @SubscribeEvent
     fun onSoundPlayed(e : PlaySoundEvent) {
         if (e.result is PositionedSound) {
-            val positionedSound = (e.result as PositionedSound as TGMLibPositionedSoundAccessor)
+            val positionedSound = (e.result as PositionedSound as PositionedSoundAccessor)
             if (Wyvtilities.checkSound(e.name) && WyvtilsConfig.soundBoost) {
                 positionedSound.setVolume((e.result as PositionedSound).volume * WyvtilsConfig.soundMultiplier)
             } else if (WyvtilsConfig.soundBoost) {
@@ -168,9 +175,72 @@ object Listener {
         }
     }
     @SubscribeEvent
-    fun onStringRendered(e : StringRenderedEvent) {
+    fun onStringRendered(e : FontRendererEvent.RenderEvent) {
         if (e.text != null && mc.theWorld != null && e.text.contains(mc.thePlayer.gameProfile.name) && WyvtilsConfig.highlightName) {
-            e.text = e.text.replace(mc.thePlayer.gameProfile.name, color + mc.thePlayer.gameProfile.name + EnumChatFormatting.RESET)
+            if (e.text.containsAny("§", "\u00A7")) {
+                var number = -1
+                var code : String? = null
+                val array = e.text.split(Pattern.compile(mc.thePlayer.gameProfile.name)).toMutableList()
+                for (split in array) {
+                    number += 1
+                    if (number % 2 == 0 || number == 0) {
+                        val subString = split.substringAfterLast("\u00A7", null.toString())
+                        code = if (subString != "null") {
+                            subString.first().toString()
+                        } else {
+                            null
+                        }
+                        continue
+                    } else {
+                        if (code != null) {
+                            array[number] = "\u00A7$code" + array[number]
+                        }
+                    }
+                }
+                e.text = StringHelper.join(array,color + mc.thePlayer.gameProfile.name + EnumChatFormatting.RESET)
+            } else {
+                e.text = e.text.replace(mc.thePlayer.gameProfile.name, color + mc.thePlayer.gameProfile.name + EnumChatFormatting.RESET)
+            }
+        }
+    }
+
+    @SubscribeEvent
+    fun onKeyInput(event: BetterInputEvent.KeyboardInputEvent?) {
+        val code: Int = keybind.keyCode
+        if (Keyboard.getEventKeyState() && Keyboard.getEventKey() == code) {
+            pressed()
+        }
+    }
+
+    @SubscribeEvent
+    fun onMouseInput(event: BetterInputEvent.MouseInputEvent?) {
+        val code: Int = keybind.keyCode
+        if (Mouse.getEventButtonState() && Mouse.getEventButton() == code + 100) {
+            pressed()
+        }
+    }
+
+    private fun pressed() {
+        if (mc.currentScreen != null) return
+        when (current) {
+            1 -> {
+                check(WyvtilsConfig.chatType2)
+                current += 1
+            }
+            2 -> {
+                check(WyvtilsConfig.chatType1)
+                current -= 1
+            }
+        }
+    }
+
+    private fun check(option : Int) {
+        when (option) {
+            0 -> mc.thePlayer.sendChatMessage("/chat a")
+            1 -> mc.thePlayer.sendChatMessage("/chat p")
+            2 -> mc.thePlayer.sendChatMessage("/chat g")
+            3 -> mc.thePlayer.sendChatMessage("/chat o")
+            else -> return
         }
     }
 }

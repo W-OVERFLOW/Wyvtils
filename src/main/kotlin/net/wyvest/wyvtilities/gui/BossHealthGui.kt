@@ -11,7 +11,7 @@ import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarX
 import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarY
 import net.wyvest.wyvtilities.config.WyvtilsConfig.firstLaunchBossbar
 import org.lwjgl.opengl.GL11
-import xyz.matthewtgm.tgmlib.util.GuiHelper
+import xyz.matthewtgm.requisite.util.GuiHelper
 import java.awt.Color
 import java.io.IOException
 

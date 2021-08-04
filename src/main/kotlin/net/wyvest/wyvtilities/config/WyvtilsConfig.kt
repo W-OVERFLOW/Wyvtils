@@ -13,7 +13,7 @@ import net.wyvest.wyvtilities.Wyvtilities.VERSION
 import net.wyvest.wyvtilities.gui.ActionBarGui
 import net.wyvest.wyvtilities.gui.BossHealthGui
 import net.wyvest.wyvtilities.listeners.Listener
-import xyz.matthewtgm.tgmlib.util.GuiHelper
+import xyz.matthewtgm.requisite.util.GuiHelper
 import java.io.File
 
 @Suppress("unused")
