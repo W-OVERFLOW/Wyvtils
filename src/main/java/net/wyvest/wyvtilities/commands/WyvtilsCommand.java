@@ -22,12 +22,12 @@ public class WyvtilsCommand {
     }
 
     @Command.Process
-    public void handle(){
+    public void handle() {
         GuiHelper.open(WyvtilsConfig.INSTANCE.gui());
     }
 
     @Command.Argument(name = "config")
-    public void config(){
+    public void config() {
         GuiHelper.open(WyvtilsConfig.INSTANCE.gui());
     }
 
@@ -100,8 +100,7 @@ public class WyvtilsCommand {
                                 Notifications
                                         .push("Wyvtilities", "There was a problem trying to get " + args[1] + "'s winstreak.");
                             }
-                        }
-                        else if (args.length >= 2) {
+                        } else if (args.length >= 2) {
                             if (HypixelUtils.INSTANCE.getWinstreak(args[1])) {
                                 Notifications
                                         .push("Wyvtilities", args[1] + " currently has a " + HypixelUtils.INSTANCE.getWinstreakString() + " winstreak.");

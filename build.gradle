@@ -53,7 +53,7 @@ dependencies {
     include('xyz.matthewtgm:RequisiteLaunchwrapper:1.0') {
         transitive = false
     }
-    include ('gg.essential:vigilance-1.8.9-forge:154') {
+    include('gg.essential:vigilance-1.8.9-forge:154') {
         exclude module: 'kotlin-reflect'
         exclude module: 'kotlin-stdlib-jdk8'
     }
@@ -65,7 +65,7 @@ dependencies {
 }
 
 jar {
-    manifest.attributes (
+    manifest.attributes(
             'ModSide': 'CLIENT',
             'FMLCorePlugin': 'net.wyvest.wyvtilities.mixin.WyvtilsLoadingPlugin',
             'FMLCorePluginContainsFMLMod': true,
@@ -85,7 +85,7 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
 
-        expand (
+        expand(
                 'version': project.version,
                 'mcversion': project.minecraft.version
         )

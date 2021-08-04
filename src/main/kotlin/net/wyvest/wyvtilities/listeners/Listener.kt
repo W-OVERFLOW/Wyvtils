@@ -75,7 +75,10 @@ object Listener {
                             if (WyvtilsConfig.autoGetGEXP) {
                                 if (HypixelUtils.getGEXP()) {
                                     Notifications
-                                        .push("Wyvtilities", "You currently have " + HypixelUtils.gexpString + " guild EXP.")
+                                        .push(
+                                            "Wyvtilities",
+                                            "You currently have " + HypixelUtils.gexpString + " guild EXP."
+                                        )
                                 } else {
                                     Notifications
                                         .push("Wyvtilities", "There was a problem trying to get your GEXP.")
@@ -98,13 +101,18 @@ object Listener {
                 }
                 //if after all that, victory isnt detected, use title checking method
                 if (!victoryDetected) {
-                    if (EnumChatFormatting.getTextWithoutFormattingCodes((mc.ingameGUI as AccessorGuiIngame).displayedTitle).containsAny("win", "over", "won", "victory")) {
+                    if (EnumChatFormatting.getTextWithoutFormattingCodes((mc.ingameGUI as AccessorGuiIngame).displayedTitle)
+                            .containsAny("win", "over", "won", "victory")
+                    ) {
                         victoryDetected = true
                         Multithreading.runAsync {
                             if (WyvtilsConfig.autoGetGEXP) {
                                 if (HypixelUtils.getGEXP()) {
                                     Notifications
-                                        .push("Wyvtilities", "You currently have " + HypixelUtils.gexpString + " guild EXP.")
+                                        .push(
+                                            "Wyvtilities",
+                                            "You currently have " + HypixelUtils.gexpString + " guild EXP."
+                                        )
                                 } else {
                                     Notifications
                                         .push("Wyvtilities", "There was a problem trying to get your GEXP.")
@@ -164,7 +172,7 @@ object Listener {
     }
 
     @SubscribeEvent
-    fun onSoundPlayed(e : PlaySoundEvent) {
+    fun onSoundPlayed(e: PlaySoundEvent) {
         if (e.result is PositionedSound) {
             val positionedSound = (e.result as PositionedSound as PositionedSoundAccessor)
             if (Wyvtilities.checkSound(e.name) && WyvtilsConfig.soundBoost) {
@@ -174,12 +182,13 @@ object Listener {
             }
         }
     }
+
     @SubscribeEvent
-    fun onStringRendered(e : FontRendererEvent.RenderEvent) {
+    fun onStringRendered(e: FontRendererEvent.RenderEvent) {
         if (e.text != null && mc.theWorld != null && e.text.contains(mc.thePlayer.gameProfile.name) && WyvtilsConfig.highlightName && !changeTextColor) {
             if (e.text.containsAny("§", "\u00A7")) {
                 var number = -1
-                var code : String? = null
+                var code: String? = null
                 val array = e.text.split(Pattern.compile(mc.thePlayer.gameProfile.name)).toMutableList()
                 for (split in array) {
                     number += 1
@@ -197,9 +206,12 @@ object Listener {
                         }
                     }
                 }
-                e.text = StringHelper.join(array,color + mc.thePlayer.gameProfile.name + EnumChatFormatting.RESET)
+                e.text = StringHelper.join(array, color + mc.thePlayer.gameProfile.name + EnumChatFormatting.RESET)
             } else {
-                e.text = e.text.replace(mc.thePlayer.gameProfile.name, color + mc.thePlayer.gameProfile.name + EnumChatFormatting.RESET)
+                e.text = e.text.replace(
+                    mc.thePlayer.gameProfile.name,
+                    color + mc.thePlayer.gameProfile.name + EnumChatFormatting.RESET
+                )
             }
         }
     }
@@ -234,7 +246,7 @@ object Listener {
         }
     }
 
-    private fun check(option : Int) {
+    private fun check(option: Int) {
         when (option) {
             0 -> mc.thePlayer.sendChatMessage("/chat a")
             1 -> mc.thePlayer.sendChatMessage("/chat p")

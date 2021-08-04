@@ -31,12 +31,14 @@ import xyz.matthewtgm.requisite.util.Notifications
 import java.net.URI
 
 
-@Mod(modid = Wyvtilities.MODID,
+@Mod(
+    modid = Wyvtilities.MODID,
     name = Wyvtilities.MOD_NAME,
     version = Wyvtilities.VERSION,
     acceptedMinecraftVersions = "[1.8.9]",
     clientSideOnly = true,
-    modLanguageAdapter = "net.wyvest.wyvtilities.adapter.KotlinLanguageAdapter")
+    modLanguageAdapter = "net.wyvest.wyvtilities.adapter.KotlinLanguageAdapter"
+)
 object Wyvtilities {
     var isRegexLoaded: Boolean = false
     const val MODID = "wyvtilities"
@@ -45,7 +47,7 @@ object Wyvtilities {
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
 
-    lateinit var autoGGRegex : JsonArray
+    lateinit var autoGGRegex: JsonArray
 
     @JvmField
     var isConfigInitialized = false
@@ -53,6 +55,7 @@ object Wyvtilities {
     fun sendMessage(message: String?) {
         ChatHelper.sendMessage(EnumChatFormatting.DARK_PURPLE.toString() + "[Wyvtilities] ", message)
     }
+
     val keybind = KeyBinding("Chat Swapper", Keyboard.KEY_V, "Wyvtilities")
 
     @Mod.EventHandler
@@ -84,12 +87,16 @@ object Wyvtilities {
         CommandManager.register(WyvtilsCommand.getInstance().javaClass)
         Multithreading.runAsync {
             try {
-                autoGGRegex = JsonApiHelper.getJsonObject("https://wyvest.net/wyvtilities.json", true).getAsArray("triggers")
+                autoGGRegex =
+                    JsonApiHelper.getJsonObject("https://wyvest.net/wyvtilities.json", true).getAsArray("triggers")
                 isRegexLoaded = true
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 e.printStackTrace()
                 isRegexLoaded = false
-                Notifications.push("Wyvtilities", "Wyvtilities failed to get regexes required for the Auto Get GEXP feature!")
+                Notifications.push(
+                    "Wyvtilities",
+                    "Wyvtilities failed to get regexes required for the Auto Get GEXP feature!"
+                )
             }
         }
         ClientRegistry.registerKeyBinding(keybind)
@@ -100,15 +107,19 @@ object Wyvtilities {
      * https://github.com/My-Name-Is-Jeff/SimpleToggleSprint/blob/1.8.9/LICENSE
      */
     @Mod.EventHandler
-    fun onFMLLoad(event : FMLLoadCompleteEvent) {
+    fun onFMLLoad(event: FMLLoadCompleteEvent) {
         if (ForgeHelper.isModLoaded("bossbar_customizer")) {
             WyvtilsConfig.bossBarCustomization = false
             WyvtilsConfig.markDirty()
             WyvtilsConfig.writeData()
-            Notifications.push("Wyvtilities", "Bossbar Customizer (the mod) has been detected, and so the Wyvtils Bossbar related features have been disabled.")
+            Notifications.push(
+                "Wyvtilities",
+                "Bossbar Customizer (the mod) has been detected, and so the Wyvtils Bossbar related features have been disabled."
+            )
         }
         CoroutineScope(Dispatchers.IO + CoroutineName("Wyvtilities-UpdateChecker")).launch {
-            val latestRelease = JsonApiHelper.getJsonObject("https://api.github.com/repos/Wyvest/Wyvtilities/releases/latest")
+            val latestRelease =
+                JsonApiHelper.getJsonObject("https://api.github.com/repos/Wyvest/Wyvtilities/releases/latest")
             val latestTag = latestRelease.get("tag_name").asString
             val currentTag = VERSION
 
@@ -129,7 +140,7 @@ object Wyvtilities {
         }
     }
 
-    fun checkSound(name : String) : Boolean {
+    fun checkSound(name: String): Boolean {
         if (name.equalsAny(
                 "random.successful_hit",
                 "random.break",

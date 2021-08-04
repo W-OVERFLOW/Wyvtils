@@ -61,7 +61,7 @@ object BossHealthGui : GuiScreen() {
             //fix this
             fontrenderer.drawString(
                 s,
-                (bossBarX- mc.fontRendererObj.getStringWidth(s) / 2).toString().toFloat(),
+                (bossBarX - mc.fontRendererObj.getStringWidth(s) / 2).toString().toFloat(),
                 bossBarY.toFloat() - 10,
                 Color.WHITE.rgb, bossBarShadow
             )

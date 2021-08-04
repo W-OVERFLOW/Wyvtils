@@ -17,27 +17,63 @@ import xyz.matthewtgm.requisite.util.Notifications
 import java.io.File
 
 @Suppress("unused")
-object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities", sortingBehavior = ConfigSorting)  {
+object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities", sortingBehavior = ConfigSorting) {
 
-    @Property(type = PropertyType.PARAGRAPH, name = "Info", description = "You are using $MOD_NAME version $VERSION, made by Wyvest.", category = "Information")
+    @Property(
+        type = PropertyType.PARAGRAPH,
+        name = "Info",
+        description = "You are using $MOD_NAME version $VERSION, made by Wyvest.",
+        category = "Information"
+    )
     var paragraph = ""
 
-    @Property(type = PropertyType.TEXT, name = "API Key", description = "The API key, used for some features.", category = "General", protectedText = true)
+    @Property(
+        type = PropertyType.TEXT,
+        name = "API Key",
+        description = "The API key, used for some features.",
+        category = "General",
+        protectedText = true
+    )
     var apiKey = ""
 
-    @Property(type = PropertyType.SWITCH, name = "Automatically Check GEXP", description = "Automatically check your GEXP after you win a Hypixel game. Requires an API Key.", category = "Automatic")
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Automatically Check GEXP",
+        description = "Automatically check your GEXP after you win a Hypixel game. Requires an API Key.",
+        category = "Automatic"
+    )
     var autoGetGEXP = true
 
-    @Property(type = PropertyType.SWITCH, name = "Automatically Check Winstreak", description = "Automatically check your winstreak after you win a Hypixel game. Requires an API Key.", category = "Automatic")
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Automatically Check Winstreak",
+        description = "Automatically check your winstreak after you win a Hypixel game. Requires an API Key.",
+        category = "Automatic"
+    )
     var autoGetWinstreak = false
 
-    @Property(type = PropertyType.SWITCH, name = "Show Update Notification", description = "Show a notification when you start Minecraft informing you of new updates.", category = "General")
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Show Update Notification",
+        description = "Show a notification when you start Minecraft informing you of new updates.",
+        category = "General"
+    )
     var showUpdateNotification = true
 
-    @Property(type = PropertyType.SWITCH, name = "Automatically get API Key", description = "Automatically get the API Key when /api new is sent.", category = "General")
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Automatically get API Key",
+        description = "Automatically get the API Key when /api new is sent.",
+        category = "General"
+    )
     var autoGetAPI = true
 
-    @Property(type = PropertyType.SWITCH, name = "Highlight Name", description = "Highlight your name.", category = "Text")
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Highlight Name",
+        description = "Highlight your name.",
+        category = "Text"
+    )
     var highlightName = false
 
     @Property(
@@ -152,7 +188,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         category = "Bossbar",
         hidden = true
     )
-    var bossBarX : Int = 0
+    var bossBarX: Int = 0
 
     @Property(
         type = PropertyType.NUMBER,
@@ -161,8 +197,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         category = "Bossbar",
         hidden = true
     )
-    var bossBarY : Int = 12
-
+    var bossBarY: Int = 12
 
 
     @Property(
@@ -224,7 +259,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         category = "Action Bar",
         hidden = true
     )
-    var actionBarX : Int = 0
+    var actionBarX: Int = 0
 
     @Property(
         type = PropertyType.NUMBER,
@@ -233,7 +268,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         category = "Action Bar",
         hidden = true
     )
-    var actionBarY : Int = 12
+    var actionBarY: Int = 12
 
     @Property(
         type = PropertyType.SWITCH,
@@ -275,13 +310,31 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     )
     var chatType2 = 0
 
-    @Property(type = PropertyType.PARAGRAPH, name = "Sk1er LLC", description = "Essential + Vigilance", category = "Information", subcategory = "Credits")
+    @Property(
+        type = PropertyType.PARAGRAPH,
+        name = "Sk1er LLC",
+        description = "Essential + Vigilance",
+        category = "Information",
+        subcategory = "Credits"
+    )
     var credits0 = ""
 
-    @Property(type = PropertyType.PARAGRAPH, name = "TGMDevelopment", description = "TGMLib", category = "Information", subcategory = "Credits")
+    @Property(
+        type = PropertyType.PARAGRAPH,
+        name = "TGMDevelopment",
+        description = "TGMLib",
+        category = "Information",
+        subcategory = "Credits"
+    )
     var credits1 = ""
 
-    @Property(type = PropertyType.PARAGRAPH, name = "Skytils", description = "Even more utilities", category = "Information", subcategory = "Credits")
+    @Property(
+        type = PropertyType.PARAGRAPH,
+        name = "Skytils",
+        description = "Even more utilities",
+        category = "Information",
+        subcategory = "Credits"
+    )
     var credits2 = ""
 
     init {
@@ -316,8 +369,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
             "Credits",
             "This mod would not be possible without OSS projects and other forms of help. This page lists the people / organizations who helped make this mod."
         )
-        registerListener("textColor") {
-                _: Int ->
+        registerListener("textColor") { _: Int ->
             Listener.changeTextColor = true
         }
         addDependency("textColor", "highlightName")
