@@ -37,7 +37,7 @@ minecraft {
 
     clientJvmArgs += '-Dfml.coreMods.load=net.wyvest.wyvtilities.mixin.WyvtilsLoadingPlugin'
     clientJvmArgs += '-Delementa.dev=true'
-    clientRunArgs += '--tweakClass org.spongepowered.asm.launch.MixinTweaker'
+    clientRunArgs += '--tweakClass xyz.matthewtgm.requisite.launchwrapper.RequisiteLaunchwrapper'
     clientRunArgs += '--mixin mixins.wyvtils.json'
 }
 
@@ -49,8 +49,8 @@ configurations {
 
 dependencies {
     // Libraries
-    provided 'xyz.matthewtgm:TGMLib:2.6.11'
-    include('xyz.matthewtgm:TGMLibLaunchwrapper:1.5') {
+    provided 'xyz.matthewtgm:Requisite:1.0'
+    include('xyz.matthewtgm:RequisiteLaunchwrapper:1.0') {
         transitive = false
     }
     include ('gg.essential:vigilance-1.8.9-forge:154')
@@ -58,8 +58,8 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
 
     // Languages
-    include 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-    include 'org.jetbrains.kotlin:kotlin-reflect'
+    include 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.21'
+    include 'org.jetbrains.kotlin:kotlin-reflect:1.5.21'
     include("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1-native-mt")
 }
 
@@ -70,7 +70,7 @@ jar {
             'FMLCorePluginContainsFMLMod': true,
             'ForceLoadAsMod': true,
             'MixinConfigs': 'mixins.wyvtils.json',
-            'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
+            'TweakClass': 'xyz.matthewtgm.requisite.launchwrapper.RequisiteLaunchwrapper',
             'TweakOrder': '0'
     )
 

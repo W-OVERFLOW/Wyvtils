@@ -9,12 +9,11 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
 import net.wyvest.wyvtilities.Wyvtilities.MOD_NAME
 import net.wyvest.wyvtilities.Wyvtilities.VERSION
-import net.wyvest.wyvtilities.actionbar.ActionBarGui
-import net.wyvest.wyvtilities.bossbar.BossHealthGui
+import net.wyvest.wyvtilities.gui.ActionBarGui
+import net.wyvest.wyvtilities.gui.BossHealthGui
 import net.wyvest.wyvtilities.listeners.Listener
-import xyz.matthewtgm.tgmlib.util.GuiHelper
-import xyz.matthewtgm.tgmlib.util.Notifications
-import java.awt.Color
+import xyz.matthewtgm.requisite.util.GuiHelper
+import xyz.matthewtgm.requisite.util.Notifications
 import java.io.File
 
 @Suppress("unused")
@@ -121,14 +120,6 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     var bossBarBar = true
 
     @Property(
-        type = PropertyType.COLOR,
-        name = "Bossbar Color",
-        description = "Change the color of the bossbar..",
-        category = "Bossbar"
-    )
-    var bossBarColor : Color = Color.WHITE
-
-    @Property(
         type = PropertyType.BUTTON,
         name = "Bossbar Editor",
         description = "Change the position of the bossbar.",
@@ -147,7 +138,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     )
     fun resetBossbar() {
         GuiHelper.open(null)
-        bossBarX = ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2 - 91
+        bossBarX = ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2
         bossBarY = 12
         WyvtilsConfig.markDirty()
         WyvtilsConfig.writeData()
@@ -244,6 +235,46 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     )
     var actionBarY : Int = 12
 
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Title",
+        description = "Toggle the title on or off.",
+        category = "Titles"
+    )
+    var title = true
+
+    @Property(
+        type = PropertyType.PERCENT_SLIDER,
+        name = "Title Scale Percentage",
+        description = "Change the scale of the title.",
+        category = "Titles",
+    )
+    var titleScale = 1.0F
+
+    @Property(
+        type = PropertyType.PERCENT_SLIDER,
+        name = "Subtitle Scale Percentage",
+        description = "Change the scale of the subtitle.",
+        category = "Titles",
+    )
+    var subtitleScale = 1.0F
+
+    @Property(
+        type = PropertyType.SELECTOR,
+        name = "Chat Type 1",
+        category = "Chat Switcher",
+        options = ["All", "Party", "Guild", "Officer"]
+    )
+    var chatType1 = 0
+
+    @Property(
+        type = PropertyType.SELECTOR,
+        name = "Chat Type 2",
+        category = "Chat Switcher",
+        options = ["All", "Party", "Guild", "Officer", "None"]
+    )
+    var chatType2 = 0
+
     @Property(type = PropertyType.PARAGRAPH, name = "Sk1er LLC", description = "Essential + Vigilance", category = "Information", subcategory = "Credits")
     var credits0 = ""
 
@@ -296,7 +327,6 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
             "bossBarText",
             "bossBarShadow",
             "bossBarBar",
-            "bossBarColor"
         ).forEach { propertyName -> addDependency(propertyName, "bossBarCustomization") }
         listOf(
             "actionBar",

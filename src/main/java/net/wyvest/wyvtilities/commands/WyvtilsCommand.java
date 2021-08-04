@@ -5,10 +5,10 @@ import net.wyvest.wyvtilities.Wyvtilities;
 import net.wyvest.wyvtilities.config.WyvtilsConfig;
 import net.wyvest.wyvtilities.utils.HypixelUtils;
 import xyz.matthewtgm.json.util.JsonApiHelper;
-import xyz.matthewtgm.tgmlib.commands.advanced.Command;
-import xyz.matthewtgm.tgmlib.util.GuiHelper;
-import xyz.matthewtgm.tgmlib.util.Multithreading;
-import xyz.matthewtgm.tgmlib.util.Notifications;
+import xyz.matthewtgm.requisite.commands.advanced.Command;
+import xyz.matthewtgm.requisite.util.GuiHelper;
+import xyz.matthewtgm.requisite.util.Multithreading;
+import xyz.matthewtgm.requisite.util.Notifications;
 
 @Command(name = "wyvtilities", aliases = {"wyvtils", "wytils", "wytil", "wyvtil"}, autoGenTabCompleteOptions = true)
 public class WyvtilsCommand {
@@ -63,14 +63,14 @@ public class WyvtilsCommand {
                         if (args.length >= 2) {
                             if (HypixelUtils.INSTANCE.getGEXP(args[1])) {
                                 Notifications
-                                        .push("Wyvtilities", args[1] + " currently has " + HypixelUtils.INSTANCE.getGexp() + " guild EXP.");
+                                        .push("Wyvtilities", args[1] + " currently has " + HypixelUtils.INSTANCE.getGexpString() + " guild EXP.");
                             } else {
                                 Notifications
                                         .push("Wyvtilities", "There was a problem trying to get " + args[1] + "'s GEXP.");
                             }
                         } else {
                             if (HypixelUtils.INSTANCE.getGEXP()) {
-                                Notifications.push("Wyvtilities", "You currently have " + HypixelUtils.INSTANCE.getGexp() + " guild EXP.");
+                                Notifications.push("Wyvtilities", "You currently have " + HypixelUtils.INSTANCE.getGexpString() + " guild EXP.");
                             } else {
                                 Notifications.push("Wyvtilities", "There was a problem trying to get your GEXP.");
                             }
@@ -92,7 +92,16 @@ public class WyvtilsCommand {
             try {
                 Multithreading.runAsync(() -> {
                     {
-                        if (args.length >= 2) {
+                        if (args.length >= 3) {
+                            if (HypixelUtils.INSTANCE.getWinstreak(args[1], args[2])) {
+                                Notifications
+                                        .push("Wyvtilities", args[1] + " currently has a " + HypixelUtils.INSTANCE.getWinstreakString() + " winstreak in " + args[2] + ".");
+                            } else {
+                                Notifications
+                                        .push("Wyvtilities", "There was a problem trying to get " + args[1] + "'s winstreak.");
+                            }
+                        }
+                        else if (args.length >= 2) {
                             if (HypixelUtils.INSTANCE.getWinstreak(args[1])) {
                                 Notifications
                                         .push("Wyvtilities", args[1] + " currently has a " + HypixelUtils.INSTANCE.getWinstreakString() + " winstreak.");

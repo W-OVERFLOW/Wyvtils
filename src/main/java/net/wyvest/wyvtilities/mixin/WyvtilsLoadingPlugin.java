@@ -2,7 +2,6 @@ package net.wyvest.wyvtilities.mixin;
 
 import kotlin.KotlinVersion;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
-import xyz.matthewtgm.tgmlib.launchwrapper.TGMLibLaunchwrapper;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,8 +11,6 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,9 +27,7 @@ public class WyvtilsLoadingPlugin implements IFMLLoadingPlugin {
 
     @Override
     public String[] getASMTransformerClass() {
-        List<String> classTransformers = new ArrayList<>();
-        TGMLibLaunchwrapper.quickInject(classTransformers);
-        return classTransformers.toArray(new String[0]);
+        return new String[0];
     }
 
     @Override

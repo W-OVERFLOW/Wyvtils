@@ -7,7 +7,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.minecraft.client.Minecraft
+import net.minecraft.client.settings.KeyBinding
 import net.minecraft.util.EnumChatFormatting
+import net.minecraftforge.fml.client.registry.ClientRegistry
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
@@ -15,16 +17,17 @@ import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion
 import net.wyvest.wyvtilities.commands.WyvtilsCommand
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.listeners.Listener
+import net.wyvest.wyvtilities.utils.HypixelUtils
 import net.wyvest.wyvtilities.utils.equalsAny
 import net.wyvest.wyvtilities.utils.startsWithAny
+import org.lwjgl.input.Keyboard
 import xyz.matthewtgm.json.entities.JsonArray
 import xyz.matthewtgm.json.util.JsonApiHelper
-import xyz.matthewtgm.tgmlib.commands.CommandManager
-import xyz.matthewtgm.tgmlib.launchwrapper.TGMLibLaunchwrapper
-import xyz.matthewtgm.tgmlib.util.ChatHelper
-import xyz.matthewtgm.tgmlib.util.ForgeHelper
-import xyz.matthewtgm.tgmlib.util.Multithreading
-import xyz.matthewtgm.tgmlib.util.Notifications
+import xyz.matthewtgm.requisite.commands.CommandManager
+import xyz.matthewtgm.requisite.util.ChatHelper
+import xyz.matthewtgm.requisite.util.ForgeHelper
+import xyz.matthewtgm.requisite.util.Multithreading
+import xyz.matthewtgm.requisite.util.Notifications
 import java.net.URI
 
 
@@ -38,7 +41,7 @@ object Wyvtilities {
     var isRegexLoaded: Boolean = false
     const val MODID = "wyvtilities"
     const val MOD_NAME = "Wyvtilities"
-    const val VERSION = "0.6.1"
+    const val VERSION = "1.0.0"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
 
@@ -50,10 +53,10 @@ object Wyvtilities {
     fun sendMessage(message: String?) {
         ChatHelper.sendMessage(EnumChatFormatting.DARK_PURPLE.toString() + "[Wyvtilities] ", message)
     }
+    val keybind = KeyBinding("Chat Swapper", Keyboard.KEY_V, "Wyvtilities")
 
     @Mod.EventHandler
     fun onFMLInitialization(event: FMLInitializationEvent) {
-        TGMLibLaunchwrapper.initialize(Minecraft.getMinecraft().mcDataDir)
         WyvtilsConfig.preload()
         isConfigInitialized = true
         if (WyvtilsConfig.highlightName) {
@@ -77,7 +80,7 @@ object Wyvtilities {
                 else -> ""
             }
         }
-        ForgeHelper.registerEventListeners(this, Listener)
+        ForgeHelper.registerEventListeners(this, Listener, HypixelUtils)
         CommandManager.register(WyvtilsCommand.getInstance().javaClass)
         Multithreading.runAsync {
             try {
@@ -89,6 +92,7 @@ object Wyvtilities {
                 Notifications.push("Wyvtilities", "Wyvtilities failed to get regexes required for the Auto Get GEXP feature!")
             }
         }
+        ClientRegistry.registerKeyBinding(keybind)
     }
 
     /**
