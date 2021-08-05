@@ -5,7 +5,7 @@ plugins {
 
     // Build
     id 'com.github.johnrengelman.shadow' version '6.1.0'
-    id 'net.minecraftforge.gradle.forge' version 'ddb1eb0'
+    id 'net.minecraftforge.gradle.forge' version '2.0.2'
 
     // Libraries
     id 'org.spongepowered.mixin' version '0.6-SNAPSHOT'
