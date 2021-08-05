@@ -11,7 +11,7 @@ plugins {
     id 'org.spongepowered.mixin' version '0.6-SNAPSHOT'
 }
 
-version = '1.0.0'
+version = '1.0.1'
 group = 'net.wyvest'
 archivesBaseName = 'Wyvtilities'
 
@@ -48,14 +48,14 @@ configurations {
 
 dependencies {
     // Libraries
-    provided 'xyz.matthewtgm:Requisite:1.0'
-    include('com.github.Wyvest:RequisiteEssentialLaunchwrapper:9056d99dde') {
+    provided 'xyz.matthewtgm:Requisite:1.1.1'
+    include('xyz.matthewtgm:RequisiteLaunchwrapper:1.1') {
         transitive = false
     }
-    include('gg.essential:loader-launchwrapper:1.0.2') {
+    include('gg.essential:loader-launchwrapper:1.1.0') {
         transitive = false
     }
-    provided 'gg.essential:essential-1.8.9-forge:1282'
+    provided 'gg.essential:essential-1.8.9-forge:1284'
 
 
     annotationProcessor 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
