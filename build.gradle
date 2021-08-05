@@ -52,7 +52,7 @@ dependencies {
     include('com.github.Wyvest:RequisiteEssentialLaunchwrapper:9056d99dde') {
         transitive = false
     }
-    include('gg.essential:loader-launchwrapper:1.0.2') {
+    include('gg.essential:loader-launchwrapper:1.1.0') {
         transitive = false
     }
     provided 'gg.essential:essential-1.8.9-forge:1282'
