@@ -10,10 +10,11 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
 import net.wyvest.wyvtilities.Wyvtilities.MOD_NAME
 import net.wyvest.wyvtilities.Wyvtilities.VERSION
+import net.wyvest.wyvtilities.Wyvtilities.mc
 import net.wyvest.wyvtilities.gui.ActionBarGui
 import net.wyvest.wyvtilities.gui.BossHealthGui
 import net.wyvest.wyvtilities.listeners.Listener
-import xyz.matthewtgm.requisite.util.GuiHelper
+import java.awt.Color
 import java.io.File
 
 @Suppress("unused")
@@ -162,7 +163,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         category = "Bossbar"
     )
     fun openBossHealthGui() {
-        if (bossBarCustomization) GuiHelper.open(BossHealthGui)
+        if (bossBarCustomization) EssentialAPI.getGuiUtil().openScreen(BossHealthGui())
         else EssentialAPI.getNotifications()
             .push("Wyvtilities", "You can't do that, you haven't enabled Bossbar Customization!")
     }
@@ -174,12 +175,12 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         category = "Bossbar"
     )
     fun resetBossbar() {
-        GuiHelper.open(null)
+        mc.displayGuiScreen(null)
         bossBarX = ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2
         bossBarY = 12
         WyvtilsConfig.markDirty()
         WyvtilsConfig.writeData()
-        GuiHelper.open(this.gui())
+        EssentialAPI.getGuiUtil().openScreen(gui())
     }
 
     @Property(
@@ -249,7 +250,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         category = "Action Bar"
     )
     fun openActionBarGui() {
-        if (actionBarPosition && actionBarCustomization) EssentialAPI.getGuiUtil().openScreen(ActionBarGui)
+        if (actionBarPosition && actionBarCustomization) EssentialAPI.getGuiUtil().openScreen(ActionBarGui())
         else EssentialAPI.getNotifications()
             .push("Wyvtilities", "You can't do that, you don't have Action Bar position enabled!")
     }
@@ -311,6 +312,63 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         options = ["All", "Party", "Guild", "Officer", "None"]
     )
     var chatType2 = 0
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Hitbox",
+        category = "Hitbox",
+        description = "Toggle the hitbox of entities."
+    )
+    var hitbox = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Disable for Self",
+        category = "Hitbox",
+        description = "Don't render the hitbox if the player's hitbox is you."
+    )
+    var disableForSelf = true
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Hitbox Color",
+        category = "Hitbox",
+        description = "Change the color of the hitbox.",
+    )
+    var hitboxColor : Color = Color.WHITE
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Line Hitbox",
+        category = "Hitbox",
+        description = "Toggle the eye line hitbox of entities."
+    )
+    var hitboxEyeLine = true
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Hitbox Line Color",
+        category = "Hitbox",
+        description = "Change the color of the hitbox eye line.",
+    )
+    var hitboxEyelineColor : Color = Color(0, 0, 255, 255)
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Hitbox Line of Sight",
+        category = "Hitbox",
+        description = "Toggle the hitbox of entities."
+    )
+    var hitboxLineOfSight = true
+
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Line of Sight Color",
+        category = "Hitbox",
+        description = "Change the color of the hitbox's line of sight.",
+    )
+    var hitboxLineOfSightColor : Color = Color(255, 0, 0, 255)
 
     @Property(
         type = PropertyType.PARAGRAPH,

@@ -6,17 +6,15 @@ import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.boss.BossStatus
 import net.minecraft.util.EnumChatFormatting
 import net.wyvest.wyvtilities.config.WyvtilsConfig
-import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarShadow
 import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarX
 import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarY
-import net.wyvest.wyvtilities.config.WyvtilsConfig.firstLaunchBossbar
 import org.lwjgl.opengl.GL11
 import xyz.matthewtgm.requisite.util.GuiHelper
 import java.awt.Color
 import java.io.IOException
 
 
-object BossHealthGui : GuiScreen() {
+class BossHealthGui : GuiScreen() {
 
     private var dragging = false
     private var prevX = 0
@@ -40,8 +38,8 @@ object BossHealthGui : GuiScreen() {
         mc.mcProfiler.startSection("bossHealthGui")
         GlStateManager.enableBlend()
         val fontrenderer: FontRenderer = mc.fontRendererObj
-        if (firstLaunchBossbar) {
-            firstLaunchBossbar = false
+        if (WyvtilsConfig.firstLaunchBossbar) {
+            WyvtilsConfig.firstLaunchBossbar = false
             bossBarX = ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2
             bossBarY = 12
             WyvtilsConfig.markDirty()
@@ -58,19 +56,17 @@ object BossHealthGui : GuiScreen() {
             mc.ingameGUI?.drawTexturedModalRect(bossBarX - 91, bossBarY, 0, 79, 1, 5)
         }
         if (WyvtilsConfig.bossBarText) {
-            //fix this
             fontrenderer.drawString(
                 s,
                 (bossBarX - mc.fontRendererObj.getStringWidth(s) / 2).toString().toFloat(),
                 bossBarY.toFloat() - 10,
-                Color.WHITE.rgb, bossBarShadow
+                Color.WHITE.rgb, WyvtilsConfig.bossBarShadow
             )
         }
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
         if (WyvtilsConfig.bossBarBar) mc.textureManager.bindTexture(Gui.icons)
         GlStateManager.disableBlend()
         mc.mcProfiler.endSection()
-
         val scale = 1
         GlStateManager.pushMatrix()
         GlStateManager.scale(scale.toFloat(), scale.toFloat(), 0f)

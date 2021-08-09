@@ -1,5 +1,6 @@
 package net.wyvest.wyvtilities
 
+import com.google.gson.JsonParser
 import gg.essential.api.EssentialAPI
 import gg.essential.api.utils.Multithreading
 import gg.essential.universal.ChatColor
@@ -23,13 +24,14 @@ import net.wyvest.wyvtilities.utils.HypixelUtils
 import net.wyvest.wyvtilities.utils.equalsAny
 import net.wyvest.wyvtilities.utils.startsWithAny
 import org.lwjgl.input.Keyboard
-import xyz.matthewtgm.json.entities.JsonArray
-import xyz.matthewtgm.json.util.JsonApiHelper
+import xyz.matthewtgm.requisite.util.ApiHelper
 import xyz.matthewtgm.requisite.util.ChatHelper
 import xyz.matthewtgm.requisite.util.ForgeHelper
 import java.net.URI
+import java.util.regex.Pattern
 
 
+@Suppress("MemberVisibilityCanBePrivate")
 @Mod(
     modid = Wyvtilities.MODID,
     name = Wyvtilities.MOD_NAME,
@@ -42,11 +44,12 @@ object Wyvtilities {
     var isRegexLoaded: Boolean = false
     const val MODID = "wyvtilities"
     const val MOD_NAME = "Wyvtilities"
-    const val VERSION = "1.0.1"
+    const val VERSION = "1.1.0-BETA1"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
+    val jsonParser = JsonParser()
 
-    lateinit var autoGGRegex: JsonArray
+    lateinit var autoGGRegex: MutableList<Pattern>
 
     @JvmField
     var isConfigInitialized = false
@@ -86,8 +89,10 @@ object Wyvtilities {
         WyvtilsCommands.register()
         Multithreading.runAsync {
             try {
-                autoGGRegex =
-                    JsonApiHelper.getJsonObject("https://wyvest.net/wyvtilities.json", true).getAsArray("triggers")
+                autoGGRegex = mutableListOf()
+                for (trigger in jsonParser.parse(ApiHelper.getJsonOnline("https://wyvest.net/wyvtilities.json")).asJsonObject["triggers"].asJsonArray) {
+                    autoGGRegex.add(Pattern.compile(trigger.toString()))
+                }
                 isRegexLoaded = true
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -116,7 +121,7 @@ object Wyvtilities {
         }
         CoroutineScope(Dispatchers.IO + CoroutineName("Wyvtilities-UpdateChecker")).launch {
             val latestRelease =
-                JsonApiHelper.getJsonObject("https://api.github.com/repos/Wyvest/Wyvtilities/releases/latest")
+                jsonParser.parse(ApiHelper.getJsonOnline("https://api.github.com/repos/Wyvest/Wyvtilities/releases/latest")).asJsonObject
             val latestTag = latestRelease.get("tag_name").asString
             val currentTag = VERSION
 
@@ -127,7 +132,7 @@ object Wyvtilities {
             if ((currentTag.contains("BETA") && currentVersion >= latestVersion)) {
                 return@launch
             } else if (currentVersion < latestVersion) {
-                updateUrl = latestRelease.getAsArray("assets")[0].asJsonObject["browser_download_url"].asString
+                updateUrl = latestRelease["assets"].asJsonArray[0].asJsonObject["browser_download_url"].asString
             }
             if (updateUrl != null) {
                 EssentialAPI.getNotifications()

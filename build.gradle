@@ -11,7 +11,7 @@ plugins {
     id 'org.spongepowered.mixin' version '0.6-SNAPSHOT'
 }
 
-version = '1.0.1'
+version = '1.1.0-BETA1'
 group = 'net.wyvest'
 archivesBaseName = 'Wyvtilities'
 
@@ -141,8 +141,11 @@ reobf {
 }
 
 sourceSets {
+    dummy
     main {
         ext.refMap = "mixins.wyvtils.refmap.json"
         output.resourcesDir = file("${buildDir}/classes/kotlin/main")
+        compileClasspath += dummy.output
     }
 }
+

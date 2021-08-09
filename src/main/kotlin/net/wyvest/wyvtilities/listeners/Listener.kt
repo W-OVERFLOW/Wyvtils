@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.wyvest.wyvtilities.Wyvtilities
 import net.wyvest.wyvtilities.Wyvtilities.keybind
 import net.wyvest.wyvtilities.Wyvtilities.mc
+import net.wyvest.wyvtilities.Wyvtilities.sendMessage
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.mixin.AccessorGuiIngame
 import net.wyvest.wyvtilities.utils.HypixelUtils
@@ -29,12 +30,13 @@ import java.util.regex.Pattern
 
 
 object Listener {
+    private var removeTitle = false
     private var current: Int = 1
     private var victoryDetected = false
     lateinit var color: String
     var changeTextColor = false
 
-    @SubscribeEvent
+    @SubscribeEvent(receiveCanceled = true)
     fun onChatReceivedEvent(e: ClientChatReceivedEvent) {
         val unformattedText = EnumChatFormatting.getTextWithoutFormattingCodes(e.message.unformattedText)
         if (WyvtilsConfig.autoGetAPI) {
@@ -51,7 +53,7 @@ object Listener {
                             .get("success").asBoolean
                     ) {
                         if (!ServerHelper.hypixel()) {
-                            Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "You are not running this command on Hypixel! This mod needs an Hypixel API key!")
+                            sendMessage(EnumChatFormatting.RED.toString() + "You are not running this command on Hypixel! This mod needs an Hypixel API key!")
                         }
                         shouldReturn = true
                     }
@@ -60,16 +62,15 @@ object Listener {
                 WyvtilsConfig.apiKey = unformattedText.substring("Your new API key is ".length)
                 WyvtilsConfig.markDirty()
                 WyvtilsConfig.writeData()
-                Wyvtilities.sendMessage(EnumChatFormatting.GREEN.toString() + "Your API Key has been automatically configured.")
+                sendMessage(EnumChatFormatting.GREEN.toString() + "Your API Key has been automatically configured.")
                 return
             }
             //Stolen code ends here
         }
-        if ((WyvtilsConfig.autoGetGEXP || WyvtilsConfig.autoGetWinstreak) && Wyvtilities.isRegexLoaded) {
+        if ((WyvtilsConfig.autoGetGEXP || WyvtilsConfig.autoGetWinstreak) && Wyvtilities.isRegexLoaded && ServerHelper.hypixel()) {
             if (!victoryDetected) {
                 for (trigger in Wyvtilities.autoGGRegex) {
-                    val triggerPattern = Pattern.compile(trigger.toString())
-                    if (triggerPattern.matcher(unformattedText).matches()) {
+                    if (trigger.matcher(unformattedText).matches()) {
                         victoryDetected = true
                         Multithreading.runAsync {
                             if (WyvtilsConfig.autoGetGEXP) {
@@ -96,36 +97,36 @@ object Listener {
                         return
                     }
                 }
-                //if after all that, victory isnt detected, use title checking method
-                if (!victoryDetected) {
-                    if (EnumChatFormatting.getTextWithoutFormattingCodes((mc.ingameGUI as AccessorGuiIngame).displayedTitle)
-                            .containsAny("win", "over", "won", "victory")
-                    ) {
-                        victoryDetected = true
-                        Multithreading.runAsync {
-                            if (WyvtilsConfig.autoGetGEXP) {
-                                if (HypixelUtils.getGEXP()) {
-                                    EssentialAPI.getNotifications()
-                                        .push("Wyvtilities", "You currently have " + HypixelUtils.gexp + " guild EXP.")
-                                } else {
-                                    EssentialAPI.getNotifications()
-                                        .push("Wyvtilities", "There was a problem trying to get your GEXP.")
-                                }
-                            }
-                            if (WyvtilsConfig.autoGetWinstreak) {
-                                if (HypixelUtils.getWinstreak()) {
-                                    EssentialAPI.getNotifications().push(
-                                        "Wyvtilities",
-                                        "You currently have a " + HypixelUtils.winstreak + " winstreak."
-                                    )
-                                } else {
-                                    EssentialAPI.getNotifications()
-                                        .push("Wyvtilities", "There was a problem trying to get your winstreak.")
-                                }
+            }
+            if (!victoryDetected) {
+                if (EnumChatFormatting.getTextWithoutFormattingCodes((mc.ingameGUI as AccessorGuiIngame).displayedTitle)
+                        .containsAny("win", "over", "won", "victory")
+                ) {
+                    victoryDetected = true
+                    removeTitle = true
+                    Multithreading.runAsync {
+                        if (WyvtilsConfig.autoGetGEXP) {
+                            if (HypixelUtils.getGEXP()) {
+                                EssentialAPI.getNotifications()
+                                    .push("Wyvtilities", "You currently have " + HypixelUtils.gexp + " guild EXP.")
+                            } else {
+                                EssentialAPI.getNotifications()
+                                    .push("Wyvtilities", "There was a problem trying to get your GEXP.")
                             }
                         }
-                        return
+                        if (WyvtilsConfig.autoGetWinstreak) {
+                            if (HypixelUtils.getWinstreak()) {
+                                EssentialAPI.getNotifications().push(
+                                    "Wyvtilities",
+                                    "You currently have a " + HypixelUtils.winstreak + " winstreak."
+                                )
+                            } else {
+                                EssentialAPI.getNotifications()
+                                    .push("Wyvtilities", "There was a problem trying to get your winstreak.")
+                            }
+                        }
                     }
+                    return
                 }
             }
         }
@@ -134,6 +135,14 @@ object Listener {
     @SubscribeEvent
     fun onWorldLeave(event: WorldEvent.Unload) {
         victoryDetected = false
+    }
+
+    @SubscribeEvent
+    fun onWorldJoin(event: WorldEvent.Load) {
+        if (removeTitle) {
+            removeTitle = false
+            (mc.ingameGUI as AccessorGuiIngame).displayedTitle = ""
+        }
     }
 
     @SubscribeEvent
@@ -212,6 +221,7 @@ object Listener {
 
     @SubscribeEvent
     fun onKeyInput(event: BetterInputEvent.KeyboardInputEvent?) {
+        if (!ServerHelper.hypixel()) return
         val code: Int = keybind.keyCode
         if (Keyboard.getEventKeyState() && Keyboard.getEventKey() == code) {
             pressed()
@@ -220,6 +230,7 @@ object Listener {
 
     @SubscribeEvent
     fun onMouseInput(event: BetterInputEvent.MouseInputEvent?) {
+        if (!ServerHelper.hypixel()) return
         val code: Int = keybind.keyCode
         if (Mouse.getEventButtonState() && Mouse.getEventButton() == code + 100) {
             pressed()

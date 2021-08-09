@@ -11,6 +11,7 @@ import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.util.EnumChatFormatting
 import net.wyvest.wyvtilities.Wyvtilities
 import net.wyvest.wyvtilities.config.WyvtilsConfig
+import net.wyvest.wyvtilities.gui.MainGui
 import net.wyvest.wyvtilities.utils.HypixelUtils
 import xyz.matthewtgm.json.util.JsonApiHelper
 
@@ -21,7 +22,7 @@ object WyvtilsCommands : Command("wyvtilities", true) {
 
     @DefaultHandler
     fun handle() {
-        EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
+        EssentialAPI.getGuiUtil().openScreen(MainGui())
     }
 
     @SubCommand("config", description = "Opens the config GUI for Wyvtils")

@@ -8,6 +8,8 @@
     "AccessorGuiIngame",
     "MixinGuiIngame",
     "MixinGuiIngameForge",
+    "MixinGuiIngameForgeHook",
+    "MixinRenderManager",
     "MixinSoundManager"
   ],
   "verbose": true
