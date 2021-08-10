@@ -55,7 +55,7 @@ dependencies {
     include('gg.essential:loader-launchwrapper:1.0.2') {
         transitive = false
     }
-    provided 'gg.essential:essential-1.8.9-forge:1292'
+    provided 'gg.essential:essential-1.8.9-forge:1299'
 
 
     annotationProcessor 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
