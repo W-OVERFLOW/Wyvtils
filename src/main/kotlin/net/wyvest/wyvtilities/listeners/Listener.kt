@@ -54,7 +54,7 @@ object Listener {
     private var victoryDetected = false
     var color: String = ""
     var changeTextColor = false
-    var currentEntity : String = ""
+    var currentEntity: String = ""
 
     @SubscribeEvent(receiveCanceled = true)
     fun onChatReceivedEvent(e: ClientChatReceivedEvent) {
@@ -186,8 +186,7 @@ object Listener {
                     12 -> ChatColor.RED.toString()
                     13 -> ChatColor.LIGHT_PURPLE.toString()
                     14 -> ChatColor.YELLOW.toString()
-                    15 -> ChatColor.WHITE.toString()
-                    else -> ""
+                    else -> ChatColor.WHITE.toString()
                 }
                 changeTextColor = false
             }
@@ -258,12 +257,16 @@ object Listener {
     }
 
     @SubscribeEvent
-    fun onRender(event : RenderPlayerEvent.Pre) {
+    fun onRender(event: RenderPlayerEvent.Pre) {
         if (event.entity == null || mc.theWorld == null) {
             return
         }
         currentEntity =
-            if (getPositiveMinus(event.entity.posX, mc.thePlayer.posX) + getPositiveMinus(event.entity.posY, mc.thePlayer.posY) + getPositiveMinus(event.entity.posZ, mc.thePlayer.posZ) <= (3).toDouble()) {
+            if (getPositiveMinus(event.entity.posX, mc.thePlayer.posX) + getPositiveMinus(
+                    event.entity.posY,
+                    mc.thePlayer.posY
+                ) <= (3).toDouble()
+            ) {
                 event.entity.name
             } else {
                 ""
@@ -294,7 +297,7 @@ object Listener {
         }
     }
 
-    private fun getPositiveMinus(a : Double, b : Double) : Double {
+    private fun getPositiveMinus(a: Double, b: Double): Double {
         if (a > b) {
             return a - b
         }

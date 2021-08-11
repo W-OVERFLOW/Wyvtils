@@ -26,8 +26,6 @@ import gg.essential.vigilance.data.PropertyType
 import gg.essential.vigilance.data.SortingBehavior
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
-import net.wyvest.wyvtilities.Wyvtilities.MOD_NAME
-import net.wyvest.wyvtilities.Wyvtilities.VERSION
 import net.wyvest.wyvtilities.Wyvtilities.mc
 import net.wyvest.wyvtilities.gui.ActionBarGui
 import net.wyvest.wyvtilities.gui.BossHealthGui
@@ -38,15 +36,8 @@ import java.awt.Color
 import java.io.File
 
 @Suppress("unused")
-object WyvtilsConfig : Vigilant(File("./config/Wyvtilities/wyvtilities.toml"), "Wyvtilities", sortingBehavior = ConfigSorting) {
-
-    @Property(
-        type = PropertyType.PARAGRAPH,
-        name = "Info",
-        description = "You are using $MOD_NAME version $VERSION, made by Wyvest.",
-        category = "Information"
-    )
-    var paragraph = ""
+object WyvtilsConfig :
+    Vigilant(File("./config/Wyvtilities/wyvtilities.toml"), "Wyvtilities", sortingBehavior = ConfigSorting) {
 
     @Property(
         type = PropertyType.TEXT,
@@ -355,7 +346,7 @@ object WyvtilsConfig : Vigilant(File("./config/Wyvtilities/wyvtilities.toml"), "
         category = "Hitbox",
         description = "Change the color of the hitbox.",
     )
-    var hitboxColor : Color = Color.WHITE
+    var hitboxColor: Color = Color.WHITE
 
     @Property(
         type = PropertyType.COLOR,
@@ -363,7 +354,7 @@ object WyvtilsConfig : Vigilant(File("./config/Wyvtilities/wyvtilities.toml"), "
         category = "Hitbox",
         description = "Change the color of the hitbox of players when they are within range of the player.",
     )
-    var hitboxRangeColor : Color = Color.WHITE
+    var hitboxRangeColor: Color = Color.WHITE
 
     @Property(
         type = PropertyType.SWITCH,
@@ -379,7 +370,7 @@ object WyvtilsConfig : Vigilant(File("./config/Wyvtilities/wyvtilities.toml"), "
         category = "Hitbox",
         description = "Change the color of the hitbox eye line.",
     )
-    var hitboxEyelineColor : Color = Color(0, 0, 255, 255)
+    var hitboxEyelineColor: Color = Color(0, 0, 255, 255)
 
     @Property(
         type = PropertyType.SWITCH,
@@ -396,7 +387,7 @@ object WyvtilsConfig : Vigilant(File("./config/Wyvtilities/wyvtilities.toml"), "
         category = "Hitbox",
         description = "Change the color of the hitbox's line of sight.",
     )
-    var hitboxLineOfSightColor : Color = Color(255, 0, 0, 255)
+    var hitboxLineOfSightColor: Color = Color(255, 0, 0, 255)
 
     @Property(
         type = PropertyType.SWITCH,
@@ -413,35 +404,8 @@ object WyvtilsConfig : Vigilant(File("./config/Wyvtilities/wyvtilities.toml"), "
         category = "Updater"
     )
     fun update() {
-        if (Updater.shouldUpdate) EssentialAPI.getGuiUtil().openScreen(DownloadConfirmGui())
+        if (Updater.shouldUpdate) EssentialAPI.getGuiUtil().openScreen(DownloadConfirmGui(mc.currentScreen)) else EssentialAPI.getNotifications().push("Wyvtilities", "No update had been detected at startup, and thus the update GUI has not been shown.")
     }
-
-    @Property(
-        type = PropertyType.PARAGRAPH,
-        name = "Sk1er LLC",
-        description = "Essential + Vigilance",
-        category = "Information",
-        subcategory = "Credits"
-    )
-    var credits0 = ""
-
-    @Property(
-        type = PropertyType.PARAGRAPH,
-        name = "TGMDevelopment",
-        description = "TGMLib",
-        category = "Information",
-        subcategory = "Credits"
-    )
-    var credits1 = ""
-
-    @Property(
-        type = PropertyType.PARAGRAPH,
-        name = "Skytils",
-        description = "Even more utilities",
-        category = "Information",
-        subcategory = "Credits"
-    )
-    var credits2 = ""
 
     init {
         initialize()
@@ -470,10 +434,9 @@ object WyvtilsConfig : Vigilant(File("./config/Wyvtilities/wyvtilities.toml"), "
             "Sound",
             "Configure sound-related features in Wyvtils."
         )
-        setSubcategoryDescription(
-            "Information",
-            "Credits",
-            "This mod would not be possible without OSS projects and other forms of help. This page lists the people / organizations who helped make this mod."
+        setCategoryDescription(
+            "Hitboxes",
+            "Configure hitbox-related features in Wyvtils."
         )
         registerListener("textColor") { _: Int ->
             Listener.changeTextColor = true

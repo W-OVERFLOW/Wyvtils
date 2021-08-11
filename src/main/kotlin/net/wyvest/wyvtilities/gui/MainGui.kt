@@ -19,7 +19,7 @@
 package net.wyvest.wyvtilities.gui
 
 import gg.essential.api.EssentialAPI
-import net.minecraft.client.gui.GuiButton
+import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.util.EnumChatFormatting
@@ -30,28 +30,25 @@ import xyz.matthewtgm.requisite.gui.GuiTransButton
 class MainGui : GuiScreen() {
 
     override fun initGui() {
-        buttonList.add(GuiTransButton(1, width / 2 - fontRendererObj.getStringWidth("Config Editor") / 2 - 5, height / 2 - 20, fontRendererObj.getStringWidth("Config Editor") + 5, 20, "Config Editor"))
-        buttonList.add(GuiTransButton(0, width / 2 - fontRendererObj.getStringWidth("Close") / 2 - 5, height / 2 + 20, fontRendererObj.getStringWidth("Close") + 5, 20, "Close"))
-        super.initGui()
-    }
 
-    override fun actionPerformed(button: GuiButton) {
-        when (button.id) {
-            0 -> mc.displayGuiScreen(null)
-            1 -> EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
-        }
+        buttonList.add(object : GuiTransButton(0, width / 2 - 50, height / 2 - 10, 100, 20, "Config Editor") {
+            override fun mousePressed(mc: Minecraft, mouseX: Int, mouseY: Int): Boolean {
+                if (super.mousePressed(mc, mouseX, mouseY)) EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
+                return false
+            }
+        })
+        super.initGui()
     }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         drawDefaultBackground()
         GlStateManager.pushMatrix()
-        val scale = 3
-        GlStateManager.scale(scale.toFloat(), scale.toFloat(), 0f)
+        GlStateManager.scale(2f, 2f, 0f)
         drawCenteredString(
             fontRendererObj,
             EnumChatFormatting.DARK_PURPLE.toString() + "Wyvtilities",
-            width / 2 / scale,
-            5 / scale + 10,
+            width / 4,
+            3,
             -1
         )
         GlStateManager.popMatrix()

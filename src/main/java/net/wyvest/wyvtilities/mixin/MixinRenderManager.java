@@ -62,7 +62,8 @@ public class MixinRenderManager {
     @Inject(method = "doRenderEntity", at = @At(value = "HEAD"))
     private void forceHitbox(Entity entity, double x, double y, double z, float entityYaw, float partialTicks, boolean hideDebugBox, CallbackInfoReturnable<Boolean> cir) {
         if (WyvtilsConfig.INSTANCE.getForceHitbox()) {
-            if (!Minecraft.getMinecraft().getRenderManager().isDebugBoundingBox()) Minecraft.getMinecraft().getRenderManager().setDebugBoundingBox(true);
+            if (!Minecraft.getMinecraft().getRenderManager().isDebugBoundingBox())
+                Minecraft.getMinecraft().getRenderManager().setDebugBoundingBox(true);
         }
     }
 

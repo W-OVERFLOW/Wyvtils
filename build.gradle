@@ -29,7 +29,7 @@ plugins {
     id 'org.spongepowered.mixin' version '0.6-SNAPSHOT'
 }
 
-version = '1.1.0-BETA2'
+version = '1.1.0-BETA3'
 group = 'net.wyvest'
 archivesBaseName = 'Wyvtilities'
 
@@ -73,7 +73,7 @@ dependencies {
     include('gg.essential:loader-launchwrapper:1.1.0') {
         transitive = false
     }
-    provided 'gg.essential:essential-1.8.9-forge:1292'
+    provided 'gg.essential:essential-1.8.9-forge:1299'
 
 
     annotationProcessor 'org.spongepowered:mixin:0.7.11-SNAPSHOT'

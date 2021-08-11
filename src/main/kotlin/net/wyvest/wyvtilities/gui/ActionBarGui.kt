@@ -55,7 +55,11 @@ class ActionBarGui : GuiScreen() {
         GlStateManager.enableBlend()
         GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0)
         mc.fontRendererObj.drawString(
-            if (ingameGui.recordPlaying.isNullOrEmpty()) {"Wyvtilities Action Bar"} else {ingameGui.recordPlaying},
+            if (ingameGui.recordPlaying.isNullOrEmpty()) {
+                "Wyvtilities Action Bar"
+            } else {
+                ingameGui.recordPlaying
+            },
             actionBarX.toFloat(),
             actionBarY.toFloat(),
             Color.WHITE.rgb,

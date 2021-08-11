@@ -33,7 +33,7 @@ import java.io.File
 import kotlin.math.max
 
 
-class DownloadConfirmGui : GuiScreen() {
+class DownloadConfirmGui(private val parent: GuiScreen?) : GuiScreen() {
     override fun initGui() {
         buttonList.add(GuiButton(0, width / 2 - 100, height - 50, 200, 20, EnumChatFormatting.GREEN.toString() + "Yes"))
         buttonList.add(GuiButton(1, width / 2 - 100, height - 28, 200, 20, EnumChatFormatting.RED.toString() + "No"))
@@ -45,36 +45,55 @@ class DownloadConfirmGui : GuiScreen() {
             0 -> {
                 mc.displayGuiScreen(GuiMainMenu())
                 Multithreading.runAsync {
-                    if (Updater.download(updateUrl, File("mods/Wyvtilities-${Updater.latestTag.substringAfter("v")}.jar")) && Updater.download("https://cdn.discordapp.com/attachments/864029986066137109/874835023268835408/WyvtilitiesDeleter-1.1.jar", File("config/Wyvtilities/WyvtilitiesDeleter.jar"))) {
-                        EssentialAPI.getNotifications().push("Wyvtilities", "The ingame updater has successfully installed the newest version.")
+                    if (Updater.download(
+                            updateUrl,
+                            File("mods/Wyvtilities-${Updater.latestTag.substringAfter("v")}.jar")
+                        ) && Updater.download(
+                            "https://github.com/Wyvest/WyvtilitiesDeleter/releases/download/v1.1/WyvtilitiesDeleter-1.1.jar",
+                            File("config/Wyvtilities/WyvtilitiesDeleter-1.1.jar")
+                        )
+                    ) {
+                        EssentialAPI.getNotifications()
+                            .push("Wyvtilities", "The ingame updater has successfully installed the newest version.")
                         Updater.addShutdownHook()
                         shouldUpdate = false
                     } else {
-                        EssentialAPI.getNotifications().push("Wyvtilities", "The ingame updater has NOT installed the newest version as something went wrong.")
+                        EssentialAPI.getNotifications().push(
+                            "Wyvtilities",
+                            "The ingame updater has NOT installed the newest version as something went wrong."
+                        )
                     }
                 }
             }
-            1 -> mc.displayGuiScreen(GuiMainMenu())
+            1 -> {
+                if (parent == null) {
+                    mc.displayGuiScreen(parent)
+                } else {
+                    EssentialAPI.getGuiUtil().openScreen(parent)
+                }
+            }
         }
     }
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         drawDefaultBackground()
         GlStateManager.pushMatrix()
-        var scale = 3
-        GlStateManager.scale(scale.toFloat(), scale.toFloat(), 0f)
+        GlStateManager.scale(2f, 2f, 0f)
         drawCenteredString(
             fontRendererObj,
             EnumChatFormatting.DARK_PURPLE.toString() + "Wyvtilities",
-            width / 2 / scale,
-            5 / scale,
+            width / 4,
+            3,
             -1
         )
         GlStateManager.popMatrix()
-        scale = 1
         GlStateManager.pushMatrix()
-        GlStateManager.scale(scale.toFloat(), scale.toFloat(), 0f)
-        val lines = listOf("Are you sure you want to update?", "You can download it ingame at any time via the configuration screen.", "(This will update from v${Wyvtilities.VERSION} to ${Updater.latestTag})")
+        GlStateManager.scale(1f, 1f, 0f)
+        val lines = listOf(
+            "Are you sure you want to update?",
+            "You can download it ingame at any time via the configuration screen.",
+            "(This will update from v${Wyvtilities.VERSION} to ${Updater.latestTag})"
+        )
         var offset = max(85 - lines.size * 10, 10)
 
         for (line in lines) {

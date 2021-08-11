@@ -57,11 +57,11 @@ object Wyvtilities {
     var isRegexLoaded: Boolean = false
     const val MODID = "wyvtilities"
     const val MOD_NAME = "Wyvtilities"
-    const val VERSION = "1.1.0-BETA2"
+    const val VERSION = "1.1.0-BETA3"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
     val jsonParser = JsonParser()
-    lateinit var jarFile : File
+    lateinit var jarFile: File
 
     lateinit var autoGGRegex: MutableList<Regex>
 
@@ -77,7 +77,7 @@ object Wyvtilities {
     val keybind = KeyBinding("Chat Swapper", Keyboard.KEY_V, "Wyvtilities")
 
     @Mod.EventHandler
-    private fun onFMLPreInitialization(event : FMLPreInitializationEvent) {
+    private fun onFMLPreInitialization(event: FMLPreInitializationEvent) {
         if (!modDir.exists()) modDir.mkdirs()
         jarFile = event.sourceFile
     }
@@ -126,10 +126,6 @@ object Wyvtilities {
         ClientRegistry.registerKeyBinding(keybind)
     }
 
-    /**
-     * Adapted from SimpleToggleSprint under AGPLv3
-     * https://github.com/My-Name-Is-Jeff/SimpleToggleSprint/blob/1.8.9/LICENSE
-     */
     @Mod.EventHandler
     private fun onFMLLoad(event: FMLLoadCompleteEvent) {
         if (ForgeHelper.isModLoaded("bossbar_customizer")) {

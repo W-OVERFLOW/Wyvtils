@@ -61,9 +61,11 @@ object HypixelUtils {
     fun getGEXP(username: String): Boolean {
         var gexp: String? = null
         val uuid = getUUID(username)
-        val guildData = Wyvtilities.jsonParser.parse(ApiHelper.getJsonOnline(
-            "https://api.hypixel.net/guild?key=" + WyvtilsConfig.apiKey + ";player=" + uuid
-        )).asJsonObject
+        val guildData = Wyvtilities.jsonParser.parse(
+            ApiHelper.getJsonOnline(
+                "https://api.hypixel.net/guild?key=" + WyvtilsConfig.apiKey + ";player=" + uuid
+            )
+        ).asJsonObject
         val guildMembers = guildData["guild"].asJsonObject["members"].asJsonArray
         for (e in guildMembers) {
             if (e.asJsonObject["uuid"].asString.equals(uuid)) {
@@ -78,10 +80,12 @@ object HypixelUtils {
 
     fun getWinstreak(): Boolean {
         val uuid = mc.thePlayer.gameProfile.id.toString().replace("-", "")
-        val playerStats = Wyvtilities.jsonParser.parse(HypixelHelper.HypixelAPI.getPlayer(
-            WyvtilsConfig.apiKey,
-            uuid
-        )).asJsonObject["player"].asJsonObject["stats"]
+        val playerStats = Wyvtilities.jsonParser.parse(
+            HypixelHelper.HypixelAPI.getPlayer(
+                WyvtilsConfig.apiKey,
+                uuid
+            )
+        ).asJsonObject["player"].asJsonObject["stats"]
         when (currentGame) {
             HypixelHelper.HypixelLocraw.GameType.BEDWARS -> {
                 try {
@@ -114,10 +118,12 @@ object HypixelUtils {
 
     fun getWinstreak(username: String): Boolean {
         val uuid = getUUID(username)
-        val playerStats = Wyvtilities.jsonParser.parse(HypixelHelper.HypixelAPI.getPlayer(
-            WyvtilsConfig.apiKey,
-            uuid
-        )).asJsonObject["player"].asJsonObject["stats"]
+        val playerStats = Wyvtilities.jsonParser.parse(
+            HypixelHelper.HypixelAPI.getPlayer(
+                WyvtilsConfig.apiKey,
+                uuid
+            )
+        ).asJsonObject["player"].asJsonObject["stats"]
         when (currentGame) {
             HypixelHelper.HypixelLocraw.GameType.BEDWARS -> {
                 try {

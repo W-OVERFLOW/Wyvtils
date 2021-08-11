@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 import net.minecraft.util.Util
 import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion
 import net.wyvest.wyvtilities.Wyvtilities
+import net.wyvest.wyvtilities.Wyvtilities.mc
 import net.wyvest.wyvtilities.gui.DownloadConfirmGui
 import org.apache.http.HttpResponse
 import org.apache.http.client.HttpClient
@@ -36,6 +37,7 @@ import xyz.matthewtgm.requisite.util.ApiHelper
 import java.awt.Desktop
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 
 
 object Updater {
@@ -43,7 +45,10 @@ object Updater {
     lateinit var latestTag: String
     var shouldUpdate = false
 
-
+    /**
+     * Adapted from SimpleToggleSprint under AGPLv3
+     * https://github.com/My-Name-Is-Jeff/SimpleToggleSprint/blob/1.8.9/LICENSE
+     */
     fun update() {
         CoroutineScope(Dispatchers.IO + CoroutineName("Wyvtilities-UpdateChecker")).launch {
             val latestRelease =
@@ -61,7 +66,7 @@ object Updater {
             if (updateUrl.isNotEmpty()) {
                 EssentialAPI.getNotifications()
                     .push("Mod Update", "Wyvtilities $latestTag is available!\nClick here to download it!", 5f) {
-                        EssentialAPI.getGuiUtil().openScreen(DownloadConfirmGui())
+                        EssentialAPI.getGuiUtil().openScreen(DownloadConfirmGui(mc.currentScreen))
                     }
                 shouldUpdate = true
             }
@@ -73,14 +78,15 @@ object Updater {
      * https://github.com/TGMDevelopment/RequisiteLaunchwrapper/blob/main/LICENSE
      */
     fun download(url: String, file: File): Boolean {
-        var url = url
-        url = url.replace(" ", "%20")
+        if (file.exists()) return true
+        var newUrl = url
+        newUrl = newUrl.replace(" ", "%20")
         val downloadClient: HttpClient =
             HttpClientBuilder.create().setDefaultRequestConfig(RequestConfig.custom().setConnectTimeout(10000).build())
                 .build()
         try {
             FileOutputStream(file).use { fileOut ->
-                val downloadResponse: HttpResponse = downloadClient.execute(HttpGet(url))
+                val downloadResponse: HttpResponse = downloadClient.execute(HttpGet(newUrl))
                 val buffer = ByteArray(1024)
                 var read: Int
                 while (downloadResponse.entity.content.read(buffer).also { read = it } > 0) {
@@ -94,11 +100,15 @@ object Updater {
         return true
     }
 
+    /**
+     * Adapted from Skytils under AGPLv3
+     * https://github.com/Skytils/SkytilsMod/blob/1.x/LICENSE.md
+     */
     fun addShutdownHook() {
         EssentialAPI.getShutdownHookUtil().register(Thread {
             println("Deleting old Wyvtilities jar file...")
             try {
-                val runtime = Utils.getJavaRuntime()
+                val runtime = getJavaRuntime()
                 if (Util.getOSType() == Util.EnumOS.OSX) {
                     println("On Mac, trying to open mods folder")
                     Desktop.getDesktop().open(Wyvtilities.jarFile.parentFile)
@@ -106,12 +116,29 @@ object Updater {
                 println("Using runtime $runtime")
                 val file = File("config/Wyvtilities/WyvtilitiesDeleter.jar")
                 println("\"$runtime\" -jar \"${file.absolutePath}\" \"${Wyvtilities.jarFile.absolutePath}\"")
-                Runtime.getRuntime().exec("\"$runtime\" -jar \"${file.absolutePath}\" \"${Wyvtilities.jarFile.absolutePath}\"")
+                Runtime.getRuntime()
+                    .exec("\"$runtime\" -jar \"${file.absolutePath}\" \"${Wyvtilities.jarFile.absolutePath}\"")
             } catch (e: Throwable) {
                 e.printStackTrace()
             }
             Thread.currentThread().interrupt()
         })
+    }
+
+    /**
+     * Gets the current Java runtime being used.
+     * @link https://stackoverflow.com/a/47925649
+     */
+    @Throws(IOException::class)
+    fun getJavaRuntime(): String {
+        val os = System.getProperty("os.name")
+        val java = "${System.getProperty("java.home")}${File.separator}bin${File.separator}${
+            if (os != null && os.lowercase().startsWith("windows")) "java.exe" else "java"
+        }"
+        if (!File(java).isFile) {
+            throw IOException("Unable to find suitable java runtime at $java")
+        }
+        return java
     }
 
 }
