@@ -16,28 +16,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenCentral()
+package net.wyvest.wyvtilities.utils
 
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
-        maven { url 'https://maven.minecraftforge.net' }
-        maven { url 'https://jitpack.io' }
-    }
+import java.io.File
+import java.io.IOException
 
-    resolutionStrategy {
-        eachPlugin {
-            switch (requested.id.id) {
-                case 'net.minecraftforge.gradle.forge':
-                    useModule "com.github.asbyth:ForgeGradle:${requested.version}"
-                    break
-                case 'org.spongepowered.mixin':
-                    useModule "com.github.xcfrg:mixingradle:${requested.version}"
-                    break
-            }
+object Utils {
+    /**
+     * @link https://stackoverflow.com/a/47925649
+     */
+    @Throws(IOException::class)
+    fun getJavaRuntime(): String {
+        val os = System.getProperty("os.name")
+        val java = "${System.getProperty("java.home")}${File.separator}bin${File.separator}${
+            if (os != null && os.lowercase().startsWith("windows")) "java.exe" else "java"
+        }"
+        if (!File(java).isFile) {
+            throw IOException("Unable to find suitable java runtime at $java")
         }
+        return java
     }
 }
-
-rootProject.name = "Wyvtilities"

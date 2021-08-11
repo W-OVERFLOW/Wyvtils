@@ -1,14 +1,27 @@
+/*
+ * Wyvtilities - Utilities for Hypixel 1.8.9.
+ * Copyright (C) 2021 Wyvtilities
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package net.wyvest.wyvtilities
 
 import com.google.gson.JsonParser
 import gg.essential.api.EssentialAPI
 import gg.essential.api.utils.Multithreading
 import gg.essential.universal.ChatColor
-import gg.essential.universal.UDesktop
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import net.minecraft.client.Minecraft
 import net.minecraft.client.settings.KeyBinding
 import net.minecraft.util.EnumChatFormatting
@@ -16,19 +29,19 @@ import net.minecraftforge.fml.client.registry.ClientRegistry
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
-import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.wyvest.wyvtilities.commands.WyvtilsCommands
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.listeners.Listener
 import net.wyvest.wyvtilities.utils.HypixelUtils
+import net.wyvest.wyvtilities.utils.Updater
 import net.wyvest.wyvtilities.utils.equalsAny
 import net.wyvest.wyvtilities.utils.startsWithAny
 import org.lwjgl.input.Keyboard
 import xyz.matthewtgm.requisite.util.ApiHelper
 import xyz.matthewtgm.requisite.util.ChatHelper
 import xyz.matthewtgm.requisite.util.ForgeHelper
-import java.net.URI
-import java.util.regex.Pattern
+import java.io.File
 
 
 @Suppress("MemberVisibilityCanBePrivate")
@@ -44,12 +57,15 @@ object Wyvtilities {
     var isRegexLoaded: Boolean = false
     const val MODID = "wyvtilities"
     const val MOD_NAME = "Wyvtilities"
-    const val VERSION = "1.1.0-BETA1"
+    const val VERSION = "1.1.0-BETA2"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
     val jsonParser = JsonParser()
+    lateinit var jarFile : File
 
-    lateinit var autoGGRegex: MutableList<Pattern>
+    lateinit var autoGGRegex: MutableList<Regex>
+
+    val modDir = File(File(mc.mcDataDir, "config"), "Wyvtilities")
 
     @JvmField
     var isConfigInitialized = false
@@ -61,7 +77,13 @@ object Wyvtilities {
     val keybind = KeyBinding("Chat Swapper", Keyboard.KEY_V, "Wyvtilities")
 
     @Mod.EventHandler
-    fun onFMLInitialization(event: FMLInitializationEvent) {
+    private fun onFMLPreInitialization(event : FMLPreInitializationEvent) {
+        if (!modDir.exists()) modDir.mkdirs()
+        jarFile = event.sourceFile
+    }
+
+    @Mod.EventHandler
+    private fun onFMLInitialization(event: FMLInitializationEvent) {
         WyvtilsConfig.preload()
         isConfigInitialized = true
         if (WyvtilsConfig.highlightName) {
@@ -91,7 +113,7 @@ object Wyvtilities {
             try {
                 autoGGRegex = mutableListOf()
                 for (trigger in jsonParser.parse(ApiHelper.getJsonOnline("https://wyvest.net/wyvtilities.json")).asJsonObject["triggers"].asJsonArray) {
-                    autoGGRegex.add(Pattern.compile(trigger.toString()))
+                    autoGGRegex.add(Regex(trigger.toString()))
                 }
                 isRegexLoaded = true
             } catch (e: Exception) {
@@ -109,7 +131,7 @@ object Wyvtilities {
      * https://github.com/My-Name-Is-Jeff/SimpleToggleSprint/blob/1.8.9/LICENSE
      */
     @Mod.EventHandler
-    fun onFMLLoad(event: FMLLoadCompleteEvent) {
+    private fun onFMLLoad(event: FMLLoadCompleteEvent) {
         if (ForgeHelper.isModLoaded("bossbar_customizer")) {
             WyvtilsConfig.bossBarCustomization = false
             WyvtilsConfig.markDirty()
@@ -119,28 +141,7 @@ object Wyvtilities {
                 "Bossbar Customizer (the mod) has been detected, and so the Wyvtils Bossbar related features have been disabled."
             )
         }
-        CoroutineScope(Dispatchers.IO + CoroutineName("Wyvtilities-UpdateChecker")).launch {
-            val latestRelease =
-                jsonParser.parse(ApiHelper.getJsonOnline("https://api.github.com/repos/Wyvest/Wyvtilities/releases/latest")).asJsonObject
-            val latestTag = latestRelease.get("tag_name").asString
-            val currentTag = VERSION
-
-            val currentVersion = DefaultArtifactVersion(currentTag.substringBefore("-"))
-            val latestVersion = DefaultArtifactVersion(latestTag.substringAfter("v").substringBefore("-"))
-
-            var updateUrl: String? = null
-            if ((currentTag.contains("BETA") && currentVersion >= latestVersion)) {
-                return@launch
-            } else if (currentVersion < latestVersion) {
-                updateUrl = latestRelease["assets"].asJsonArray[0].asJsonObject["browser_download_url"].asString
-            }
-            if (updateUrl != null) {
-                EssentialAPI.getNotifications()
-                    .push("Mod Update", "Wyvtilities $latestTag is available!\nClick to open!", 5f) {
-                        UDesktop.browse(URI("https://github.com/wyvest/Wyvtilities/releases/latest"))
-                    }
-            }
-        }
+        Updater.update()
     }
 
     fun checkSound(name: String): Boolean {

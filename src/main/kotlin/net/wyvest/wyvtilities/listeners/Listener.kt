@@ -1,3 +1,21 @@
+/*
+ * Wyvtilities - Utilities for Hypixel 1.8.9.
+ * Copyright (C) 2021 Wyvtilities
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package net.wyvest.wyvtilities.listeners
 
 import gg.essential.api.EssentialAPI
@@ -6,6 +24,7 @@ import gg.essential.universal.ChatColor
 import net.minecraft.client.audio.PositionedSound
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.client.event.ClientChatReceivedEvent
+import net.minecraftforge.client.event.RenderPlayerEvent
 import net.minecraftforge.client.event.sound.PlaySoundEvent
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -33,8 +52,9 @@ object Listener {
     private var removeTitle = false
     private var current: Int = 1
     private var victoryDetected = false
-    lateinit var color: String
+    var color: String = ""
     var changeTextColor = false
+    var currentEntity : String = ""
 
     @SubscribeEvent(receiveCanceled = true)
     fun onChatReceivedEvent(e: ClientChatReceivedEvent) {
@@ -70,7 +90,7 @@ object Listener {
         if ((WyvtilsConfig.autoGetGEXP || WyvtilsConfig.autoGetWinstreak) && Wyvtilities.isRegexLoaded && ServerHelper.hypixel()) {
             if (!victoryDetected) {
                 for (trigger in Wyvtilities.autoGGRegex) {
-                    if (trigger.matcher(unformattedText).matches()) {
+                    if (trigger.matches(unformattedText)) {
                         victoryDetected = true
                         Multithreading.runAsync {
                             if (WyvtilsConfig.autoGetGEXP) {
@@ -237,6 +257,19 @@ object Listener {
         }
     }
 
+    @SubscribeEvent
+    fun onRender(event : RenderPlayerEvent.Pre) {
+        if (event.entity == null || mc.theWorld == null) {
+            return
+        }
+        currentEntity =
+            if (getPositiveMinus(event.entity.posX, mc.thePlayer.posX) + getPositiveMinus(event.entity.posY, mc.thePlayer.posY) + getPositiveMinus(event.entity.posZ, mc.thePlayer.posZ) <= (3).toDouble()) {
+                event.entity.name
+            } else {
+                ""
+            }
+    }
+
     private fun pressed() {
         if (mc.currentScreen != null) return
         when (current) {
@@ -259,5 +292,15 @@ object Listener {
             3 -> mc.thePlayer.sendChatMessage("/chat o")
             else -> return
         }
+    }
+
+    private fun getPositiveMinus(a : Double, b : Double) : Double {
+        if (a > b) {
+            return a - b
+        }
+        if (b > a) {
+            return b - a
+        }
+        return (0).toDouble()
     }
 }

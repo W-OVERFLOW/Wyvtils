@@ -1,3 +1,21 @@
+/*
+ * Wyvtilities - Utilities for Hypixel 1.8.9.
+ * Copyright (C) 2021 Wyvtilities
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package net.wyvest.wyvtilities.commands
 
 import gg.essential.api.EssentialAPI
@@ -28,14 +46,6 @@ object WyvtilsCommands : Command("wyvtilities", true) {
     @SubCommand("config", description = "Opens the config GUI for Wyvtils")
     fun config() {
         EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
-    }
-
-    @SubCommand("reset", description = "gsdgdsgds")
-    fun congdsgdsgfig() {
-        WyvtilsConfig.bossBarX = ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2
-        WyvtilsConfig.bossBarY = 12
-        WyvtilsConfig.markDirty()
-        WyvtilsConfig.writeData()
     }
 
     @SubCommand("setkey", description = "Sets the API key for Wyvtils.")

@@ -1,3 +1,21 @@
+/*
+ * Wyvtilities - Utilities for Hypixel 1.8.9.
+ * Copyright (C) 2021 Wyvtilities
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package net.wyvest.wyvtilities.config
 
 import gg.essential.api.EssentialAPI
@@ -13,12 +31,14 @@ import net.wyvest.wyvtilities.Wyvtilities.VERSION
 import net.wyvest.wyvtilities.Wyvtilities.mc
 import net.wyvest.wyvtilities.gui.ActionBarGui
 import net.wyvest.wyvtilities.gui.BossHealthGui
+import net.wyvest.wyvtilities.gui.DownloadConfirmGui
 import net.wyvest.wyvtilities.listeners.Listener
+import net.wyvest.wyvtilities.utils.Updater
 import java.awt.Color
 import java.io.File
 
 @Suppress("unused")
-object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities", sortingBehavior = ConfigSorting) {
+object WyvtilsConfig : Vigilant(File("./config/Wyvtilities/wyvtilities.toml"), "Wyvtilities", sortingBehavior = ConfigSorting) {
 
     @Property(
         type = PropertyType.PARAGRAPH,
@@ -52,14 +72,6 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         category = "Automatic"
     )
     var autoGetWinstreak = false
-
-    @Property(
-        type = PropertyType.SWITCH,
-        name = "Show Update Notification",
-        description = "Show a notification when you start Minecraft informing you of new updates.",
-        category = "General"
-    )
-    var showUpdateNotification = true
 
     @Property(
         type = PropertyType.SWITCH,
@@ -323,11 +335,19 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
 
     @Property(
         type = PropertyType.SWITCH,
+        name = "Force Hitboxes",
+        category = "Hitbox",
+        description = "Force the rendering of hitbox of entities."
+    )
+    var forceHitbox = false
+
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Disable for Self",
         category = "Hitbox",
         description = "Don't render the hitbox if the player's hitbox is you."
     )
-    var disableForSelf = true
+    var disableForSelf = false
 
     @Property(
         type = PropertyType.COLOR,
@@ -336,6 +356,14 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         description = "Change the color of the hitbox.",
     )
     var hitboxColor : Color = Color.WHITE
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Hitbox Color (within range)",
+        category = "Hitbox",
+        description = "Change the color of the hitbox of players when they are within range of the player.",
+    )
+    var hitboxRangeColor : Color = Color.WHITE
 
     @Property(
         type = PropertyType.SWITCH,
@@ -369,6 +397,24 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         description = "Change the color of the hitbox's line of sight.",
     )
     var hitboxLineOfSightColor : Color = Color(255, 0, 0, 255)
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Show Update Notification",
+        description = "Show a notification when you start Minecraft informing you of new updates.",
+        category = "Updater"
+    )
+    var showUpdateNotification = true
+
+    @Property(
+        type = PropertyType.BUTTON,
+        name = "Update Now",
+        description = "Update Wyvtilities by clicking the button.",
+        category = "Updater"
+    )
+    fun update() {
+        if (Updater.shouldUpdate) EssentialAPI.getGuiUtil().openScreen(DownloadConfirmGui())
+    }
 
     @Property(
         type = PropertyType.PARAGRAPH,
