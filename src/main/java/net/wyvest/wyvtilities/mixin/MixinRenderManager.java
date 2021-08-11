@@ -19,6 +19,7 @@
 package net.wyvest.wyvtilities.mixin;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -27,6 +28,8 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.wyvest.wyvtilities.config.WyvtilsConfig;
@@ -55,6 +58,21 @@ public class MixinRenderManager {
                 if (entityIn == Minecraft.getMinecraft().thePlayer) {
                     ci.cancel();
                 }
+            }
+        }
+        if (!WyvtilsConfig.INSTANCE.getItemHitBox()) {
+            if (entityIn instanceof EntityItem) {
+                ci.cancel();
+            }
+        }
+        if (!WyvtilsConfig.INSTANCE.getItemFrameHitBox()) {
+            if (entityIn instanceof EntityItemFrame) {
+                ci.cancel();
+            }
+        }
+        if (!WyvtilsConfig.INSTANCE.getNonplayerHitbox()) {
+            if (!(entityIn instanceof AbstractClientPlayer)) {
+                ci.cancel();
             }
         }
     }

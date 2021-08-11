@@ -22,6 +22,7 @@ import gg.essential.api.EssentialAPI
 import gg.essential.api.utils.Multithreading
 import gg.essential.universal.ChatColor
 import net.minecraft.client.audio.PositionedSound
+import net.minecraft.entity.Entity
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.client.event.RenderPlayerEvent
@@ -46,6 +47,8 @@ import xyz.matthewtgm.requisite.mixins.sound.PositionedSoundAccessor
 import xyz.matthewtgm.requisite.util.ServerHelper
 import xyz.matthewtgm.requisite.util.StringHelper
 import java.util.regex.Pattern
+import kotlin.math.roundToInt
+import kotlin.math.sqrt
 
 
 object Listener {
@@ -258,19 +261,21 @@ object Listener {
 
     @SubscribeEvent
     fun onRender(event: RenderPlayerEvent.Pre) {
-        if (event.entity == null || mc.theWorld == null) {
+        if (event.entity == null || mc.theWorld == null || mc.thePlayer == null) {
             return
         }
         currentEntity =
-            if (getPositiveMinus(event.entity.posX, mc.thePlayer.posX) + getPositiveMinus(
-                    event.entity.posY,
-                    mc.thePlayer.posY
-                ) <= (3).toDouble()
-            ) {
+            if (getDistanceSqToEntity(event.entity, mc.thePlayer) <= 3) {
                 event.entity.name
             } else {
                 ""
             }
+    }
+    private fun getDistanceSqToEntity(entityIn: Entity, entityIn2: Entity): Int {
+        val f = (entityIn2.posX - entityIn.posX)
+        val f1 = (entityIn2.posY - entityIn.posY)
+        val f2 = (entityIn2.posZ - entityIn.posZ)
+        return (sqrt(f * f) + sqrt(f1 * f1) + sqrt(f2 * f2)).roundToInt()
     }
 
     private fun pressed() {
@@ -295,15 +300,5 @@ object Listener {
             3 -> mc.thePlayer.sendChatMessage("/chat o")
             else -> return
         }
-    }
-
-    private fun getPositiveMinus(a: Double, b: Double): Double {
-        if (a > b) {
-            return a - b
-        }
-        if (b > a) {
-            return b - a
-        }
-        return (0).toDouble()
     }
 }

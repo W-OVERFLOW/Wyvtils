@@ -33,6 +33,7 @@ public class MixinGuiIngameForgeHook {
     @SuppressWarnings({"UnresolvedMixinReference", "DefaultAnnotationParam"})
     @Inject(remap = false, method = "drawActionbarText", at = @At(remap = true, value = "HEAD"), cancellable = true)
     private static void onActionBarTextDrawn(String recordPlaying, int color, CallbackInfo ci) {
+        if (!WyvtilsConfig.INSTANCE.getActionBarCustomization()) return;
         int newX;
         int newY;
         if (WyvtilsConfig.INSTANCE.getActionBarPosition()) {

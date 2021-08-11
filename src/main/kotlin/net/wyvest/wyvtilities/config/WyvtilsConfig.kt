@@ -34,6 +34,7 @@ import net.wyvest.wyvtilities.listeners.Listener
 import net.wyvest.wyvtilities.utils.Updater
 import java.awt.Color
 import java.io.File
+import kotlin.math.roundToInt
 
 @Suppress("unused")
 object WyvtilsConfig :
@@ -179,12 +180,20 @@ object WyvtilsConfig :
     )
     fun resetBossbar() {
         mc.displayGuiScreen(null)
-        bossBarX = ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2
+        bossBarX = ((ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2) / bossbarScale).roundToInt()
         bossBarY = 12
         WyvtilsConfig.markDirty()
         WyvtilsConfig.writeData()
         EssentialAPI.getGuiUtil().openScreen(gui())
     }
+
+    @Property(
+        type = PropertyType.PERCENT_SLIDER,
+        name = "Bossbar Scale",
+        description = "Change the scale of the bossbar (THIS MAY BE BUGGY SOMETIMES!).",
+        category = "Bossbar"
+    )
+    var bossbarScale = 1.0F
 
     @Property(
         type = PropertyType.NUMBER,
@@ -323,6 +332,30 @@ object WyvtilsConfig :
         description = "Toggle the hitbox of entities."
     )
     var hitbox = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Hitboxes for Items",
+        category = "Hitbox",
+        description = "Toggle the hitboxes of items."
+    )
+    var itemHitBox = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Hitboxes for Itemframes",
+        category = "Hitbox",
+        description = "Toggle the hitboxes of itemframes."
+    )
+    var itemFrameHitBox = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Hitboxes for Non-Players",
+        category = "Hitbox",
+        description = "Toggle the hitboxes of non-players."
+    )
+    var nonplayerHitbox = true
 
     @Property(
         type = PropertyType.SWITCH,

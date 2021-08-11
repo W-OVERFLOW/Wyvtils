@@ -43,7 +43,7 @@ public class MixinGuiIngameForge {
 
     @Redirect(method = "renderRecordOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;translate(FFF)V"), remap = true)
     private void removeTranslation(float x, float y, float z) {
-        if (!WyvtilsConfig.INSTANCE.getActionBarPosition() && WyvtilsConfig.INSTANCE.getActionBarCustomization()) {
+        if (!WyvtilsConfig.INSTANCE.getActionBarPosition() || WyvtilsConfig.INSTANCE.getActionBarCustomization()) {
             GlStateManager.translate(x, y, z);
         }
     }

@@ -22,6 +22,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.boss.BossStatus;
 import net.wyvest.wyvtilities.config.WyvtilsConfig;
 import net.wyvest.wyvtilities.gui.BossHealthGui;
@@ -36,6 +37,8 @@ import java.awt.*;
 @Mixin(GuiIngame.class)
 public class MixinGuiIngame {
 
+    private boolean shouldScale = false;
+
     @Inject(method = "renderBossHealth", at = @At("HEAD"), cancellable = true)
     protected void renderBossHealth(CallbackInfo ci) {
         if (Minecraft.getMinecraft().currentScreen instanceof BossHealthGui) {
@@ -43,6 +46,15 @@ public class MixinGuiIngame {
             return;
         }
         if (WyvtilsConfig.INSTANCE.getBossBarCustomization() && !WyvtilsConfig.INSTANCE.getBossBar()) ci.cancel();
+
+        if (!shouldScale) shouldScale = true;
+        if (WyvtilsConfig.INSTANCE.getBossBarCustomization()) GlStateManager.pushMatrix();
+    }
+
+    @Inject(method = "renderBossHealth", at = @At("TAIL"), cancellable = true)
+    protected void tail(CallbackInfo ci) {
+        if (shouldScale) shouldScale = false;
+        GlStateManager.popMatrix();
     }
 
     @Redirect(method = "renderBossHealth", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/FontRenderer;drawStringWithShadow(Ljava/lang/String;FFI)I"))
@@ -60,6 +72,16 @@ public class MixinGuiIngame {
             }
         } else {
             return fontRenderer.drawStringWithShadow(text, x, y, color);
+        }
+    }
+
+    @Inject(method = "renderBossHealth", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiIngame;drawTexturedModalRect(IIIIII)V"))
+    private void applyScale(CallbackInfo ci) {
+        if (WyvtilsConfig.INSTANCE.getBossBarCustomization() && shouldScale) {
+            if (WyvtilsConfig.INSTANCE.getBossBarBar() || WyvtilsConfig.INSTANCE.getBossBarText()) {
+                GlStateManager.scale(WyvtilsConfig.INSTANCE.getBossbarScale(), WyvtilsConfig.INSTANCE.getBossbarScale(), 1F);
+                shouldScale = false;
+            }
         }
     }
 
