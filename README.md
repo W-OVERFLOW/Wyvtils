@@ -2,7 +2,7 @@
 
 ##### Utilities, by Wyvest.
 <a href="https://github.com/Wyvest/Wyvtilities/releases" target="_blank">
-<img alt="downloads" src="https://img.shields.io/github/downloads/Wyvest/Wyvtilities/total?color=F5C400&style=for-the-badge" />
+<img alt="downloads" src="https://img.shields.io/github/downloads/Wyvest/Wyvtilities/total?color=F5C400&style=for-the-badge" /> <img alt="downloads latest" src="https://img.shields.io/github/downloads-pre/Wyvest/Wyvtilities/latest/total?color=F5C400&style=for-the-badge" />
  
 ### [Discord invite (click to get support)](https://discord.gg/b6twapxC3T)
 
