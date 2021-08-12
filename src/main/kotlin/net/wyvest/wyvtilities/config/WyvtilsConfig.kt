@@ -35,7 +35,6 @@ import net.wyvest.wyvtilities.listeners.Listener
 import net.wyvest.wyvtilities.utils.Updater
 import java.awt.Color
 import java.io.File
-import kotlin.math.roundToInt
 
 @Suppress("unused")
 object WyvtilsConfig :
@@ -185,20 +184,12 @@ object WyvtilsConfig :
     )
     fun resetBossbar() {
         mc.displayGuiScreen(null)
-        bossBarX = ((ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2) / bossbarScale).roundToInt()
+        bossBarX = (ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2)
         bossBarY = 12
         WyvtilsConfig.markDirty()
         WyvtilsConfig.writeData()
         EssentialAPI.getGuiUtil().openScreen(gui())
     }
-
-    @Property(
-        type = PropertyType.PERCENT_SLIDER,
-        name = "Bossbar Scale",
-        description = "Change the scale of the bossbar (THIS MAY BE BUGGY SOMETIMES!).",
-        category = "Bossbar"
-    )
-    var bossbarScale = 1.0F
 
     @Property(
         type = PropertyType.NUMBER,

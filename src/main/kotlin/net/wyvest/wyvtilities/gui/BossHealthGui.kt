@@ -30,7 +30,6 @@ import org.lwjgl.opengl.GL11
 import xyz.matthewtgm.requisite.util.GuiHelper
 import java.awt.Color
 import java.io.IOException
-import kotlin.math.roundToInt
 
 
 class BossHealthGui : GuiScreen() {
@@ -69,8 +68,6 @@ class BossHealthGui : GuiScreen() {
         } else {
             BossStatus.bossName
         }
-        GlStateManager.pushMatrix()
-        GlStateManager.scale(WyvtilsConfig.bossbarScale, WyvtilsConfig.bossbarScale, WyvtilsConfig.bossbarScale)
         if (WyvtilsConfig.bossBarBar) {
             mc.ingameGUI?.drawTexturedModalRect(bossBarX - 91, bossBarY, 0, 74, 182, 5)
             mc.ingameGUI?.drawTexturedModalRect(bossBarX - 91, bossBarY, 0, 74, 182, 5)
@@ -88,7 +85,6 @@ class BossHealthGui : GuiScreen() {
         if (WyvtilsConfig.bossBarBar) mc.textureManager.bindTexture(Gui.icons)
         GlStateManager.disableBlend()
         mc.mcProfiler.endSection()
-        GlStateManager.popMatrix()
         val scale = 1
         GlStateManager.pushMatrix()
         GlStateManager.scale(scale.toFloat(), scale.toFloat(), 0f)
@@ -106,8 +102,8 @@ class BossHealthGui : GuiScreen() {
     @Throws(IOException::class)
     override fun mouseClicked(mouseX: Int, mouseY: Int, mouseButton: Int) {
         super.mouseClicked(mouseX, mouseY, mouseButton)
-        prevX = (mouseX / WyvtilsConfig.bossbarScale).roundToInt()
-        prevY = (mouseY / WyvtilsConfig.bossbarScale).roundToInt()
+        prevX = mouseX
+        prevY = mouseY
         if (mouseButton == 0) {
             dragging = true
         }
@@ -118,8 +114,8 @@ class BossHealthGui : GuiScreen() {
             bossBarX = prevX
             bossBarY = prevY
         }
-        prevX = (x / WyvtilsConfig.bossbarScale).roundToInt()
-        prevY = (y / WyvtilsConfig.bossbarScale).roundToInt()
+        prevX = x
+        prevY = y
     }
 
     override fun mouseReleased(mouseX: Int, mouseY: Int, state: Int) {
