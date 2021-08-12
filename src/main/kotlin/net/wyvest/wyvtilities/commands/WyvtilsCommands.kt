@@ -24,11 +24,9 @@ import gg.essential.api.commands.DefaultHandler
 import gg.essential.api.commands.DisplayName
 import gg.essential.api.commands.SubCommand
 import gg.essential.api.utils.Multithreading
-import net.minecraft.client.Minecraft
 import net.minecraft.util.EnumChatFormatting
 import net.wyvest.wyvtilities.Wyvtilities
 import net.wyvest.wyvtilities.config.WyvtilsConfig
-import net.wyvest.wyvtilities.gui.MainGui
 import net.wyvest.wyvtilities.utils.HypixelUtils
 import xyz.matthewtgm.json.util.JsonApiHelper
 
@@ -39,7 +37,7 @@ object WyvtilsCommands : Command("wyvtilities", true) {
 
     @DefaultHandler
     fun handle() {
-        EssentialAPI.getGuiUtil().openScreen(MainGui())
+        EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
     }
 
     @SubCommand("config", description = "Opens the config GUI for Wyvtils")

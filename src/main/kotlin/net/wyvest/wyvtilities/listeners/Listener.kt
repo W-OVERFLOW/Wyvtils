@@ -22,10 +22,8 @@ import gg.essential.api.EssentialAPI
 import gg.essential.api.utils.Multithreading
 import gg.essential.universal.ChatColor
 import net.minecraft.client.audio.PositionedSound
-import net.minecraft.entity.Entity
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.client.event.ClientChatReceivedEvent
-import net.minecraftforge.client.event.RenderPlayerEvent
 import net.minecraftforge.client.event.sound.PlaySoundEvent
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -46,9 +44,6 @@ import xyz.matthewtgm.requisite.events.FontRendererEvent
 import xyz.matthewtgm.requisite.mixins.sound.PositionedSoundAccessor
 import xyz.matthewtgm.requisite.util.ServerHelper
 import xyz.matthewtgm.requisite.util.StringHelper
-import java.util.regex.Pattern
-import kotlin.math.roundToInt
-import kotlin.math.sqrt
 
 
 object Listener {
@@ -57,7 +52,6 @@ object Listener {
     private var victoryDetected = false
     var color: String = ""
     var changeTextColor = false
-    var currentEntity: String = ""
 
     @SubscribeEvent(receiveCanceled = true)
     fun onChatReceivedEvent(e: ClientChatReceivedEvent) {
@@ -171,6 +165,12 @@ object Listener {
     @SubscribeEvent
     fun onTick(event: TickEvent.ClientTickEvent) {
         if (event.phase != TickEvent.Phase.START) return
+        if (WyvtilsConfig.firstTime && mc.theWorld != null) {
+            EssentialAPI.getNotifications().push("Wyvtilities", "Hello! As this is your first time using this mod, type in /wyvtils in the chat to configure the many features in Wyvtilities!")
+            WyvtilsConfig.firstTime = false
+            WyvtilsConfig.markDirty()
+            WyvtilsConfig.writeData()
+        }
         if (changeTextColor) {
             if (mc.currentScreen != WyvtilsConfig.gui()) {
                 color = when (WyvtilsConfig.textColor) {
@@ -214,7 +214,7 @@ object Listener {
             if (e.text.containsAny("§", "\u00A7")) {
                 var number = -1
                 var code: String? = null
-                val array = e.text.split(Pattern.compile(mc.thePlayer.gameProfile.name)).toMutableList()
+                val array = e.text.split(Regex.fromLiteral(mc.thePlayer.gameProfile.name)).toMutableList()
                 for (split in array) {
                     number += 1
                     if (number % 2 == 0 || number == 0) {
@@ -257,25 +257,6 @@ object Listener {
         if (Mouse.getEventButtonState() && Mouse.getEventButton() == code + 100) {
             pressed()
         }
-    }
-
-    @SubscribeEvent
-    fun onRender(event: RenderPlayerEvent.Pre) {
-        if (event.entity == null || mc.theWorld == null || mc.thePlayer == null) {
-            return
-        }
-        currentEntity =
-            if (getDistanceSqToEntity(event.entity, mc.thePlayer) <= 3) {
-                event.entity.name
-            } else {
-                ""
-            }
-    }
-    private fun getDistanceSqToEntity(entityIn: Entity, entityIn2: Entity): Int {
-        val f = (entityIn2.posX - entityIn.posX)
-        val f1 = (entityIn2.posY - entityIn.posY)
-        val f2 = (entityIn2.posZ - entityIn.posZ)
-        return (sqrt(f * f) + sqrt(f1 * f1) + sqrt(f2 * f2)).roundToInt()
     }
 
     private fun pressed() {

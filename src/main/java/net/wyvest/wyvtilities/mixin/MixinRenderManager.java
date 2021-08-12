@@ -33,7 +33,6 @@ import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.wyvest.wyvtilities.config.WyvtilsConfig;
-import net.wyvest.wyvtilities.listeners.Listener;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -41,18 +40,13 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Objects;
-
 @Mixin(RenderManager.class)
 public class MixinRenderManager {
 
-    String currentEntityName = null;
+    boolean withinRange = false;
 
     @Inject(method = "renderDebugBoundingBox", at = @At(value = "HEAD"), cancellable = true)
     private void cancelForSelf(Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
-        if (WyvtilsConfig.INSTANCE.getHitboxColor() != WyvtilsConfig.INSTANCE.getHitboxRangeColor()) {
-            currentEntityName = entityIn.getName();
-        }
         if (WyvtilsConfig.INSTANCE.getDisableForSelf()) {
             if (entityIn instanceof EntityPlayerSP) {
                 if (entityIn == Minecraft.getMinecraft().thePlayer) {
@@ -75,6 +69,11 @@ public class MixinRenderManager {
                 ci.cancel();
             }
         }
+        if (WyvtilsConfig.INSTANCE.getHitboxColor() != WyvtilsConfig.INSTANCE.getHitboxRangeColor()) {
+            if (getDistanceSqToEntity(Minecraft.getMinecraft().thePlayer, entityIn) <= 9 && Minecraft.getMinecraft().thePlayer != entityIn) {
+                withinRange = true;
+            }
+        }
     }
 
     @Inject(method = "doRenderEntity", at = @At(value = "HEAD"))
@@ -89,7 +88,8 @@ public class MixinRenderManager {
     private void addHitBoxAndSight(AxisAlignedBB boundingBox, int red, int green, int blue, int alpha) {
         if (green == 255) {
             if (WyvtilsConfig.INSTANCE.getHitbox()) {
-                if (Objects.equals(currentEntityName, Listener.INSTANCE.getCurrentEntity())) {
+                if (withinRange) {
+                    withinRange = false;
                     RenderGlobal.drawOutlinedBoundingBox(boundingBox, WyvtilsConfig.INSTANCE.getHitboxRangeColor().getRed(), WyvtilsConfig.INSTANCE.getHitboxRangeColor().getGreen(), WyvtilsConfig.INSTANCE.getHitboxRangeColor().getBlue(), WyvtilsConfig.INSTANCE.getHitboxRangeColor().getAlpha());
                 } else {
                     RenderGlobal.drawOutlinedBoundingBox(boundingBox, WyvtilsConfig.INSTANCE.getHitboxColor().getRed(), WyvtilsConfig.INSTANCE.getHitboxColor().getGreen(), WyvtilsConfig.INSTANCE.getHitboxColor().getBlue(), WyvtilsConfig.INSTANCE.getHitboxColor().getAlpha());
@@ -119,6 +119,13 @@ public class MixinRenderManager {
         GlStateManager.disableBlend();
         GlStateManager.depthMask(true);
         ci.cancel();
+    }
+
+    private float getDistanceSqToEntity(Entity entityIn, Entity entityIn2) {
+        float f = (float) (entityIn2.posX - entityIn.posX);
+        float f1 = (float) (entityIn2.posY - entityIn.posY);
+        float f2 = (float) (entityIn2.posZ - entityIn.posZ);
+        return f * f + f1 * f1 + f2 * f2;
     }
 
 }

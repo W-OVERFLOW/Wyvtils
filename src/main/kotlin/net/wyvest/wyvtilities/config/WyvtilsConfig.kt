@@ -26,6 +26,7 @@ import gg.essential.vigilance.data.PropertyType
 import gg.essential.vigilance.data.SortingBehavior
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
+import net.minecraft.util.EnumChatFormatting
 import net.wyvest.wyvtilities.Wyvtilities.mc
 import net.wyvest.wyvtilities.gui.ActionBarGui
 import net.wyvest.wyvtilities.gui.BossHealthGui
@@ -38,7 +39,11 @@ import kotlin.math.roundToInt
 
 @Suppress("unused")
 object WyvtilsConfig :
-    Vigilant(File("./config/Wyvtilities/wyvtilities.toml"), "Wyvtilities", sortingBehavior = ConfigSorting) {
+    Vigilant(
+        File("./config/Wyvtilities/wyvtilities.toml"),
+        "${EnumChatFormatting.DARK_PURPLE}Wyvtilities",
+        sortingBehavior = ConfigSorting
+    ) {
 
     @Property(
         type = PropertyType.TEXT,
@@ -431,13 +436,24 @@ object WyvtilsConfig :
     var showUpdateNotification = true
 
     @Property(
+        type = PropertyType.SWITCH,
+        name = "First time",
+        description = "ok.",
+        category = "General",
+        hidden = true
+    )
+    var firstTime = true
+
+    @Property(
         type = PropertyType.BUTTON,
         name = "Update Now",
         description = "Update Wyvtilities by clicking the button.",
         category = "Updater"
     )
     fun update() {
-        if (Updater.shouldUpdate) EssentialAPI.getGuiUtil().openScreen(DownloadConfirmGui(mc.currentScreen)) else EssentialAPI.getNotifications().push("Wyvtilities", "No update had been detected at startup, and thus the update GUI has not been shown.")
+        if (Updater.shouldUpdate) EssentialAPI.getGuiUtil()
+            .openScreen(DownloadConfirmGui(mc.currentScreen)) else EssentialAPI.getNotifications()
+            .push("Wyvtilities", "No update had been detected at startup, and thus the update GUI has not been shown.")
     }
 
     init {

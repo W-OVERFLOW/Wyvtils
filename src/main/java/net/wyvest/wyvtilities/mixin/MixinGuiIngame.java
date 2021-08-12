@@ -54,7 +54,7 @@ public class MixinGuiIngame {
     @Inject(method = "renderBossHealth", at = @At("TAIL"), cancellable = true)
     protected void tail(CallbackInfo ci) {
         if (shouldScale) shouldScale = false;
-        GlStateManager.popMatrix();
+        if (WyvtilsConfig.INSTANCE.getBossBarCustomization()) GlStateManager.popMatrix();
     }
 
     @Redirect(method = "renderBossHealth", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/FontRenderer;drawStringWithShadow(Ljava/lang/String;FFI)I"))
@@ -79,7 +79,7 @@ public class MixinGuiIngame {
     private void applyScale(CallbackInfo ci) {
         if (WyvtilsConfig.INSTANCE.getBossBarCustomization() && shouldScale) {
             if (WyvtilsConfig.INSTANCE.getBossBarBar() || WyvtilsConfig.INSTANCE.getBossBarText()) {
-                GlStateManager.scale(WyvtilsConfig.INSTANCE.getBossbarScale(), WyvtilsConfig.INSTANCE.getBossbarScale(), 1F);
+                GlStateManager.scale(WyvtilsConfig.INSTANCE.getBossbarScale(), WyvtilsConfig.INSTANCE.getBossbarScale(), 0F);
                 shouldScale = false;
             }
         }

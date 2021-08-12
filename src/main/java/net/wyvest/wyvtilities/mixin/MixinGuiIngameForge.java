@@ -43,12 +43,12 @@ public class MixinGuiIngameForge {
 
     @Redirect(method = "renderRecordOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;translate(FFF)V"), remap = true)
     private void removeTranslation(float x, float y, float z) {
-        if (!WyvtilsConfig.INSTANCE.getActionBarPosition() || WyvtilsConfig.INSTANCE.getActionBarCustomization()) {
+        if ((!WyvtilsConfig.INSTANCE.getActionBarPosition() && WyvtilsConfig.INSTANCE.getActionBarCustomization()) || !WyvtilsConfig.INSTANCE.getActionBarCustomization()) {
             GlStateManager.translate(x, y, z);
         }
     }
 
-    @Redirect(method = "renderRecordOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/FontRenderer;drawString(Ljava/lang/String;III)I"))
+    @Redirect(method = "renderRecordOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/FontRenderer;drawString(Ljava/lang/String;III)I"), remap = true)
     private int modifyDrawString(FontRenderer fontRenderer, String text, int x, int y, int color) {
         if (!WyvtilsConfig.INSTANCE.getActionBarCustomization()) {
             return fontRenderer.drawString(text, x, y, color);
