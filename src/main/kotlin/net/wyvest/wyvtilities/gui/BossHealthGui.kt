@@ -1,3 +1,21 @@
+/*
+ * Wyvtilities - Utilities for Hypixel 1.8.9.
+ * Copyright (C) 2021 Wyvtilities
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package net.wyvest.wyvtilities.gui
 
 import net.minecraft.client.Minecraft
@@ -6,17 +24,16 @@ import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.boss.BossStatus
 import net.minecraft.util.EnumChatFormatting
 import net.wyvest.wyvtilities.config.WyvtilsConfig
-import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarShadow
 import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarX
 import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarY
-import net.wyvest.wyvtilities.config.WyvtilsConfig.firstLaunchBossbar
 import org.lwjgl.opengl.GL11
 import xyz.matthewtgm.requisite.util.GuiHelper
 import java.awt.Color
 import java.io.IOException
+import kotlin.math.roundToInt
 
 
-object BossHealthGui : GuiScreen() {
+class BossHealthGui : GuiScreen() {
 
     private var dragging = false
     private var prevX = 0
@@ -40,8 +57,8 @@ object BossHealthGui : GuiScreen() {
         mc.mcProfiler.startSection("bossHealthGui")
         GlStateManager.enableBlend()
         val fontrenderer: FontRenderer = mc.fontRendererObj
-        if (firstLaunchBossbar) {
-            firstLaunchBossbar = false
+        if (WyvtilsConfig.firstLaunchBossbar) {
+            WyvtilsConfig.firstLaunchBossbar = false
             bossBarX = ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2
             bossBarY = 12
             WyvtilsConfig.markDirty()
@@ -52,25 +69,26 @@ object BossHealthGui : GuiScreen() {
         } else {
             BossStatus.bossName
         }
+        GlStateManager.pushMatrix()
+        GlStateManager.scale(WyvtilsConfig.bossbarScale, WyvtilsConfig.bossbarScale, WyvtilsConfig.bossbarScale)
         if (WyvtilsConfig.bossBarBar) {
             mc.ingameGUI?.drawTexturedModalRect(bossBarX - 91, bossBarY, 0, 74, 182, 5)
             mc.ingameGUI?.drawTexturedModalRect(bossBarX - 91, bossBarY, 0, 74, 182, 5)
             mc.ingameGUI?.drawTexturedModalRect(bossBarX - 91, bossBarY, 0, 79, 1, 5)
         }
         if (WyvtilsConfig.bossBarText) {
-            //fix this
             fontrenderer.drawString(
                 s,
                 (bossBarX - mc.fontRendererObj.getStringWidth(s) / 2).toString().toFloat(),
                 bossBarY.toFloat() - 10,
-                Color.WHITE.rgb, bossBarShadow
+                Color.WHITE.rgb, WyvtilsConfig.bossBarShadow
             )
         }
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
         if (WyvtilsConfig.bossBarBar) mc.textureManager.bindTexture(Gui.icons)
         GlStateManager.disableBlend()
         mc.mcProfiler.endSection()
-
+        GlStateManager.popMatrix()
         val scale = 1
         GlStateManager.pushMatrix()
         GlStateManager.scale(scale.toFloat(), scale.toFloat(), 0f)
@@ -88,8 +106,8 @@ object BossHealthGui : GuiScreen() {
     @Throws(IOException::class)
     override fun mouseClicked(mouseX: Int, mouseY: Int, mouseButton: Int) {
         super.mouseClicked(mouseX, mouseY, mouseButton)
-        prevX = mouseX
-        prevY = mouseY
+        prevX = (mouseX / WyvtilsConfig.bossbarScale).roundToInt()
+        prevY = (mouseY / WyvtilsConfig.bossbarScale).roundToInt()
         if (mouseButton == 0) {
             dragging = true
         }
@@ -100,8 +118,8 @@ object BossHealthGui : GuiScreen() {
             bossBarX = prevX
             bossBarY = prevY
         }
-        prevX = x
-        prevY = y
+        prevX = (x / WyvtilsConfig.bossbarScale).roundToInt()
+        prevY = (y / WyvtilsConfig.bossbarScale).roundToInt()
     }
 
     override fun mouseReleased(mouseX: Int, mouseY: Int, state: Int) {

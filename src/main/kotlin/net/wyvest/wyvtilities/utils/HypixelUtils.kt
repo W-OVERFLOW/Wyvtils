@@ -1,3 +1,21 @@
+/*
+ * Wyvtilities - Utilities for Hypixel 1.8.9.
+ * Copyright (C) 2021 Wyvtilities
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package net.wyvest.wyvtilities.utils
 
 import net.minecraft.util.EnumChatFormatting
@@ -5,9 +23,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.wyvest.wyvtilities.Wyvtilities
 import net.wyvest.wyvtilities.Wyvtilities.mc
 import net.wyvest.wyvtilities.config.WyvtilsConfig
-import xyz.matthewtgm.json.parser.JsonParser
-import xyz.matthewtgm.json.util.JsonApiHelper
 import xyz.matthewtgm.requisite.events.LocrawReceivedEvent
+import xyz.matthewtgm.requisite.util.ApiHelper
 import xyz.matthewtgm.requisite.util.HypixelHelper
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,7 +33,7 @@ import java.util.*
 object HypixelUtils {
     lateinit var winstreak: String
     var gexp: String? = null
-    var currentGame: HypixelHelper.HypixelLocraw.GameType? = null
+    private var currentGame: HypixelHelper.HypixelLocraw.GameType? = null
 
     private fun getCurrentESTTime(): String? {
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -28,13 +45,9 @@ object HypixelUtils {
         var gexp: String? = null
         val uuid = mc.thePlayer.gameProfile.id.toString().replace("-", "")
         val guildData =
-            JsonApiHelper.getJsonObject(
-                "https://api.hypixel.net/guild?key=" + WyvtilsConfig.apiKey + ";player=" + uuid,
-                true
-            )
-        val guildMembers = guildData.getAsObject("guild").getAsArray("members")
+            Wyvtilities.jsonParser.parse(ApiHelper.getJsonOnline("https://api.hypixel.net/guild?key=" + WyvtilsConfig.apiKey + ";player=" + uuid)).asJsonObject
+        val guildMembers = guildData["guild"].asJsonObject["members"].asJsonArray
         for (e in guildMembers) {
-            if (e.isString) continue //bypass a JsonParser bug or a problem on my end honestly idk anymore
             if (e.asJsonObject["uuid"].asString.equals(uuid)) {
                 gexp = e.asJsonObject["expHistory"].asJsonObject[getCurrentESTTime()].asInt.toString()
                 break
@@ -48,14 +61,13 @@ object HypixelUtils {
     fun getGEXP(username: String): Boolean {
         var gexp: String? = null
         val uuid = getUUID(username)
-        val guildData =
-            JsonApiHelper.getJsonObject(
-                "https://api.hypixel.net/guild?key=" + WyvtilsConfig.apiKey + ";player=" + uuid,
-                true
+        val guildData = Wyvtilities.jsonParser.parse(
+            ApiHelper.getJsonOnline(
+                "https://api.hypixel.net/guild?key=" + WyvtilsConfig.apiKey + ";player=" + uuid
             )
-        val guildMembers = guildData.getAsObject("guild").getAsArray("members")
+        ).asJsonObject
+        val guildMembers = guildData["guild"].asJsonObject["members"].asJsonArray
         for (e in guildMembers) {
-            if (e.isString) continue //bypass a JsonParser bug or a problem on my end honestly idk anymore
             if (e.asJsonObject["uuid"].asString.equals(uuid)) {
                 gexp = e.asJsonObject["expHistory"].asJsonObject[getCurrentESTTime()].asInt.toString()
                 break
@@ -68,7 +80,7 @@ object HypixelUtils {
 
     fun getWinstreak(): Boolean {
         val uuid = mc.thePlayer.gameProfile.id.toString().replace("-", "")
-        val playerStats = JsonParser.parse(
+        val playerStats = Wyvtilities.jsonParser.parse(
             HypixelHelper.HypixelAPI.getPlayer(
                 WyvtilsConfig.apiKey,
                 uuid
@@ -106,7 +118,7 @@ object HypixelUtils {
 
     fun getWinstreak(username: String): Boolean {
         val uuid = getUUID(username)
-        val playerStats = JsonParser.parse(
+        val playerStats = Wyvtilities.jsonParser.parse(
             HypixelHelper.HypixelAPI.getPlayer(
                 WyvtilsConfig.apiKey,
                 uuid
@@ -144,7 +156,7 @@ object HypixelUtils {
 
     fun getWinstreak(username: String, game: String): Boolean {
         val uuid = getUUID(username)
-        val playerStats = JsonParser.parse(
+        val playerStats = Wyvtilities.jsonParser.parse(
             HypixelHelper.HypixelAPI.getPlayer(
                 WyvtilsConfig.apiKey,
                 uuid
@@ -183,18 +195,16 @@ object HypixelUtils {
     //I really didn't want to use this and instead use one of essential's APIs, but then Mojang released an unannounced API change for the 69th time!
     private fun getUUID(username: String): String? {
         val uuidResponse =
-            JsonApiHelper.getJsonObject("https://api.mojang.com/users/profiles/minecraft/$username", true)
+            Wyvtilities.jsonParser.parse(ApiHelper.getJsonOnline("https://api.mojang.com/users/profiles/minecraft/$username")).asJsonObject
         if (uuidResponse.has("error")) {
             Wyvtilities.sendMessage(
                 EnumChatFormatting.RED.toString() + "Failed with error: ${
-                    uuidResponse.getAsString(
-                        "reason"
-                    )
+                    uuidResponse["reason"].asString
                 }"
             )
             return null
         }
-        return uuidResponse.getAsString("id")
+        return uuidResponse["id"].asString
     }
 
     @SubscribeEvent

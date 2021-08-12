@@ -1,3 +1,21 @@
+/*
+ * Wyvtilities - Utilities for Hypixel 1.8.9.
+ * Copyright (C) 2021 Wyvtilities
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package net.wyvest.wyvtilities.config
 
 import gg.essential.api.EssentialAPI
@@ -8,24 +26,24 @@ import gg.essential.vigilance.data.PropertyType
 import gg.essential.vigilance.data.SortingBehavior
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
-import net.wyvest.wyvtilities.Wyvtilities.MOD_NAME
-import net.wyvest.wyvtilities.Wyvtilities.VERSION
+import net.minecraft.util.EnumChatFormatting
+import net.wyvest.wyvtilities.Wyvtilities.mc
 import net.wyvest.wyvtilities.gui.ActionBarGui
 import net.wyvest.wyvtilities.gui.BossHealthGui
+import net.wyvest.wyvtilities.gui.DownloadConfirmGui
 import net.wyvest.wyvtilities.listeners.Listener
-import xyz.matthewtgm.requisite.util.GuiHelper
+import net.wyvest.wyvtilities.utils.Updater
+import java.awt.Color
 import java.io.File
+import kotlin.math.roundToInt
 
 @Suppress("unused")
-object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities", sortingBehavior = ConfigSorting) {
-
-    @Property(
-        type = PropertyType.PARAGRAPH,
-        name = "Info",
-        description = "You are using $MOD_NAME version $VERSION, made by Wyvest.",
-        category = "Information"
-    )
-    var paragraph = ""
+object WyvtilsConfig :
+    Vigilant(
+        File("./config/Wyvtilities/wyvtilities.toml"),
+        "${EnumChatFormatting.DARK_PURPLE}Wyvtilities",
+        sortingBehavior = ConfigSorting
+    ) {
 
     @Property(
         type = PropertyType.TEXT,
@@ -51,14 +69,6 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         category = "Automatic"
     )
     var autoGetWinstreak = false
-
-    @Property(
-        type = PropertyType.SWITCH,
-        name = "Show Update Notification",
-        description = "Show a notification when you start Minecraft informing you of new updates.",
-        category = "General"
-    )
-    var showUpdateNotification = true
 
     @Property(
         type = PropertyType.SWITCH,
@@ -162,7 +172,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         category = "Bossbar"
     )
     fun openBossHealthGui() {
-        if (bossBarCustomization) GuiHelper.open(BossHealthGui)
+        if (bossBarCustomization) EssentialAPI.getGuiUtil().openScreen(BossHealthGui())
         else EssentialAPI.getNotifications()
             .push("Wyvtilities", "You can't do that, you haven't enabled Bossbar Customization!")
     }
@@ -174,13 +184,21 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         category = "Bossbar"
     )
     fun resetBossbar() {
-        GuiHelper.open(null)
-        bossBarX = ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2
+        mc.displayGuiScreen(null)
+        bossBarX = ((ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2) / bossbarScale).roundToInt()
         bossBarY = 12
         WyvtilsConfig.markDirty()
         WyvtilsConfig.writeData()
-        GuiHelper.open(this.gui())
+        EssentialAPI.getGuiUtil().openScreen(gui())
     }
+
+    @Property(
+        type = PropertyType.PERCENT_SLIDER,
+        name = "Bossbar Scale",
+        description = "Change the scale of the bossbar (THIS MAY BE BUGGY SOMETIMES!).",
+        category = "Bossbar"
+    )
+    var bossbarScale = 1.0F
 
     @Property(
         type = PropertyType.NUMBER,
@@ -249,7 +267,7 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
         category = "Action Bar"
     )
     fun openActionBarGui() {
-        if (actionBarPosition && actionBarCustomization) EssentialAPI.getGuiUtil().openScreen(ActionBarGui)
+        if (actionBarPosition && actionBarCustomization) EssentialAPI.getGuiUtil().openScreen(ActionBarGui())
         else EssentialAPI.getNotifications()
             .push("Wyvtilities", "You can't do that, you don't have Action Bar position enabled!")
     }
@@ -313,31 +331,130 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
     var chatType2 = 0
 
     @Property(
-        type = PropertyType.PARAGRAPH,
-        name = "Sk1er LLC",
-        description = "Essential + Vigilance",
-        category = "Information",
-        subcategory = "Credits"
+        type = PropertyType.SWITCH,
+        name = "Toggle Hitbox",
+        category = "Hitbox",
+        description = "Toggle the hitbox of entities."
     )
-    var credits0 = ""
+    var hitbox = true
 
     @Property(
-        type = PropertyType.PARAGRAPH,
-        name = "TGMDevelopment",
-        description = "TGMLib",
-        category = "Information",
-        subcategory = "Credits"
+        type = PropertyType.SWITCH,
+        name = "Toggle Hitboxes for Items",
+        category = "Hitbox",
+        description = "Toggle the hitboxes of items."
     )
-    var credits1 = ""
+    var itemHitBox = true
 
     @Property(
-        type = PropertyType.PARAGRAPH,
-        name = "Skytils",
-        description = "Even more utilities",
-        category = "Information",
-        subcategory = "Credits"
+        type = PropertyType.SWITCH,
+        name = "Toggle Hitboxes for Itemframes",
+        category = "Hitbox",
+        description = "Toggle the hitboxes of itemframes."
     )
-    var credits2 = ""
+    var itemFrameHitBox = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Hitboxes for Non-Players",
+        category = "Hitbox",
+        description = "Toggle the hitboxes of non-players."
+    )
+    var nonplayerHitbox = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Force Hitboxes",
+        category = "Hitbox",
+        description = "Force the rendering of hitbox of entities."
+    )
+    var forceHitbox = false
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Disable for Self",
+        category = "Hitbox",
+        description = "Don't render the hitbox if the player's hitbox is you."
+    )
+    var disableForSelf = false
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Hitbox Color",
+        category = "Hitbox",
+        description = "Change the color of the hitbox.",
+    )
+    var hitboxColor: Color = Color.WHITE
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Hitbox Color (within range)",
+        category = "Hitbox",
+        description = "Change the color of the hitbox of players when they are within range of the player.",
+    )
+    var hitboxRangeColor: Color = Color.WHITE
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Line Hitbox",
+        category = "Hitbox",
+        description = "Toggle the eye line hitbox of entities."
+    )
+    var hitboxEyeLine = true
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Hitbox Line Color",
+        category = "Hitbox",
+        description = "Change the color of the hitbox eye line.",
+    )
+    var hitboxEyelineColor: Color = Color(0, 0, 255, 255)
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Hitbox Line of Sight",
+        category = "Hitbox",
+        description = "Toggle the hitbox of entities."
+    )
+    var hitboxLineOfSight = true
+
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Line of Sight Color",
+        category = "Hitbox",
+        description = "Change the color of the hitbox's line of sight.",
+    )
+    var hitboxLineOfSightColor: Color = Color(255, 0, 0, 255)
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Show Update Notification",
+        description = "Show a notification when you start Minecraft informing you of new updates.",
+        category = "Updater"
+    )
+    var showUpdateNotification = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "First time",
+        description = "ok.",
+        category = "General",
+        hidden = true
+    )
+    var firstTime = true
+
+    @Property(
+        type = PropertyType.BUTTON,
+        name = "Update Now",
+        description = "Update Wyvtilities by clicking the button.",
+        category = "Updater"
+    )
+    fun update() {
+        if (Updater.shouldUpdate) EssentialAPI.getGuiUtil()
+            .openScreen(DownloadConfirmGui(mc.currentScreen)) else EssentialAPI.getNotifications()
+            .push("Wyvtilities", "No update had been detected at startup, and thus the update GUI has not been shown.")
+    }
 
     init {
         initialize()
@@ -366,10 +483,9 @@ object WyvtilsConfig : Vigilant(File("./config/wyvtilities.toml"), "Wyvtilities"
             "Sound",
             "Configure sound-related features in Wyvtils."
         )
-        setSubcategoryDescription(
-            "Information",
-            "Credits",
-            "This mod would not be possible without OSS projects and other forms of help. This page lists the people / organizations who helped make this mod."
+        setCategoryDescription(
+            "Hitboxes",
+            "Configure hitbox-related features in Wyvtils."
         )
         registerListener("textColor") { _: Int ->
             Listener.changeTextColor = true

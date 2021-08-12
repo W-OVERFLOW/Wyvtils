@@ -1,61 +1,74 @@
+/*
+ * Wyvtilities - Utilities for Hypixel 1.8.9.
+ * Copyright (C) 2021 Wyvtilities
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package net.wyvest.wyvtilities.mixin;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.GuiIngameForge;
 import net.wyvest.wyvtilities.config.WyvtilsConfig;
 import net.wyvest.wyvtilities.gui.ActionBarGui;
-import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.awt.*;
-
+@SuppressWarnings("DefaultAnnotationParam")
 @Mixin(value = GuiIngameForge.class, remap = false)
 public class MixinGuiIngameForge {
 
-    Minecraft mc = Minecraft.getMinecraft();
-
-    @Inject(method = "renderRecordOverlay", at = @At(value = "HEAD"), cancellable = true)
-    public void renderActionBar(int width, int height, float partialTicks, CallbackInfo ci) {
-        if (WyvtilsConfig.INSTANCE.getActionBarCustomization()) {
+    @Inject(method = "renderRecordOverlay", at = @At("HEAD"), cancellable = true)
+    private void removeActionBar(int width, int height, float partialTicks, CallbackInfo ci) {
+        if ((WyvtilsConfig.INSTANCE.getActionBarCustomization() && !WyvtilsConfig.INSTANCE.getActionBar()) || Minecraft.getMinecraft().currentScreen instanceof ActionBarGui) {
             ci.cancel();
-            if (!WyvtilsConfig.INSTANCE.getActionBar() || Minecraft.getMinecraft().currentScreen instanceof ActionBarGui)
-                return;
-            AccessorGuiIngame guiIngame = (AccessorGuiIngame) mc.ingameGUI;
-            if (guiIngame.getRecordPlayingUpFor() > 0) {
-                mc.mcProfiler.startSection("overlayMessage");
-                float hue = (float) guiIngame.getRecordPlayingUpFor() - partialTicks;
-                int opacity = (int) (hue * 256.0F / 20.0F);
-                if (opacity > 255) opacity = 255;
+        }
+    }
 
-                if (opacity > 0) {
-                    int newX;
-                    int newY;
-                    if (WyvtilsConfig.INSTANCE.getActionBarPosition()) {
-                        newX = WyvtilsConfig.INSTANCE.getActionBarX();
-                        newY = WyvtilsConfig.INSTANCE.getActionBarY();
-                    } else {
-                        newX = -mc.fontRendererObj.getStringWidth(guiIngame.getRecordPlaying()) / 2;
-                        newY = -4;
-                    }
+    @Redirect(method = "renderRecordOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;translate(FFF)V"), remap = true)
+    private void removeTranslation(float x, float y, float z) {
+        if ((!WyvtilsConfig.INSTANCE.getActionBarPosition() && WyvtilsConfig.INSTANCE.getActionBarCustomization()) || !WyvtilsConfig.INSTANCE.getActionBarCustomization()) {
+            GlStateManager.translate(x, y, z);
+        }
+    }
 
-                    GlStateManager.pushMatrix();
-                    if (!WyvtilsConfig.INSTANCE.getActionBarPosition() && WyvtilsConfig.INSTANCE.getActionBarCustomization())
-                        GlStateManager.translate((float) (width / 2), (float) (height - 68), 0.0F);
-                    GlStateManager.enableBlend();
-                    GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-                    int color = (guiIngame.getRecordIsPlaying() ? Color.HSBtoRGB(hue / 50.0F, 0.7F, 0.6F) & Color.WHITE.getRGB() : Color.WHITE.getRGB());
-                    mc.fontRendererObj.drawString(guiIngame.getRecordPlaying(), newX, newY, color | (opacity << 24), WyvtilsConfig.INSTANCE.getActionBarShadow());
-                    GlStateManager.disableBlend();
-                    GlStateManager.popMatrix();
-                }
-
-                mc.mcProfiler.endSection();
+    @Redirect(method = "renderRecordOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/FontRenderer;drawString(Ljava/lang/String;III)I"), remap = true)
+    private int modifyDrawString(FontRenderer fontRenderer, String text, int x, int y, int color) {
+        if (!WyvtilsConfig.INSTANCE.getActionBarCustomization()) {
+            return fontRenderer.drawString(text, x, y, color);
+        } else {
+            int newX;
+            int newY;
+            if (WyvtilsConfig.INSTANCE.getActionBarPosition()) {
+                newX = WyvtilsConfig.INSTANCE.getActionBarX();
+                newY = WyvtilsConfig.INSTANCE.getActionBarY();
+            } else {
+                newX = x;
+                newY = y;
             }
+            return fontRenderer.drawString(
+                    text,
+                    newX,
+                    newY,
+                    color,
+                    WyvtilsConfig.INSTANCE.getActionBarShadow()
+            );
         }
     }
 
@@ -66,7 +79,7 @@ public class MixinGuiIngameForge {
         }
     }
 
-    @Redirect(method = "renderTitle", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V"))
+    @Redirect(method = "renderTitle", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V"), remap = true)
     private void modifyTitleScale1(float x, float y, float z) {
         if (WyvtilsConfig.INSTANCE.getTitleScale() == 1.0F && WyvtilsConfig.INSTANCE.getSubtitleScale() == 1.0F) {
             GlStateManager.scale(x, y, z);

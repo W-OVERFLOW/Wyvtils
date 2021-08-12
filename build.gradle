@@ -1,3 +1,21 @@
+/*
+ * Wyvtilities - Utilities for Hypixel 1.8.9.
+ * Copyright (C) 2021 Wyvtilities
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 plugins {
     // Languages
     id 'java'
@@ -11,7 +29,7 @@ plugins {
     id 'org.spongepowered.mixin' version '0.6-SNAPSHOT'
 }
 
-version = '1.0.0'
+version = '1.1.0'
 group = 'net.wyvest'
 archivesBaseName = 'Wyvtilities'
 
@@ -48,14 +66,14 @@ configurations {
 
 dependencies {
     // Libraries
-    provided 'xyz.matthewtgm:Requisite:1.0'
-    include('com.github.Wyvest:RequisiteEssentialLaunchwrapper:9056d99dde') {
+    provided 'xyz.matthewtgm:Requisite:1.1.1'
+    include('xyz.matthewtgm:RequisiteLaunchwrapper:1.1') {
         transitive = false
     }
-    include('gg.essential:loader-launchwrapper:1.0.2') {
+    include('gg.essential:loader-launchwrapper:1.1.0') {
         transitive = false
     }
-    provided 'gg.essential:essential-1.8.9-forge:1292'
+    provided 'gg.essential:essential-1.8.9-forge:1300'
 
 
     annotationProcessor 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
@@ -81,6 +99,7 @@ processResources {
 
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
+        include 'bundle.project.json'
 
         expand(
                 'version': project.version,
@@ -90,6 +109,7 @@ processResources {
 
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+        exclude 'bundle.project.json'
     }
 }
 
@@ -123,7 +143,7 @@ shadowJar {
 
 repositories {
     mavenCentral()
-    maven { url 'https://repo.sk1er.club/repository/maven-public/' }
+    maven { url 'https://repo.sk1er.club/repository/maven-releases/' }
     maven { url 'https://jitpack.io/' }
     maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
 }
@@ -146,3 +166,4 @@ sourceSets {
         output.resourcesDir = file("${buildDir}/classes/kotlin/main")
     }
 }
+

@@ -5,12 +5,12 @@
     "description": "Utilities, by Wyvest.",
     "version": "${version}",
     "mcversion": "${mcversion}",
-    "url": "",
-    "updateUrl": "",
+    "url": "https://github.com/Wyvest/Wyvtilities/releases/latest",
+    "updateUrl": "https://github.com/Wyvest/Wyvtilities/releases/latest",
     "authorList": [
       "Wyvest"
     ],
-    "credits": "",
+    "credits": "ModCore Inc. for Essential, TGMDevelopment for Requisite, and Skytils for many other things.",
     "logoFile": "",
     "screenshots": [],
     "dependencies": []
