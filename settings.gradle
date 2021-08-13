@@ -33,7 +33,7 @@ pluginManagement {
                     useModule "com.github.asbyth:ForgeGradle:${requested.version}"
                     break
                 case 'org.spongepowered.mixin':
-                    useModule "com.github.xcfrg:mixingradle:${requested.version}"
+                    useModule "com.github.Skytils:MixinGradle:${requested.version}"
                     break
             }
         }

@@ -57,7 +57,7 @@ object Wyvtilities {
     var isRegexLoaded: Boolean = false
     const val MODID = "wyvtilities"
     const val MOD_NAME = "Wyvtilities"
-    const val VERSION = "1.1.1"
+    const val VERSION = "1.1.2"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
     val jsonParser = JsonParser()
@@ -74,7 +74,8 @@ object Wyvtilities {
         ChatHelper.sendMessage(EnumChatFormatting.DARK_PURPLE.toString() + "[Wyvtilities] ", message)
     }
 
-    val keybind = KeyBinding("Chat Swapper", Keyboard.KEY_V, "Wyvtilities")
+    val chatKeybind = KeyBinding("Chat Swapper", Keyboard.KEY_V, "Wyvtilities")
+    val titleKeybind = KeyBinding("Clear Title", Keyboard.KEY_Z, "Wyvtilities")
 
     @Mod.EventHandler
     private fun onFMLPreInitialization(event: FMLPreInitializationEvent) {
@@ -123,7 +124,8 @@ object Wyvtilities {
                     .push("Wyvtilities", "Wyvtilities failed to get regexes required for the Auto Get GEXP feature!")
             }
         }
-        ClientRegistry.registerKeyBinding(keybind)
+        ClientRegistry.registerKeyBinding(chatKeybind)
+        ClientRegistry.registerKeyBinding(titleKeybind)
     }
 
     @Mod.EventHandler

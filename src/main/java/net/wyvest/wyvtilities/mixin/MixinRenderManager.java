@@ -31,6 +31,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.wyvest.wyvtilities.config.WyvtilsConfig;
 import org.spongepowered.asm.mixin.Mixin;
@@ -43,13 +44,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(RenderManager.class)
 public class MixinRenderManager {
 
-    boolean withinRange = false;
-
     @Inject(method = "renderDebugBoundingBox", at = @At(value = "HEAD"), cancellable = true)
     private void cancelForSelf(Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
         if (WyvtilsConfig.INSTANCE.getDisableForSelf()) {
             if (entityIn instanceof EntityPlayerSP) {
-                if (entityIn == Minecraft.getMinecraft().thePlayer) {
+                if (((EntityPlayerSP) entityIn).getGameProfile().getId() == Minecraft.getMinecraft().thePlayer.getGameProfile().getId()) {
                     ci.cancel();
                 }
             }
@@ -69,11 +68,6 @@ public class MixinRenderManager {
                 ci.cancel();
             }
         }
-        if (WyvtilsConfig.INSTANCE.getHitboxColor() != WyvtilsConfig.INSTANCE.getHitboxRangeColor()) {
-            if (getDistanceSqToEntity(Minecraft.getMinecraft().thePlayer, entityIn) <= 9 && Minecraft.getMinecraft().thePlayer != entityIn) {
-                withinRange = true;
-            }
-        }
     }
 
     @Inject(method = "doRenderEntity", at = @At(value = "HEAD"))
@@ -85,14 +79,13 @@ public class MixinRenderManager {
     }
 
     @Redirect(method = "renderDebugBoundingBox", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderGlobal;drawOutlinedBoundingBox(Lnet/minecraft/util/AxisAlignedBB;IIII)V"))
-    private void addHitBoxAndSight(AxisAlignedBB boundingBox, int red, int green, int blue, int alpha) {
+    private void addHitBoxAndSight(AxisAlignedBB boundingBox, int red, int green, int blue, int alpha, Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks) {
         if (green == 255) {
             if (WyvtilsConfig.INSTANCE.getHitbox()) {
-                if (withinRange) {
-                    withinRange = false;
-                    RenderGlobal.drawOutlinedBoundingBox(boundingBox, WyvtilsConfig.INSTANCE.getHitboxRangeColor().getRed(), WyvtilsConfig.INSTANCE.getHitboxRangeColor().getGreen(), WyvtilsConfig.INSTANCE.getHitboxRangeColor().getBlue(), WyvtilsConfig.INSTANCE.getHitboxRangeColor().getAlpha());
+                if (Minecraft.getMinecraft().thePlayer != entityIn && getReachDistanceFromEntity(entityIn)) {
+                    RenderGlobal.drawOutlinedBoundingBox((WyvtilsConfig.INSTANCE.getAccurateHitbox() ? boundingBox.expand(entityIn.getCollisionBorderSize(), entityIn.getCollisionBorderSize(), entityIn.getCollisionBorderSize()) : boundingBox), WyvtilsConfig.INSTANCE.getHitboxRangeColor().getRed(), WyvtilsConfig.INSTANCE.getHitboxRangeColor().getGreen(), WyvtilsConfig.INSTANCE.getHitboxRangeColor().getBlue(), WyvtilsConfig.INSTANCE.getHitboxRangeColor().getAlpha());
                 } else {
-                    RenderGlobal.drawOutlinedBoundingBox(boundingBox, WyvtilsConfig.INSTANCE.getHitboxColor().getRed(), WyvtilsConfig.INSTANCE.getHitboxColor().getGreen(), WyvtilsConfig.INSTANCE.getHitboxColor().getBlue(), WyvtilsConfig.INSTANCE.getHitboxColor().getAlpha());
+                    RenderGlobal.drawOutlinedBoundingBox((WyvtilsConfig.INSTANCE.getAccurateHitbox() ? boundingBox.expand(entityIn.getCollisionBorderSize(), entityIn.getCollisionBorderSize(), entityIn.getCollisionBorderSize()) : boundingBox), WyvtilsConfig.INSTANCE.getHitboxColor().getRed(), WyvtilsConfig.INSTANCE.getHitboxColor().getGreen(), WyvtilsConfig.INSTANCE.getHitboxColor().getBlue(), WyvtilsConfig.INSTANCE.getHitboxColor().getAlpha());
                 }
             }
         } else {
@@ -121,11 +114,27 @@ public class MixinRenderManager {
         ci.cancel();
     }
 
-    private float getDistanceSqToEntity(Entity entityIn, Entity entityIn2) {
-        float f = (float) (entityIn2.posX - entityIn.posX);
-        float f1 = (float) (entityIn2.posY - entityIn.posY);
-        float f2 = (float) (entityIn2.posZ - entityIn.posZ);
-        return f * f + f1 * f1 + f2 * f2;
+    /**
+     * Adapted from EvergreenHUD under GPLv3
+     * https://github.com/isXander/EvergreenHUD/blob/main/LICENSE
+     *
+     * Modified to be more compact.
+     */
+    private boolean getReachDistanceFromEntity(Entity entity) {
+        Minecraft.getMinecraft().mcProfiler.startSection("Calculating Reach Dist");
+
+        double maxSize = 3D;
+        AxisAlignedBB otherBB = entity.getEntityBoundingBox();
+        float collisionBorderSize = entity.getCollisionBorderSize();
+        AxisAlignedBB otherHitbox = otherBB.expand(collisionBorderSize, collisionBorderSize, collisionBorderSize);
+        Vec3 eyePos = Minecraft.getMinecraft().thePlayer.getPositionEyes(1.0F);
+        Vec3 lookPos = Minecraft.getMinecraft().thePlayer.getLook(1.0F);
+        Vec3 adjustedPos = eyePos.addVector(lookPos.xCoord * maxSize, lookPos.yCoord * maxSize, lookPos.zCoord * maxSize);
+        MovingObjectPosition movingObjectPosition = otherHitbox.calculateIntercept(eyePos, adjustedPos);
+        if (movingObjectPosition == null)
+            return false;
+        Minecraft.getMinecraft().mcProfiler.endSection();
+        return true;
     }
 
 }

@@ -331,6 +331,14 @@ object WyvtilsConfig :
 
     @Property(
         type = PropertyType.SWITCH,
+        name = "Accurate Hitbox",
+        category = "Hitbox",
+        description = "In vanilla, hitboxes are a bit smaller compared to their actual size. When this is on, it make the hitboxes accurate."
+    )
+    var accurateHitbox = true
+
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Toggle Hitboxes for Items",
         category = "Hitbox",
         description = "Toggle the hitboxes of items."
@@ -379,11 +387,11 @@ object WyvtilsConfig :
 
     @Property(
         type = PropertyType.COLOR,
-        name = "Hitbox Color (within range)",
+        name = "Hitbox Color (within crosshair)",
         category = "Hitbox",
-        description = "Change the color of the hitbox of players when they are within range of the player.",
+        description = "Change the color of the hitbox of players when they are within the crosshair of the player.",
     )
-    var hitboxRangeColor: Color = Color.WHITE
+    var hitboxRangeColor: Color = Color.RED
 
     @Property(
         type = PropertyType.SWITCH,

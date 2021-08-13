@@ -29,9 +29,10 @@ import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.wyvest.wyvtilities.Wyvtilities
-import net.wyvest.wyvtilities.Wyvtilities.keybind
+import net.wyvest.wyvtilities.Wyvtilities.chatKeybind
 import net.wyvest.wyvtilities.Wyvtilities.mc
 import net.wyvest.wyvtilities.Wyvtilities.sendMessage
+import net.wyvest.wyvtilities.Wyvtilities.titleKeybind
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.mixin.AccessorGuiIngame
 import net.wyvest.wyvtilities.utils.HypixelUtils
@@ -243,24 +244,34 @@ object Listener {
 
     @SubscribeEvent
     fun onKeyInput(event: BetterInputEvent.KeyboardInputEvent?) {
-        if (!ServerHelper.hypixel()) return
-        val code: Int = keybind.keyCode
-        if (Keyboard.getEventKeyState() && Keyboard.getEventKey() == code) {
-            pressed()
+        if (mc.currentScreen != null) return
+        if (Keyboard.getEventKeyState() && Keyboard.getEventKey() == titleKeybind.keyCode) {
+            titlePressed()
         }
+        if (!ServerHelper.hypixel()) return
+        if (Keyboard.getEventKeyState() && Keyboard.getEventKey() == chatKeybind.keyCode) {
+            chatPressed()
+        }
+
     }
 
     @SubscribeEvent
     fun onMouseInput(event: BetterInputEvent.MouseInputEvent?) {
+        if (mc.currentScreen != null) return
+        if (Mouse.getEventButtonState() && Mouse.getEventButton() == titleKeybind.keyCode + 100) {
+            titlePressed()
+        }
         if (!ServerHelper.hypixel()) return
-        val code: Int = keybind.keyCode
-        if (Mouse.getEventButtonState() && Mouse.getEventButton() == code + 100) {
-            pressed()
+        if (Mouse.getEventButtonState() && Mouse.getEventButton() == chatKeybind.keyCode + 100) {
+            chatPressed()
         }
     }
 
-    private fun pressed() {
-        if (mc.currentScreen != null) return
+    private fun titlePressed() {
+        (mc.ingameGUI as AccessorGuiIngame).displayedTitle = ""
+    }
+
+    private fun chatPressed() {
         when (current) {
             1 -> {
                 check(WyvtilsConfig.chatType2)
