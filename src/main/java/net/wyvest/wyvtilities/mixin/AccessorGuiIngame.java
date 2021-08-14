@@ -33,4 +33,7 @@ public interface AccessorGuiIngame {
 
     @Accessor
     void setDisplayedTitle(String title);
+
+    @Accessor
+    void setDisplayedSubTitle(String subtitle);
 }

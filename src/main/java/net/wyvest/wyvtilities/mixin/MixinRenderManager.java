@@ -83,7 +83,7 @@ public class MixinRenderManager {
         if (green == 255) {
             if (WyvtilsConfig.INSTANCE.getHitbox()) {
                 if (Minecraft.getMinecraft().thePlayer != entityIn && getReachDistanceFromEntity(entityIn)) {
-                    RenderGlobal.drawOutlinedBoundingBox((WyvtilsConfig.INSTANCE.getAccurateHitbox() ? boundingBox.expand(entityIn.getCollisionBorderSize(), entityIn.getCollisionBorderSize(), entityIn.getCollisionBorderSize()) : boundingBox), WyvtilsConfig.INSTANCE.getHitboxRangeColor().getRed(), WyvtilsConfig.INSTANCE.getHitboxRangeColor().getGreen(), WyvtilsConfig.INSTANCE.getHitboxRangeColor().getBlue(), WyvtilsConfig.INSTANCE.getHitboxRangeColor().getAlpha());
+                    RenderGlobal.drawOutlinedBoundingBox((WyvtilsConfig.INSTANCE.getAccurateHitbox() ? boundingBox.expand(entityIn.getCollisionBorderSize(), entityIn.getCollisionBorderSize(), entityIn.getCollisionBorderSize()) : boundingBox), WyvtilsConfig.INSTANCE.getHitboxCrosshairColor().getRed(), WyvtilsConfig.INSTANCE.getHitboxCrosshairColor().getGreen(), WyvtilsConfig.INSTANCE.getHitboxCrosshairColor().getBlue(), WyvtilsConfig.INSTANCE.getHitboxCrosshairColor().getAlpha());
                 } else {
                     RenderGlobal.drawOutlinedBoundingBox((WyvtilsConfig.INSTANCE.getAccurateHitbox() ? boundingBox.expand(entityIn.getCollisionBorderSize(), entityIn.getCollisionBorderSize(), entityIn.getCollisionBorderSize()) : boundingBox), WyvtilsConfig.INSTANCE.getHitboxColor().getRed(), WyvtilsConfig.INSTANCE.getHitboxColor().getGreen(), WyvtilsConfig.INSTANCE.getHitboxColor().getBlue(), WyvtilsConfig.INSTANCE.getHitboxColor().getAlpha());
                 }

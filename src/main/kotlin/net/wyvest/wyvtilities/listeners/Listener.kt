@@ -31,20 +31,20 @@ import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.wyvest.wyvtilities.Wyvtilities
 import net.wyvest.wyvtilities.Wyvtilities.chatKeybind
 import net.wyvest.wyvtilities.Wyvtilities.mc
-import net.wyvest.wyvtilities.Wyvtilities.sendMessage
 import net.wyvest.wyvtilities.Wyvtilities.titleKeybind
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.mixin.AccessorGuiIngame
 import net.wyvest.wyvtilities.utils.HypixelUtils
 import net.wyvest.wyvtilities.utils.containsAny
+import net.wyvest.wyvtilities.utils.equalsAny
 import org.lwjgl.input.Keyboard
 import org.lwjgl.input.Mouse
-import xyz.matthewtgm.json.util.JsonApiHelper
 import xyz.matthewtgm.requisite.events.BetterInputEvent
 import xyz.matthewtgm.requisite.events.FontRendererEvent
 import xyz.matthewtgm.requisite.mixins.sound.PositionedSoundAccessor
 import xyz.matthewtgm.requisite.util.ServerHelper
 import xyz.matthewtgm.requisite.util.StringHelper
+import java.util.*
 
 
 object Listener {
@@ -57,34 +57,6 @@ object Listener {
     @SubscribeEvent(receiveCanceled = true)
     fun onChatReceivedEvent(e: ClientChatReceivedEvent) {
         val unformattedText = EnumChatFormatting.getTextWithoutFormattingCodes(e.message.unformattedText)
-        if (WyvtilsConfig.autoGetAPI) {
-            /*/
-            Adapted from Moulberry's NotEnoughUpdates, under the Attribution-NonCommercial 3.0 license.
-            https://github.com/Moulberry/NotEnoughUpdates
-         */
-            //Stolen code starts here
-            if (unformattedText.startsWith("Your new API key is ")) {
-                val tempApiKey = unformattedText.substring("Your new API key is ".length)
-                var shouldReturn = false
-                Multithreading.runAsync {
-                    if (!JsonApiHelper.getJsonObject("https://api.hypixel.net/key?key=$tempApiKey")
-                            .get("success").asBoolean
-                    ) {
-                        if (!ServerHelper.hypixel()) {
-                            sendMessage(EnumChatFormatting.RED.toString() + "You are not running this command on Hypixel! This mod needs an Hypixel API key!")
-                        }
-                        shouldReturn = true
-                    }
-                }
-                if (shouldReturn) return
-                WyvtilsConfig.apiKey = unformattedText.substring("Your new API key is ".length)
-                WyvtilsConfig.markDirty()
-                WyvtilsConfig.writeData()
-                sendMessage(EnumChatFormatting.GREEN.toString() + "Your API Key has been automatically configured.")
-                return
-            }
-            //Stolen code ends here
-        }
         if ((WyvtilsConfig.autoGetGEXP || WyvtilsConfig.autoGetWinstreak) && Wyvtilities.isRegexLoaded && ServerHelper.hypixel()) {
             if (!victoryDetected) {
                 for (trigger in Wyvtilities.autoGGRegex) {
@@ -118,8 +90,8 @@ object Listener {
             }
             if (!victoryDetected) {
                 if (EnumChatFormatting.getTextWithoutFormattingCodes((mc.ingameGUI as AccessorGuiIngame).displayedTitle)
-                        .containsAny("win", "over", "won", "victory")
-                ) {
+                        .lowercase(Locale.ENGLISH).equalsAny("victory!", "game over!"))
+                {
                     victoryDetected = true
                     removeTitle = true
                     Multithreading.runAsync {
@@ -160,6 +132,7 @@ object Listener {
         if (removeTitle) {
             removeTitle = false
             (mc.ingameGUI as AccessorGuiIngame).displayedTitle = ""
+            (mc.ingameGUI as AccessorGuiIngame).setDisplayedSubTitle("")
         }
     }
 
@@ -269,6 +242,7 @@ object Listener {
 
     private fun titlePressed() {
         (mc.ingameGUI as AccessorGuiIngame).displayedTitle = ""
+        (mc.ingameGUI as AccessorGuiIngame).setDisplayedSubTitle("")
     }
 
     private fun chatPressed() {

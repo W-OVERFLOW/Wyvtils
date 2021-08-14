@@ -26,6 +26,8 @@ import net.minecraft.util.EnumChatFormatting
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarX
 import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarY
+import net.wyvest.wyvtilities.config.WyvtilsConfig.bossbarScale
+import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11
 import xyz.matthewtgm.requisite.util.GuiHelper
 import java.awt.Color
@@ -54,6 +56,14 @@ class BossHealthGui : GuiScreen() {
         mc.textureManager.bindTexture(icons)
         GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0)
         mc.mcProfiler.startSection("bossHealthGui")
+        GlStateManager.pushMatrix()
+        val iHaveNoIdeaWhatToNameThisFloat = bossbarScale - 1.0f
+        GlStateManager.translate(
+            -bossBarX * iHaveNoIdeaWhatToNameThisFloat,
+            -bossBarY * iHaveNoIdeaWhatToNameThisFloat,
+            0.0f
+        )
+        GlStateManager.scale(bossbarScale, bossbarScale, 1.0f)
         GlStateManager.enableBlend()
         val fontrenderer: FontRenderer = mc.fontRendererObj
         if (WyvtilsConfig.firstLaunchBossbar) {
@@ -84,6 +94,7 @@ class BossHealthGui : GuiScreen() {
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
         if (WyvtilsConfig.bossBarBar) mc.textureManager.bindTexture(Gui.icons)
         GlStateManager.disableBlend()
+        GlStateManager.popMatrix()
         mc.mcProfiler.endSection()
         val scale = 1
         GlStateManager.pushMatrix()
@@ -106,6 +117,16 @@ class BossHealthGui : GuiScreen() {
         prevY = mouseY
         if (mouseButton == 0) {
             dragging = true
+        }
+    }
+
+    override fun keyTyped(typedChar: Char, keyCode: Int) {
+        super.keyTyped(typedChar, keyCode)
+        when (keyCode) {
+            Keyboard.KEY_UP -> bossBarY -= 5
+            Keyboard.KEY_DOWN -> bossBarY += 5
+            Keyboard.KEY_LEFT -> bossBarX -= 5
+            Keyboard.KEY_RIGHT -> bossBarX += 5
         }
     }
 

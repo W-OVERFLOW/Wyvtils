@@ -31,6 +31,7 @@ import net.wyvest.wyvtilities.Wyvtilities.mc
 import net.wyvest.wyvtilities.gui.ActionBarGui
 import net.wyvest.wyvtilities.gui.BossHealthGui
 import net.wyvest.wyvtilities.gui.DownloadConfirmGui
+import net.wyvest.wyvtilities.gui.SidebarGui
 import net.wyvest.wyvtilities.listeners.Listener
 import net.wyvest.wyvtilities.utils.Updater
 import java.awt.Color
@@ -45,18 +46,9 @@ object WyvtilsConfig :
     ) {
 
     @Property(
-        type = PropertyType.TEXT,
-        name = "API Key",
-        description = "The API key, used for some features.",
-        category = "General",
-        protectedText = true
-    )
-    var apiKey = ""
-
-    @Property(
         type = PropertyType.SWITCH,
         name = "Automatically Check GEXP",
-        description = "Automatically check your GEXP after you win a Hypixel game. Requires an API Key.",
+        description = "Automatically check your GEXP after you win a Hypixel game.",
         category = "Automatic"
     )
     var autoGetGEXP = true
@@ -64,18 +56,10 @@ object WyvtilsConfig :
     @Property(
         type = PropertyType.SWITCH,
         name = "Automatically Check Winstreak",
-        description = "Automatically check your winstreak after you win a Hypixel game. Requires an API Key.",
+        description = "Automatically check your winstreak after you win a Hypixel game.",
         category = "Automatic"
     )
     var autoGetWinstreak = false
-
-    @Property(
-        type = PropertyType.SWITCH,
-        name = "Automatically get API Key",
-        description = "Automatically get the API Key when /api new is sent.",
-        category = "General"
-    )
-    var autoGetAPI = true
 
     @Property(
         type = PropertyType.SWITCH,
@@ -163,6 +147,14 @@ object WyvtilsConfig :
         category = "Bossbar"
     )
     var bossBarBar = true
+
+    @Property(
+        type = PropertyType.PERCENT_SLIDER,
+        name = "Bossbar Scale",
+        description = "Set the scale for the bossbar.",
+        category = "Bossbar"
+    )
+    var bossbarScale = 1.0F
 
     @Property(
         type = PropertyType.BUTTON,
@@ -391,7 +383,7 @@ object WyvtilsConfig :
         category = "Hitbox",
         description = "Change the color of the hitbox of players when they are within the crosshair of the player.",
     )
-    var hitboxRangeColor: Color = Color.RED
+    var hitboxCrosshairColor: Color = Color.RED
 
     @Property(
         type = PropertyType.SWITCH,
@@ -425,6 +417,92 @@ object WyvtilsConfig :
         description = "Change the color of the hitbox's line of sight.",
     )
     var hitboxLineOfSightColor: Color = Color(255, 0, 0, 255)
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Sidebar",
+        category = "Sidebar",
+        description = "Toggle the sidebar from rendering."
+    )
+    var sidebar = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Sidebar Text Shadow",
+        category = "Sidebar",
+        description = "Toggle the sidebar text's shadow from rendering."
+    )
+    var sidebarTextShadow = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Score Points",
+        category = "Sidebar",
+        description = "Toggle the sidebar score points (aka red numbers) from rendering."
+    )
+    var sidebarScorePoints = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Background",
+        category = "Sidebar",
+        description = "Toggle the background from rendering."
+    )
+    var sidebarBackground = true
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Sidebar Background Color",
+        category = "Sidebar",
+        description = "Change the text color for the sidebar."
+    )
+    var sidebarBackgroundColor : Color = Color(0, 0, 0, 50)
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Sidebar Position",
+        category = "Sidebar",
+        description = "Toggle the sidebar position editor."
+    )
+    var sidebarPosition = false
+
+    @Property(
+        type = PropertyType.BUTTON,
+        name = "Sidebar Editor",
+        description = "Change the position of the sidebar.",
+        category = "Sidebar"
+    )
+    fun openSidebarGui() {
+        if (sidebarPosition) EssentialAPI.getGuiUtil().openScreen(SidebarGui())
+        else EssentialAPI.getNotifications()
+            .push("Wyvtilities", "You can't do that, you don't have Sidebar position enabled!")
+    }
+
+    @Property(
+        type = PropertyType.PERCENT_SLIDER,
+        name = "Sidebar Scale",
+        description = "Set the scale for the sidebar.",
+        category = "Sidebar"
+    )
+    var sidebarScale = 1.0F
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Sidebar X",
+        description = "X",
+        category = "Sidebar",
+        hidden = true
+    )
+    var sidebarX: Int = 0
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Sidebar Y",
+        description = "Y",
+        category = "Sidebar",
+        hidden = true
+    )
+    var sidebarY: Int = 12
 
     @Property(
         type = PropertyType.SWITCH,

@@ -21,17 +21,16 @@ package net.wyvest.wyvtilities.gui
 import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
+import net.minecraft.util.EnumChatFormatting
 import net.wyvest.wyvtilities.config.WyvtilsConfig
-import net.wyvest.wyvtilities.config.WyvtilsConfig.actionBarX
-import net.wyvest.wyvtilities.config.WyvtilsConfig.actionBarY
-import net.wyvest.wyvtilities.mixin.AccessorGuiIngame
+import net.wyvest.wyvtilities.config.WyvtilsConfig.sidebarScale
+import net.wyvest.wyvtilities.config.WyvtilsConfig.sidebarX
+import net.wyvest.wyvtilities.config.WyvtilsConfig.sidebarY
 import org.lwjgl.input.Keyboard
-import org.lwjgl.opengl.GL11
 import xyz.matthewtgm.requisite.util.GuiHelper
-import java.awt.Color
 import java.io.IOException
 
-class ActionBarGui : GuiScreen() {
+class SidebarGui : GuiScreen() {
 
     private var dragging = false
     private var prevX = 0
@@ -50,25 +49,45 @@ class ActionBarGui : GuiScreen() {
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
         updatePos(mouseX, mouseY)
-        mc.mcProfiler.startSection("actionBarGui")
-        val ingameGui = mc.ingameGUI as AccessorGuiIngame
+        mc.mcProfiler.startSection("sidebarGui")
         GlStateManager.pushMatrix()
-        GlStateManager.enableBlend()
-        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0)
-        mc.fontRendererObj.drawString(
-            if (ingameGui.recordPlaying.isNullOrEmpty()) {
-                "Wyvtilities Action Bar"
-            } else {
-                ingameGui.recordPlaying
-            },
-            actionBarX.toFloat(),
-            actionBarY.toFloat(),
-            Color.WHITE.rgb,
-            WyvtilsConfig.actionBarShadow
-        )
-        GlStateManager.disableBlend()
-        GlStateManager.popMatrix()
+        val mscale = sidebarScale - 1.0f
+        GlStateManager.translate(-sidebarX * mscale, -sidebarY * mscale, 0.0f)
+        GlStateManager.scale(sidebarScale, sidebarScale, 1.0f)
 
+        val i: Int = fontRendererObj.getStringWidth("Wyvtilities")
+
+        val j1: Int = sidebarY
+        val l1: Int = sidebarX - i
+        var j = 0
+
+        val list = listOf("ok", "Wyvest")
+
+        for (score1 in list) {
+            ++j
+            val k: Int = j1 - j * this.fontRendererObj.FONT_HEIGHT
+            val l = sidebarX
+            drawRect(l1 - 2, k, l, k + fontRendererObj.FONT_HEIGHT, WyvtilsConfig.sidebarBackgroundColor.rgb)
+            fontRendererObj.drawString(list[j - 1], l1.toFloat(), k.toFloat(), 553648127, WyvtilsConfig.sidebarTextShadow)
+            if (WyvtilsConfig.sidebarScorePoints) {
+                fontRendererObj.drawString(EnumChatFormatting.RED.toString() + j.toString(),
+                    (l - fontRendererObj.getStringWidth(j.toString())).toFloat(), k.toFloat(), 553648127,
+                    WyvtilsConfig.sidebarTextShadow)
+            }
+
+            if (j == list.size) {
+                val s3 = "Wyvtilities"
+                drawRect(l1 - 2, k - fontRendererObj.FONT_HEIGHT - 1, l, k - 1, WyvtilsConfig.sidebarBackgroundColor.rgb)
+                drawRect(l1 - 2, k - 1, l, k, WyvtilsConfig.sidebarBackgroundColor.rgb)
+                fontRendererObj.drawString(
+                    s3,
+                    (l1 + i / 2 - fontRendererObj.getStringWidth(s3) / 2).toFloat(),
+                    (k - fontRendererObj.FONT_HEIGHT).toFloat(),
+                    553648127, WyvtilsConfig.sidebarTextShadow
+                )
+            }
+        }
+        GlStateManager.popMatrix()
         mc.mcProfiler.endSection()
         super.drawScreen(mouseX, mouseY, partialTicks)
     }
@@ -86,17 +105,17 @@ class ActionBarGui : GuiScreen() {
     override fun keyTyped(typedChar: Char, keyCode: Int) {
         super.keyTyped(typedChar, keyCode)
         when (keyCode) {
-            Keyboard.KEY_UP -> actionBarY -= 5
-            Keyboard.KEY_DOWN -> actionBarY += 5
-            Keyboard.KEY_LEFT -> actionBarX -= 5
-            Keyboard.KEY_RIGHT -> actionBarX += 5
+            Keyboard.KEY_UP -> sidebarY -= 5
+            Keyboard.KEY_DOWN -> sidebarY += 5
+            Keyboard.KEY_LEFT -> sidebarX -= 5
+            Keyboard.KEY_RIGHT -> sidebarX += 5
         }
     }
 
     private fun updatePos(x: Int, y: Int) {
         if (dragging) {
-            actionBarX = prevX
-            actionBarY = prevY
+            sidebarX = prevX
+            sidebarY = prevY
         }
         prevX = x
         prevY = y
