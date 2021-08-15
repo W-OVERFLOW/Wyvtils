@@ -27,6 +27,7 @@ import net.wyvest.wyvtilities.gui.ActionBarGui;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -94,6 +95,11 @@ public class MixinGuiIngameForge {
                 GlStateManager.scale(x * WyvtilsConfig.INSTANCE.getSubtitleScale(), y * WyvtilsConfig.INSTANCE.getSubtitleScale(), z * WyvtilsConfig.INSTANCE.getSubtitleScale());
             }
         }
+    }
+
+    @ModifyArg(method = "renderTitle", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/FontRenderer;drawString(Ljava/lang/String;FFIZ)I"), index = 4)
+    private boolean setShadow() {
+        return WyvtilsConfig.INSTANCE.getTitleShadow();
     }
 
 }

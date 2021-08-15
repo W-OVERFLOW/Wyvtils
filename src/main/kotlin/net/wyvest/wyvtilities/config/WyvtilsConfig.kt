@@ -298,6 +298,14 @@ object WyvtilsConfig :
     var subtitleScale = 1.0F
 
     @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Title Shadow",
+        description = "Toggle the title and subtitle's shadow.",
+        category = "Titles"
+    )
+    var titleShadow = true
+
+    @Property(
         type = PropertyType.SELECTOR,
         name = "Chat Type 1",
         category = "Chat Switcher",
@@ -457,6 +465,14 @@ object WyvtilsConfig :
         description = "Change the text color for the sidebar."
     )
     var sidebarBackgroundColor : Color = Color(0, 0, 0, 50)
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Compact Sidebar",
+        category = "Sidebar",
+        description = "Toggle compact sidebar, which removes all empty sidebar lines."
+    )
+    var compactSidebar = false
 
     @Property(
         type = PropertyType.SWITCH,

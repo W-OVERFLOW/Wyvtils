@@ -18,6 +18,7 @@
 
 package net.wyvest.wyvtilities.mixin;
 
+import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -25,7 +26,9 @@ import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.boss.BossStatus;
+import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
+import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.wyvest.wyvtilities.config.WyvtilsConfig;
 import net.wyvest.wyvtilities.gui.BossHealthGui;
 import net.wyvest.wyvtilities.gui.SidebarGui;
@@ -36,6 +39,7 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 @Mixin(GuiIngame.class)
 public class MixinGuiIngame {
@@ -102,6 +106,22 @@ public class MixinGuiIngame {
             float iHaveNoIdeaWhatToNameThisFloat = WyvtilsConfig.INSTANCE.getSidebarScale() - 1.0f;
             GlStateManager.translate(-WyvtilsConfig.INSTANCE.getSidebarX() * iHaveNoIdeaWhatToNameThisFloat, -WyvtilsConfig.INSTANCE.getSidebarY() * iHaveNoIdeaWhatToNameThisFloat, 0.0f);
             GlStateManager.scale(WyvtilsConfig.INSTANCE.getSidebarScale(), WyvtilsConfig.INSTANCE.getSidebarScale(), 1.0F);
+        }
+    }
+
+    @Redirect(method = "renderScoreboard", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Lists;newArrayList(Ljava/lang/Iterable;)Ljava/util/ArrayList;"))
+    private ArrayList<Score> compactSidebar(Iterable<? extends Score> elements) {
+        if (WyvtilsConfig.INSTANCE.getCompactSidebar()) {
+            ArrayList<Score> newElement = new ArrayList<>();
+            for (Score input : elements) {
+                if (!ScorePlayerTeam.formatPlayerName(input.getScoreScoreboard().getPlayersTeam(input.getPlayerName()), input.getPlayerName()).replaceAll("[\\ud83c\\udf00-\\ud83d\\ude4f]|[\\ud83d\\ude80-\\ud83d\\udeff]", "").trim()
+                        .isEmpty()) {
+                    newElement.add(input);
+                }
+            }
+            return newElement;
+        } else {
+            return Lists.newArrayList(elements);
         }
     }
 

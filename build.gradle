@@ -29,9 +29,9 @@ plugins {
     id 'org.spongepowered.mixin' version 'd5f9873'
 }
 
-version = '1.2.0-BETA1'
+version = '1.2.0-BETA1.1'
 group = 'net.wyvest'
-archivesBaseName = 'Wyvtilities'
+archivesBaseName = 'Wyvtilities [1.8.9]'
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 

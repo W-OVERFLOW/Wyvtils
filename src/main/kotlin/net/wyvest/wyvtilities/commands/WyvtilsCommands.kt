@@ -24,15 +24,13 @@ import gg.essential.api.commands.DefaultHandler
 import gg.essential.api.commands.DisplayName
 import gg.essential.api.commands.SubCommand
 import gg.essential.api.utils.Multithreading
-import net.minecraft.util.EnumChatFormatting
-import net.wyvest.wyvtilities.Wyvtilities
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.utils.HypixelUtils
 
 @Suppress("unused")
 object WyvtilsCommands : Command("wyvtilities", true) {
 
-    override val commandAliases = setOf(Alias("wyvtils"), Alias("wytils"), Alias("wyvtil"), Alias("wytil"))
+    override val commandAliases = setOf(Alias("wyvtils"), Alias("wytils"), Alias("wyvtil"), Alias("wytil"), Alias("wyvest")) //dont ask about the wyvest alias
 
     @DefaultHandler
     fun handle() {
