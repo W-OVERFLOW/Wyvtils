@@ -1,8 +1,7 @@
 plugins {
-    id 'fabric-loom' version '0.8-SNAPSHOT'
+    id 'fabric-loom' version '0.9-SNAPSHOT'
     id 'maven-publish'
     id 'org.jetbrains.kotlin.jvm' version '1.5.21'
-    id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
 
 sourceCompatibility = JavaVersion.VERSION_16
@@ -12,8 +11,8 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
-minecraft {
-    refmapName = "mixins.wyvtils.refmap.json"
+loom {
+    mixin.defaultRefmapName = "mixins.wyvtils.refmap.json"
 }
 
 repositories {
@@ -24,12 +23,6 @@ repositories {
         url 'https://maven.terraformersmc.com/releases/'
     }
     maven { url 'https://repo.sk1er.club/repository/maven-releases/' }
-}
-
-configurations {
-    // Creates an extra configuration that extends from `implementation` to be used later as the configuration that shades libraries
-    include
-    modImplementation.extendsFrom include
 }
 
 dependencies {
@@ -44,31 +37,31 @@ dependencies {
         transitive = false
     }
     modImplementation("net.fabricmc:fabric-language-kotlin:1.6.3+kotlin.1.5.21")
-    include('gg.essential:vigilance-1.17-fabric:163+next') {
+    modImplementation include('gg.essential:vigilance-1.17-fabric:163+next') {
         exclude(group: "net.fabricmc.fabric-loader")
         exclude module: 'kotlin-reflect'
         exclude module: 'kotlin-stdlib-jdk8'
     }
-    include('com.electronwill.night-config:toml:3.6.4')
-    include('com.electronwill.night-config:core:3.6.4')
-    include ("gg.essential:elementa-1.17-fabric:359+next") {
+    modImplementation include('com.electronwill.night-config:toml:3.6.4')
+    modImplementation include('com.electronwill.night-config:core:3.6.4')
+    modImplementation include ("gg.essential:elementa-1.17-fabric:359+next") {
         exclude(group: "net.fabricmc.fabric-loader")
         exclude module: 'kotlin-reflect'
         exclude module: 'kotlin-stdlib-jdk8'
     }
     //noinspection GradlePackageUpdate
-    include "org.commonmark:commonmark:0.17.1"
+    modImplementation include ("org.commonmark:commonmark:0.17.1")
     //noinspection GradlePackageUpdate
-    include "org.commonmark:commonmark-ext-gfm-strikethrough:0.17.1"
+    modImplementation include ("org.commonmark:commonmark-ext-gfm-strikethrough:0.17.1")
     //noinspection GradlePackageUpdate
-    include "org.commonmark:commonmark-ext-ins:0.17.1"
+    modImplementation include ("org.commonmark:commonmark-ext-ins:0.17.1")
     //noinspection GradlePackageUpdate
-    include "org.dom4j:dom4j:2.1.1"
-    annotationProcessor ('net.fabricmc:sponge-mixin:0.9.3+mixin.0.8.2') {
+    modImplementation include ("org.dom4j:dom4j:2.1.1")
+    modImplementation annotationProcessor ('net.fabricmc:sponge-mixin:0.9.3+mixin.0.8.2') {
         exclude module: 'launchwrapper'
         exclude module: 'guava'
     }
-    include ("gg.essential:universalcraft-1.17-fabric:156+next") {
+    modImplementation include ("gg.essential:universalcraft-1.17-fabric:156+next") {
         exclude(group: "net.fabricmc.fabric-loader")
         exclude module: 'kotlin-reflect'
         exclude module: 'kotlin-stdlib-jdk8'
@@ -107,31 +100,6 @@ jar {
     from("LICENSE") {
         rename { "${it}_${project.archivesBaseName}"}
     }
-}
-
-tasks.build.dependsOn tasks.shadowJar
-shadowJar {
-    archiveClassifier.set('')
-    configurations = [project.configurations.include]
-    duplicatesStrategy DuplicatesStrategy.EXCLUDE
-
-    exclude 'LICENSE.md'
-    exclude 'pack.mcmeta'
-    exclude 'dummyThing'
-    exclude '**/module-info.class'
-    exclude '*.so'
-    exclude '*.dylib'
-    exclude '*.dll'
-    exclude '*.jnilib'
-    exclude 'ibxm/**'
-    exclude 'com/jcraft/**'
-    exclude 'org/lwjgl/**'
-    exclude 'net/java/**'
-
-    exclude 'META-INF/proguard/**'
-    exclude 'META-INF/maven/**'
-    exclude 'META-INF/versions/**'
-    exclude 'META-INF/com.android.tools/**'
 }
 
 // configure the maven publication
