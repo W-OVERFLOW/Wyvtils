@@ -1,16 +1,12 @@
 {
-  "compatibilityLevel": "JAVA_8",
-  "minVersion": "0.7",
-  "plugin": "net.wyvest.wyvtilities.tweaker.WyvtilsMixinPlugin",
-  "package": "net.wyvest.wyvtilities.mixin",
+  "required": true,
   "refmap": "mixins.wyvtils.refmap.json",
+  "package": "net.wyvest.wyvtilities.mixins",
+  "compatibilityLevel": "JAVA_16",
+  "injectors": {
+    "defaultRequire": 1
+  },
   "mixins": [
-    "AccessorGuiIngame",
-    "MixinGuiIngame",
-    "MixinGuiIngameForge",
-    "MixinGuiIngameForgeHook",
-    "MixinRenderManager",
-    "MixinSoundManager"
-  ],
-  "verbose": true
+    "BossBarHudMixin"
+  ]
 }

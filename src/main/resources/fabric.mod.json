@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "wyvtilities",
+  "version": "${version}",
+  "name": "Wyvtilities",
+  "description": "Utilities, by Wyvest.",
+  "authors": [
+    "Wyvest"
+  ],
+  "contact": {
+    "homepage": "https://wyvest.net/",
+    "issues": "https://github.com/Wyvest/Wyvtilities/issues/",
+    "sources": "https://github.com/Wyvest/Wyvtilities/"
+  },
+  "license": "GNU Lesser General Public License version 3 (LGPLv3)",
+  "icon": "assets/wyvtilities/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "net.wyvest.wyvtilities.Wyvtilities"
+      }
+    ],
+    "modmenu": [
+      "net.wyvest.wyvtilities.config.WyvtilsModMenu"
+    ]
+  },
+  "mixins": [
+    "mixins.wyvtils.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.6",
+    "fabric": "*",
+    "fabric-language-kotlin": ">=1.6.3+kotlin.1.5.21",
+    "minecraft": "1.17.x",
+    "java": ">=16",
+    "fabric-key-binding-api-v1": "*",
+    "modmenu": ">=2.0.0"
+  }
+}

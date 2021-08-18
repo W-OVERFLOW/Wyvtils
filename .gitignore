@@ -1,29 +1,12 @@
-# eclipse
-eclipse
-bin
-*.launch
-.settings
-.metadata
-.classpath
-.project
-
-# idea
-out
-classes
+# Gradle
+.gradle/
+build/
+out/
+# Idea
+.idea/
+*.iml
 *.ipr
 *.iws
-*.iml
-.idea
-
-# gradle
-build
-.gradle
-
-#Netbeans
-.nb-gradle
-.nb-gradle-properties
-
-# other
-run
-.DS_Store
-Thumbs.db
+# Fabric
+run/
+minecraft/
