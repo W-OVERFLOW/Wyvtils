@@ -23,15 +23,17 @@ repositories {
         url 'https://maven.terraformersmc.com/releases/'
     }
     maven { url 'https://repo.sk1er.club/repository/maven-releases/' }
+    maven {
+        url 'http://maven.matthewtgm.xyz/repository/maven-public/'
+        allowInsecureProtocol = true
+    }
 }
 
 dependencies {
-    // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation("com.terraformersmc:modmenu:2.0.4") {
         transitive = false
@@ -44,30 +46,28 @@ dependencies {
     }
     modImplementation include('com.electronwill.night-config:toml:3.6.4')
     modImplementation include('com.electronwill.night-config:core:3.6.4')
-    modImplementation include ("gg.essential:elementa-1.17-fabric:359+next") {
+    modImplementation include("gg.essential:elementa-1.17-fabric:359+next") {
         exclude(group: "net.fabricmc.fabric-loader")
         exclude module: 'kotlin-reflect'
         exclude module: 'kotlin-stdlib-jdk8'
     }
     //noinspection GradlePackageUpdate
-    modImplementation include ("org.commonmark:commonmark:0.17.1")
+    modImplementation include("org.commonmark:commonmark:0.17.1")
     //noinspection GradlePackageUpdate
-    modImplementation include ("org.commonmark:commonmark-ext-gfm-strikethrough:0.17.1")
+    modImplementation include("org.commonmark:commonmark-ext-gfm-strikethrough:0.17.1")
     //noinspection GradlePackageUpdate
-    modImplementation include ("org.commonmark:commonmark-ext-ins:0.17.1")
+    modImplementation include("org.commonmark:commonmark-ext-ins:0.17.1")
     //noinspection GradlePackageUpdate
-    modImplementation include ("org.dom4j:dom4j:2.1.1")
-    modImplementation annotationProcessor ('net.fabricmc:sponge-mixin:0.9.3+mixin.0.8.2') {
+    modImplementation include("org.dom4j:dom4j:2.1.1")
+    modImplementation annotationProcessor('net.fabricmc:sponge-mixin:0.9.3+mixin.0.8.2') {
         exclude module: 'launchwrapper'
         exclude module: 'guava'
     }
-    modImplementation include ("gg.essential:universalcraft-1.17-fabric:156+next") {
+    modImplementation include("gg.essential:universalcraft-1.17-fabric:156+next") {
         exclude(group: "net.fabricmc.fabric-loader")
         exclude module: 'kotlin-reflect'
         exclude module: 'kotlin-stdlib-jdk8'
     }
-    // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
-    // You may need to force-disable transitiveness on them.
 }
 
 processResources {
@@ -79,34 +79,24 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    // ensure that the encoding is set to UTF-8, no matter what the system default is
-    // this fixes some edge cases with special characters not displaying correctly
-    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-    // If Javadoc is generated, this must be specified in that task too.
     it.options.encoding = "UTF-8"
 
-    // Minecraft 1.17 (21w19a) upwards uses Java 16.
     it.options.release = 16
 }
 
 java {
-    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-    // if it is present.
-    // If you remove this line, sources will not be generated.
     withSourcesJar()
 }
 
 jar {
     from("LICENSE") {
-        rename { "${it}_${project.archivesBaseName}"}
+        rename { "${it}_${project.archivesBaseName}" }
     }
 }
 
-// configure the maven publication
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            // add all the jars that should be included when publishing to maven
             artifact(remapJar) {
                 builtBy remapJar
             }
@@ -116,11 +106,6 @@ publishing {
         }
     }
 
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
-        // Notice: This block does NOT have the same function as the block in the top level.
-        // The repositories here will be used for publishing your artifact, not for
-        // retrieving dependencies.
-    }
+
+    repositories {}
 }

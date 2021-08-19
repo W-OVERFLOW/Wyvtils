@@ -35,7 +35,9 @@
     "fabric-language-kotlin": ">=1.6.3+kotlin.1.5.21",
     "minecraft": "1.17.x",
     "java": ">=16",
-    "fabric-key-binding-api-v1": "*",
+    "fabric-key-binding-api-v1": "*"
+  },
+  "recommends": {
     "modmenu": ">=2.0.0"
   }
 }

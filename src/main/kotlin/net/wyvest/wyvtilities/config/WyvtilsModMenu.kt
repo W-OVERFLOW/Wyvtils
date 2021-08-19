@@ -6,7 +6,7 @@ import net.minecraft.client.gui.screen.Screen
 
 class WyvtilsModMenu : ModMenuApi {
 
-    private val screenFactory : ConfigScreenFactory<Screen> = ConfigScreenFactory {
+    private val screenFactory: ConfigScreenFactory<Screen> = ConfigScreenFactory {
         WyvtilsConfig.gui()
     }
 
