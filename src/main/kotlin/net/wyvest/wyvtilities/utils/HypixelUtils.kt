@@ -23,7 +23,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.wyvest.wyvtilities.Wyvtilities
 import net.wyvest.wyvtilities.Wyvtilities.mc
 import xyz.matthewtgm.requisite.events.LocrawReceivedEvent
-import xyz.matthewtgm.requisite.util.ApiHelper
 import xyz.matthewtgm.requisite.util.HypixelHelper
 import java.text.SimpleDateFormat
 import java.util.*
@@ -44,7 +43,7 @@ object HypixelUtils {
         var gexp: String? = null
         val uuid = mc.thePlayer.gameProfile.id.toString().replace("-", "")
         val guildData =
-            Wyvtilities.jsonParser.parse(ApiHelper.getJsonOnline("https://api.slothpixel.me/api/guilds/$uuid")).asJsonObject
+            APIUtil.getJSONResponse("https://api.slothpixel.me/api/guilds/$uuid")
         val guildMembers = guildData["members"].asJsonArray
         for (e in guildMembers) {
             if (e.asJsonObject["uuid"].asString.equals(uuid)) {
@@ -61,7 +60,7 @@ object HypixelUtils {
         var gexp: String? = null
         val uuid = getUUID(username)
         val guildData =
-            Wyvtilities.jsonParser.parse(ApiHelper.getJsonOnline("https://api.slothpixel.me/api/guilds/$uuid")).asJsonObject
+            APIUtil.getJSONResponse("https://api.slothpixel.me/api/guilds/$uuid")
         val guildMembers = guildData["members"].asJsonArray
         for (e in guildMembers) {
             if (e.asJsonObject["uuid"].asString.equals(uuid)) {
@@ -74,11 +73,51 @@ object HypixelUtils {
         return true
     }
 
+    fun getWeeklyGEXP(): Boolean {
+        var gexp: String? = null
+        val uuid = mc.thePlayer.gameProfile.id.toString().replace("-", "")
+        val guildData =
+            APIUtil.getJSONResponse("https://api.slothpixel.me/api/guilds/$uuid")
+        val guildMembers = guildData["members"].asJsonArray
+        for (e in guildMembers) {
+            if (e.asJsonObject["uuid"].asString.equals(uuid)) {
+                var addGEXP = 0
+                for (set in e.asJsonObject["exp_history"].asJsonObject.entrySet()) {
+                    addGEXP += set.value.asInt
+                }
+                gexp = addGEXP.toString()
+                break
+            }
+        }
+        if (gexp == null) return false
+        this.gexp = gexp
+        return true
+    }
+
+    fun getWeeklyGEXP(username: String): Boolean {
+        var gexp: String? = null
+        val uuid = getUUID(username)
+        val guildData =
+            APIUtil.getJSONResponse("https://api.slothpixel.me/api/guilds/$uuid")
+        val guildMembers = guildData["members"].asJsonArray
+        for (e in guildMembers) {
+            if (e.asJsonObject["uuid"].asString.equals(uuid)) {
+                var addGEXP = 0
+                for (set in e.asJsonObject["exp_history"].asJsonObject.entrySet()) {
+                    addGEXP += set.value.asInt
+                }
+                gexp = addGEXP.toString()
+                break
+            }
+        }
+        if (gexp == null) return false
+        this.gexp = gexp
+        return true
+    }
+
     fun getWinstreak(): Boolean {
         val uuid = mc.thePlayer.gameProfile.id.toString().replace("-", "")
-        val playerStats = Wyvtilities.jsonParser.parse(
-            ApiHelper.getJsonOnline("https://api.slothpixel.me/api/players/$uuid")
-        ).asJsonObject["stats"].asJsonObject
+        val playerStats = APIUtil.getJSONResponse("https://api.slothpixel.me/api/players/$uuid")["stats"].asJsonObject
         when (currentGame) {
             HypixelHelper.HypixelLocraw.GameType.BEDWARS -> {
                 try {
@@ -103,9 +142,7 @@ object HypixelUtils {
 
     fun getWinstreak(username: String): Boolean {
         val uuid = getUUID(username)
-        val playerStats = Wyvtilities.jsonParser.parse(
-            ApiHelper.getJsonOnline("https://api.slothpixel.me/api/players/$uuid")
-        ).asJsonObject["stats"].asJsonObject
+        val playerStats = APIUtil.getJSONResponse("https://api.slothpixel.me/api/players/$uuid")["stats"].asJsonObject
         when (currentGame) {
             HypixelHelper.HypixelLocraw.GameType.BEDWARS -> {
                 try {
@@ -130,9 +167,7 @@ object HypixelUtils {
 
     fun getWinstreak(username: String, game: String): Boolean {
         val uuid = getUUID(username)
-        val playerStats = Wyvtilities.jsonParser.parse(
-            ApiHelper.getJsonOnline("https://api.slothpixel.me/api/players/$uuid")
-        ).asJsonObject["stats"].asJsonObject
+        val playerStats = APIUtil.getJSONResponse("https://api.slothpixel.me/api/players/$uuid")["stats"].asJsonObject
         when (game.lowercase(Locale.ENGLISH)) {
             "bedwars" -> {
                 try {
@@ -158,7 +193,7 @@ object HypixelUtils {
     //I really didn't want to use this and instead use one of essential's APIs, but then Mojang released an unannounced API change for the 69th time!
     private fun getUUID(username: String): String? {
         val uuidResponse =
-            Wyvtilities.jsonParser.parse(ApiHelper.getJsonOnline("https://api.mojang.com/users/profiles/minecraft/$username")).asJsonObject
+            APIUtil.getJSONResponse("https://api.mojang.com/users/profiles/minecraft/$username")
         if (uuidResponse.has("error")) {
             Wyvtilities.sendMessage(
                 EnumChatFormatting.RED.toString() + "Failed with error: ${

@@ -54,6 +54,15 @@ object WyvtilsConfig :
     var autoGetGEXP = true
 
     @Property(
+        type = PropertyType.SELECTOR,
+        name = "GEXP Mode",
+        description = "Choose which GEXP to get.",
+        category = "Automatic",
+        options = ["Daily", "Weekly"]
+    )
+    var gexpMode = 0
+
+    @Property(
         type = PropertyType.SWITCH,
         name = "Automatically Check Winstreak",
         description = "Automatically check your winstreak after you win a Hypixel game.",
@@ -68,6 +77,14 @@ object WyvtilsConfig :
         category = "Text"
     )
     var highlightName = false
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Only Highlight In Chat",
+        description = "Makes the name highlight only appear in chat.",
+        category = "Text"
+    )
+    var chatHightlight = false
 
     @Property(
         type = PropertyType.SELECTOR,

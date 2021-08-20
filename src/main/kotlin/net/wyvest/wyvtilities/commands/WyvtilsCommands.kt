@@ -43,16 +43,39 @@ object WyvtilsCommands : Command("wyvtilities", true) {
     }
 
     @SubCommand("gexp", description = "Gets the GEXP of the player specified")
-    fun gexp(@DisplayName("username") username: String?) {
+    fun gexp(@DisplayName("username") username: String?, @DisplayName("type") type: String?) {
         try {
             Multithreading.runAsync {
                 if (username != null) {
-                    if (HypixelUtils.getGEXP(username)) {
-                        EssentialAPI.getNotifications()
-                            .push("Wyvtilities", "$username currently has " + HypixelUtils.gexp + " guild EXP.")
+                    if (type == null) {
+                        if (HypixelUtils.getGEXP(username)) {
+                            EssentialAPI.getNotifications()
+                                .push("Wyvtilities", "$username currently has " + HypixelUtils.gexp + " guild EXP.")
+                        } else {
+                            EssentialAPI.getNotifications()
+                                .push("Wyvtilities", "There was a problem trying to get $username's GEXP.")
+                        }
                     } else {
-                        EssentialAPI.getNotifications()
-                            .push("Wyvtilities", "There was a problem trying to get $username's GEXP.")
+                        if (type == "daily") {
+                            if (HypixelUtils.getGEXP(username)) {
+                                EssentialAPI.getNotifications()
+                                    .push("Wyvtilities", "$username currently has " + HypixelUtils.gexp + " daily guild EXP.")
+                            } else {
+                                EssentialAPI.getNotifications()
+                                    .push("Wyvtilities", "There was a problem trying to get $username's daily GEXP.")
+                            }
+                        } else if (type == "weekly") {
+                            if (HypixelUtils.getWeeklyGEXP(username)) {
+                                EssentialAPI.getNotifications()
+                                    .push("Wyvtilities", "$username currently has " + HypixelUtils.gexp + " weekly guild EXP.")
+                            } else {
+                                EssentialAPI.getNotifications()
+                                    .push("Wyvtilities", "There was a problem trying to get $username's weekly GEXP.")
+                            }
+                        } else {
+                            EssentialAPI.getNotifications()
+                                .push("Wyvtilities", "The type argument was not valid.")
+                        }
                     }
                 } else {
                     if (HypixelUtils.getGEXP()) {

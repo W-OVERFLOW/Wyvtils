@@ -57,7 +57,7 @@ object Wyvtilities {
     var isRegexLoaded: Boolean = false
     const val MODID = "wyvtilities"
     const val MOD_NAME = "Wyvtilities"
-    const val VERSION = "1.2.0-BETA1.1"
+    const val VERSION = "1.2.0-BETA3"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
     val jsonParser = JsonParser()
@@ -160,85 +160,3 @@ object Wyvtilities {
     }
 
 }
-
-/*/
-        private const val PARTY_TALK = "Party > (.*)"
-    private const val PARTY_TALK_HYTILS = "P > (.*)"
-    private const val PARTY_TALK_NO_PARTY = "You are not in a party right now\\."
-    private const val PARTY_TALK_MUTED = "This party is currently muted\\."
-    private const val PARTY_INVITE =
-        "(?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}) invited (?<tags1>(?:\\[[^]]+] ?)*)(?<senderUsername1>[^ ]{1,16}) to the party! They have 60 seconds to accept\\."
-    private const val PARTY_OTHER_LEAVE = "(?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}) has left the party\\."
-    private const val PARTY_OTHER_JOIN = "(?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}) joined the party\\."
-    private const val PARTY_LEAVE = "You left the party\\."
-    private const val PARTY_JOIN = "You have joined (?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16})'s party!"
-    private const val PARTY_DISBANDED =
-        "The party was disbanded because all invites expired and the party was empty"
-    private const val PARTY_INVITE_NOT_ONLINE = "You cannot invite that player since they're not online\\."
-
-    private const val PARTY_HOUSING_WARP =
-        "The party leader, (?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}), warped you to (?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername1>[^ ]{1,16})'s house\\."
-
-    private const val PARTY_SB_WARP = "SkyBlock Party Warp \\([0-9]+ players?\\)"
-    private const val PARTY_WARPED =
-        ". (?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}) warped to your server"
-
-    private const val PARTY_SUMMONED =
-        "You summoned (?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}) to your server\\."
-
-    private const val PARTY_WARP_HOUSING =
-        "The party leader, (?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}), warped you to their house\\."
-
-    private const val PARTY_PRIVATE_ON = "(?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}) enabled Private Game"
-
-    private const val PARTY_PRIVATE_OFF = "(?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}) disabled Private Game"
-
-    private const val PARTY_MUTE_ON = "The party is now muted\\."
-
-    private const val PARTY_MUTE_OFF = "The party is no longer muted\\."
-
-    private const val PARTY_NOOFFLINE = "There are no offline players to remove\\."
-
-    private const val PARTY_KICK = "(?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}) has been removed from the party\\."
-
-    private const val PARTY_TRANSFER =
-        "The party was transferred to (?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}) by (?<tags>(?:\\[[^]]+] ?)*)(?<sender1Username>[^ ]{1,16})"
-
-    private const val PARTY_PROMOTE =
-        "(?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}) has promoted (?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername1>[^ ]{1,16}) to Party Leader"
-
-    private const val PARTY_PROMOTE_MODERATOR =
-        "(?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}) has promoted (?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername1>[^ ]{1,16}) to Party Moderator"
-    private const val PARTY_DEMOTE_MODERATOR = "(?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}) is now a Party Moderator"
-
-    private const val PARTY_DEMOTE_MEMBER =
-        "(?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}) has demoted (?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername1>[^ ]{1,16}) to Party Member"
-
-    private const val PARTY_DEMOTE_SELF = "You can't demote yourself!"
-
-    private const val PARTY_LIST_NUM = "Party Members \\([0-9]+\\)"
-
-    private const val PARTY_LIST_LEADER = "Party Leader: (?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16})" //works
-
-    private const val PARTY_LIST_MEMBERS =
-        "Party Members: (?:(?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}) . )+"
-
-    private const val PARTY_LIST_MODS =
-        "Party Moderators: (?:(?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}) . )+" //works
-
-    private const val PARTY_INVITE_EXPIRE =
-        "The party invite to (?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}) has expired" //works
-
-    private const val PARTY_ALLINVITE_OFF = "(?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}) disabled All Invite" //works
-
-    private const val PARTY_ALLINVITE_ON = "(?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}) enabled All Invite" //works
-
-    private const val PARTY_INVITES_OFF = "You cannot invite that player\\." //works
-
-    private const val PARTY_INVITE_NOPERMS = "You are not allowed to invite players\\." //works
-
-    private const val PARTY_DC_LEADER =
-        "The party leader, (?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}) has disconnected, they have 5 minutes to rejoin before the party is disbanded\\."
-    private const val PARTY_DC_OTHER =
-        "(?<tags>(?:\\[[^]]+] ?)*)(?<senderUsername>[^ ]{1,16}) has disconnected, they have 5 minutes to rejoin before they are removed from the party\\."
-         */

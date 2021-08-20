@@ -29,7 +29,7 @@ plugins {
     id 'org.spongepowered.mixin' version 'd5f9873'
 }
 
-version = '1.2.0-BETA1.1'
+version = '1.2.0-BETA3'
 group = 'net.wyvest'
 archivesBaseName = 'Wyvtilities [1.8.9]'
 
@@ -64,6 +64,17 @@ configurations {
     implementation.extendsFrom include
 }
 
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.sk1er.club/repository/maven-releases/' }
+    maven { url 'https://jitpack.io/' }
+    maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
+    maven {
+        url 'http://maven.matthewtgm.xyz/repository/maven-public/'
+        allowInsecureProtocol = true
+    }
+}
+
 dependencies {
     // Libraries
     provided 'xyz.matthewtgm:Requisite:1.1.1'
@@ -74,7 +85,6 @@ dependencies {
         transitive = false
     }
     provided 'gg.essential:essential-1.8.9-forge:1300'
-
 
     annotationProcessor 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
 }
@@ -139,13 +149,6 @@ shadowJar {
     exclude 'META-INF/com.android.tools/**'
 
     exclude 'fabric.mod.json'
-}
-
-repositories {
-    mavenCentral()
-    maven { url 'https://repo.sk1er.club/repository/maven-releases/' }
-    maven { url 'https://jitpack.io/' }
-    maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
 }
 
 mixin {

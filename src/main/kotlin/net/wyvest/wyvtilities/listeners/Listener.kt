@@ -22,7 +22,9 @@ import gg.essential.api.EssentialAPI
 import gg.essential.api.utils.Multithreading
 import gg.essential.universal.ChatColor
 import net.minecraft.client.audio.PositionedSound
+import net.minecraft.util.ChatComponentText
 import net.minecraft.util.EnumChatFormatting
+import net.minecraft.util.IChatComponent
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.client.event.sound.PlaySoundEvent
 import net.minecraftforge.event.world.WorldEvent
@@ -34,9 +36,7 @@ import net.wyvest.wyvtilities.Wyvtilities.mc
 import net.wyvest.wyvtilities.Wyvtilities.titleKeybind
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.mixin.AccessorGuiIngame
-import net.wyvest.wyvtilities.utils.HypixelUtils
-import net.wyvest.wyvtilities.utils.containsAny
-import net.wyvest.wyvtilities.utils.equalsAny
+import net.wyvest.wyvtilities.utils.*
 import org.lwjgl.input.Keyboard
 import org.lwjgl.input.Mouse
 import xyz.matthewtgm.requisite.events.BetterInputEvent
@@ -54,9 +54,9 @@ object Listener {
     var color: String = ""
     var changeTextColor = false
 
-    @SubscribeEvent(receiveCanceled = true)
+    @SubscribeEvent
     fun onChatReceivedEvent(e: ClientChatReceivedEvent) {
-        val unformattedText = EnumChatFormatting.getTextWithoutFormattingCodes(e.message.unformattedText)
+        val unformattedText = e.message.unformattedText.withoutFormattingCodes()
         if ((WyvtilsConfig.autoGetGEXP || WyvtilsConfig.autoGetWinstreak) && Wyvtilities.isRegexLoaded && ServerHelper.hypixel()) {
             if (!victoryDetected) {
                 for (trigger in Wyvtilities.autoGGRegex) {
@@ -89,19 +89,29 @@ object Listener {
                 }
             }
             if (!victoryDetected) {
-                if (EnumChatFormatting.getTextWithoutFormattingCodes((mc.ingameGUI as AccessorGuiIngame).displayedTitle)
+                if ((mc.ingameGUI as AccessorGuiIngame).displayedTitle.withoutFormattingCodes()
                         .lowercase(Locale.ENGLISH).equalsAny("victory!", "game over!"))
                 {
                     victoryDetected = true
                     removeTitle = true
                     Multithreading.runAsync {
                         if (WyvtilsConfig.autoGetGEXP) {
-                            if (HypixelUtils.getGEXP()) {
-                                EssentialAPI.getNotifications()
-                                    .push("Wyvtilities", "You currently have " + HypixelUtils.gexp + " guild EXP.")
+                            if (WyvtilsConfig.gexpMode == 0) {
+                                if (HypixelUtils.getGEXP()) {
+                                    EssentialAPI.getNotifications()
+                                        .push("Wyvtilities", "You currently have " + HypixelUtils.gexp + " daily guild EXP.")
+                                } else {
+                                    EssentialAPI.getNotifications()
+                                        .push("Wyvtilities", "There was a problem trying to get your daily GEXP.")
+                                }
                             } else {
-                                EssentialAPI.getNotifications()
-                                    .push("Wyvtilities", "There was a problem trying to get your GEXP.")
+                                if (HypixelUtils.getWeeklyGEXP()) {
+                                    EssentialAPI.getNotifications()
+                                        .push("Wyvtilities", "You currently have " + HypixelUtils.gexp + " weekly guild EXP.")
+                                } else {
+                                    EssentialAPI.getNotifications()
+                                        .push("Wyvtilities", "There was a problem trying to get your weekly GEXP.")
+                                }
                             }
                         }
                         if (WyvtilsConfig.autoGetWinstreak) {
@@ -119,6 +129,11 @@ object Listener {
                     return
                 }
             }
+        }
+        if (WyvtilsConfig.chatHightlight && e.message.formattedText != null && mc.theWorld != null && e.message.formattedText.contains(mc.thePlayer.gameProfile.name) && WyvtilsConfig.highlightName && !changeTextColor) {
+            mc.ingameGUI.chatGUI.printChatMessage(
+                replaceMessage(e.message, mc.thePlayer.name, color + mc.thePlayer.name + EnumChatFormatting.RESET)
+            )
         }
     }
 
@@ -184,28 +199,9 @@ object Listener {
 
     @SubscribeEvent
     fun onStringRendered(e: FontRendererEvent.RenderEvent) {
-        if (e.text != null && mc.theWorld != null && e.text.contains(mc.thePlayer.gameProfile.name) && WyvtilsConfig.highlightName && !changeTextColor) {
+        if (!WyvtilsConfig.chatHightlight && e.text != null && mc.theWorld != null && e.text.contains(mc.thePlayer.gameProfile.name) && WyvtilsConfig.highlightName && !changeTextColor) {
             if (e.text.containsAny("§", "\u00A7")) {
-                var number = -1
-                var code: String? = null
-                val array = e.text.split(Regex.fromLiteral(mc.thePlayer.gameProfile.name)).toMutableList()
-                for (split in array) {
-                    number += 1
-                    if (number % 2 == 0 || number == 0) {
-                        val subString = split.substringAfterLast("\u00A7", null.toString())
-                        code = if (subString != "null") {
-                            subString.first().toString()
-                        } else {
-                            null
-                        }
-                        continue
-                    } else {
-                        if (code != null) {
-                            array[number] = "\u00A7$code" + array[number]
-                        }
-                    }
-                }
-                e.text = StringHelper.join(array, color + mc.thePlayer.gameProfile.name + EnumChatFormatting.RESET)
+                e.text = smartReplaceStringWithName(e.text)
             } else {
                 e.text = e.text.replace(
                     mc.thePlayer.gameProfile.name,
@@ -266,5 +262,48 @@ object Listener {
             3 -> mc.thePlayer.sendChatMessage("/chat o")
             else -> return
         }
+    }
+
+    private fun replaceMessage(
+        message: IChatComponent,
+        username: String,
+        replacement: String
+    ): ChatComponentText {
+        val originalText = message.unformattedTextForChat
+        val copy = ChatComponentText(originalText).setChatStyle(message.chatStyle) as ChatComponentText
+        for (sibling in message.siblings) {
+            copy.appendSibling(
+                ChatComponentText(
+                    sibling.unformattedTextForChat.replace(
+                        username,
+                        replacement
+                    )
+                ).setChatStyle(sibling.chatStyle)
+            )
+        }
+        return copy
+    }
+
+    private fun smartReplaceStringWithName(string : String) : String {
+        var number = -1
+        var code: String? = null
+        val array = string.split(Regex.fromLiteral(mc.thePlayer.gameProfile.name)).toMutableList()
+        for (split in array) {
+            number += 1
+            if (number % 2 == 0 || number == 0) {
+                val subString = split.substringAfterLast("\u00A7", null.toString())
+                code = if (subString != "null") {
+                    subString.first().toString()
+                } else {
+                    null
+                }
+                continue
+            } else {
+                if (code != null) {
+                    array[number] = "\u00A7$code" + array[number]
+                }
+            }
+        }
+        return StringHelper.join(array, color + mc.thePlayer.gameProfile.name + EnumChatFormatting.RESET)
     }
 }
