@@ -134,7 +134,7 @@ object Listener {
             mc.ingameGUI.chatGUI.printChatMessage(
                 replaceMessage(e.message, mc.thePlayer.name, color + mc.thePlayer.name + EnumChatFormatting.RESET)
             )
-            event.isCanceled = true
+            e.isCanceled = true
         }
     }
 
