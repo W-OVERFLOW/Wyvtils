@@ -7,6 +7,7 @@ import gg.essential.vigilance.data.PropertyType
 import net.minecraft.client.MinecraftClient
 import net.wyvest.wyvtilities.gui.ActionBarGui
 import net.wyvest.wyvtilities.gui.BossBarGui
+import net.wyvest.wyvtilities.gui.SidebarGui
 import java.awt.Color
 import java.io.File
 
@@ -231,7 +232,7 @@ object WyvtilsConfig : Vigilant(
         description = "Don't render the hitbox if the player's hitbox is you."
     )
     var disableForSelf = false
-/*/
+
     @Property(
         type = PropertyType.COLOR,
         name = "Hitbox Color",
@@ -281,6 +282,93 @@ object WyvtilsConfig : Vigilant(
     )
     var hitboxLineOfSightColor: Color = Color(255, 0, 0, 255)
 
- */
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Sidebar",
+        category = "Sidebar",
+        description = "Toggle the sidebar from rendering."
+    )
+    var sidebar = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Sidebar Text Shadow",
+        category = "Sidebar",
+        description = "Toggle the sidebar text's shadow from rendering."
+    )
+    var sidebarTextShadow = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Score Points",
+        category = "Sidebar",
+        description = "Toggle the sidebar score points (aka red numbers) from rendering."
+    )
+    var sidebarScorePoints = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Background",
+        category = "Sidebar",
+        description = "Toggle the background from rendering."
+    )
+    var sidebarBackground = true
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Sidebar Background Color",
+        category = "Sidebar",
+        description = "Change the text color for the sidebar."
+    )
+    var sidebarBackgroundColor: Color = Color(0, 0, 0, 50)
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Sidebar Position",
+        category = "Sidebar",
+        description = "Toggle the sidebar position editor."
+    )
+    var sidebarPosition = false
+
+    @Property(
+        type = PropertyType.BUTTON,
+        name = "Sidebar Editor",
+        description = "Change the position of the sidebar.",
+        category = "Sidebar"
+    )
+    fun openSidebarGui() {
+        if (sidebarPosition) MinecraftClient.getInstance().setScreen(SidebarGui(gui()))
+    }
+
+    @Property(
+        type = PropertyType.PERCENT_SLIDER,
+        name = "Sidebar Scale",
+        description = "Set the scale for the sidebar.",
+        category = "Sidebar"
+    )
+    var sidebarScale = 1.0F
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Sidebar X",
+        description = "X",
+        category = "Sidebar",
+        hidden = true
+    )
+    var sidebarX: Int = 0
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Sidebar Y",
+        description = "Y",
+        category = "Sidebar",
+        hidden = true
+    )
+    var sidebarY: Int = 12
+
+    fun markAndWrite() {
+        markDirty()
+        writeData()
+    }
 
 }

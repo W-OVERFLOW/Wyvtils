@@ -13,7 +13,7 @@ import java.io.File
 
 @Suppress("unused")
 object Wyvtilities : ClientModInitializer {
-    var configInitialized = false
+
     private val keyBinding: KeyBinding = KeyBindingHelper.registerKeyBinding(
         KeyBinding(
             "key.wyvtilities.keybind", // The translation key of the keybinding's name
@@ -28,7 +28,6 @@ object Wyvtilities : ClientModInitializer {
             File(File(FabricLoader.getInstance().configDir.toFile(), "Wyvtilities"), "1.17.1").mkdirs()
         }
         WyvtilsConfig.initialize()
-        configInitialized = true
         ClientTickEvents.END_CLIENT_TICK.register {
             while (keyBinding.wasPressed()) {
                 it.setScreen(WyvtilsConfig.gui())

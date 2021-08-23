@@ -76,8 +76,7 @@ class ActionBarGui(private var parent: Screen?) : Screen(Text.of("Wyvtilities"))
 
 
     override fun onClose() {
-        WyvtilsConfig.markDirty()
-        WyvtilsConfig.writeData()
+        WyvtilsConfig.markAndWrite()
         MinecraftClient.getInstance().setScreen(parent)
         parent = null
     }
