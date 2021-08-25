@@ -133,9 +133,21 @@ object Listener {
             }
         }
         if (WyvtilsConfig.chatHightlight && e.message.formattedText != null && mc.theWorld != null && e.message.formattedText.contains(mc.thePlayer.gameProfile.name) && WyvtilsConfig.highlightName && !changeTextColor) {
-            mc.ingameGUI.chatGUI.printChatMessage(
-                replaceMessage(e.message, mc.thePlayer.name, color + mc.thePlayer.name + EnumChatFormatting.RESET)
-            )
+            if (e.message is ChatComponentText) {
+                mc.ingameGUI.chatGUI.printChatMessage(
+                    replaceMessage(e.message, mc.thePlayer.name, color + mc.thePlayer.name + EnumChatFormatting.RESET)
+                )
+            } else {
+                mc.ingameGUI.chatGUI.printChatMessage(
+                    ChatComponentText(
+                        e.message.formattedText.replace(
+                            mc.thePlayer.name,
+                            color + mc.thePlayer.name + EnumChatFormatting.RESET.toString(),
+                            true
+                        )
+                    )
+                )
+            }
             e.isCanceled = true
         }
     }

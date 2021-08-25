@@ -75,6 +75,8 @@ dependencies {
     // Libraries
     provided 'xyz.matthewtgm:Requisite:1.1.1'
     include 'com.github.W-OVERFLOW:RequisiteEssentialLoader:7a4eb4eeb7'
+    implementation ('xyz.matthewtgm:RequisiteLaunchwrapper:1.1')
+    implementation ('gg.essential:loader-launchwrapper:1.1.0')
     provided 'gg.essential:essential-1.8.9-forge:1318'
 
     annotationProcessor 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
