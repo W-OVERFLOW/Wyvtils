@@ -20,11 +20,11 @@ class ActionBarGui(private var parent: Screen?) : Screen(Text.of("Wyvtilities"))
     private var prevY = 0
     private var actionBarDragging = false
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         updatePos(mouseX, mouseY)
         super.render(matrices, mouseX, mouseY, delta)
         client!!.profiler.push("overlayGuiMessage")
-        matrices!!.push()
+        matrices.push()
         RenderSystem.enableBlend()
         RenderSystem.defaultBlendFunc()
         this.drawTextBackground(matrices, textRenderer)

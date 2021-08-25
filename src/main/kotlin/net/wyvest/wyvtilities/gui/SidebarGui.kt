@@ -15,11 +15,11 @@ class SidebarGui(private var parent: Screen?) : Screen(Text.of("Wyvtilities")) {
     private var prevY = 0
     private var sidebarDragging = false
 
-    override fun render(matrices: MatrixStack?, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         updatePos(mouseX, mouseY)
         super.render(matrices, mouseX, mouseY, delta)
         client!!.profiler.push("sidebarGui")
-        matrices!!.push()
+        matrices.push()
         val iHaveNoIdeaWhatToNameThisFloat = sidebarScale - 1.0f
         matrices.translate(
             (-sidebarX * iHaveNoIdeaWhatToNameThisFloat).toDouble(),

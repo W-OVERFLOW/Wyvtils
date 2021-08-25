@@ -14,6 +14,9 @@ import java.io.File
 @Suppress("unused")
 object Wyvtilities : ClientModInitializer {
 
+    private val modDir = File(File(File(FabricLoader.getInstance().configDir.toFile(), "Wyvest"), "Wyvtilities"), "1.17.1")
+    lateinit var jarFile: File
+
     private val keyBinding: KeyBinding = KeyBindingHelper.registerKeyBinding(
         KeyBinding(
             "key.wyvtilities.keybind", // The translation key of the keybinding's name
@@ -24,9 +27,10 @@ object Wyvtilities : ClientModInitializer {
     )
 
     override fun onInitializeClient() {
-        if (!File(File(FabricLoader.getInstance().configDir.toFile(), "Wyvtilities"), "1.17.1").exists()) {
-            File(File(FabricLoader.getInstance().configDir.toFile(), "Wyvtilities"), "1.17.1").mkdirs()
+        if (!File(File(File(FabricLoader.getInstance().configDir.toFile(), "Wyvest"), "Wyvtilities"), "1.17.1").exists()) {
+            File(File(File(FabricLoader.getInstance().configDir.toFile(), "Wyvest"), "Wyvtilities"), "1.17.1").mkdirs()
         }
+        jarFile = File(javaClass.protectionDomain.codeSource.location.toURI())
         WyvtilsConfig.initialize()
         ClientTickEvents.END_CLIENT_TICK.register {
             while (keyBinding.wasPressed()) {
