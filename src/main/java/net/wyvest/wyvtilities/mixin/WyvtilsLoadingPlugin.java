@@ -28,7 +28,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URI;
-import java.net.URL;
 import java.util.Map;
 
 /**
@@ -94,16 +93,6 @@ public class WyvtilsLoadingPlugin implements IFMLLoadingPlugin {
             }
         });
 
-        Icon icon = null;
-        try {
-            URL url = WyvtilsLoadingPlugin.class.getResource("/assets/wyvtilities/wyvtilities.png");
-            if (url != null) {
-                icon = new ImageIcon(Toolkit.getDefaultToolkit().createImage(url).getScaledInstance(50, 50, Image.SCALE_DEFAULT));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         JButton close = new JButton("Close");
         close.addMouseListener(new MouseAdapter() {
             @Override
@@ -119,7 +108,7 @@ public class WyvtilsLoadingPlugin implements IFMLLoadingPlugin {
                 "Wyvtilities Error",
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.ERROR_MESSAGE,
-                icon,
+                null,
                 options,
                 options[0]
         );
