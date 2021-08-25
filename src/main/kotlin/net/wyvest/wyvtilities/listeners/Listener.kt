@@ -53,6 +53,7 @@ object Listener {
     private var victoryDetected = false
     var color: String = ""
     var changeTextColor = false
+    private var titleRegex = Regex("(.*) wins(.*)")
 
     @SubscribeEvent
     fun onChatReceivedEvent(e: ClientChatReceivedEvent) {
@@ -90,7 +91,8 @@ object Listener {
             }
             if (!victoryDetected) {
                 if ((mc.ingameGUI as AccessorGuiIngame).displayedTitle.withoutFormattingCodes()
-                        .lowercase(Locale.ENGLISH).equalsAny("victory!", "game over!"))
+                        .lowercase(Locale.ENGLISH).equalsAny("victory!", "game over!") || (mc.ingameGUI as AccessorGuiIngame).displayedTitle.withoutFormattingCodes()
+                        .lowercase(Locale.ENGLISH).matches(titleRegex))
                 {
                     victoryDetected = true
                     removeTitle = true

@@ -47,19 +47,19 @@ class DownloadConfirmGui(private val parent: GuiScreen?) : GuiScreen() {
                 Multithreading.runAsync {
                     if (Updater.download(
                             updateUrl,
-                            File("mods/Wyvtilities-${Updater.latestTag.substringAfter("v")}.jar")
+                            File("mods/${Wyvtilities.MOD_NAME} [1.8.9]-${Updater.latestTag.substringAfter("v")}.jar")
                         ) && Updater.download(
-                            "https://github.com/Wyvest/WyvtilitiesDeleter/releases/download/v1.1/WyvtilitiesDeleter-1.1.jar",
-                            File("config/Wyvtilities/WyvtilitiesDeleter-1.1.jar")
+                            "https://github.com/Wyvest/Deleter/releases/download/v1.2/Deleter-1.2.jar",
+                            File("config/Wyvest/Deleter-1.2.jar")
                         )
                     ) {
                         EssentialAPI.getNotifications()
-                            .push("Wyvtilities", "The ingame updater has successfully installed the newest version.")
+                            .push(Wyvtilities.MOD_NAME, "The ingame updater has successfully installed the newest version.")
                         Updater.addShutdownHook()
                         shouldUpdate = false
                     } else {
                         EssentialAPI.getNotifications().push(
-                            "Wyvtilities",
+                            Wyvtilities.MOD_NAME,
                             "The ingame updater has NOT installed the newest version as something went wrong."
                         )
                     }
@@ -81,7 +81,7 @@ class DownloadConfirmGui(private val parent: GuiScreen?) : GuiScreen() {
         GlStateManager.scale(2f, 2f, 0f)
         drawCenteredString(
             fontRendererObj,
-            EnumChatFormatting.DARK_PURPLE.toString() + "Wyvtilities",
+            EnumChatFormatting.DARK_PURPLE.toString() + Wyvtilities.MOD_NAME,
             width / 4,
             3,
             -1

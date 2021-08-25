@@ -40,7 +40,7 @@ import java.io.File
 @Suppress("unused")
 object WyvtilsConfig :
     Vigilant(
-        File("./config/Wyvtilities/wyvtilities.toml"),
+        File("config/Wyvest/Wyvtilities/wyvtilities.toml"),
         "${EnumChatFormatting.DARK_PURPLE}Wyvtilities",
         sortingBehavior = ConfigSorting
     ) {

@@ -57,7 +57,7 @@ object Wyvtilities {
     var isRegexLoaded: Boolean = false
     const val MODID = "wyvtilities"
     const val MOD_NAME = "Wyvtilities"
-    const val VERSION = "1.2.0-BETA4"
+    const val VERSION = "1.2.0-BETA5"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
     val jsonParser = JsonParser()
@@ -65,7 +65,7 @@ object Wyvtilities {
 
     lateinit var autoGGRegex: MutableList<Regex>
 
-    val modDir = File(File(mc.mcDataDir, "config"), "Wyvtilities")
+    private val modDir = File(File(File(mc.mcDataDir, "config"), "Wyvest"), "Wyvtilities")
 
     @JvmField
     var isConfigInitialized = false

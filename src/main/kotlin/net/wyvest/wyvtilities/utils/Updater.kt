@@ -33,7 +33,6 @@ import org.apache.http.client.HttpClient
 import org.apache.http.client.config.RequestConfig
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.HttpClientBuilder
-import xyz.matthewtgm.requisite.util.ApiHelper
 import java.awt.Desktop
 import java.io.File
 import java.io.FileOutputStream
@@ -50,9 +49,9 @@ object Updater {
      * https://github.com/My-Name-Is-Jeff/SimpleToggleSprint/blob/1.8.9/LICENSE
      */
     fun update() {
-        CoroutineScope(Dispatchers.IO + CoroutineName("Wyvtilities-UpdateChecker")).launch {
+        CoroutineScope(Dispatchers.IO + CoroutineName("${Wyvtilities.MOD_NAME}-UpdateChecker")).launch {
             val latestRelease =
-                Wyvtilities.jsonParser.parse(ApiHelper.getJsonOnline("https://api.github.com/repos/Wyvest/Wyvtilities/releases/latest")).asJsonObject
+                APIUtil.getJSONResponse("https://api.github.com/repos/Wyvest/${Wyvtilities.MODID}/releases/latest")
             latestTag = latestRelease.get("tag_name").asString
 
             val currentVersion = DefaultArtifactVersion(Wyvtilities.VERSION.substringBefore("-"))
@@ -65,7 +64,7 @@ object Updater {
             }
             if (updateUrl.isNotEmpty()) {
                 EssentialAPI.getNotifications()
-                    .push("Mod Update", "Wyvtilities $latestTag is available!\nClick here to download it!", 5f) {
+                    .push("Mod Update", "${Wyvtilities.MOD_NAME} $latestTag is available!\nClick here to download it!", 5f) {
                         EssentialAPI.getGuiUtil().openScreen(DownloadConfirmGui(mc.currentScreen))
                     }
                 shouldUpdate = true
@@ -106,7 +105,7 @@ object Updater {
      */
     fun addShutdownHook() {
         EssentialAPI.getShutdownHookUtil().register(Thread {
-            println("Deleting old Wyvtilities jar file...")
+            println("Deleting old ${Wyvtilities.MOD_NAME} jar file...")
             try {
                 val runtime = getJavaRuntime()
                 if (Util.getOSType() == Util.EnumOS.OSX) {
@@ -114,7 +113,7 @@ object Updater {
                     Desktop.getDesktop().open(Wyvtilities.jarFile.parentFile)
                 }
                 println("Using runtime $runtime")
-                val file = File("config/Wyvtilities/WyvtilitiesDeleter.jar")
+                val file = File("config/Wyvest/Deleter-1.2.jar")
                 println("\"$runtime\" -jar \"${file.absolutePath}\" \"${Wyvtilities.jarFile.absolutePath}\"")
                 Runtime.getRuntime()
                     .exec("\"$runtime\" -jar \"${file.absolutePath}\" \"${Wyvtilities.jarFile.absolutePath}\"")

@@ -19,7 +19,7 @@
 plugins {
     // Languages
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.5.21'
+    id 'org.jetbrains.kotlin.jvm' version '1.5.30'
 
     // Build
     id 'com.github.johnrengelman.shadow' version '6.1.0'
@@ -29,7 +29,7 @@ plugins {
     id 'org.spongepowered.mixin' version 'd5f9873'
 }
 
-version = '1.2.0-BETA4'
+version = '1.2.0-BETA5'
 group = 'net.wyvest'
 archivesBaseName = 'Wyvtilities [1.8.9]'
 
@@ -54,7 +54,7 @@ minecraft {
     makeObfSourceJar = false
 
     clientJvmArgs += '-Dfml.coreMods.load=net.wyvest.wyvtilities.mixin.WyvtilsLoadingPlugin'
-    clientRunArgs += '--tweakClass net.wyvest.wyvtilities.mixin.RequisiteEssentialTweaker'
+    clientRunArgs += '--tweakClass net.wyvest.requisiteessentialloader.RequisiteEssentialTweaker'
     clientRunArgs += '--mixin mixins.wyvtils.json'
 }
 
@@ -69,22 +69,13 @@ repositories {
     maven { url 'https://repo.sk1er.club/repository/maven-releases/' }
     maven { url 'https://jitpack.io/' }
     maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
-    maven {
-        url 'http://maven.matthewtgm.xyz/repository/maven-public/'
-        allowInsecureProtocol = true
-    }
 }
 
 dependencies {
     // Libraries
     provided 'xyz.matthewtgm:Requisite:1.1.1'
-    include('xyz.matthewtgm:RequisiteLaunchwrapper:1.1') {
-        transitive = false
-    }
-    include('gg.essential:loader-launchwrapper:1.1.0') {
-        transitive = false
-    }
-    provided 'gg.essential:essential-1.8.9-forge:1300'
+    include 'com.github.W-OVERFLOW:RequisiteEssentialLoader:7a4eb4eeb7'
+    provided 'gg.essential:essential-1.8.9-forge:1318'
 
     annotationProcessor 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
 }
@@ -96,7 +87,7 @@ jar {
             'FMLCorePluginContainsFMLMod': true,
             'ForceLoadAsMod': true,
             'MixinConfigs': 'mixins.wyvtils.json',
-            'TweakClass': 'net.wyvest.wyvtilities.mixin.RequisiteEssentialTweaker',
+            'TweakClass': 'net.wyvest.requisiteessentialloader.RequisiteEssentialTweaker',
             'TweakOrder': '0'
     )
 
