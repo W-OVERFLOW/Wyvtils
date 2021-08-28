@@ -23,9 +23,7 @@ import gg.essential.api.EssentialAPI
 import gg.essential.api.utils.Multithreading
 import gg.essential.universal.ChatColor
 import net.minecraft.client.Minecraft
-import net.minecraft.client.settings.KeyBinding
 import net.minecraft.util.EnumChatFormatting
-import net.minecraftforge.fml.client.registry.ClientRegistry
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
@@ -37,7 +35,6 @@ import net.wyvest.wyvtilities.utils.HypixelUtils
 import net.wyvest.wyvtilities.utils.Updater
 import net.wyvest.wyvtilities.utils.equalsAny
 import net.wyvest.wyvtilities.utils.startsWithAny
-import org.lwjgl.input.Keyboard
 import xyz.matthewtgm.requisite.util.ApiHelper
 import xyz.matthewtgm.requisite.util.ChatHelper
 import xyz.matthewtgm.requisite.util.ForgeHelper
@@ -74,8 +71,10 @@ object Wyvtilities {
         ChatHelper.sendMessage(EnumChatFormatting.DARK_PURPLE.toString() + "[Wyvtilities] ", message)
     }
 
+    /*/
     val chatKeybind = KeyBinding("Chat Swapper", Keyboard.KEY_V, "Wyvtilities")
     val titleKeybind = KeyBinding("Clear Title", Keyboard.KEY_Z, "Wyvtilities")
+     */
 
     @Mod.EventHandler
     private fun onFMLPreInitialization(event: FMLPreInitializationEvent) {
@@ -124,8 +123,10 @@ object Wyvtilities {
                     .push("Wyvtilities", "Wyvtilities failed to get regexes required for the Auto Get GEXP feature!")
             }
         }
+        /*/
         ClientRegistry.registerKeyBinding(chatKeybind)
         ClientRegistry.registerKeyBinding(titleKeybind)
+         */
     }
 
     @Mod.EventHandler

@@ -24,6 +24,8 @@ import gg.essential.api.commands.DefaultHandler
 import gg.essential.api.commands.DisplayName
 import gg.essential.api.commands.SubCommand
 import gg.essential.api.utils.Multithreading
+import net.minecraft.util.EnumChatFormatting
+import net.wyvest.wyvtilities.Wyvtilities
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.utils.HypixelUtils
 
@@ -42,8 +44,32 @@ object WyvtilsCommands : Command("wyvtilities", true) {
         EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
     }
 
+    @SubCommand("setkey", description = "Sets the API key for Wyvtils.")
+    fun setKey(@DisplayName("api key") apiKey: String) {
+        Multithreading.runAsync {
+            try {
+                if (HypixelUtils.isValidKey(apiKey)
+                ) {
+                    WyvtilsConfig.apiKey = apiKey
+                    WyvtilsConfig.markDirty()
+                    WyvtilsConfig.writeData()
+                    Wyvtilities.sendMessage(EnumChatFormatting.GREEN.toString() + "Saved API key successfully!")
+                } else {
+                    Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "Invalid API key! Please try again.")
+                }
+            } catch (ex: Throwable) {
+                Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "Invalid API key! Please try again.")
+                ex.printStackTrace()
+            }
+        }
+    }
+
     @SubCommand("gexp", description = "Gets the GEXP of the player specified")
     fun gexp(@DisplayName("username") username: String?, @DisplayName("type") type: String?) {
+        if (WyvtilsConfig.apiKey.isEmpty() || !HypixelUtils.isValidKey(WyvtilsConfig.apiKey)) {
+            Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "You need to provide a valid API key to run this command! Type /api new to autoset a key.")
+            return
+        }
         try {
             Multithreading.runAsync {
                 if (username != null) {
@@ -94,6 +120,10 @@ object WyvtilsCommands : Command("wyvtilities", true) {
 
     @SubCommand("winstreak", description = "Gets the winstreak of the player specified")
     fun winstreak(@DisplayName("username") username: String?, @DisplayName("gamemode") gamemode: String?) {
+        if (WyvtilsConfig.apiKey.isEmpty() || !HypixelUtils.isValidKey(WyvtilsConfig.apiKey)) {
+            Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "You need to provide a valid API key to run this command! Type /api new to autoset a key.")
+            return
+        }
         try {
             Multithreading.runAsync {
                 if (username != null) {

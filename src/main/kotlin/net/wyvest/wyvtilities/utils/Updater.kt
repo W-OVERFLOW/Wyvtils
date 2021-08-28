@@ -51,7 +51,7 @@ object Updater {
     fun update() {
         CoroutineScope(Dispatchers.IO + CoroutineName("${Wyvtilities.MOD_NAME}-UpdateChecker")).launch {
             val latestRelease =
-                APIUtil.getJSONResponse("https://api.github.com/repos/Wyvest/${Wyvtilities.MODID}/releases/latest")
+                APIUtil.getJSONResponse("https://api.github.com/repos/W-OVERFLOW/${Wyvtilities.MODID}/releases/latest")
             latestTag = latestRelease.get("tag_name").asString
 
             val currentVersion = DefaultArtifactVersion(Wyvtilities.VERSION.substringBefore("-"))

@@ -31,15 +31,13 @@ import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.wyvest.wyvtilities.Wyvtilities
-import net.wyvest.wyvtilities.Wyvtilities.chatKeybind
 import net.wyvest.wyvtilities.Wyvtilities.mc
-import net.wyvest.wyvtilities.Wyvtilities.titleKeybind
 import net.wyvest.wyvtilities.config.WyvtilsConfig
 import net.wyvest.wyvtilities.mixin.AccessorGuiIngame
-import net.wyvest.wyvtilities.utils.*
-import org.lwjgl.input.Keyboard
-import org.lwjgl.input.Mouse
-import xyz.matthewtgm.requisite.events.BetterInputEvent
+import net.wyvest.wyvtilities.utils.HypixelUtils
+import net.wyvest.wyvtilities.utils.containsAny
+import net.wyvest.wyvtilities.utils.equalsAny
+import net.wyvest.wyvtilities.utils.withoutFormattingCodes
 import xyz.matthewtgm.requisite.events.FontRendererEvent
 import xyz.matthewtgm.requisite.mixins.sound.PositionedSoundAccessor
 import xyz.matthewtgm.requisite.util.ServerHelper
@@ -49,7 +47,7 @@ import java.util.*
 
 object Listener {
     private var removeTitle = false
-    private var current: Int = 1
+    //private var current: Int = 1
     private var victoryDetected = false
     var color: String = ""
     var changeTextColor = false
@@ -58,6 +56,33 @@ object Listener {
     @SubscribeEvent
     fun onChatReceivedEvent(e: ClientChatReceivedEvent) {
         val unformattedText = e.message.unformattedText.withoutFormattingCodes()
+        if (WyvtilsConfig.autoGetAPI) {
+            /*/
+            Adapted from Moulberry's NotEnoughUpdates, under the Attribution-NonCommercial 3.0 license.
+            https://github.com/Moulberry/NotEnoughUpdates
+            */
+            //Stolen code starts here
+            if (unformattedText.startsWith("Your new API key is ")) {
+                val tempApiKey = unformattedText.substring("Your new API key is ".length)
+                var shouldReturn = false
+                Multithreading.runAsync {
+                    if (!HypixelUtils.isValidKey(tempApiKey)
+                    ) {
+                        if (!ServerHelper.hypixel()) {
+                            Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "You are not running this command on Hypixel! This mod needs an Hypixel API key!")
+                        }
+                        shouldReturn = true
+                    }
+                }
+                if (shouldReturn) return
+                WyvtilsConfig.apiKey = unformattedText.substring("Your new API key is ".length)
+                WyvtilsConfig.markDirty()
+                WyvtilsConfig.writeData()
+                Wyvtilities.sendMessage(EnumChatFormatting.GREEN.toString() + "Your API Key has been automatically configured.")
+                return
+            }
+            //Stolen code ends here
+        }
         if ((WyvtilsConfig.autoGetGEXP || WyvtilsConfig.autoGetWinstreak) && Wyvtilities.isRegexLoaded && ServerHelper.hypixel()) {
             if (!victoryDetected) {
                 for (trigger in Wyvtilities.autoGGRegex) {
@@ -226,6 +251,7 @@ object Listener {
         }
     }
 
+    /*/
     @SubscribeEvent
     fun onKeyInput(event: BetterInputEvent.KeyboardInputEvent?) {
         if (mc.currentScreen != null) return
@@ -278,6 +304,8 @@ object Listener {
             else -> return
         }
     }
+
+     */
 
     private fun replaceMessage(
         message: IChatComponent,

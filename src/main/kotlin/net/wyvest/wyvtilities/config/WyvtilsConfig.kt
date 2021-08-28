@@ -46,9 +46,26 @@ object WyvtilsConfig :
     ) {
 
     @Property(
+        type = PropertyType.TEXT,
+        name = "API Key",
+        description = "The API key, used for some features. Can be also automatically set by typing in /api new ingame.",
+        category = "General",
+        protectedText = true
+    )
+    var apiKey = ""
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Automatically Get API Key",
+        description = "Automatically get the API Key from /api new.",
+        category = "General"
+    )
+    var autoGetAPI = true
+
+    @Property(
         type = PropertyType.SWITCH,
         name = "Automatically Check GEXP",
-        description = "Automatically check your GEXP after you win a Hypixel game.",
+        description = "Automatically check your GEXP after you win a Hypixel game. \\u00a7cRequires an API Key.",
         category = "Automatic"
     )
     var autoGetGEXP = true
@@ -65,7 +82,7 @@ object WyvtilsConfig :
     @Property(
         type = PropertyType.SWITCH,
         name = "Automatically Check Winstreak",
-        description = "Automatically check your winstreak after you win a Hypixel game.",
+        description = "Automatically check your winstreak after you win a Hypixel game. \\u00a7cRequires an API Key.",
         category = "Automatic"
     )
     var autoGetWinstreak = false
@@ -322,6 +339,7 @@ object WyvtilsConfig :
     )
     var titleShadow = true
 
+    /*/
     @Property(
         type = PropertyType.SELECTOR,
         name = "Chat Type 1",
@@ -337,6 +355,8 @@ object WyvtilsConfig :
         options = ["All", "Party", "Guild", "Officer", "None"]
     )
     var chatType2 = 0
+
+     */
 
     @Property(
         type = PropertyType.SWITCH,

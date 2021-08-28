@@ -1,6 +1,6 @@
 {
   "id": "wyvtilities",
   "version": "${version}",
-  "minecraft_version": "1.8.9",
+  "minecraft_version": "${mcversion}",
   "platform": "forge"
 }

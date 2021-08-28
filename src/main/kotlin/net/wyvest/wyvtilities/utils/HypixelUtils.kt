@@ -22,6 +22,7 @@ import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.wyvest.wyvtilities.Wyvtilities
 import net.wyvest.wyvtilities.Wyvtilities.mc
+import net.wyvest.wyvtilities.config.WyvtilsConfig
 import xyz.matthewtgm.requisite.events.LocrawReceivedEvent
 import xyz.matthewtgm.requisite.util.HypixelHelper
 import java.text.SimpleDateFormat
@@ -43,11 +44,11 @@ object HypixelUtils {
         var gexp: String? = null
         val uuid = mc.thePlayer.gameProfile.id.toString().replace("-", "")
         val guildData =
-            APIUtil.getJSONResponse("https://api.slothpixel.me/api/guilds/$uuid")
+            APIUtil.getJSONResponse("https://api.hypixel.net/guild?key=" + WyvtilsConfig.apiKey + ";player=" + uuid)["guild"].asJsonObject
         val guildMembers = guildData["members"].asJsonArray
         for (e in guildMembers) {
             if (e.asJsonObject["uuid"].asString.equals(uuid)) {
-                gexp = e.asJsonObject["exp_history"].asJsonObject[getCurrentESTTime()].asInt.toString()
+                gexp = e.asJsonObject["expHistory"].asJsonObject[getCurrentESTTime()].asInt.toString()
                 break
             }
         }
@@ -60,11 +61,11 @@ object HypixelUtils {
         var gexp: String? = null
         val uuid = getUUID(username)
         val guildData =
-            APIUtil.getJSONResponse("https://api.slothpixel.me/api/guilds/$uuid")
+            APIUtil.getJSONResponse("https://api.hypixel.net/guild?key=" + WyvtilsConfig.apiKey + ";player=" + uuid)["guild"].asJsonObject
         val guildMembers = guildData["members"].asJsonArray
         for (e in guildMembers) {
             if (e.asJsonObject["uuid"].asString.equals(uuid)) {
-                gexp = e.asJsonObject["exp_history"].asJsonObject[getCurrentESTTime()].asInt.toString()
+                gexp = e.asJsonObject["expHistory"].asJsonObject[getCurrentESTTime()].asInt.toString()
                 break
             }
         }
@@ -77,12 +78,12 @@ object HypixelUtils {
         var gexp: String? = null
         val uuid = mc.thePlayer.gameProfile.id.toString().replace("-", "")
         val guildData =
-            APIUtil.getJSONResponse("https://api.slothpixel.me/api/guilds/$uuid")
+            APIUtil.getJSONResponse("https://api.hypixel.net/guild?key=" + WyvtilsConfig.apiKey + ";player=" + uuid)["guild"].asJsonObject
         val guildMembers = guildData["members"].asJsonArray
         for (e in guildMembers) {
             if (e.asJsonObject["uuid"].asString.equals(uuid)) {
                 var addGEXP = 0
-                for (set in e.asJsonObject["exp_history"].asJsonObject.entrySet()) {
+                for (set in e.asJsonObject["expHistory"].asJsonObject.entrySet()) {
                     addGEXP += set.value.asInt
                 }
                 gexp = addGEXP.toString()
@@ -98,12 +99,12 @@ object HypixelUtils {
         var gexp: String? = null
         val uuid = getUUID(username)
         val guildData =
-            APIUtil.getJSONResponse("https://api.slothpixel.me/api/guilds/$uuid")
+            APIUtil.getJSONResponse("https://api.hypixel.net/guild?key=" + WyvtilsConfig.apiKey + ";player=" + uuid)["guild"].asJsonObject
         val guildMembers = guildData["members"].asJsonArray
         for (e in guildMembers) {
             if (e.asJsonObject["uuid"].asString.equals(uuid)) {
                 var addGEXP = 0
-                for (set in e.asJsonObject["exp_history"].asJsonObject.entrySet()) {
+                for (set in e.asJsonObject["expHistory"].asJsonObject.entrySet()) {
                     addGEXP += set.value.asInt
                 }
                 gexp = addGEXP.toString()
@@ -117,11 +118,19 @@ object HypixelUtils {
 
     fun getWinstreak(): Boolean {
         val uuid = mc.thePlayer.gameProfile.id.toString().replace("-", "")
-        val playerStats = APIUtil.getJSONResponse("https://api.slothpixel.me/api/players/$uuid")["stats"].asJsonObject
+        val playerStats = APIUtil.getJSONResponse("https://api.hypixel.net/player?key=${WyvtilsConfig.apiKey};uuid=$uuid").asJsonObject["player"].asJsonObject["stats"]
         when (currentGame) {
             HypixelHelper.HypixelLocraw.GameType.BEDWARS -> {
                 try {
-                    winstreak = playerStats["BedWars"].asJsonObject["winstreak"].asInt.toString()
+                    winstreak = playerStats.asJsonObject["Bedwars"].asJsonObject["winstreak"].asInt.toString()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    return false
+                }
+            }
+            HypixelHelper.HypixelLocraw.GameType.SKYWARS -> {
+                try {
+                    winstreak = playerStats.asJsonObject["SkyWars"].asJsonObject["win_streak"].asInt.toString()
                 } catch (e: Exception) {
                     e.printStackTrace()
                     return false
@@ -129,7 +138,7 @@ object HypixelUtils {
             }
             HypixelHelper.HypixelLocraw.GameType.DUELS -> {
                 try {
-                    winstreak = playerStats["Duels"].asJsonObject["general"].asJsonObject["winstreaks"].asJsonObject["current"].asJsonObject["overall"].asInt.toString()
+                    winstreak = playerStats.asJsonObject["Duels"].asJsonObject["current_winstreak"].asInt.toString()
                 } catch (e: Exception) {
                     e.printStackTrace()
                     return false
@@ -142,11 +151,19 @@ object HypixelUtils {
 
     fun getWinstreak(username: String): Boolean {
         val uuid = getUUID(username)
-        val playerStats = APIUtil.getJSONResponse("https://api.slothpixel.me/api/players/$uuid")["stats"].asJsonObject
+        val playerStats = APIUtil.getJSONResponse("https://api.hypixel.net/player?key=${WyvtilsConfig.apiKey};uuid=$uuid").asJsonObject["player"].asJsonObject["stats"]
         when (currentGame) {
             HypixelHelper.HypixelLocraw.GameType.BEDWARS -> {
                 try {
-                    winstreak = playerStats["BedWars"].asJsonObject["winstreak"].asInt.toString()
+                    winstreak = playerStats.asJsonObject["Bedwars"].asJsonObject["winstreak"].asInt.toString()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    return false
+                }
+            }
+            HypixelHelper.HypixelLocraw.GameType.SKYWARS -> {
+                try {
+                    winstreak = playerStats.asJsonObject["SkyWars"].asJsonObject["win_streak"].asInt.toString()
                 } catch (e: Exception) {
                     e.printStackTrace()
                     return false
@@ -154,7 +171,7 @@ object HypixelUtils {
             }
             HypixelHelper.HypixelLocraw.GameType.DUELS -> {
                 try {
-                    winstreak = playerStats["Duels"].asJsonObject["general"].asJsonObject["winstreaks"].asJsonObject["current"].asJsonObject["overall"].asInt.toString()
+                    winstreak = playerStats.asJsonObject["Duels"].asJsonObject["current_winstreak"].asInt.toString()
                 } catch (e: Exception) {
                     e.printStackTrace()
                     return false
@@ -167,11 +184,19 @@ object HypixelUtils {
 
     fun getWinstreak(username: String, game: String): Boolean {
         val uuid = getUUID(username)
-        val playerStats = APIUtil.getJSONResponse("https://api.slothpixel.me/api/players/$uuid")["stats"].asJsonObject
-        when (game.lowercase(Locale.ENGLISH)) {
+        val playerStats = APIUtil.getJSONResponse("https://api.hypixel.net/player?key=${WyvtilsConfig.apiKey};uuid=$uuid").asJsonObject["player"].asJsonObject["stats"]
+        when (game.lowercase()) {
             "bedwars" -> {
                 try {
-                    winstreak = playerStats["BedWars"].asJsonObject["winstreak"].asInt.toString()
+                    winstreak = playerStats.asJsonObject["Bedwars"].asJsonObject["winstreak"].asInt.toString()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    return false
+                }
+            }
+            "skywars" -> {
+                try {
+                    winstreak = playerStats.asJsonObject["SkyWars"].asJsonObject["win_streak"].asInt.toString()
                 } catch (e: Exception) {
                     e.printStackTrace()
                     return false
@@ -179,7 +204,7 @@ object HypixelUtils {
             }
             "duels" -> {
                 try {
-                    winstreak = playerStats["Duels"].asJsonObject["general"].asJsonObject["winstreaks"].asJsonObject["current"].asJsonObject["overall"].asInt.toString()
+                    winstreak = playerStats.asJsonObject["Duels"].asJsonObject["current_winstreak"].asInt.toString()
                 } catch (e: Exception) {
                     e.printStackTrace()
                     return false
@@ -190,7 +215,11 @@ object HypixelUtils {
         return true
     }
 
-    //I really didn't want to use this and instead use one of essential's APIs, but then Mojang released an unannounced API change for the 69th time!
+    fun isValidKey(apiKey: String): Boolean {
+        val json = APIUtil.getJSONResponse("https://api.hypixel.net/key?key=$apiKey")
+        return json.has("success") && json["success"].asBoolean
+    }
+
     private fun getUUID(username: String): String? {
         val uuidResponse =
             APIUtil.getJSONResponse("https://api.mojang.com/users/profiles/minecraft/$username")
