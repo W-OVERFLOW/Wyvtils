@@ -27,6 +27,7 @@ import gg.essential.vigilance.data.SortingBehavior
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.util.EnumChatFormatting
+import net.wyvest.wyvtilities.Wyvtilities
 import net.wyvest.wyvtilities.Wyvtilities.mc
 import net.wyvest.wyvtilities.gui.ActionBarGui
 import net.wyvest.wyvtilities.gui.BossHealthGui
@@ -40,7 +41,7 @@ import java.io.File
 @Suppress("unused")
 object WyvtilsConfig :
     Vigilant(
-        File("config/Wyvest/Wyvtilities/wyvtilities.toml"),
+        File(Wyvtilities.modDir, "wyvtilities.toml"),
         "${EnumChatFormatting.DARK_PURPLE}Wyvtilities",
         sortingBehavior = ConfigSorting
     ) {

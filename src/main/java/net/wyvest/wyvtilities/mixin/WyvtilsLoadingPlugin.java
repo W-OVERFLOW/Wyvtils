@@ -19,6 +19,7 @@
 package net.wyvest.wyvtilities.mixin;
 
 import kotlin.KotlinVersion;
+import kotlin.text.StringsKt;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 import javax.swing.*;
@@ -28,6 +29,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
 
 /**
@@ -36,9 +38,24 @@ import java.util.Map;
  */
 public class WyvtilsLoadingPlugin implements IFMLLoadingPlugin {
 
-    public WyvtilsLoadingPlugin() {
+    public WyvtilsLoadingPlugin() throws URISyntaxException {
         if (!KotlinVersion.CURRENT.isAtLeast(1, 5, 0)) {
-            showMessage(new File(new File(KotlinVersion.class.getProtectionDomain().getCodeSource().getLocation().toString()).getParentFile().getParentFile().getName()));
+            final File file = new File(KotlinVersion.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            File realFile = file;
+            for (int i = 0; i < 5; i++) {
+                if (realFile == null) {
+                    realFile = file;
+                    break;
+                }
+                if (!realFile.getName().endsWith(".jar!") && !realFile.getName().endsWith(".jar")) {
+                    realFile = realFile.getParentFile();
+                } else break;
+            }
+
+            String name = realFile.getName().contains(".jar") ? realFile.getName() : StringsKt.substringAfterLast(StringsKt.substringBeforeLast(file.getAbsolutePath(), ".jar", "unknown"), "/", "Unknown");
+
+            if (name.endsWith("!")) name = name.substring(0, name.length() - 1);
+            showMessage(name);
         }
     }
 
@@ -67,7 +84,7 @@ public class WyvtilsLoadingPlugin implements IFMLLoadingPlugin {
         return null;
     }
 
-    private void showMessage(File file) {
+    private void showMessage(String file) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
@@ -104,7 +121,7 @@ public class WyvtilsLoadingPlugin implements IFMLLoadingPlugin {
         Object[] options = new Object[]{discordLink, close};
         JOptionPane.showOptionDialog(
                 frame,
-                "<html><p>Wyvtilities has detected a mod with an older version of Kotlin.<br>The culprit is " + file.toString() + ".<br>It packages version " + KotlinVersion.CURRENT + ".<br>In order to resolve this conflict you must make Wyvtilities be<br>above this mod alphabetically in your mods folder.<br>This tricks Forge into loading Wyvtilities first.<br>You can do this by renaming your Wyvtilities jar to !Wyvtilities.jar,<br>or by renaming the other mod's jar to start with a Z.<br>If you have already done this and are still getting this error,<br>ask for support in the Discord.</p></html>",
+                "<html><p>Wyvtilities has detected a mod with an older version of Kotlin.<br>The culprit is " + file + ".<br>It packages version " + KotlinVersion.CURRENT + ".<br>In order to resolve this conflict you must make Wyvtilities be<br>above this mod alphabetically in your mods folder.<br>This tricks Forge into loading Wyvtilities first.<br>You can do this by renaming your Wyvtilities jar to !Wyvtilities.jar,<br>or by renaming the other mod's jar to start with a Z.<br>If you have already done this and are still getting this error,<br>ask for support in the Discord.</p></html>",
                 "Wyvtilities Error",
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.ERROR_MESSAGE,

@@ -62,7 +62,7 @@ object Wyvtilities {
 
     lateinit var autoGGRegex: MutableList<Regex>
 
-    private val modDir = File(File(File(mc.mcDataDir, "config"), "Wyvest"), "Wyvtilities")
+    val modDir = File(File(File(File(mc.mcDataDir, "config"), "Wyvest"), "Wyvtilities"), "1.8.9")
 
     @JvmField
     var isConfigInitialized = false
