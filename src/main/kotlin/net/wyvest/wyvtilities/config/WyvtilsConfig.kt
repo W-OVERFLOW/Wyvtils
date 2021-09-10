@@ -5,6 +5,7 @@ import gg.essential.vigilance.Vigilant
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
 import net.minecraft.client.MinecraftClient
+import net.wyvest.wyvtilities.Wyvtilities
 import net.wyvest.wyvtilities.gui.ActionBarGui
 import net.wyvest.wyvtilities.gui.BossBarGui
 import net.wyvest.wyvtilities.gui.SidebarGui
@@ -13,7 +14,7 @@ import java.io.File
 
 @Suppress("unused")
 object WyvtilsConfig : Vigilant(
-    File("config/Wyvtilities/1.17.1/wyvtilities.toml"),
+    File(Wyvtilities.modDir, "wyvtilities.toml"),
     "${ChatColor.DARK_PURPLE}Wyvtilities"
 ) {
     @Property(
@@ -74,7 +75,7 @@ object WyvtilsConfig : Vigilant(
     )
     fun resetBossbar() {
         MinecraftClient.getInstance().setScreen(null)
-        bossBarX = (MinecraftClient.getInstance().window.scaledWidth)
+        bossBarX = MinecraftClient.getInstance().window.scaledWidth
         bossBarY = 12
         WyvtilsConfig.markDirty()
         WyvtilsConfig.writeData()

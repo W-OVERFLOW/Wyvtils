@@ -14,7 +14,7 @@ import java.io.File
 @Suppress("unused")
 object Wyvtilities : ClientModInitializer {
 
-    private val modDir = File(File(File(FabricLoader.getInstance().configDir.toFile(), "Wyvest"), "Wyvtilities"), "1.17.1")
+    val modDir = File(File(File(FabricLoader.getInstance().configDir.toFile(), "Wyvest"), "Wyvtilities"), "1.17.1")
     lateinit var jarFile: File
 
     private val keyBinding: KeyBinding = KeyBindingHelper.registerKeyBinding(
@@ -27,8 +27,8 @@ object Wyvtilities : ClientModInitializer {
     )
 
     override fun onInitializeClient() {
-        if (!File(File(File(FabricLoader.getInstance().configDir.toFile(), "Wyvest"), "Wyvtilities"), "1.17.1").exists()) {
-            File(File(File(FabricLoader.getInstance().configDir.toFile(), "Wyvest"), "Wyvtilities"), "1.17.1").mkdirs()
+        if (!modDir.exists()) {
+            modDir.mkdirs()
         }
         jarFile = File(javaClass.protectionDomain.codeSource.location.toURI())
         WyvtilsConfig.initialize()

@@ -9,11 +9,10 @@
   ],
   "contact": {
     "homepage": "https://wyvest.net/",
-    "issues": "https://github.com/Wyvest/Wyvtilities/issues/",
-    "sources": "https://github.com/Wyvest/Wyvtilities/"
+    "issues": "https://github.com/W-OVERFLOW/Wyvtilities/issues/",
+    "sources": "https://github.com/W-OVERFLOW/Wyvtilities/"
   },
   "license": "GNU Lesser General Public License version 3 (LGPLv3)",
-  "icon": "assets/wyvtilities/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [

@@ -7,11 +7,16 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.InputUtil
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.boss.BossBar
+import net.minecraft.text.StringVisitable
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.wyvest.wyvtilities.config.WyvtilsConfig
+import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarBar
+import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarShadow
+import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarText
 import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarX
 import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarY
+import net.wyvest.wyvtilities.config.WyvtilsConfig.bossbarScale
 import java.util.*
 
 class BossBarGui(private var parent: Screen?) : Screen(Text.of("Wyvtilities")) {
@@ -29,25 +34,58 @@ class BossBarGui(private var parent: Screen?) : Screen(Text.of("Wyvtilities")) {
     private var prevX = 0
     private var prevY = 0
     private var bossBarDragging = false
+    private val barsTexture = Identifier("textures/gui/bars.png")
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         updatePos(mouseX, mouseY)
         super.render(matrices, mouseX, mouseY, delta)
-
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
-        RenderSystem.setShaderTexture(0, Identifier("textures/gui/bars.png"))
-        this.drawTexture(matrices, bossBarX - 91, bossBarY, 0, bossBar.color.ordinal * 5 * 2, 182, 5)
-        this.drawTexture(matrices, bossBarX - 91, bossBarY, 0, 80 + (bossBar.style.ordinal - 1) * 5 * 2, 182, 5)
-
-        val text = bossBar.name
-        client!!.textRenderer.drawWithShadow(
-            matrices,
-            text,
-            (bossBarX - MinecraftClient.getInstance().textRenderer.getWidth("Wyvtilities") / 2).toString().toFloat(),
-            bossBarY.toFloat() - 10,
-            16777215
+        client!!.profiler.push("bossBarGui")
+        matrices.push()
+        val iHaveNoIdeaWhatToNameThisFloat = bossbarScale.toDouble() - 1.0f
+        matrices.translate(
+            -bossBarX * iHaveNoIdeaWhatToNameThisFloat / 2,
+            -bossBarY * iHaveNoIdeaWhatToNameThisFloat,
+            0.0
         )
+        matrices.scale(bossbarScale, bossbarScale, 1f)
+        val i = bossBarX
+        val j = bossBarY
 
+        val k = i / 2 - 91
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
+        RenderSystem.setShaderTexture(0, barsTexture)
+
+        if (bossBarBar) {
+            renderBossBar(matrices, k, j, bossBar)
+        }
+
+        if (bossBarText) {
+            val text = bossBar.name
+            val m = client!!.textRenderer.getWidth(text as StringVisitable)
+            val n = i / 2 - m / 2
+            val o = j - 9
+            if (bossBarShadow) {
+                client!!.textRenderer.drawWithShadow(matrices, text, n.toFloat(), o.toFloat(), 16777215)
+            } else {
+                client!!.textRenderer.draw(matrices, text, n.toFloat(), o.toFloat(), 16777215)
+            }
+        }
+        client!!.profiler.pop()
+        matrices.pop()
+    }
+
+    private fun renderBossBar(matrices: MatrixStack, x: Int, y: Int, bossBar: BossBar) {
+        this.drawTexture(matrices, x, y, 0, bossBar.color.ordinal * 5 * 2, 182, 5)
+        if (bossBar.style != BossBar.Style.PROGRESS) {
+            this.drawTexture(matrices, x, y, 0, 80 + (bossBar.style.ordinal - 1) * 5 * 2, 182, 5)
+        }
+        val i = (bossBar.percent * 183.0f).toInt()
+        if (i > 0) {
+            this.drawTexture(matrices, x, y, 0, bossBar.color.ordinal * 5 * 2 + 5, i, 5)
+            if (bossBar.style != BossBar.Style.PROGRESS) {
+                this.drawTexture(matrices, x, y, 0, 80 + (bossBar.style.ordinal - 1) * 5 * 2 + 5, i, 5)
+            }
+        }
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, mouseButton: Int): Boolean {
