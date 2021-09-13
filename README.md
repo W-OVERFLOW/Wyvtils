@@ -1,8 +1,8 @@
 ![Wyvtilities ultrawide logo](.github/ultrawide.png)
 
 ##### Utilities, by Wyvest.
-<a href="https://github.com/Wyvest/Wyvtilities/releases" target="_blank">
-<img alt="downloads" src="https://img.shields.io/github/downloads/Wyvest/Wyvtilities/total?color=F5C400&style=for-the-badge" /> <img alt="downloads latest" src="https://img.shields.io/github/downloads-pre/Wyvest/Wyvtilities/latest/total?color=F5C400&style=for-the-badge" />
+<a href="https://github.com/W-OVERFLOW/Wyvtilities/releases" target="_blank">
+<img alt="downloads" src="https://img.shields.io/github/downloads/W-OVERFLOW/Wyvtilities/total?color=F5C400&style=for-the-badge" /> <img alt="downloads latest" src="https://img.shields.io/github/downloads-pre/W-OVERFLOW/Wyvtilities/latest/total?color=F5C400&style=for-the-badge" />
  
 ### [Discord invite (click to get support)](https://discord.gg/b6twapxC3T)
 
