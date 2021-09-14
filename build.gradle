@@ -1,6 +1,6 @@
 /*
- * Wyvtilities - Utilities for Hypixel 1.8.9.
- * Copyright (C) 2021 Wyvtilities
+ * Qaltils, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Qaltils
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -29,9 +29,9 @@ plugins {
     id 'org.spongepowered.mixin' version 'd5f9873'
 }
 
-version = '1.2.0-BETA5'
-group = 'net.wyvest'
-archivesBaseName = 'Wyvtilities [1.8.9]'
+version = '1.2.0-BETA6'
+group = 'xyz.qalcyo'
+archivesBaseName = 'Qaltils [1.8.9]'
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
@@ -53,9 +53,8 @@ minecraft {
 
     makeObfSourceJar = false
 
-    clientJvmArgs += '-Dfml.coreMods.load=net.wyvest.wyvtilities.mixin.WyvtilsLoadingPlugin'
-    clientRunArgs += '--tweakClass net.wyvest.requisiteessentialloader.RequisiteEssentialTweaker'
-    clientRunArgs += '--mixin mixins.wyvtils.json'
+    clientRunArgs += '--tweakClass xyz.qalcyo.requisiteessentialloader.RequisiteEssentialTweaker'
+    clientRunArgs += '--mixin mixins.qaltils.json'
 }
 
 configurations {
@@ -74,10 +73,10 @@ repositories {
 dependencies {
     // Libraries
     provided 'xyz.matthewtgm:Requisite:1.1.1'
-    include 'com.github.W-OVERFLOW:RequisiteEssentialLoader:7a4eb4eeb7'
+    include 'com.github.Qalcyo:RequisiteEssentialLoader:0a78589683'
     implementation ('xyz.matthewtgm:RequisiteLaunchwrapper:1.1')
-    implementation ('gg.essential:loader-launchwrapper:1.1.0')
-    provided 'gg.essential:essential-1.8.9-forge:1318'
+    implementation ('gg.essential:loader-launchwrapper:1.1.1')
+    provided 'gg.essential:essential-1.8.9-forge:1423+release-launch'
 
     annotationProcessor 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
 }
@@ -85,11 +84,10 @@ dependencies {
 jar {
     manifest.attributes(
             'ModSide': 'CLIENT',
-            'FMLCorePlugin': 'net.wyvest.wyvtilities.mixin.WyvtilsLoadingPlugin',
             'FMLCorePluginContainsFMLMod': true,
             'ForceLoadAsMod': true,
-            'MixinConfigs': 'mixins.wyvtils.json',
-            'TweakClass': 'net.wyvest.requisiteessentialloader.RequisiteEssentialTweaker',
+            'MixinConfigs': 'mixins.qaltils.json',
+            'TweakClass': 'xyz.qalcyo.requisiteessentialloader.RequisiteEssentialTweaker',
             'TweakOrder': '0'
     )
 
@@ -147,7 +145,7 @@ shadowJar {
 mixin {
     disableRefMapWarning = true
     defaultObfuscationEnv searge
-    add sourceSets.main, "mixins.wyvtils.refmap.json"
+    add sourceSets.main, "mixins.qaltils.refmap.json"
 }
 
 reobf {
@@ -158,7 +156,7 @@ reobf {
 
 sourceSets {
     main {
-        ext.refMap = "mixins.wyvtils.refmap.json"
+        ext.refMap = "mixins.qaltils.refmap.json"
         output.resourcesDir = file("${buildDir}/classes/kotlin/main")
     }
 }

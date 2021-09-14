@@ -1,0 +1,17 @@
+{
+  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.7",
+  "plugin": "xyz.qalcyo.qaltils.tweaker.QaltilsMixinPlugin",
+  "package": "xyz.qalcyo.qaltils.mixin",
+  "refmap": "mixins.qaltils.refmap.json",
+  "mixins": [
+    "AccessorGuiIngame",
+    "MixinGuiIngame",
+    "MixinGuiIngameForge",
+    "MixinGuiIngameForgeHook",
+    "MixinMinecraft",
+    "MixinRenderManager",
+    "MixinSoundManager"
+  ],
+  "verbose": true
+}

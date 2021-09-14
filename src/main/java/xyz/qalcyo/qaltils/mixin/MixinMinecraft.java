@@ -16,28 +16,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenCentral()
+package xyz.qalcyo.qaltils.mixin;
 
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
-        maven { url 'https://maven.minecraftforge.net' }
-        maven { url 'https://jitpack.io' }
-    }
+import net.minecraft.client.Minecraft;
+import xyz.qalcyo.qaltils.config.QaltilsConfig;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-    resolutionStrategy {
-        eachPlugin {
-            switch (requested.id.id) {
-                case 'net.minecraftforge.gradle.forge':
-                    useModule "com.github.asbyth:ForgeGradle:${requested.version}"
-                    break
-                case 'org.spongepowered.mixin':
-                    useModule "com.github.Skytils:MixinGradle:${requested.version}"
-                    break
+@Mixin(Minecraft.class)
+public class MixinMinecraft {
+
+    @ModifyArg(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/InventoryPlayer;changeCurrentItem(I)V"), index = 0)
+    private int reverseScroll(int direction) {
+        if (QaltilsConfig.INSTANCE.getReverseScrolling()) {
+            if (direction == 0) {
+                return 0;
+            } else {
+                return direction * -1;
             }
+        } else {
+            return direction;
         }
     }
-}
 
-rootProject.name = "Qaltils"
+}
