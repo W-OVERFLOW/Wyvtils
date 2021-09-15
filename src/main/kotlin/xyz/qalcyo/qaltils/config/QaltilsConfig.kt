@@ -1,21 +1,21 @@
-package net.wyvest.wyvtilities.config
+package xyz.qalcyo.qaltils.config
 
 import gg.essential.universal.ChatColor
 import gg.essential.vigilance.Vigilant
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
 import net.minecraft.client.MinecraftClient
-import net.wyvest.wyvtilities.Wyvtilities
-import net.wyvest.wyvtilities.gui.ActionBarGui
-import net.wyvest.wyvtilities.gui.BossBarGui
-import net.wyvest.wyvtilities.gui.SidebarGui
+import xyz.qalcyo.qaltils.Qaltils
+import xyz.qalcyo.qaltils.gui.ActionBarGui
+import xyz.qalcyo.qaltils.gui.BossBarGui
+import xyz.qalcyo.qaltils.gui.SidebarGui
 import java.awt.Color
 import java.io.File
 
 @Suppress("unused")
-object WyvtilsConfig : Vigilant(
-    File(Wyvtilities.modDir, "wyvtilities.toml"),
-    "${ChatColor.DARK_PURPLE}Wyvtilities"
+object QaltilsConfig : Vigilant(
+    File(Qaltils.modDir, "qaltils.toml"),
+    "${ChatColor.DARK_PURPLE}Qaltils"
 ) {
     @Property(
         type = PropertyType.SWITCH,
@@ -77,8 +77,8 @@ object WyvtilsConfig : Vigilant(
         MinecraftClient.getInstance().setScreen(null)
         bossBarX = MinecraftClient.getInstance().window.scaledWidth
         bossBarY = 12
-        WyvtilsConfig.markDirty()
-        WyvtilsConfig.writeData()
+        QaltilsConfig.markDirty()
+        QaltilsConfig.writeData()
         MinecraftClient.getInstance().setScreen(gui())
     }
 

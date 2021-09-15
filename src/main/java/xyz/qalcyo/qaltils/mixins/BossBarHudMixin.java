@@ -1,4 +1,4 @@
-package net.wyvest.wyvtilities.mixins;
+package xyz.qalcyo.qaltils.mixins;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -7,8 +7,8 @@ import net.minecraft.client.gui.hud.ClientBossBar;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.boss.BossBar;
 import net.minecraft.text.Text;
-import net.wyvest.wyvtilities.config.WyvtilsConfig;
-import net.wyvest.wyvtilities.gui.BossBarGui;
+import xyz.qalcyo.qaltils.config.QaltilsConfig;
+import xyz.qalcyo.qaltils.gui.BossBarGui;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -31,38 +31,38 @@ public class BossBarHudMixin {
     private void cancel(MatrixStack matrices, CallbackInfo ci) {
         if (MinecraftClient.getInstance().currentScreen instanceof BossBarGui) {
             ci.cancel();
-        } else if (!WyvtilsConfig.INSTANCE.getBossBar()) {
+        } else if (!QaltilsConfig.INSTANCE.getBossBar()) {
             ci.cancel();
         } else {
-            if (WyvtilsConfig.INSTANCE.getFirstLaunchBossbar()) {
-                WyvtilsConfig.INSTANCE.setFirstLaunchBossbar(false);
-                WyvtilsConfig.INSTANCE.setBossBarX(MinecraftClient.getInstance().getWindow().getScaledWidth());
-                WyvtilsConfig.INSTANCE.markDirty();
-                WyvtilsConfig.INSTANCE.writeData();
+            if (QaltilsConfig.INSTANCE.getFirstLaunchBossbar()) {
+                QaltilsConfig.INSTANCE.setFirstLaunchBossbar(false);
+                QaltilsConfig.INSTANCE.setBossBarX(MinecraftClient.getInstance().getWindow().getScaledWidth());
+                QaltilsConfig.INSTANCE.markDirty();
+                QaltilsConfig.INSTANCE.writeData();
             }
             if (!bossBars.isEmpty()) {
                 matrices.push();
-                double iHaveNoIdeaWhatToNameThisFloat = (double) WyvtilsConfig.INSTANCE.getBossbarScale() - 1.0f;
-                matrices.translate(-WyvtilsConfig.INSTANCE.getBossBarX() * iHaveNoIdeaWhatToNameThisFloat / 2, -WyvtilsConfig.INSTANCE.getBossBarY() * iHaveNoIdeaWhatToNameThisFloat, 0.0f);
-                matrices.scale(WyvtilsConfig.INSTANCE.getBossbarScale(), WyvtilsConfig.INSTANCE.getBossbarScale(), 1F);
+                double iHaveNoIdeaWhatToNameThisFloat = (double) QaltilsConfig.INSTANCE.getBossbarScale() - 1.0f;
+                matrices.translate(-QaltilsConfig.INSTANCE.getBossBarX() * iHaveNoIdeaWhatToNameThisFloat / 2, -QaltilsConfig.INSTANCE.getBossBarY() * iHaveNoIdeaWhatToNameThisFloat, 0.0f);
+                matrices.scale(QaltilsConfig.INSTANCE.getBossbarScale(), QaltilsConfig.INSTANCE.getBossbarScale(), 1F);
             }
         }
     }
 
     @ModifyVariable(method = "render", at = @At("STORE"), index = 2)
     private int getX(int x) {
-        return WyvtilsConfig.INSTANCE.getBossBarX();
+        return QaltilsConfig.INSTANCE.getBossBarX();
     }
 
     @ModifyVariable(method = "render", at = @At("STORE"), index = 3)
     private int getY(int y) {
-        return WyvtilsConfig.INSTANCE.getBossBarY();
+        return QaltilsConfig.INSTANCE.getBossBarY();
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I"))
     private int modifyText(TextRenderer textRenderer, MatrixStack matrices, Text text, float x, float y, int color) {
-        if (WyvtilsConfig.INSTANCE.getBossBarText()) {
-            if (WyvtilsConfig.INSTANCE.getBossBarShadow()) {
+        if (QaltilsConfig.INSTANCE.getBossBarText()) {
+            if (QaltilsConfig.INSTANCE.getBossBarShadow()) {
                 return textRenderer.drawWithShadow(matrices, text, x, y, color);
             } else {
                 return textRenderer.draw(matrices, text, x, y, color);
@@ -74,7 +74,7 @@ public class BossBarHudMixin {
 
     @Inject(method = "renderBossBar", at = @At("HEAD"), cancellable = true)
     private void cancelBar(MatrixStack matrices, int x, int y, BossBar bossBar, CallbackInfo ci) {
-        if (!WyvtilsConfig.INSTANCE.getBossBarBar()) {
+        if (!QaltilsConfig.INSTANCE.getBossBarBar()) {
             ci.cancel();
         }
     }

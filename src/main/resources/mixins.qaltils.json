@@ -1,15 +1,15 @@
 {
   "required": true,
-  "refmap": "mixins.wyvtils.refmap.json",
-  "package": "net.wyvest.wyvtilities.mixins",
+  "refmap": "mixins.qaltils.refmap.json",
+  "package": "xyz.qalcyo.qaltils.mixins",
   "compatibilityLevel": "JAVA_16",
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
-    "BossBarHudMixin",
+    "InGameHudMixin",
     "DebugHudMixin",
     "EntityRenderDispatcherMixin",
-    "InGameHudMixin"
+    "BossBarHudMixin"
   ]
 }

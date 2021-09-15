@@ -1,4 +1,4 @@
-package net.wyvest.wyvtilities.gui
+package xyz.qalcyo.qaltils.gui
 
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
@@ -10,20 +10,20 @@ import net.minecraft.entity.boss.BossBar
 import net.minecraft.text.StringVisitable
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
-import net.wyvest.wyvtilities.config.WyvtilsConfig
-import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarBar
-import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarShadow
-import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarText
-import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarX
-import net.wyvest.wyvtilities.config.WyvtilsConfig.bossBarY
-import net.wyvest.wyvtilities.config.WyvtilsConfig.bossbarScale
+import xyz.qalcyo.qaltils.config.QaltilsConfig
+import xyz.qalcyo.qaltils.config.QaltilsConfig.bossBarBar
+import xyz.qalcyo.qaltils.config.QaltilsConfig.bossBarShadow
+import xyz.qalcyo.qaltils.config.QaltilsConfig.bossBarText
+import xyz.qalcyo.qaltils.config.QaltilsConfig.bossBarX
+import xyz.qalcyo.qaltils.config.QaltilsConfig.bossBarY
+import xyz.qalcyo.qaltils.config.QaltilsConfig.bossbarScale
 import java.util.*
 
-class BossBarGui(private var parent: Screen?) : Screen(Text.of("Wyvtilities")) {
+class BossBarGui(private var parent: Screen?) : Screen(Text.of("Qaltils")) {
 
     private val bossBar = ClientBossBar(
         UUID.fromString("cd899a14-de78-4de8-8d31-9d42fff31d7a"),
-        Text.of("Wyvtilities"),
+        Text.of("Qaltils"),
         1.0F,
         BossBar.Color.PURPLE,
         BossBar.Style.NOTCHED_20,
@@ -123,7 +123,7 @@ class BossBarGui(private var parent: Screen?) : Screen(Text.of("Wyvtilities")) {
 
 
     override fun onClose() {
-        WyvtilsConfig.markAndWrite()
+        QaltilsConfig.markAndWrite()
         MinecraftClient.getInstance().setScreen(parent)
         parent = null
     }

@@ -1,7 +1,7 @@
 plugins {
     id 'fabric-loom' version '0.9-SNAPSHOT'
     id 'maven-publish'
-    id 'org.jetbrains.kotlin.jvm' version '1.5.21'
+    id 'org.jetbrains.kotlin.jvm' version '1.5.30'
 }
 sourceCompatibility = JavaVersion.VERSION_16
 targetCompatibility = JavaVersion.VERSION_16
@@ -11,7 +11,7 @@ version = project.mod_version
 group = project.maven_group
 
 loom {
-    mixin.defaultRefmapName = "mixins.wyvtils.refmap.json"
+    mixin.defaultRefmapName = "mixins.qaltils.refmap.json"
 }
 
 repositories {
@@ -22,51 +22,51 @@ repositories {
         url 'https://maven.terraformersmc.com/releases/'
     }
     maven { url 'https://repo.sk1er.club/repository/maven-releases/' }
-    maven {
-        url 'http://maven.matthewtgm.xyz/repository/maven-public/'
-        allowInsecureProtocol = true
-    }
+    maven { url 'https://jitpack.io/' }
+    maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation("com.terraformersmc:modmenu:2.0.4") {
         transitive = false
     }
-    modImplementation("net.fabricmc:fabric-language-kotlin:1.6.3+kotlin.1.5.21")
-    modImplementation include('gg.essential:vigilance-1.17-fabric:163+next') {
-        exclude(group: "net.fabricmc.fabric-loader")
+    modImplementation('gg.essential:essential-1.17.1-fabric:1436+release-launch-1.17') {
+        transitive = false
+    }
+    modImplementation include('gg.essential:loader-fabric:1.0.0') {
+        transitive = false
+    }
+    modImplementation("net.fabricmc:fabric-language-kotlin:1.6.4+kotlin.1.5.30")
+    modImplementation('gg.essential:vigilance-1.17-fabric:163+next') {
+        exclude(group: "net.fabricmc")
         exclude module: 'kotlin-reflect'
         exclude module: 'kotlin-stdlib-jdk8'
     }
-    modImplementation include('com.electronwill.night-config:toml:3.6.4')
-    modImplementation include('com.electronwill.night-config:core:3.6.4')
-    modImplementation include("gg.essential:elementa-1.17-fabric:359+next") {
-        exclude(group: "net.fabricmc.fabric-loader")
+    modImplementation('com.electronwill.night-config:toml:3.6.4')
+    modImplementation('com.electronwill.night-config:core:3.6.4')
+    modImplementation("gg.essential:elementa-1.17-fabric:359+next") {
+        exclude(group: "net.fabricmc")
         exclude module: 'kotlin-reflect'
         exclude module: 'kotlin-stdlib-jdk8'
     }
     //noinspection GradlePackageUpdate
-    modImplementation include("org.commonmark:commonmark:0.17.1")
+    modImplementation("org.commonmark:commonmark:0.17.1")
     //noinspection GradlePackageUpdate
-    modImplementation include("org.commonmark:commonmark-ext-gfm-strikethrough:0.17.1")
+    modImplementation("org.commonmark:commonmark-ext-gfm-strikethrough:0.17.1")
     //noinspection GradlePackageUpdate
-    modImplementation include("org.commonmark:commonmark-ext-ins:0.17.1")
+    modImplementation("org.commonmark:commonmark-ext-ins:0.17.1")
     //noinspection GradlePackageUpdate
-    modImplementation include("org.dom4j:dom4j:2.1.1")
-    modImplementation annotationProcessor('net.fabricmc:sponge-mixin:0.9.3+mixin.0.8.2') {
-        exclude module: 'launchwrapper'
-        exclude module: 'guava'
-    }
-    modImplementation include("gg.essential:universalcraft-1.17-fabric:156+next") {
-        exclude(group: "net.fabricmc.fabric-loader")
+    modImplementation("org.dom4j:dom4j:2.1.1")
+    modImplementation("gg.essential:universalcraft-1.17-fabric:156+next") {
+        exclude(group: "net.fabricmc")
         exclude module: 'kotlin-reflect'
         exclude module: 'kotlin-stdlib-jdk8'
     }
+
 }
 
 processResources {

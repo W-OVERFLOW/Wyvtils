@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "id": "wyvtilities",
+  "id": "qaltils",
   "version": "${version}",
-  "name": "Wyvtilities",
+  "name": "Qaltils",
   "description": "Utilities, by Wyvest.",
   "authors": [
-    "Wyvest"
+    "Qalcyo"
   ],
   "contact": {
     "homepage": "https://wyvest.net/",
-    "issues": "https://github.com/W-OVERFLOW/Wyvtilities/issues/",
-    "sources": "https://github.com/W-OVERFLOW/Wyvtilities/"
+    "issues": "https://github.com/Qalcyo/Qaltils/issues/",
+    "sources": "https://github.com/Qalcyo/Qaltils/"
   },
   "license": "GNU Lesser General Public License version 3 (LGPLv3)",
   "environment": "client",
@@ -18,15 +18,18 @@
     "client": [
       {
         "adapter": "kotlin",
-        "value": "net.wyvest.wyvtilities.Wyvtilities"
+        "value": "xyz.qalcyo.qaltils.Qaltils"
       }
     ],
+    "preLaunch": [
+      "gg.essential.loader.stage0.EssentialSetupPreLaunch"
+    ],
     "modmenu": [
-      "net.wyvest.wyvtilities.config.WyvtilsModMenu"
+      "xyz.qalcyo.qaltils.config.QaltilsModMenu"
     ]
   },
   "mixins": [
-    "mixins.wyvtils.json"
+    "mixins.qaltils.json"
   ],
   "depends": {
     "fabricloader": ">=0.11.6",
