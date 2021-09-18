@@ -3,12 +3,11 @@
   "id": "qaltils",
   "version": "${version}",
   "name": "Qaltils",
-  "description": "Utilities, by Wyvest.",
+  "description": "Utilities, for 1.17.1.",
   "authors": [
     "Qalcyo"
   ],
   "contact": {
-    "homepage": "https://wyvest.net/",
     "issues": "https://github.com/Qalcyo/Qaltils/issues/",
     "sources": "https://github.com/Qalcyo/Qaltils/"
   },
