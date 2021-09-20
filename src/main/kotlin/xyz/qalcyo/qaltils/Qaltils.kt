@@ -20,7 +20,6 @@ package xyz.qalcyo.qaltils
 
 import gg.essential.api.EssentialAPI
 import gg.essential.universal.ChatColor
-import gg.essential.vigilance.data.PropertyData
 import net.minecraft.client.Minecraft
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.fml.common.Mod
