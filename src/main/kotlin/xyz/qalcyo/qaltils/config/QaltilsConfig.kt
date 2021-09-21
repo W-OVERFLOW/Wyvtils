@@ -55,6 +55,14 @@ object QaltilsConfig :
     var reverseScrolling = false
 
     @Property(
+        type = PropertyType.SWITCH,
+        name = "Remove Non-NPCs",
+        description = "Remove every entity from rendering except NPCs, armorstands, and your own player.",
+        category = "General"
+    )
+    var removeNonNPCS = false
+
+    @Property(
         type = PropertyType.TEXT,
         name = "API Key",
         description = "The API key, used for some features. Can be also automatically set by typing in /api new ingame.",

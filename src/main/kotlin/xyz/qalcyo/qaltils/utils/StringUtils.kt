@@ -18,7 +18,7 @@
 
 package xyz.qalcyo.qaltils.utils
 
-import net.minecraft.util.EnumChatFormatting
+import gg.essential.universal.wrappers.message.UTextComponent
 import org.apache.commons.lang3.StringUtils as ApacheStringUtils
 
 /**
@@ -45,4 +45,4 @@ fun String?.containsAny(vararg sequences: CharSequence?): Boolean {
     return sequences.any { it != null && this.contains(it, true) }
 }
 
-fun String.withoutFormattingCodes(): String = EnumChatFormatting.getTextWithoutFormattingCodes(this)
+fun String.withoutFormattingCodes(): String = UTextComponent.stripFormatting(this)

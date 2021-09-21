@@ -77,7 +77,6 @@ object Qaltils {
     @Mod.EventHandler
     private fun onFMLInitialization(event: FMLInitializationEvent) {
         QaltilsConfig.preload()
-        //EntityConfig.preload()
         isConfigInitialized = true
         if (QaltilsConfig.highlightName) {
             Listener.color = when (QaltilsConfig.textColor) {
@@ -110,7 +109,7 @@ object Qaltils {
 
     @Mod.EventHandler
     private fun onFMLLoad(event: FMLLoadCompleteEvent) {
-        if (ForgeHelper.isModLoaded("bossbar_customizer")) {
+        if (ForgeHelper.isModLoaded("bossbar_customizer") && QaltilsConfig.bossBarCustomization) {
             QaltilsConfig.bossBarCustomization = false
             QaltilsConfig.markDirty()
             QaltilsConfig.writeData()

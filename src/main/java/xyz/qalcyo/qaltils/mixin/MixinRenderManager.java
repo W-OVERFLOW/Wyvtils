@@ -25,11 +25,15 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.culling.ICamera;
+import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -40,6 +44,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.qalcyo.qaltils.config.QaltilsConfig;
+import xyz.qalcyo.qaltils.utils.HypixelUtils;
 
 @Mixin(RenderManager.class)
 public class MixinRenderManager {
@@ -67,6 +72,33 @@ public class MixinRenderManager {
             if (!(entityIn instanceof AbstractClientPlayer)) {
                 ci.cancel();
             }
+        }
+
+    }
+
+    @Inject(method = "shouldRender", at = @At(value = "HEAD"), cancellable = true)
+    private void renderNPCOnly(Entity entityIn, ICamera camera, double camX, double camY, double camZ, CallbackInfoReturnable<Boolean> cir) {
+        Render<Entity> render = ((RenderManager) (Object)this).getEntityRenderObject(entityIn);
+        if (QaltilsConfig.INSTANCE.getRemoveNonNPCS()) {
+            if (
+                    HypixelUtils.INSTANCE.isSkyblock() || HypixelUtils.INSTANCE.isOnLobby()
+            ) {
+                if (entityIn instanceof EntityPlayerSP) {
+                    if (((EntityPlayerSP) entityIn).getGameProfile().getId() == Minecraft.getMinecraft().thePlayer.getGameProfile().getId()) {
+                        cir.setReturnValue(render != null && render.shouldRender(entityIn, camera, camX, camY, camZ));
+                    }
+                } else if (entityIn instanceof AbstractClientPlayer) {
+                    cir.setReturnValue(((AbstractClientPlayer) entityIn).getGameProfile().getId().version() == 2 && render != null && render.shouldRender(entityIn, camera, camX, camY, camZ));
+                } else if (entityIn instanceof EntityVillager || entityIn instanceof EntityArmorStand) {
+                    cir.setReturnValue(render != null && render.shouldRender(entityIn, camera, camX, camY, camZ));
+                } else {
+                    cir.setReturnValue(false);
+                }
+            } else {
+                cir.setReturnValue(render != null && render.shouldRender(entityIn, camera, camX, camY, camZ));
+            }
+        } else {
+            cir.setReturnValue(render != null && render.shouldRender(entityIn, camera, camX, camY, camZ));
         }
     }
 

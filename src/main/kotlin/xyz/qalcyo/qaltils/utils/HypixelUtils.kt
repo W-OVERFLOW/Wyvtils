@@ -18,13 +18,15 @@
 
 package xyz.qalcyo.qaltils.utils
 
+import gg.essential.api.EssentialAPI
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.common.network.FMLNetworkEvent
+import xyz.matthewtgm.requisite.events.LocrawReceivedEvent
+import xyz.matthewtgm.requisite.util.HypixelHelper
 import xyz.qalcyo.qaltils.Qaltils
 import xyz.qalcyo.qaltils.Qaltils.mc
 import xyz.qalcyo.qaltils.config.QaltilsConfig
-import xyz.matthewtgm.requisite.events.LocrawReceivedEvent
-import xyz.matthewtgm.requisite.util.HypixelHelper
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -32,7 +34,8 @@ import java.util.*
 object HypixelUtils {
     lateinit var winstreak: String
     var gexp: String? = null
-    private var currentGame: HypixelHelper.HypixelLocraw.GameType? = null
+    private var locraw: HypixelHelper.HypixelLocraw? = null
+    @Suppress("ObjectPropertyName") private var `troll age` = false
 
     private fun getCurrentESTTime(): String? {
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -119,7 +122,7 @@ object HypixelUtils {
     fun getWinstreak(): Boolean {
         val uuid = mc.thePlayer.gameProfile.id.toString().replace("-", "")
         val playerStats = APIUtil.getJSONResponse("https://api.hypixel.net/player?key=${QaltilsConfig.apiKey};uuid=$uuid").asJsonObject["player"].asJsonObject["stats"]
-        when (currentGame) {
+        when (locraw?.gameType) {
             HypixelHelper.HypixelLocraw.GameType.BEDWARS -> {
                 try {
                     winstreak = playerStats.asJsonObject["Bedwars"].asJsonObject["winstreak"].asInt.toString()
@@ -152,7 +155,7 @@ object HypixelUtils {
     fun getWinstreak(username: String): Boolean {
         val uuid = getUUID(username)
         val playerStats = APIUtil.getJSONResponse("https://api.hypixel.net/player?key=${QaltilsConfig.apiKey};uuid=$uuid").asJsonObject["player"].asJsonObject["stats"]
-        when (currentGame) {
+        when (locraw?.gameType) {
             HypixelHelper.HypixelLocraw.GameType.BEDWARS -> {
                 try {
                     winstreak = playerStats.asJsonObject["Bedwars"].asJsonObject["winstreak"].asInt.toString()
@@ -234,9 +237,49 @@ object HypixelUtils {
         return uuidResponse["id"].asString
     }
 
+    fun isSkyblock(): Boolean {
+        return EssentialAPI.getMinecraftUtil().isHypixel() && mc.theWorld.scoreboard.getObjectiveInDisplaySlot(1)
+            ?.let { it -> it.displayName.withoutFormattingCodes().toCharArray().filter { it.code in 21..126 }.joinToString(separator = "").contains("SKYBLOCK") } ?: false
+    }
+
+    fun isOnLobby(): Boolean {
+        return if (EssentialAPI.getMinecraftUtil().isHypixel()) {
+            locraw?.gameMode.isNullOrBlank() || locraw?.gameType == null
+        } else {
+            false
+        }
+    }
+
     @SubscribeEvent
     fun onLocraw(event: LocrawReceivedEvent) {
-        currentGame = event.locraw.gameType
+        locraw = event.locraw
+        if (QaltilsConfig.autoBossbarLobby) {
+            println(event.locraw.gameMode)
+            println(event.locraw.gameType)
+            if (event.locraw.gameMode.isNullOrBlank() || event.locraw.gameType == null) {
+                QaltilsConfig.bossBar = false
+                QaltilsConfig.markDirty()
+                QaltilsConfig.writeData()
+                `troll age` = true
+            } else {
+                if (`troll age`) {
+                    QaltilsConfig.bossBar = true
+                    QaltilsConfig.markDirty()
+                    QaltilsConfig.writeData()
+                    `troll age` = false
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    fun onLeave(event: FMLNetworkEvent.ClientDisconnectionFromServerEvent) {
+        if (`troll age`) {
+            QaltilsConfig.bossBar = true
+            QaltilsConfig.markDirty()
+            QaltilsConfig.writeData()
+            `troll age` = false
+        }
     }
 
 }

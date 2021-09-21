@@ -21,7 +21,6 @@ package xyz.qalcyo.qaltils.gui
 import gg.essential.api.EssentialAPI
 import gg.essential.api.utils.Multithreading
 import net.minecraft.client.gui.GuiButton
-import net.minecraft.client.gui.GuiMainMenu
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.util.EnumChatFormatting
@@ -43,7 +42,7 @@ class DownloadConfirmGui(private val parent: GuiScreen?) : GuiScreen() {
     override fun actionPerformed(button: GuiButton) {
         when (button.id) {
             0 -> {
-                mc.displayGuiScreen(GuiMainMenu())
+                mc.displayGuiScreen(parent)
                 Multithreading.runAsync {
                     if (Updater.download(
                             updateUrl,

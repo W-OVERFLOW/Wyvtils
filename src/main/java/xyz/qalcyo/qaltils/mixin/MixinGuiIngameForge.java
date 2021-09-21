@@ -31,6 +31,8 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.UUID;
+
 @SuppressWarnings("DefaultAnnotationParam")
 @Mixin(value = GuiIngameForge.class, remap = false)
 public class MixinGuiIngameForge {
@@ -46,6 +48,7 @@ public class MixinGuiIngameForge {
     private void removeTranslation(float x, float y, float z) {
         if ((!QaltilsConfig.INSTANCE.getActionBarPosition() && QaltilsConfig.INSTANCE.getActionBarCustomization()) || !QaltilsConfig.INSTANCE.getActionBarCustomization()) {
             GlStateManager.translate(x, y, z);
+
         }
     }
 
