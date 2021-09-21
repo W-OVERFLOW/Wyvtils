@@ -17,6 +17,42 @@ object QaltilsConfig : Vigilant(
     File(Qaltils.modDir, "qaltils.toml"),
     "${ChatColor.DARK_PURPLE}Qaltils"
 ) {
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Disable Text Shadow",
+        description = "Disable the shadow on text rendering. Can boost performance.",
+        category = "Miscellaneous"
+    )
+    var disableTextShadow = false
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Render Own Nametag",
+        description = "Render your own nametag in third person.",
+        category = "Miscellaneous",
+        subcategory = "Nametags"
+    )
+    var renderOwnNametag = false
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Remove Nametag Background",
+        description = "Remove the background of nametags.",
+        category = "Miscellaneous",
+        subcategory = "Nametags"
+    )
+    var removeNametagBackground = false
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Nametag Text Shadow",
+        description = "Render a text shadow with the nametag text.",
+        category = "Miscellaneous",
+        subcategory = "Nametags"
+    )
+    var nametagTextShadow = false
+
     @Property(
         type = PropertyType.SWITCH,
         name = "Toggle Bossbar",

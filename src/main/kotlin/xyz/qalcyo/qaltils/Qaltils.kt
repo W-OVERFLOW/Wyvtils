@@ -6,14 +6,14 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.util.InputUtil
-import xyz.qalcyo.qaltils.config.QaltilsConfig
 import org.lwjgl.glfw.GLFW
+import xyz.qalcyo.qaltils.config.QaltilsConfig
 import java.io.File
 
 
 @Suppress("unused")
 object Qaltils : ClientModInitializer {
-
+    var needsToCancel = false
     val modDir = File(File(File(FabricLoader.getInstance().configDir.toFile(), "Qalcyo"), "Qaltils"), "1.17.1")
     lateinit var jarFile: File
 

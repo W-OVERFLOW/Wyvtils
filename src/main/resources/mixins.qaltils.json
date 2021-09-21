@@ -7,9 +7,13 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "InGameHudMixin",
+    "BossBarHudMixin",
     "DebugHudMixin",
     "EntityRenderDispatcherMixin",
-    "BossBarHudMixin"
+    "EntityRendererMixin",
+    "InGameHudMixin",
+    "LivingEntityRendererMixin",
+    "TextRendererDrawerMixin",
+    "TextRendererMixin"
   ]
 }
