@@ -22,16 +22,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.GuiIngameForge;
-import xyz.qalcyo.qaltils.config.QaltilsConfig;
-import xyz.qalcyo.qaltils.gui.ActionBarGui;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.UUID;
+import xyz.qalcyo.qaltils.config.QaltilsConfig;
+import xyz.qalcyo.qaltils.gui.ActionBarGui;
 
 @SuppressWarnings("DefaultAnnotationParam")
 @Mixin(value = GuiIngameForge.class, remap = false)

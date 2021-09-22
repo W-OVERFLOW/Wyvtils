@@ -24,6 +24,7 @@ import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.util.EnumChatFormatting
+import xyz.matthewtgm.requisite.util.GuiHelper
 import xyz.qalcyo.qaltils.Qaltils
 import xyz.qalcyo.qaltils.utils.Updater
 import xyz.qalcyo.qaltils.utils.Updater.shouldUpdate
@@ -42,7 +43,7 @@ class DownloadConfirmGui(private val parent: GuiScreen?) : GuiScreen() {
     override fun actionPerformed(button: GuiButton) {
         when (button.id) {
             0 -> {
-                mc.displayGuiScreen(parent)
+                GuiHelper.open(parent)
                 Multithreading.runAsync {
                     if (Updater.download(
                             updateUrl,
@@ -65,11 +66,7 @@ class DownloadConfirmGui(private val parent: GuiScreen?) : GuiScreen() {
                 }
             }
             1 -> {
-                if (parent == null) {
-                    mc.displayGuiScreen(parent)
-                } else {
-                    EssentialAPI.getGuiUtil().openScreen(parent)
-                }
+                GuiHelper.open(parent)
             }
         }
     }

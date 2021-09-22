@@ -50,7 +50,7 @@ import java.io.File
 object Qaltils {
     const val MODID = "qaltils"
     const val MOD_NAME = "Qaltils"
-    const val VERSION = "1.2.0-BETA6"
+    const val VERSION = "1.2.0-BETA7"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
     lateinit var jarFile: File
@@ -60,7 +60,7 @@ object Qaltils {
     var isConfigInitialized = false
 
     fun sendMessage(message: String?) {
-        ChatHelper.sendMessage(EnumChatFormatting.DARK_PURPLE.toString() + "[Qaltils] ", message)
+        ChatHelper.sendMessage("${EnumChatFormatting.DARK_PURPLE}[Qaltils] ", message)
     }
 
     /*/

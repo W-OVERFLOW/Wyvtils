@@ -37,7 +37,7 @@ public class MixinSoundManager {
                     if (positionedSound.getVolume() * QaltilsConfig.INSTANCE.getSoundMultiplier() <= 1) {
                         cir.setReturnValue(positionedSound.getVolume() * QaltilsConfig.INSTANCE.getSoundMultiplier());
                     } else {
-                        cir.setReturnValue(Float.parseFloat("1"));
+                        cir.setReturnValue(1F);
                     }
                 }
             }

@@ -78,10 +78,10 @@ public class MixinRenderManager {
 
     @Inject(method = "shouldRender", at = @At(value = "HEAD"), cancellable = true)
     private void renderNPCOnly(Entity entityIn, ICamera camera, double camX, double camY, double camZ, CallbackInfoReturnable<Boolean> cir) {
-        Render<Entity> render = ((RenderManager) (Object)this).getEntityRenderObject(entityIn);
+        Render<Entity> render = ((RenderManager) (Object) this).getEntityRenderObject(entityIn);
         if (QaltilsConfig.INSTANCE.getRemoveNonNPCS()) {
             if (
-                    HypixelUtils.INSTANCE.isSkyblock() || HypixelUtils.INSTANCE.isOnLobby()
+                    HypixelUtils.INSTANCE.getSkyblock() || HypixelUtils.INSTANCE.getLobby()
             ) {
                 if (entityIn instanceof EntityPlayerSP) {
                     if (((EntityPlayerSP) entityIn).getGameProfile().getId() == Minecraft.getMinecraft().thePlayer.getGameProfile().getId()) {
@@ -149,7 +149,7 @@ public class MixinRenderManager {
     /**
      * Adapted from EvergreenHUD under GPLv3
      * https://github.com/isXander/EvergreenHUD/blob/main/LICENSE
-     *
+     * <p>
      * Modified to be more compact.
      */
     private boolean getReachDistanceFromEntity(Entity entity) {

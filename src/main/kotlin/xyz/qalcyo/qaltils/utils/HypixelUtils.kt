@@ -36,6 +36,15 @@ object HypixelUtils {
     var gexp: String? = null
     private var locraw: HypixelHelper.HypixelLocraw? = null
     @Suppress("ObjectPropertyName") private var `troll age` = false
+    val skyblock
+    get() = EssentialAPI.getMinecraftUtil().isHypixel() && mc.theWorld.scoreboard.getObjectiveInDisplaySlot(1)
+        ?.let { it -> it.displayName.withoutFormattingCodes().toCharArray().filter { it.code in 21..126 }.joinToString(separator = "").contains("SKYBLOCK") } ?: false
+    val lobby
+    get() = if (EssentialAPI.getMinecraftUtil().isHypixel()) {
+        locraw?.gameMode.isNullOrBlank() || locraw?.gameType == null
+    } else {
+        false
+    }
 
     private fun getCurrentESTTime(): String? {
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -235,19 +244,6 @@ object HypixelUtils {
             return null
         }
         return uuidResponse["id"].asString
-    }
-
-    fun isSkyblock(): Boolean {
-        return EssentialAPI.getMinecraftUtil().isHypixel() && mc.theWorld.scoreboard.getObjectiveInDisplaySlot(1)
-            ?.let { it -> it.displayName.withoutFormattingCodes().toCharArray().filter { it.code in 21..126 }.joinToString(separator = "").contains("SKYBLOCK") } ?: false
-    }
-
-    fun isOnLobby(): Boolean {
-        return if (EssentialAPI.getMinecraftUtil().isHypixel()) {
-            locraw?.gameMode.isNullOrBlank() || locraw?.gameType == null
-        } else {
-            false
-        }
     }
 
     @SubscribeEvent

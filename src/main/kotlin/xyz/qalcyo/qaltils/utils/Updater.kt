@@ -64,7 +64,11 @@ object Updater {
             }
             if (updateUrl.isNotEmpty()) {
                 EssentialAPI.getNotifications()
-                    .push("Mod Update", "${Qaltils.MOD_NAME} $latestTag is available!\nClick here to download it!", 5f) {
+                    .push(
+                        "Mod Update",
+                        "${Qaltils.MOD_NAME} $latestTag is available!\nClick here to download it!",
+                        5f
+                    ) {
                         EssentialAPI.getGuiUtil().openScreen(DownloadConfirmGui(mc.currentScreen))
                     }
                 shouldUpdate = true

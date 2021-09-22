@@ -44,7 +44,9 @@ import java.util.ArrayList;
 @Mixin(GuiIngame.class)
 public class MixinGuiIngame {
 
-    @Shadow @Final protected Minecraft mc;
+    @Shadow
+    @Final
+    protected Minecraft mc;
     private int i;
 
     @Inject(method = "renderBossHealth", at = @At("HEAD"), cancellable = true)
@@ -109,7 +111,7 @@ public class MixinGuiIngame {
         }
     }
 
-    @Redirect(method = "renderScoreboard", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Lists;newArrayList(Ljava/lang/Iterable;)Ljava/util/ArrayList;"))
+    @Redirect(method = "renderScoreboard", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Lists;newArrayList(Ljava/lang/Iterable;)Ljava/util/ArrayList;"), remap = false)
     private ArrayList<Score> compactSidebar(Iterable<? extends Score> elements) {
         if (QaltilsConfig.INSTANCE.getCompactSidebar()) {
             ArrayList<Score> newElement = new ArrayList<>();

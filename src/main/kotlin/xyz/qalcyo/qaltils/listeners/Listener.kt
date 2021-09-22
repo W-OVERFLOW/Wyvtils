@@ -133,6 +133,7 @@ object Listener {
                                             .push("Qaltils", "There was a problem trying to get your winstreak.")
                                     }
                                 }
+                                break
                             }
                         }
                     }

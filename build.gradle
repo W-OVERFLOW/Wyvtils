@@ -29,7 +29,7 @@ plugins {
     id 'org.spongepowered.mixin' version 'd5f9873'
 }
 
-version = '1.2.0-BETA6'
+version = '1.2.0-BETA7'
 group = 'xyz.qalcyo'
 archivesBaseName = 'Qaltils [1.8.9]'
 
@@ -71,12 +71,11 @@ repositories {
 }
 
 dependencies {
-    // Libraries
-    provided 'xyz.matthewtgm:Requisite:1.1.1'
+    implementation 'xyz.matthewtgm:Requisite:1.1.1'
     include 'com.github.Qalcyo:RequisiteEssentialLoader:0a78589683'
-    implementation ('xyz.matthewtgm:RequisiteLaunchwrapper:1.1')
-    implementation ('gg.essential:loader-launchwrapper:1.1.1')
-    provided 'gg.essential:essential-1.8.9-forge:1448+release-launch'
+    implementation 'xyz.matthewtgm:RequisiteLaunchwrapper:1.1'
+    implementation 'gg.essential:loader-launchwrapper:1.1.1'
+    implementation 'gg.essential:essential-1.8.9-forge:1459+release-launch'
 
     annotationProcessor 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
 }
