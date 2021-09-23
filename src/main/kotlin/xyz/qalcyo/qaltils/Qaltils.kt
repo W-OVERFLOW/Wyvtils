@@ -31,9 +31,9 @@ object Qaltils : ClientModInitializer {
             modDir.mkdirs()
         }
         jarFile = File(javaClass.protectionDomain.codeSource.location.toURI())
-        QaltilsConfig.initialize()
+        QaltilsConfig.preload()
         ClientTickEvents.END_CLIENT_TICK.register {
-            while (keyBinding.wasPressed()) {
+            while (keyBinding.wasPressed() && it.currentScreen == null) {
                 it.setScreen(QaltilsConfig.gui())
                 return@register
             }

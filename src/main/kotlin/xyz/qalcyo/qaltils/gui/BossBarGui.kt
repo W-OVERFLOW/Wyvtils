@@ -1,7 +1,7 @@
 package xyz.qalcyo.qaltils.gui
 
 import com.mojang.blaze3d.systems.RenderSystem
-import net.minecraft.client.MinecraftClient
+import gg.essential.api.EssentialAPI
 import net.minecraft.client.gui.hud.ClientBossBar
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.InputUtil
@@ -124,7 +124,7 @@ class BossBarGui(private var parent: Screen?) : Screen(Text.of("Qaltils")) {
 
     override fun onClose() {
         QaltilsConfig.markAndWrite()
-        MinecraftClient.getInstance().setScreen(parent)
+        EssentialAPI.getGuiUtil().openScreen(parent)
         parent = null
     }
 }

@@ -1,5 +1,6 @@
 package xyz.qalcyo.qaltils.config
 
+import gg.essential.api.EssentialAPI
 import gg.essential.universal.ChatColor
 import gg.essential.vigilance.Vigilant
 import gg.essential.vigilance.data.Property
@@ -100,7 +101,7 @@ object QaltilsConfig : Vigilant(
         category = "Bossbar"
     )
     fun openBossHealthGui() {
-        MinecraftClient.getInstance().setScreen(BossBarGui(gui()))
+        EssentialAPI.getGuiUtil().openScreen(BossBarGui(gui()))
     }
 
     @Property(
@@ -110,12 +111,12 @@ object QaltilsConfig : Vigilant(
         category = "Bossbar"
     )
     fun resetBossbar() {
-        MinecraftClient.getInstance().setScreen(null)
+        EssentialAPI.getGuiUtil().openScreen(null)
         bossBarX = MinecraftClient.getInstance().window.scaledWidth
         bossBarY = 12
         QaltilsConfig.markDirty()
         QaltilsConfig.writeData()
-        MinecraftClient.getInstance().setScreen(gui())
+        EssentialAPI.getGuiUtil().openScreen(gui())
     }
 
     @Property(
@@ -201,7 +202,7 @@ object QaltilsConfig : Vigilant(
         category = "Action Bar"
     )
     fun openActionBarGui() {
-        if (actionBarPosition && actionBarCustomization) MinecraftClient.getInstance().setScreen(ActionBarGui(gui()))
+        if (actionBarPosition && actionBarCustomization) EssentialAPI.getGuiUtil().openScreen(ActionBarGui(gui()))
     }
 
     @Property(
@@ -374,7 +375,7 @@ object QaltilsConfig : Vigilant(
         category = "Sidebar"
     )
     fun openSidebarGui() {
-        if (sidebarPosition) MinecraftClient.getInstance().setScreen(SidebarGui(gui()))
+        if (sidebarPosition) EssentialAPI.getGuiUtil().openScreen(SidebarGui(gui()))
     }
 
     @Property(
@@ -406,6 +407,10 @@ object QaltilsConfig : Vigilant(
     fun markAndWrite() {
         markDirty()
         writeData()
+    }
+
+    init {
+        initialize()
     }
 
 }

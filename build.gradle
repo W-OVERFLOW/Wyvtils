@@ -2,6 +2,7 @@ plugins {
     id 'fabric-loom' version '0.9-SNAPSHOT'
     id 'maven-publish'
     id 'org.jetbrains.kotlin.jvm' version '1.5.30'
+    id 'java'
 }
 sourceCompatibility = JavaVersion.VERSION_16
 targetCompatibility = JavaVersion.VERSION_16
@@ -35,38 +36,18 @@ dependencies {
         transitive = false
     }
     modImplementation('gg.essential:essential-1.17.1-fabric:1436+release-launch-1.17') {
+        exclude(group: "net.fabricmc")
         transitive = false
     }
     modImplementation include('gg.essential:loader-fabric:1.0.0') {
         transitive = false
     }
     modImplementation("net.fabricmc:fabric-language-kotlin:1.6.4+kotlin.1.5.30")
-    modImplementation('gg.essential:vigilance-1.17-fabric:163+next') {
+    modImplementation('gg.essential:vigilance-1.17.1-fabric:179+next') {
         exclude(group: "net.fabricmc")
         exclude module: 'kotlin-reflect'
         exclude module: 'kotlin-stdlib-jdk8'
     }
-    modImplementation('com.electronwill.night-config:toml:3.6.4')
-    modImplementation('com.electronwill.night-config:core:3.6.4')
-    modImplementation("gg.essential:elementa-1.17-fabric:359+next") {
-        exclude(group: "net.fabricmc")
-        exclude module: 'kotlin-reflect'
-        exclude module: 'kotlin-stdlib-jdk8'
-    }
-    //noinspection GradlePackageUpdate
-    modImplementation("org.commonmark:commonmark:0.17.1")
-    //noinspection GradlePackageUpdate
-    modImplementation("org.commonmark:commonmark-ext-gfm-strikethrough:0.17.1")
-    //noinspection GradlePackageUpdate
-    modImplementation("org.commonmark:commonmark-ext-ins:0.17.1")
-    //noinspection GradlePackageUpdate
-    modImplementation("org.dom4j:dom4j:2.1.1")
-    modImplementation("gg.essential:universalcraft-1.17-fabric:156+next") {
-        exclude(group: "net.fabricmc")
-        exclude module: 'kotlin-reflect'
-        exclude module: 'kotlin-stdlib-jdk8'
-    }
-
 }
 
 processResources {

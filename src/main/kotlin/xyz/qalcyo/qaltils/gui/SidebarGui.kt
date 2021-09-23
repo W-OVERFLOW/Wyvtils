@@ -1,6 +1,6 @@
 package xyz.qalcyo.qaltils.gui
 
-import net.minecraft.client.MinecraftClient
+import gg.essential.api.EssentialAPI
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.InputUtil
 import net.minecraft.client.util.math.MatrixStack
@@ -109,7 +109,7 @@ class SidebarGui(private var parent: Screen?) : Screen(Text.of("Qaltils")) {
 
     override fun onClose() {
         QaltilsConfig.markAndWrite()
-        MinecraftClient.getInstance().setScreen(parent)
+        EssentialAPI.getGuiUtil().openScreen(parent)
         parent = null
     }
 }
