@@ -83,7 +83,6 @@ dependencies {
 jar {
     manifest.attributes(
             'ModSide': 'CLIENT',
-            'FMLCorePluginContainsFMLMod': true,
             'ForceLoadAsMod': true,
             'MixinConfigs': 'mixins.qaltils.json',
             'TweakClass': 'xyz.qalcyo.requisiteessentialloader.RequisiteEssentialTweaker',
