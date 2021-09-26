@@ -3,7 +3,7 @@
   "minVersion": "0.7",
   "plugin": "xyz.qalcyo.wyvtils.tweaker.WyvtilsMixinPlugin",
   "package": "xyz.qalcyo.wyvtils.mixin",
-  "refmap": "mixins.qaltils.refmap.json",
+  "refmap": "mixins.wyvtils.refmap.json",
   "mixins": [
     "AccessorGuiIngame",
     "MixinGuiIngame",

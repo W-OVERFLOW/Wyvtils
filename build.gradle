@@ -29,7 +29,7 @@ plugins {
     id 'org.spongepowered.mixin' version 'd5f9873'
 }
 
-version = '1.2.0-BETA8'
+version = '1.2.0-BETA9'
 group = 'xyz.qalcyo'
 archivesBaseName = 'Wyvtils [1.8.9]'
 
