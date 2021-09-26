@@ -1,12 +1,12 @@
 [
   {
-    "modid": "qaltils",
-    "name": "Qaltils",
+    "modid": "wyvtils",
+    "name": "Wyvtils",
     "description": "Useful utilities for general usage.",
     "version": "${version}",
     "mcversion": "${mcversion}",
-    "url": "https://github.com/Qalcyo/Qaltils/releases/latest",
-    "updateUrl": "https://github.com/Qalcyo/Qaltils/releases/latest",
+    "url": "https://github.com/Qalcyo/Wyvtils/releases/latest",
+    "updateUrl": "https://github.com/Qalcyo/Wyvtils/releases/latest",
     "authorList": [
       "Qalcyo"
     ],

@@ -1,6 +1,6 @@
 /*
- * Qaltils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Qaltils
+ * Wyvtils, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Wyvtils
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -16,11 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.qaltils.mixin;
+package xyz.qalcyo.wyvtils.mixin;
 
 import net.minecraft.client.audio.*;
-import xyz.qalcyo.qaltils.Qaltils;
-import xyz.qalcyo.qaltils.config.QaltilsConfig;
+import xyz.qalcyo.wyvtils.Wyvtils;
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -30,12 +30,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinSoundManager {
     @Inject(method = "getNormalizedVolume", at = @At("HEAD"), cancellable = true)
     public void getVolume(ISound sound, SoundPoolEntry entry, SoundCategory category, CallbackInfoReturnable<Float> cir) {
-        if (QaltilsConfig.INSTANCE.getSoundBoost()) {
+        if (WyvtilsConfig.INSTANCE.getSoundBoost()) {
             if (sound instanceof PositionedSound) {
                 PositionedSound positionedSound = (PositionedSound) sound;
-                if (Qaltils.INSTANCE.checkSound(sound.getSoundLocation().getResourcePath())) {
-                    if (positionedSound.getVolume() * QaltilsConfig.INSTANCE.getSoundMultiplier() <= 1) {
-                        cir.setReturnValue(positionedSound.getVolume() * QaltilsConfig.INSTANCE.getSoundMultiplier());
+                if (Wyvtils.INSTANCE.checkSound(sound.getSoundLocation().getResourcePath())) {
+                    if (positionedSound.getVolume() * WyvtilsConfig.INSTANCE.getSoundMultiplier() <= 1) {
+                        cir.setReturnValue(positionedSound.getVolume() * WyvtilsConfig.INSTANCE.getSoundMultiplier());
                     } else {
                         cir.setReturnValue(1F);
                     }

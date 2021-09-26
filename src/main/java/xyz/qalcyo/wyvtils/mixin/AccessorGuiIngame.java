@@ -1,6 +1,6 @@
 /*
- * Qaltils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Qaltils
+ * Wyvtils, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Wyvtils
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.qaltils.mixin;
+package xyz.qalcyo.wyvtils.mixin;
 
 import net.minecraft.client.gui.GuiIngame;
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,13 +27,4 @@ public interface AccessorGuiIngame {
 
     @Accessor
     String getRecordPlaying();
-
-    @Accessor
-    String getDisplayedTitle();
-
-    @Accessor
-    void setDisplayedTitle(String title);
-
-    @Accessor
-    void setDisplayedSubTitle(String subtitle);
 }

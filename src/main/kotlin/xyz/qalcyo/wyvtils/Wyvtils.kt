@@ -1,6 +1,6 @@
 /*
- * Qaltils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Qaltils
+ * Wyvtils, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Wyvtils
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.qaltils
+package xyz.qalcyo.wyvtils
 
 import gg.essential.api.EssentialAPI
 import gg.essential.universal.ChatColor
@@ -28,44 +28,44 @@ import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import xyz.matthewtgm.requisite.util.ChatHelper
 import xyz.matthewtgm.requisite.util.ForgeHelper
-import xyz.qalcyo.qaltils.commands.QaltilsCommands
-import xyz.qalcyo.qaltils.config.QaltilsConfig
-import xyz.qalcyo.qaltils.listeners.Listener
-import xyz.qalcyo.qaltils.utils.HypixelUtils
-import xyz.qalcyo.qaltils.utils.Updater
-import xyz.qalcyo.qaltils.utils.equalsAny
-import xyz.qalcyo.qaltils.utils.startsWithAny
+import xyz.qalcyo.wyvtils.commands.WyvtilsCommands
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig
+import xyz.qalcyo.wyvtils.listeners.Listener
+import xyz.qalcyo.wyvtils.utils.HypixelUtils
+import xyz.qalcyo.wyvtils.utils.Updater
+import xyz.qalcyo.wyvtils.utils.equalsAny
+import xyz.qalcyo.wyvtils.utils.startsWithAny
 import java.io.File
 
 
 @Suppress("MemberVisibilityCanBePrivate")
 @Mod(
-    modid = Qaltils.MODID,
-    name = Qaltils.MOD_NAME,
-    version = Qaltils.VERSION,
+    modid = Wyvtils.MODID,
+    name = Wyvtils.MOD_NAME,
+    version = Wyvtils.VERSION,
     acceptedMinecraftVersions = "[1.8.9]",
     clientSideOnly = true,
     modLanguageAdapter = "gg.essential.api.utils.KotlinAdapter"
 )
-object Qaltils {
-    const val MODID = "qaltils"
-    const val MOD_NAME = "Qaltils"
+object Wyvtils {
+    const val MODID = "wyvtils"
+    const val MOD_NAME = "Wyvtils"
     const val VERSION = "1.2.0-BETA7"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
     lateinit var jarFile: File
-    val modDir = File(File(File(File(mc.mcDataDir, "config"), "Qalcyo"), "Qaltils"), "1.8.9")
+    val modDir = File(File(File(File(mc.mcDataDir, "config"), "Qalcyo"), "Wyvtils"), "1.8.9")
 
     @JvmField
     var isConfigInitialized = false
 
     fun sendMessage(message: String?) {
-        ChatHelper.sendMessage("${EnumChatFormatting.DARK_PURPLE}[Qaltils] ", message)
+        ChatHelper.sendMessage("${EnumChatFormatting.DARK_PURPLE}[Wyvtils] ", message)
     }
 
     /*/
-    val chatKeybind = KeyBinding("Chat Swapper", Keyboard.KEY_V, "Qaltils")
-    val titleKeybind = KeyBinding("Clear Title", Keyboard.KEY_Z, "Qaltils")
+    val chatKeybind = KeyBinding("Chat Swapper", Keyboard.KEY_V, "Wyvtils")
+    val titleKeybind = KeyBinding("Clear Title", Keyboard.KEY_Z, "Wyvtils")
      */
 
     @Mod.EventHandler
@@ -76,10 +76,10 @@ object Qaltils {
 
     @Mod.EventHandler
     private fun onFMLInitialization(event: FMLInitializationEvent) {
-        QaltilsConfig.preload()
+        WyvtilsConfig.preload()
         isConfigInitialized = true
-        if (QaltilsConfig.highlightName) {
-            Listener.color = when (QaltilsConfig.textColor) {
+        if (WyvtilsConfig.highlightName) {
+            Listener.color = when (WyvtilsConfig.textColor) {
                 0 -> ChatColor.BLACK.toString()
                 1 -> ChatColor.DARK_BLUE.toString()
                 2 -> ChatColor.DARK_GREEN.toString()
@@ -100,7 +100,7 @@ object Qaltils {
             }
         }
         ForgeHelper.registerEventListeners(Listener, HypixelUtils)
-        QaltilsCommands.register()
+        WyvtilsCommands.register()
         /*/
         ClientRegistry.registerKeyBinding(chatKeybind)
         ClientRegistry.registerKeyBinding(titleKeybind)
@@ -109,13 +109,13 @@ object Qaltils {
 
     @Mod.EventHandler
     private fun onFMLLoad(event: FMLLoadCompleteEvent) {
-        if (ForgeHelper.isModLoaded("bossbar_customizer") && QaltilsConfig.bossBarCustomization) {
-            QaltilsConfig.bossBarCustomization = false
-            QaltilsConfig.markDirty()
-            QaltilsConfig.writeData()
+        if (ForgeHelper.isModLoaded("bossbar_customizer") && WyvtilsConfig.bossBarCustomization) {
+            WyvtilsConfig.bossBarCustomization = false
+            WyvtilsConfig.markDirty()
+            WyvtilsConfig.writeData()
             EssentialAPI.getNotifications().push(
-                "Qaltils",
-                "Bossbar Customizer (the mod) has been detected, and so the Qaltils Bossbar related features have been disabled."
+                "Wyvtils",
+                "Bossbar Customizer (the mod) has been detected, and so the Wyvtils Bossbar related features have been disabled."
             )
         }
         Updater.update()

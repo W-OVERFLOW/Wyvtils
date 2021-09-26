@@ -1,6 +1,6 @@
 /*
- * Qaltils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Qaltils
+ * Wyvtils, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Wyvtils
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.qaltils.gui
+package xyz.qalcyo.wyvtils.gui
 
 import gg.essential.api.EssentialAPI
 import gg.essential.api.utils.Multithreading
@@ -25,10 +25,10 @@ import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.util.EnumChatFormatting
 import xyz.matthewtgm.requisite.util.GuiHelper
-import xyz.qalcyo.qaltils.Qaltils
-import xyz.qalcyo.qaltils.utils.Updater
-import xyz.qalcyo.qaltils.utils.Updater.shouldUpdate
-import xyz.qalcyo.qaltils.utils.Updater.updateUrl
+import xyz.qalcyo.wyvtils.Wyvtils
+import xyz.qalcyo.wyvtils.utils.Updater
+import xyz.qalcyo.wyvtils.utils.Updater.shouldUpdate
+import xyz.qalcyo.wyvtils.utils.Updater.updateUrl
 import java.io.File
 import kotlin.math.max
 
@@ -47,19 +47,19 @@ class DownloadConfirmGui(private val parent: GuiScreen?) : GuiScreen() {
                 Multithreading.runAsync {
                     if (Updater.download(
                             updateUrl,
-                            File("mods/${Qaltils.MOD_NAME} [1.8.9]-${Updater.latestTag.substringAfter("v")}.jar")
+                            File("mods/${Wyvtils.MOD_NAME} [1.8.9]-${Updater.latestTag.substringAfter("v")}.jar")
                         ) && Updater.download(
                             "https://github.com/Wyvest/Deleter/releases/download/v1.2/Deleter-1.2.jar",
                             File("config/Wyvest/Deleter-1.2.jar")
                         )
                     ) {
                         EssentialAPI.getNotifications()
-                            .push(Qaltils.MOD_NAME, "The ingame updater has successfully installed the newest version.")
+                            .push(Wyvtils.MOD_NAME, "The ingame updater has successfully installed the newest version.")
                         Updater.addShutdownHook()
                         shouldUpdate = false
                     } else {
                         EssentialAPI.getNotifications().push(
-                            Qaltils.MOD_NAME,
+                            Wyvtils.MOD_NAME,
                             "The ingame updater has NOT installed the newest version as something went wrong."
                         )
                     }
@@ -77,7 +77,7 @@ class DownloadConfirmGui(private val parent: GuiScreen?) : GuiScreen() {
         GlStateManager.scale(2f, 2f, 0f)
         drawCenteredString(
             fontRendererObj,
-            EnumChatFormatting.DARK_PURPLE.toString() + Qaltils.MOD_NAME,
+            EnumChatFormatting.DARK_PURPLE.toString() + Wyvtils.MOD_NAME,
             width / 4,
             3,
             -1
@@ -88,7 +88,7 @@ class DownloadConfirmGui(private val parent: GuiScreen?) : GuiScreen() {
         val lines = listOf(
             "Are you sure you want to update?",
             "You can download it ingame at any time via the configuration screen.",
-            "(This will update from v${Qaltils.VERSION} to ${Updater.latestTag})"
+            "(This will update from v${Wyvtils.VERSION} to ${Updater.latestTag})"
         )
         var offset = max(85 - lines.size * 10, 10)
 

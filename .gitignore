@@ -1,6 +1,7 @@
 # User-specific stuff
 .idea/**.**
 .idea/modules
+.idea/runConfigurations
 
 *.iml
 *.ipr

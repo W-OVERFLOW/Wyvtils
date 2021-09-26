@@ -1,6 +1,6 @@
 /*
- * Qaltils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Qaltils
+ * Wyvtils, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Wyvtils
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.qaltils.listeners
+package xyz.qalcyo.wyvtils.listeners
 
 import gg.essential.api.EssentialAPI
 import gg.essential.api.utils.Multithreading
@@ -30,29 +30,24 @@ import net.minecraftforge.client.event.sound.PlaySoundEvent
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
-import xyz.qalcyo.qaltils.Qaltils
-import xyz.qalcyo.qaltils.Qaltils.mc
-import xyz.qalcyo.qaltils.config.QaltilsConfig
-import xyz.qalcyo.qaltils.mixin.AccessorGuiIngame
-import xyz.qalcyo.qaltils.utils.HypixelUtils
-import xyz.qalcyo.qaltils.utils.containsAny
-import xyz.qalcyo.qaltils.utils.equalsAny
-import xyz.qalcyo.qaltils.utils.withoutFormattingCodes
 import xyz.matthewtgm.requisite.events.FontRendererEvent
 import xyz.matthewtgm.requisite.mixins.sound.PositionedSoundAccessor
 import xyz.matthewtgm.requisite.util.ServerHelper
 import xyz.matthewtgm.requisite.util.StringHelper
-import java.util.*
+import xyz.qalcyo.wyvtils.Wyvtils
+import xyz.qalcyo.wyvtils.Wyvtils.mc
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig
+import xyz.qalcyo.wyvtils.utils.HypixelUtils
+import xyz.qalcyo.wyvtils.utils.containsAny
+import xyz.qalcyo.wyvtils.utils.withoutFormattingCodes
 
 
 object Listener {
-    private var removeTitle = false
 
     //private var current: Int = 1
     private var victoryDetected = false
     var color: String = ""
     var changeTextColor = false
-    private var titleRegex = Regex("(.*) wins(.*)")
 
     private val gameEndList = listOf(
         "Winner #1 (",
@@ -77,7 +72,7 @@ object Listener {
     @SubscribeEvent
     fun onChatReceivedEvent(e: ClientChatReceivedEvent) {
         val unformattedText = e.message.unformattedText.withoutFormattingCodes()
-        if (QaltilsConfig.autoGetAPI) {
+        if (WyvtilsConfig.autoGetAPI) {
             /*/
             Adapted from Moulberry's NotEnoughUpdates, under the Attribution-NonCommercial 3.0 license.
             https://github.com/Moulberry/NotEnoughUpdates
@@ -89,48 +84,48 @@ object Listener {
                     if (!HypixelUtils.isValidKey(tempApiKey)
                     ) {
                         if (!ServerHelper.hypixel()) {
-                            Qaltils.sendMessage(EnumChatFormatting.RED.toString() + "You are not running this command on Hypixel! This mod needs an Hypixel API key!")
+                            Wyvtils.sendMessage(EnumChatFormatting.RED.toString() + "You are not running this command on Hypixel! This mod needs an Hypixel API key!")
                         } else {
-                            Qaltils.sendMessage(EnumChatFormatting.RED.toString() + "The API Key was invalid! Please try running the command again.")
+                            Wyvtils.sendMessage(EnumChatFormatting.RED.toString() + "The API Key was invalid! Please try running the command again.")
                         }
                     } else {
-                        QaltilsConfig.apiKey = unformattedText.substring("Your new API key is ".length)
-                        QaltilsConfig.markDirty()
-                        QaltilsConfig.writeData()
-                        Qaltils.sendMessage(EnumChatFormatting.GREEN.toString() + "Your API Key has been automatically configured.")
+                        WyvtilsConfig.apiKey = unformattedText.substring("Your new API key is ".length)
+                        WyvtilsConfig.markDirty()
+                        WyvtilsConfig.writeData()
+                        Wyvtils.sendMessage(EnumChatFormatting.GREEN.toString() + "Your API Key has been automatically configured.")
                     }
                 }
             }
             //Stolen code ends here
         }
-        if ((QaltilsConfig.autoGetGEXP || QaltilsConfig.autoGetWinstreak) && ServerHelper.hypixel()) {
+        if ((WyvtilsConfig.autoGetGEXP || WyvtilsConfig.autoGetWinstreak) && ServerHelper.hypixel()) {
             if (!victoryDetected) {
                 Multithreading.runAsync {
                     if (unformattedText.startsWith(" ")) {
                         for (triggers in gameEndList) {
                             if (unformattedText.contains(triggers)) {
                                 victoryDetected = true
-                                if (QaltilsConfig.autoGetGEXP) {
+                                if (WyvtilsConfig.autoGetGEXP) {
                                     if (HypixelUtils.getGEXP()) {
                                         EssentialAPI.getNotifications()
                                             .push(
-                                                "Qaltils",
+                                                "Wyvtils",
                                                 "You currently have " + HypixelUtils.gexp + " guild EXP."
                                             )
                                     } else {
                                         EssentialAPI.getNotifications()
-                                            .push("Qaltils", "There was a problem trying to get your GEXP.")
+                                            .push("Wyvtils", "There was a problem trying to get your GEXP.")
                                     }
                                 }
-                                if (QaltilsConfig.autoGetWinstreak) {
+                                if (WyvtilsConfig.autoGetWinstreak) {
                                     if (HypixelUtils.getWinstreak()) {
                                         EssentialAPI.getNotifications().push(
-                                            "Qaltils",
+                                            "Wyvtils",
                                             "You currently have a " + HypixelUtils.winstreak + " winstreak."
                                         )
                                     } else {
                                         EssentialAPI.getNotifications()
-                                            .push("Qaltils", "There was a problem trying to get your winstreak.")
+                                            .push("Wyvtils", "There was a problem trying to get your winstreak.")
                                     }
                                 }
                                 break
@@ -139,60 +134,10 @@ object Listener {
                     }
                 }
             }
-            if (!victoryDetected) {
-                Multithreading.runAsync {
-                    if ((mc.ingameGUI as AccessorGuiIngame).displayedTitle.withoutFormattingCodes()
-                            .lowercase(Locale.ENGLISH).equalsAny(
-                                "victory!",
-                                "game over!"
-                            ) || (mc.ingameGUI as AccessorGuiIngame).displayedTitle.withoutFormattingCodes()
-                            .lowercase(Locale.ENGLISH).matches(titleRegex)
-                    ) {
-                        victoryDetected = true
-                        removeTitle = true
-                        if (QaltilsConfig.autoGetGEXP) {
-                            if (QaltilsConfig.gexpMode == 0) {
-                                if (HypixelUtils.getGEXP()) {
-                                    EssentialAPI.getNotifications()
-                                        .push(
-                                            "Qaltils",
-                                            "You currently have " + HypixelUtils.gexp + " daily guild EXP."
-                                        )
-                                } else {
-                                    EssentialAPI.getNotifications()
-                                        .push("Qaltils", "There was a problem trying to get your daily GEXP.")
-                                }
-                            } else {
-                                if (HypixelUtils.getWeeklyGEXP()) {
-                                    EssentialAPI.getNotifications()
-                                        .push(
-                                            "Qaltils",
-                                            "You currently have " + HypixelUtils.gexp + " weekly guild EXP."
-                                        )
-                                } else {
-                                    EssentialAPI.getNotifications()
-                                        .push("Qaltils", "There was a problem trying to get your weekly GEXP.")
-                                }
-                            }
-                        }
-                        if (QaltilsConfig.autoGetWinstreak) {
-                            if (HypixelUtils.getWinstreak()) {
-                                EssentialAPI.getNotifications().push(
-                                    "Qaltils",
-                                    "You currently have a " + HypixelUtils.winstreak + " winstreak."
-                                )
-                            } else {
-                                EssentialAPI.getNotifications()
-                                    .push("Qaltils", "There was a problem trying to get your winstreak.")
-                            }
-                        }
-                    }
-                }
-            }
         }
-        if (QaltilsConfig.chatHightlight && e.message.formattedText != null && mc.theWorld != null && e.message.formattedText.contains(
+        if (WyvtilsConfig.chatHightlight && e.message.formattedText != null && mc.theWorld != null && e.message.formattedText.contains(
                 mc.thePlayer.gameProfile.name
-            ) && QaltilsConfig.highlightName && !changeTextColor
+            ) && WyvtilsConfig.highlightName && !changeTextColor
         ) {
             if (e.message is ChatComponentText) {
                 mc.ingameGUI.chatGUI.printChatMessage(
@@ -219,29 +164,20 @@ object Listener {
     }
 
     @SubscribeEvent
-    fun onWorldJoin(event: WorldEvent.Load) {
-        if (removeTitle) {
-            removeTitle = false
-            (mc.ingameGUI as AccessorGuiIngame).displayedTitle = ""
-            (mc.ingameGUI as AccessorGuiIngame).setDisplayedSubTitle("")
-        }
-    }
-
-    @SubscribeEvent
     fun onTick(event: TickEvent.ClientTickEvent) {
         if (event.phase != TickEvent.Phase.START) return
-        if (QaltilsConfig.firstTime && mc.theWorld != null) {
+        if (WyvtilsConfig.firstTime && mc.theWorld != null) {
             EssentialAPI.getNotifications().push(
-                "Qaltils",
-                "Hello! As this is your first time using this mod, type in /qaltils in the chat to configure the many features in Qaltils!"
+                "Wyvtils",
+                "Hello! As this is your first time using this mod, type in /wyvtils in the chat to configure the many features in Wyvtils!"
             )
-            QaltilsConfig.firstTime = false
-            QaltilsConfig.markDirty()
-            QaltilsConfig.writeData()
+            WyvtilsConfig.firstTime = false
+            WyvtilsConfig.markDirty()
+            WyvtilsConfig.writeData()
         }
         if (changeTextColor) {
-            if (mc.currentScreen != QaltilsConfig.gui()) {
-                color = when (QaltilsConfig.textColor) {
+            if (mc.currentScreen != WyvtilsConfig.gui()) {
+                color = when (WyvtilsConfig.textColor) {
                     0 -> ChatColor.BLACK.toString()
                     1 -> ChatColor.DARK_BLUE.toString()
                     2 -> ChatColor.DARK_GREEN.toString()
@@ -268,17 +204,17 @@ object Listener {
     fun onSoundPlayed(e: PlaySoundEvent) {
         if (e.result is PositionedSound) {
             val positionedSound = (e.result as PositionedSound as PositionedSoundAccessor)
-            if (Qaltils.checkSound(e.name) && QaltilsConfig.soundBoost) {
-                positionedSound.setVolume((e.result as PositionedSound).volume * QaltilsConfig.soundMultiplier)
-            } else if (QaltilsConfig.soundBoost) {
-                positionedSound.setVolume((e.result as PositionedSound).volume / QaltilsConfig.soundDecrease)
+            if (Wyvtils.checkSound(e.name) && WyvtilsConfig.soundBoost) {
+                positionedSound.setVolume((e.result as PositionedSound).volume * WyvtilsConfig.soundMultiplier)
+            } else if (WyvtilsConfig.soundBoost && e.name != "game.player.hurt") {
+                positionedSound.setVolume((e.result as PositionedSound).volume / WyvtilsConfig.soundDecrease)
             }
         }
     }
 
     @SubscribeEvent
     fun onStringRendered(e: FontRendererEvent.RenderEvent) {
-        if (!QaltilsConfig.chatHightlight && e.text != null && mc.theWorld != null && e.text.contains(mc.thePlayer.gameProfile.name) && QaltilsConfig.highlightName && !changeTextColor) {
+        if (!WyvtilsConfig.chatHightlight && e.text != null && mc.theWorld != null && e.text.contains(mc.thePlayer.gameProfile.name) && WyvtilsConfig.highlightName && !changeTextColor) {
             if (e.text.containsAny("§", "\u00A7")) {
                 e.text = smartReplaceStringWithName(e.text)
             } else {

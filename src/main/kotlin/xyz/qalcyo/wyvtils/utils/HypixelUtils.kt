@@ -1,6 +1,6 @@
 /*
- * Qaltils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Qaltils
+ * Wyvtils, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Wyvtils
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.qaltils.utils
+package xyz.qalcyo.wyvtils.utils
 
 import gg.essential.api.EssentialAPI
 import net.minecraft.util.EnumChatFormatting
@@ -24,9 +24,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent
 import xyz.matthewtgm.requisite.events.LocrawReceivedEvent
 import xyz.matthewtgm.requisite.util.HypixelHelper
-import xyz.qalcyo.qaltils.Qaltils
-import xyz.qalcyo.qaltils.Qaltils.mc
-import xyz.qalcyo.qaltils.config.QaltilsConfig
+import xyz.qalcyo.wyvtils.Wyvtils
+import xyz.qalcyo.wyvtils.Wyvtils.mc
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -56,7 +56,7 @@ object HypixelUtils {
         var gexp: String? = null
         val uuid = mc.thePlayer.gameProfile.id.toString().replace("-", "")
         val guildData =
-            APIUtil.getJSONResponse("https://api.hypixel.net/guild?key=" + QaltilsConfig.apiKey + ";player=" + uuid)["guild"].asJsonObject
+            APIUtil.getJSONResponse("https://api.hypixel.net/guild?key=" + WyvtilsConfig.apiKey + ";player=" + uuid)["guild"].asJsonObject
         val guildMembers = guildData["members"].asJsonArray
         for (e in guildMembers) {
             if (e.asJsonObject["uuid"].asString.equals(uuid)) {
@@ -73,7 +73,7 @@ object HypixelUtils {
         var gexp: String? = null
         val uuid = getUUID(username)
         val guildData =
-            APIUtil.getJSONResponse("https://api.hypixel.net/guild?key=" + QaltilsConfig.apiKey + ";player=" + uuid)["guild"].asJsonObject
+            APIUtil.getJSONResponse("https://api.hypixel.net/guild?key=" + WyvtilsConfig.apiKey + ";player=" + uuid)["guild"].asJsonObject
         val guildMembers = guildData["members"].asJsonArray
         for (e in guildMembers) {
             if (e.asJsonObject["uuid"].asString.equals(uuid)) {
@@ -90,7 +90,7 @@ object HypixelUtils {
         var gexp: String? = null
         val uuid = mc.thePlayer.gameProfile.id.toString().replace("-", "")
         val guildData =
-            APIUtil.getJSONResponse("https://api.hypixel.net/guild?key=" + QaltilsConfig.apiKey + ";player=" + uuid)["guild"].asJsonObject
+            APIUtil.getJSONResponse("https://api.hypixel.net/guild?key=" + WyvtilsConfig.apiKey + ";player=" + uuid)["guild"].asJsonObject
         val guildMembers = guildData["members"].asJsonArray
         for (e in guildMembers) {
             if (e.asJsonObject["uuid"].asString.equals(uuid)) {
@@ -111,7 +111,7 @@ object HypixelUtils {
         var gexp: String? = null
         val uuid = getUUID(username)
         val guildData =
-            APIUtil.getJSONResponse("https://api.hypixel.net/guild?key=" + QaltilsConfig.apiKey + ";player=" + uuid)["guild"].asJsonObject
+            APIUtil.getJSONResponse("https://api.hypixel.net/guild?key=" + WyvtilsConfig.apiKey + ";player=" + uuid)["guild"].asJsonObject
         val guildMembers = guildData["members"].asJsonArray
         for (e in guildMembers) {
             if (e.asJsonObject["uuid"].asString.equals(uuid)) {
@@ -130,7 +130,7 @@ object HypixelUtils {
 
     fun getWinstreak(): Boolean {
         val uuid = mc.thePlayer.gameProfile.id.toString().replace("-", "")
-        val playerStats = APIUtil.getJSONResponse("https://api.hypixel.net/player?key=${QaltilsConfig.apiKey};uuid=$uuid").asJsonObject["player"].asJsonObject["stats"]
+        val playerStats = APIUtil.getJSONResponse("https://api.hypixel.net/player?key=${WyvtilsConfig.apiKey};uuid=$uuid").asJsonObject["player"].asJsonObject["stats"]
         when (locraw?.gameType) {
             HypixelHelper.HypixelLocraw.GameType.BEDWARS -> {
                 try {
@@ -163,7 +163,7 @@ object HypixelUtils {
 
     fun getWinstreak(username: String): Boolean {
         val uuid = getUUID(username)
-        val playerStats = APIUtil.getJSONResponse("https://api.hypixel.net/player?key=${QaltilsConfig.apiKey};uuid=$uuid").asJsonObject["player"].asJsonObject["stats"]
+        val playerStats = APIUtil.getJSONResponse("https://api.hypixel.net/player?key=${WyvtilsConfig.apiKey};uuid=$uuid").asJsonObject["player"].asJsonObject["stats"]
         when (locraw?.gameType) {
             HypixelHelper.HypixelLocraw.GameType.BEDWARS -> {
                 try {
@@ -196,7 +196,7 @@ object HypixelUtils {
 
     fun getWinstreak(username: String, game: String): Boolean {
         val uuid = getUUID(username)
-        val playerStats = APIUtil.getJSONResponse("https://api.hypixel.net/player?key=${QaltilsConfig.apiKey};uuid=$uuid").asJsonObject["player"].asJsonObject["stats"]
+        val playerStats = APIUtil.getJSONResponse("https://api.hypixel.net/player?key=${WyvtilsConfig.apiKey};uuid=$uuid").asJsonObject["player"].asJsonObject["stats"]
         when (game.lowercase()) {
             "bedwars" -> {
                 try {
@@ -236,7 +236,7 @@ object HypixelUtils {
         val uuidResponse =
             APIUtil.getJSONResponse("https://api.mojang.com/users/profiles/minecraft/$username")
         if (uuidResponse.has("error")) {
-            Qaltils.sendMessage(
+            Wyvtils.sendMessage(
                 EnumChatFormatting.RED.toString() + "Failed with error: ${
                     uuidResponse["reason"].asString
                 }"
@@ -249,19 +249,19 @@ object HypixelUtils {
     @SubscribeEvent
     fun onLocraw(event: LocrawReceivedEvent) {
         locraw = event.locraw
-        if (QaltilsConfig.autoBossbarLobby) {
+        if (WyvtilsConfig.autoBossbarLobby) {
             println(event.locraw.gameMode)
             println(event.locraw.gameType)
             if (event.locraw.gameMode.isNullOrBlank() || event.locraw.gameType == null) {
-                QaltilsConfig.bossBar = false
-                QaltilsConfig.markDirty()
-                QaltilsConfig.writeData()
+                WyvtilsConfig.bossBar = false
+                WyvtilsConfig.markDirty()
+                WyvtilsConfig.writeData()
                 `troll age` = true
             } else {
                 if (`troll age`) {
-                    QaltilsConfig.bossBar = true
-                    QaltilsConfig.markDirty()
-                    QaltilsConfig.writeData()
+                    WyvtilsConfig.bossBar = true
+                    WyvtilsConfig.markDirty()
+                    WyvtilsConfig.writeData()
                     `troll age` = false
                 }
             }
@@ -271,9 +271,9 @@ object HypixelUtils {
     @SubscribeEvent
     fun onLeave(event: FMLNetworkEvent.ClientDisconnectionFromServerEvent) {
         if (`troll age`) {
-            QaltilsConfig.bossBar = true
-            QaltilsConfig.markDirty()
-            QaltilsConfig.writeData()
+            WyvtilsConfig.bossBar = true
+            WyvtilsConfig.markDirty()
+            WyvtilsConfig.writeData()
             `troll age` = false
         }
     }

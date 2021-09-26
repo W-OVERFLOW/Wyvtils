@@ -1,6 +1,6 @@
 /*
- * Qaltils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Qaltils
+ * Wyvtils, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Wyvtils
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -16,17 +16,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.qaltils.gui
+package xyz.qalcyo.wyvtils.gui
 
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.*
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.boss.BossStatus
 import net.minecraft.util.EnumChatFormatting
-import xyz.qalcyo.qaltils.config.QaltilsConfig
-import xyz.qalcyo.qaltils.config.QaltilsConfig.bossBarX
-import xyz.qalcyo.qaltils.config.QaltilsConfig.bossBarY
-import xyz.qalcyo.qaltils.config.QaltilsConfig.bossbarScale
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.bossBarX
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.bossBarY
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.bossbarScale
 import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11
 import xyz.matthewtgm.requisite.util.GuiHelper
@@ -47,7 +47,7 @@ class BossHealthGui : GuiScreen() {
 
     override fun actionPerformed(button: GuiButton) {
         when (button.id) {
-            0 -> GuiHelper.open(QaltilsConfig.gui())
+            0 -> GuiHelper.open(WyvtilsConfig.gui())
         }
     }
 
@@ -66,33 +66,33 @@ class BossHealthGui : GuiScreen() {
         GlStateManager.scale(bossbarScale, bossbarScale, 1.0f)
         GlStateManager.enableBlend()
         val fontrenderer: FontRenderer = mc.fontRendererObj
-        if (QaltilsConfig.firstLaunchBossbar) {
-            QaltilsConfig.firstLaunchBossbar = false
+        if (WyvtilsConfig.firstLaunchBossbar) {
+            WyvtilsConfig.firstLaunchBossbar = false
             bossBarX = ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2
             bossBarY = 12
-            QaltilsConfig.markDirty()
-            QaltilsConfig.writeData()
+            WyvtilsConfig.markDirty()
+            WyvtilsConfig.writeData()
         }
         val s = if (BossStatus.bossName == null && mc.currentScreen != null) {
             "Example Text"
         } else {
             BossStatus.bossName
         }
-        if (QaltilsConfig.bossBarBar) {
+        if (WyvtilsConfig.bossBarBar) {
             mc.ingameGUI?.drawTexturedModalRect(bossBarX - 91, bossBarY, 0, 74, 182, 5)
             mc.ingameGUI?.drawTexturedModalRect(bossBarX - 91, bossBarY, 0, 74, 182, 5)
             mc.ingameGUI?.drawTexturedModalRect(bossBarX - 91, bossBarY, 0, 79, 1, 5)
         }
-        if (QaltilsConfig.bossBarText) {
+        if (WyvtilsConfig.bossBarText) {
             fontrenderer.drawString(
                 s,
                 (bossBarX - mc.fontRendererObj.getStringWidth(s) / 2).toString().toFloat(),
                 bossBarY.toFloat() - 10,
-                Color.WHITE.rgb, QaltilsConfig.bossBarShadow
+                Color.WHITE.rgb, WyvtilsConfig.bossBarShadow
             )
         }
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
-        if (QaltilsConfig.bossBarBar) mc.textureManager.bindTexture(Gui.icons)
+        if (WyvtilsConfig.bossBarBar) mc.textureManager.bindTexture(Gui.icons)
         GlStateManager.disableBlend()
         GlStateManager.popMatrix()
         mc.mcProfiler.endSection()
@@ -149,8 +149,8 @@ class BossHealthGui : GuiScreen() {
     }
 
     override fun onGuiClosed() {
-        QaltilsConfig.markDirty()
-        QaltilsConfig.writeData()
+        WyvtilsConfig.markDirty()
+        WyvtilsConfig.writeData()
         super.onGuiClosed()
     }
 

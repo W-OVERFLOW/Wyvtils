@@ -1,6 +1,6 @@
 /*
- * Qaltils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Qaltils
+ * Wyvtils, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Wyvtils
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -16,16 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.qaltils.gui
+package xyz.qalcyo.wyvtils.gui
 
 import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.util.EnumChatFormatting
-import xyz.qalcyo.qaltils.config.QaltilsConfig
-import xyz.qalcyo.qaltils.config.QaltilsConfig.sidebarScale
-import xyz.qalcyo.qaltils.config.QaltilsConfig.sidebarX
-import xyz.qalcyo.qaltils.config.QaltilsConfig.sidebarY
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.sidebarScale
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.sidebarX
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.sidebarY
 import org.lwjgl.input.Keyboard
 import xyz.matthewtgm.requisite.util.GuiHelper
 import java.io.IOException
@@ -43,7 +43,7 @@ class SidebarGui : GuiScreen() {
 
     override fun actionPerformed(button: GuiButton) {
         when (button.id) {
-            0 -> GuiHelper.open(QaltilsConfig.gui())
+            0 -> GuiHelper.open(WyvtilsConfig.gui())
         }
     }
 
@@ -55,7 +55,7 @@ class SidebarGui : GuiScreen() {
         GlStateManager.translate(-sidebarX * mscale, -sidebarY * mscale, 0.0f)
         GlStateManager.scale(sidebarScale, sidebarScale, 1.0f)
 
-        val i: Int = fontRendererObj.getStringWidth("Qaltils!!!!")
+        val i: Int = fontRendererObj.getStringWidth("Wyvtils!!!!")
 
         val j1: Int = sidebarY
         val l1: Int = sidebarX - i
@@ -67,37 +67,29 @@ class SidebarGui : GuiScreen() {
             ++j
             val k: Int = j1 - j * this.fontRendererObj.FONT_HEIGHT
             val l = sidebarX
-            drawRect(l1 - 2, k, l, k + fontRendererObj.FONT_HEIGHT, QaltilsConfig.sidebarBackgroundColor.rgb)
+            drawRect(l1 - 2, k, l, k + fontRendererObj.FONT_HEIGHT, WyvtilsConfig.sidebarBackgroundColor.rgb)
             fontRendererObj.drawString(
                 list[j - 1],
                 l1.toFloat(),
                 k.toFloat(),
                 553648127,
-                QaltilsConfig.sidebarTextShadow
+                WyvtilsConfig.sidebarTextShadow
             )
-            if (QaltilsConfig.sidebarScorePoints) {
+            if (WyvtilsConfig.sidebarScorePoints) {
                 fontRendererObj.drawString(
                     EnumChatFormatting.RED.toString() + j.toString(),
                     (l - fontRendererObj.getStringWidth(j.toString())).toFloat(), k.toFloat(), 553648127,
-                    QaltilsConfig.sidebarTextShadow
+                    WyvtilsConfig.sidebarTextShadow
                 )
             }
 
             if (j == list.size) {
-                val s3 = "Qaltils!!!!"
-                drawRect(
-                    l1 - 2,
-                    k - fontRendererObj.FONT_HEIGHT - 1,
-                    l,
-                    k - 1,
-                    QaltilsConfig.sidebarBackgroundColor.rgb
-                )
-                drawRect(l1 - 2, k - 1, l, k, QaltilsConfig.sidebarBackgroundColor.rgb)
+                val s3 = "Wyvtils!!!!"
                 fontRendererObj.drawString(
                     s3,
                     (l1 + i / 2 - fontRendererObj.getStringWidth(s3) / 2).toFloat(),
                     (k - fontRendererObj.FONT_HEIGHT).toFloat(),
-                    553648127, QaltilsConfig.sidebarTextShadow
+                    553648127, WyvtilsConfig.sidebarTextShadow
                 )
             }
         }
@@ -145,8 +137,8 @@ class SidebarGui : GuiScreen() {
     }
 
     override fun onGuiClosed() {
-        QaltilsConfig.markDirty()
-        QaltilsConfig.writeData()
+        WyvtilsConfig.markDirty()
+        WyvtilsConfig.writeData()
         super.onGuiClosed()
     }
 

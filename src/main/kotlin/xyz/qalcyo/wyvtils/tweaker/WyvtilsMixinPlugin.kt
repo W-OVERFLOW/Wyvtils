@@ -1,6 +1,6 @@
 /*
- * Qaltils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Qaltils
+ * Wyvtils, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Wyvtils
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -16,13 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.qaltils.tweaker
+package xyz.qalcyo.wyvtils.tweaker
 
 import org.spongepowered.asm.lib.tree.ClassNode
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo
 
-class QaltilsMixinPlugin : IMixinConfigPlugin {
+class WyvtilsMixinPlugin : IMixinConfigPlugin {
     override fun onLoad(mixinPackage: String) {
 
     }
@@ -32,7 +32,7 @@ class QaltilsMixinPlugin : IMixinConfigPlugin {
     }
 
     override fun shouldApplyMixin(targetClassName: String, mixinClassName: String): Boolean {
-        if (!mixinClassName.startsWith("xyz.qalcyo.qaltils.mixin")) {
+        if (!mixinClassName.startsWith("xyz.qalcyo.wyvtils.mixin")) {
             println("Mixin $mixinClassName for $targetClassName is foreign, disabling.")
             return false
         }

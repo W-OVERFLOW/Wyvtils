@@ -1,6 +1,6 @@
 /*
- * Qaltils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Qaltils
+ * Wyvtils, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Wyvtils
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.qaltils.utils
+package xyz.qalcyo.wyvtils.utils
 
 import gg.essential.api.EssentialAPI
 import kotlinx.coroutines.CoroutineName
@@ -25,9 +25,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.minecraft.util.Util
 import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion
-import xyz.qalcyo.qaltils.Qaltils
-import xyz.qalcyo.qaltils.Qaltils.mc
-import xyz.qalcyo.qaltils.gui.DownloadConfirmGui
+import xyz.qalcyo.wyvtils.Wyvtils
+import xyz.qalcyo.wyvtils.Wyvtils.mc
+import xyz.qalcyo.wyvtils.gui.DownloadConfirmGui
 import org.apache.http.HttpResponse
 import org.apache.http.client.HttpClient
 import org.apache.http.client.config.RequestConfig
@@ -49,15 +49,15 @@ object Updater {
      * https://github.com/My-Name-Is-Jeff/SimpleToggleSprint/blob/1.8.9/LICENSE
      */
     fun update() {
-        CoroutineScope(Dispatchers.IO + CoroutineName("${Qaltils.MOD_NAME}-UpdateChecker")).launch {
+        CoroutineScope(Dispatchers.IO + CoroutineName("${Wyvtils.MOD_NAME}-UpdateChecker")).launch {
             val latestRelease =
-                APIUtil.getJSONResponse("https://api.github.com/repos/Qalcyo/${Qaltils.MODID}/releases/latest")
+                APIUtil.getJSONResponse("https://api.github.com/repos/Qalcyo/${Wyvtils.MODID}/releases/latest")
             latestTag = latestRelease.get("tag_name").asString
 
-            val currentVersion = DefaultArtifactVersion(Qaltils.VERSION.substringBefore("-"))
+            val currentVersion = DefaultArtifactVersion(Wyvtils.VERSION.substringBefore("-"))
             val latestVersion = DefaultArtifactVersion(latestTag.substringAfter("v").substringBefore("-"))
 
-            if ((Qaltils.VERSION.contains("BETA") && currentVersion >= latestVersion)) {
+            if ((Wyvtils.VERSION.contains("BETA") && currentVersion >= latestVersion)) {
                 return@launch
             } else if (currentVersion < latestVersion) {
                 updateUrl = latestRelease["assets"].asJsonArray[0].asJsonObject["browser_download_url"].asString
@@ -66,7 +66,7 @@ object Updater {
                 EssentialAPI.getNotifications()
                     .push(
                         "Mod Update",
-                        "${Qaltils.MOD_NAME} $latestTag is available!\nClick here to download it!",
+                        "${Wyvtils.MOD_NAME} $latestTag is available!\nClick here to download it!",
                         5f
                     ) {
                         EssentialAPI.getGuiUtil().openScreen(DownloadConfirmGui(mc.currentScreen))
@@ -109,18 +109,18 @@ object Updater {
      */
     fun addShutdownHook() {
         EssentialAPI.getShutdownHookUtil().register(Thread {
-            println("Deleting old ${Qaltils.MOD_NAME} jar file...")
+            println("Deleting old ${Wyvtils.MOD_NAME} jar file...")
             try {
                 val runtime = getJavaRuntime()
                 if (Util.getOSType() == Util.EnumOS.OSX) {
                     println("On Mac, trying to open mods folder")
-                    Desktop.getDesktop().open(Qaltils.jarFile.parentFile)
+                    Desktop.getDesktop().open(Wyvtils.jarFile.parentFile)
                 }
                 println("Using runtime $runtime")
                 val file = File("config/Wyvest/Deleter-1.2.jar")
-                println("\"$runtime\" -jar \"${file.absolutePath}\" \"${Qaltils.jarFile.absolutePath}\"")
+                println("\"$runtime\" -jar \"${file.absolutePath}\" \"${Wyvtils.jarFile.absolutePath}\"")
                 Runtime.getRuntime()
-                    .exec("\"$runtime\" -jar \"${file.absolutePath}\" \"${Qaltils.jarFile.absolutePath}\"")
+                    .exec("\"$runtime\" -jar \"${file.absolutePath}\" \"${Wyvtils.jarFile.absolutePath}\"")
             } catch (e: Throwable) {
                 e.printStackTrace()
             }

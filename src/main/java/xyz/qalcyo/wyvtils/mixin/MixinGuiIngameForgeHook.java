@@ -1,6 +1,6 @@
 /*
- * Qaltils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Qaltils
+ * Wyvtils, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Wyvtils
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -16,10 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.qaltils.mixin;
+package xyz.qalcyo.wyvtils.mixin;
 
 import net.minecraft.client.Minecraft;
-import xyz.qalcyo.qaltils.config.QaltilsConfig;
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -33,12 +33,12 @@ public class MixinGuiIngameForgeHook {
     @SuppressWarnings({"UnresolvedMixinReference", "DefaultAnnotationParam"})
     @Inject(remap = false, method = "drawActionbarText", at = @At(remap = true, value = "HEAD"), cancellable = true)
     private static void onActionBarTextDrawn(String recordPlaying, int color, CallbackInfo ci) {
-        if (!QaltilsConfig.INSTANCE.getActionBarCustomization()) return;
+        if (!WyvtilsConfig.INSTANCE.getActionBarCustomization()) return;
         int newX;
         int newY;
-        if (QaltilsConfig.INSTANCE.getActionBarPosition()) {
-            newX = QaltilsConfig.INSTANCE.getActionBarX();
-            newY = QaltilsConfig.INSTANCE.getActionBarY();
+        if (WyvtilsConfig.INSTANCE.getActionBarPosition()) {
+            newX = WyvtilsConfig.INSTANCE.getActionBarX();
+            newY = WyvtilsConfig.INSTANCE.getActionBarY();
         } else {
             newX = -Minecraft.getMinecraft().fontRendererObj.getStringWidth(recordPlaying) >> 1;
             newY = -4;
@@ -46,7 +46,7 @@ public class MixinGuiIngameForgeHook {
         Minecraft.getMinecraft().fontRendererObj.drawString(
                 recordPlaying,
                 newX, newY,
-                color, QaltilsConfig.INSTANCE.getActionBarShadow()
+                color, WyvtilsConfig.INSTANCE.getActionBarShadow()
         );
         ci.cancel();
     }

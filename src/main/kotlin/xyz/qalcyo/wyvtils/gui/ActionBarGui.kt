@@ -1,6 +1,6 @@
 /*
- * Qaltils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Qaltils
+ * Wyvtils, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Wyvtils
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -16,15 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.qaltils.gui
+package xyz.qalcyo.wyvtils.gui
 
 import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
-import xyz.qalcyo.qaltils.config.QaltilsConfig
-import xyz.qalcyo.qaltils.config.QaltilsConfig.actionBarX
-import xyz.qalcyo.qaltils.config.QaltilsConfig.actionBarY
-import xyz.qalcyo.qaltils.mixin.AccessorGuiIngame
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.actionBarX
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.actionBarY
+import xyz.qalcyo.wyvtils.mixin.AccessorGuiIngame
 import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11
 import xyz.matthewtgm.requisite.util.GuiHelper
@@ -44,7 +44,7 @@ class ActionBarGui : GuiScreen() {
 
     override fun actionPerformed(button: GuiButton) {
         when (button.id) {
-            0 -> GuiHelper.open(QaltilsConfig.gui())
+            0 -> GuiHelper.open(WyvtilsConfig.gui())
         }
     }
 
@@ -57,14 +57,14 @@ class ActionBarGui : GuiScreen() {
         GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0)
         mc.fontRendererObj.drawString(
             if (ingameGui.recordPlaying.isNullOrEmpty()) {
-                "Qaltils Action Bar"
+                "Wyvtils Action Bar"
             } else {
                 ingameGui.recordPlaying
             },
             actionBarX.toFloat(),
             actionBarY.toFloat(),
             Color.WHITE.rgb,
-            QaltilsConfig.actionBarShadow
+            WyvtilsConfig.actionBarShadow
         )
         GlStateManager.disableBlend()
         GlStateManager.popMatrix()
@@ -112,8 +112,8 @@ class ActionBarGui : GuiScreen() {
     }
 
     override fun onGuiClosed() {
-        QaltilsConfig.markDirty()
-        QaltilsConfig.writeData()
+        WyvtilsConfig.markDirty()
+        WyvtilsConfig.writeData()
         super.onGuiClosed()
     }
 

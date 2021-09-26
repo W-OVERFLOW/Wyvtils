@@ -1,6 +1,6 @@
 /*
- * Qaltils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Qaltils
+ * Wyvtils, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Wyvtils
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -16,11 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.qaltils.utils
+package xyz.qalcyo.wyvtils.utils
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import xyz.qalcyo.qaltils.Qaltils
+import xyz.qalcyo.wyvtils.Wyvtils
 import org.apache.http.HttpRequest
 import org.apache.http.HttpResponse
 import org.apache.http.HttpVersion
@@ -40,7 +40,7 @@ object APIUtil {
     private val parser = JsonParser()
 
     private val builder: HttpClientBuilder =
-        HttpClients.custom().setUserAgent("Qaltils/${Qaltils.VERSION}")
+        HttpClients.custom().setUserAgent("Wyvtils/${Wyvtils.VERSION}")
             .addInterceptorFirst { request: HttpRequest, _: HttpContext? ->
                 if (!request.containsHeader("Pragma")) request.addHeader("Pragma", "no-cache")
                 if (!request.containsHeader("Cache-Control")) request.addHeader("Cache-Control", "no-cache")
@@ -73,7 +73,7 @@ object APIUtil {
             }
         } catch (ex: Throwable) {
             ex.printStackTrace()
-            Qaltils.sendMessage("§cAn error has occured whilst fetching a resource. See logs for more details.")
+            Wyvtils.sendMessage("§cAn error has occured whilst fetching a resource. See logs for more details.")
         } finally {
             client.close()
         }

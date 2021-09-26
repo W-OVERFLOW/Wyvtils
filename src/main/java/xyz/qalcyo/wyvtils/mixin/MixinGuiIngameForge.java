@@ -1,6 +1,6 @@
 /*
- * Qaltils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Qaltils
+ * Wyvtils, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Wyvtils
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.qaltils.mixin;
+package xyz.qalcyo.wyvtils.mixin;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -28,8 +28,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import xyz.qalcyo.qaltils.config.QaltilsConfig;
-import xyz.qalcyo.qaltils.gui.ActionBarGui;
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig;
+import xyz.qalcyo.wyvtils.gui.ActionBarGui;
 
 @SuppressWarnings("DefaultAnnotationParam")
 @Mixin(value = GuiIngameForge.class, remap = false)
@@ -37,14 +37,14 @@ public class MixinGuiIngameForge {
 
     @Inject(method = "renderRecordOverlay", at = @At("HEAD"), cancellable = true)
     private void removeActionBar(int width, int height, float partialTicks, CallbackInfo ci) {
-        if ((QaltilsConfig.INSTANCE.getActionBarCustomization() && !QaltilsConfig.INSTANCE.getActionBar()) || Minecraft.getMinecraft().currentScreen instanceof ActionBarGui) {
+        if ((WyvtilsConfig.INSTANCE.getActionBarCustomization() && !WyvtilsConfig.INSTANCE.getActionBar()) || Minecraft.getMinecraft().currentScreen instanceof ActionBarGui) {
             ci.cancel();
         }
     }
 
     @Redirect(method = "renderRecordOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;translate(FFF)V"), remap = true)
     private void removeTranslation(float x, float y, float z) {
-        if ((!QaltilsConfig.INSTANCE.getActionBarPosition() && QaltilsConfig.INSTANCE.getActionBarCustomization()) || !QaltilsConfig.INSTANCE.getActionBarCustomization()) {
+        if ((!WyvtilsConfig.INSTANCE.getActionBarPosition() && WyvtilsConfig.INSTANCE.getActionBarCustomization()) || !WyvtilsConfig.INSTANCE.getActionBarCustomization()) {
             GlStateManager.translate(x, y, z);
 
         }
@@ -52,14 +52,14 @@ public class MixinGuiIngameForge {
 
     @Redirect(method = "renderRecordOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/FontRenderer;drawString(Ljava/lang/String;III)I"), remap = true)
     private int modifyDrawString(FontRenderer fontRenderer, String text, int x, int y, int color) {
-        if (!QaltilsConfig.INSTANCE.getActionBarCustomization()) {
+        if (!WyvtilsConfig.INSTANCE.getActionBarCustomization()) {
             return fontRenderer.drawString(text, x, y, color);
         } else {
             int newX;
             int newY;
-            if (QaltilsConfig.INSTANCE.getActionBarPosition()) {
-                newX = QaltilsConfig.INSTANCE.getActionBarX();
-                newY = QaltilsConfig.INSTANCE.getActionBarY();
+            if (WyvtilsConfig.INSTANCE.getActionBarPosition()) {
+                newX = WyvtilsConfig.INSTANCE.getActionBarX();
+                newY = WyvtilsConfig.INSTANCE.getActionBarY();
             } else {
                 newX = x;
                 newY = y;
@@ -69,38 +69,38 @@ public class MixinGuiIngameForge {
                     newX,
                     newY,
                     color,
-                    QaltilsConfig.INSTANCE.getActionBarShadow()
+                    WyvtilsConfig.INSTANCE.getActionBarShadow()
             );
         }
     }
 
     @Inject(method = "renderTitle", at = @At("HEAD"), cancellable = true)
     private void removeTitle(int width, int height, float partialTicks, CallbackInfo ci) {
-        if (!QaltilsConfig.INSTANCE.getTitle()) {
+        if (!WyvtilsConfig.INSTANCE.getTitle()) {
             ci.cancel();
         }
     }
 
     @Redirect(method = "renderTitle", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V"), remap = true)
     private void modifyTitleScale1(float x, float y, float z) {
-        if (QaltilsConfig.INSTANCE.getTitleScale() == 1.0F && QaltilsConfig.INSTANCE.getSubtitleScale() == 1.0F) {
+        if (WyvtilsConfig.INSTANCE.getTitleScale() == 1.0F && WyvtilsConfig.INSTANCE.getSubtitleScale() == 1.0F) {
             GlStateManager.scale(x, y, z);
         } else {
             if (x == 4.0F) {
                 //Title
-                GlStateManager.scale(x * QaltilsConfig.INSTANCE.getTitleScale(), y * QaltilsConfig.INSTANCE.getTitleScale(), z * QaltilsConfig.INSTANCE.getTitleScale());
+                GlStateManager.scale(x * WyvtilsConfig.INSTANCE.getTitleScale(), y * WyvtilsConfig.INSTANCE.getTitleScale(), z * WyvtilsConfig.INSTANCE.getTitleScale());
                 return;
             }
             if (x == 2.0F) {
                 //Subtitle
-                GlStateManager.scale(x * QaltilsConfig.INSTANCE.getSubtitleScale(), y * QaltilsConfig.INSTANCE.getSubtitleScale(), z * QaltilsConfig.INSTANCE.getSubtitleScale());
+                GlStateManager.scale(x * WyvtilsConfig.INSTANCE.getSubtitleScale(), y * WyvtilsConfig.INSTANCE.getSubtitleScale(), z * WyvtilsConfig.INSTANCE.getSubtitleScale());
             }
         }
     }
 
     @ModifyArg(method = "renderTitle", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/FontRenderer;drawString(Ljava/lang/String;FFIZ)I"), index = 4)
     private boolean setShadow() {
-        return QaltilsConfig.INSTANCE.getTitleShadow();
+        return WyvtilsConfig.INSTANCE.getTitleShadow();
     }
 
 }

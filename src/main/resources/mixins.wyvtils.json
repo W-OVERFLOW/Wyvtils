@@ -1,8 +1,8 @@
 {
   "compatibilityLevel": "JAVA_8",
   "minVersion": "0.7",
-  "plugin": "xyz.qalcyo.qaltils.tweaker.QaltilsMixinPlugin",
-  "package": "xyz.qalcyo.qaltils.mixin",
+  "plugin": "xyz.qalcyo.wyvtils.tweaker.WyvtilsMixinPlugin",
+  "package": "xyz.qalcyo.wyvtils.mixin",
   "refmap": "mixins.qaltils.refmap.json",
   "mixins": [
     "AccessorGuiIngame",

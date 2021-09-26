@@ -1,6 +1,6 @@
 /*
- * Qaltils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Qaltils
+ * Wyvtils, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Wyvtils
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.qaltils.config
+package xyz.qalcyo.wyvtils.config
 
 import gg.essential.api.EssentialAPI
 import gg.essential.vigilance.Vigilant
@@ -27,22 +27,22 @@ import gg.essential.vigilance.data.SortingBehavior
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.util.EnumChatFormatting
-import xyz.qalcyo.qaltils.Qaltils
-import xyz.qalcyo.qaltils.Qaltils.mc
-import xyz.qalcyo.qaltils.gui.ActionBarGui
-import xyz.qalcyo.qaltils.gui.BossHealthGui
-import xyz.qalcyo.qaltils.gui.DownloadConfirmGui
-import xyz.qalcyo.qaltils.gui.SidebarGui
-import xyz.qalcyo.qaltils.listeners.Listener
-import xyz.qalcyo.qaltils.utils.Updater
+import xyz.qalcyo.wyvtils.Wyvtils
+import xyz.qalcyo.wyvtils.Wyvtils.mc
+import xyz.qalcyo.wyvtils.gui.ActionBarGui
+import xyz.qalcyo.wyvtils.gui.BossHealthGui
+import xyz.qalcyo.wyvtils.gui.DownloadConfirmGui
+import xyz.qalcyo.wyvtils.gui.SidebarGui
+import xyz.qalcyo.wyvtils.listeners.Listener
+import xyz.qalcyo.wyvtils.utils.Updater
 import java.awt.Color
 import java.io.File
 
 @Suppress("unused")
-object QaltilsConfig :
+object WyvtilsConfig :
     Vigilant(
-        File(Qaltils.modDir, "qaltils.toml"),
-        "${EnumChatFormatting.DARK_PURPLE}Qaltils",
+        File(Wyvtils.modDir, "wyvtils.toml"),
+        "${EnumChatFormatting.DARK_PURPLE}Wyvtils",
         sortingBehavior = ConfigSorting
     ) {
 
@@ -224,7 +224,7 @@ object QaltilsConfig :
     fun openBossHealthGui() {
         if (bossBarCustomization) EssentialAPI.getGuiUtil().openScreen(BossHealthGui())
         else EssentialAPI.getNotifications()
-            .push("Qaltils", "You can't do that, you haven't enabled Bossbar Customization!")
+            .push("Wyvtils", "You can't do that, you haven't enabled Bossbar Customization!")
     }
 
     @Property(
@@ -237,8 +237,8 @@ object QaltilsConfig :
         mc.displayGuiScreen(null)
         bossBarX = (ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2)
         bossBarY = 12
-        QaltilsConfig.markDirty()
-        QaltilsConfig.writeData()
+        WyvtilsConfig.markDirty()
+        WyvtilsConfig.writeData()
         EssentialAPI.getGuiUtil().openScreen(gui())
     }
 
@@ -311,7 +311,7 @@ object QaltilsConfig :
     fun openActionBarGui() {
         if (actionBarPosition && actionBarCustomization) EssentialAPI.getGuiUtil().openScreen(ActionBarGui())
         else EssentialAPI.getNotifications()
-            .push("Qaltils", "You can't do that, you don't have Action Bar position enabled!")
+            .push("Wyvtils", "You can't do that, you don't have Action Bar position enabled!")
     }
 
     @Property(
@@ -530,11 +530,29 @@ object QaltilsConfig :
 
     @Property(
         type = PropertyType.SWITCH,
-        name = "Compact Sidebar",
+        name = "Background Border",
         category = "Sidebar",
-        description = "Toggle compact sidebar, which removes all empty sidebar lines."
+        description = "Enable a border to border the background."
     )
-    var compactSidebar = false
+    var backgroundBorder = false
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Border Color",
+        category = "Sidebar",
+        description = "Select a color to set for the background border."
+    )
+    var borderColor: Color = Color.WHITE
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Border Width",
+        category = "Sidebar",
+        description = "Set the width of the background border.",
+        min = 1,
+        max = 20
+    )
+    var borderNumber = 10
 
     @Property(
         type = PropertyType.SWITCH,
@@ -553,7 +571,7 @@ object QaltilsConfig :
     fun openSidebarGui() {
         if (sidebarPosition) EssentialAPI.getGuiUtil().openScreen(SidebarGui())
         else EssentialAPI.getNotifications()
-            .push("Qaltils", "You can't do that, you don't have Sidebar position enabled!")
+            .push("Wyvtils", "You can't do that, you don't have Sidebar position enabled!")
     }
 
     @Property(
@@ -602,44 +620,44 @@ object QaltilsConfig :
     @Property(
         type = PropertyType.BUTTON,
         name = "Update Now",
-        description = "Update Qaltils by clicking the button.",
+        description = "Update Wyvtils by clicking the button.",
         category = "Updater"
     )
     fun update() {
         if (Updater.shouldUpdate) EssentialAPI.getGuiUtil()
             .openScreen(DownloadConfirmGui(mc.currentScreen)) else EssentialAPI.getNotifications()
-            .push("Qaltils", "No update had been detected at startup, and thus the update GUI has not been shown.")
+            .push("Wyvtils", "No update had been detected at startup, and thus the update GUI has not been shown.")
     }
 
     init {
         initialize()
         setCategoryDescription(
             "General",
-            "This category is for configuring general parts of Qaltils."
+            "This category is for configuring general parts of Wyvtils."
         )
         setCategoryDescription(
             "Action Bar",
-            "Configure action bar-related features in Qaltils."
+            "Configure action bar-related features in Wyvtils."
         )
         setCategoryDescription(
             "Text",
-            "Configure text-related features in Qaltils."
+            "Configure text-related features in Wyvtils."
         )
         setCategoryDescription(
             "GEXP",
-            "Configure GEXP-related features in Qaltils."
+            "Configure GEXP-related features in Wyvtils."
         )
         setCategoryDescription(
             "Bossbar",
-            "Configure bossbar-related features in Qaltils."
+            "Configure bossbar-related features in Wyvtils."
         )
         setCategoryDescription(
             "Sound",
-            "Configure sound-related features in Qaltils."
+            "Configure sound-related features in Wyvtils."
         )
         setCategoryDescription(
             "Hitboxes",
-            "Configure hitbox-related features in Qaltils."
+            "Configure hitbox-related features in Wyvtils."
         )
         registerListener("textColor") { _: Int ->
             Listener.changeTextColor = true
