@@ -1,4 +1,4 @@
-package xyz.qalcyo.qaltils.config
+package xyz.qalcyo.wyvtils.config
 
 import gg.essential.api.EssentialAPI
 import gg.essential.universal.ChatColor
@@ -6,17 +6,17 @@ import gg.essential.vigilance.Vigilant
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
 import net.minecraft.client.MinecraftClient
-import xyz.qalcyo.qaltils.Qaltils
-import xyz.qalcyo.qaltils.gui.ActionBarGui
-import xyz.qalcyo.qaltils.gui.BossBarGui
-import xyz.qalcyo.qaltils.gui.SidebarGui
+import xyz.qalcyo.wyvtils.Wyvtils
+import xyz.qalcyo.wyvtils.gui.ActionBarGui
+import xyz.qalcyo.wyvtils.gui.BossBarGui
+import xyz.qalcyo.wyvtils.gui.SidebarGui
 import java.awt.Color
 import java.io.File
 
 @Suppress("unused")
-object QaltilsConfig : Vigilant(
-    File(Qaltils.modDir, "qaltils.toml"),
-    "${ChatColor.DARK_PURPLE}Qaltils"
+object WyvtilsConfig : Vigilant(
+    File(Wyvtils.modDir, "wyvtils.toml"),
+    "${ChatColor.DARK_PURPLE}Wyvtils"
 ) {
 
     @Property(
@@ -114,8 +114,8 @@ object QaltilsConfig : Vigilant(
         EssentialAPI.getGuiUtil().openScreen(null)
         bossBarX = MinecraftClient.getInstance().window.scaledWidth
         bossBarY = 12
-        QaltilsConfig.markDirty()
-        QaltilsConfig.writeData()
+        WyvtilsConfig.markDirty()
+        WyvtilsConfig.writeData()
         EssentialAPI.getGuiUtil().openScreen(gui())
     }
 

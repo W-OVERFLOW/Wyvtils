@@ -1,4 +1,4 @@
-package xyz.qalcyo.qaltils.mixins;
+package xyz.qalcyo.wyvtils.mixins;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -7,8 +7,8 @@ import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.text.Text;
-import xyz.qalcyo.qaltils.config.QaltilsConfig;
-import xyz.qalcyo.qaltils.gui.SidebarGui;
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig;
+import xyz.qalcyo.wyvtils.gui.SidebarGui;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
@@ -31,7 +31,7 @@ public abstract class InGameHudMixin {
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(DDD)V"))
     private void removeTranslation(MatrixStack matrixStack, double x, double y, double z) {
         if (y == (double) (scaledHeight - 68)) {
-            if ((!QaltilsConfig.INSTANCE.getActionBarPosition() && QaltilsConfig.INSTANCE.getActionBarCustomization()) || !QaltilsConfig.INSTANCE.getActionBarCustomization()) {
+            if ((!WyvtilsConfig.INSTANCE.getActionBarPosition() && WyvtilsConfig.INSTANCE.getActionBarCustomization()) || !WyvtilsConfig.INSTANCE.getActionBarCustomization()) {
                 matrixStack.translate(x, y, z);
             }
         } else {
@@ -42,7 +42,7 @@ public abstract class InGameHudMixin {
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTextBackground(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;III)V"))
     private void modifyActionBarBackground(InGameHud inGameHud, MatrixStack matrices, TextRenderer textRenderer, int yOffset, int width, int color) {
         if (yOffset == -4) {
-            if (QaltilsConfig.INSTANCE.getActionBarCustomization() && QaltilsConfig.INSTANCE.getActionBar()) {
+            if (WyvtilsConfig.INSTANCE.getActionBarCustomization() && WyvtilsConfig.INSTANCE.getActionBar()) {
                 drawTextBackground(matrices, textRenderer, yOffset, width, color);
             }
         } else {
@@ -52,12 +52,12 @@ public abstract class InGameHudMixin {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I"))
     private int modifyActionBar(TextRenderer textRenderer, MatrixStack matrices, Text text, float x, float y, int color) {
-        if (QaltilsConfig.INSTANCE.getActionBarCustomization()) {
-            if (QaltilsConfig.INSTANCE.getActionBar()) {
-                if (QaltilsConfig.INSTANCE.getActionBarShadow()) {
-                    return textRenderer.drawWithShadow(matrices, text, (QaltilsConfig.INSTANCE.getActionBarPosition() ? QaltilsConfig.INSTANCE.getActionBarX() : x), (QaltilsConfig.INSTANCE.getActionBarPosition() ? QaltilsConfig.INSTANCE.getActionBarY() : y), color);
+        if (WyvtilsConfig.INSTANCE.getActionBarCustomization()) {
+            if (WyvtilsConfig.INSTANCE.getActionBar()) {
+                if (WyvtilsConfig.INSTANCE.getActionBarShadow()) {
+                    return textRenderer.drawWithShadow(matrices, text, (WyvtilsConfig.INSTANCE.getActionBarPosition() ? WyvtilsConfig.INSTANCE.getActionBarX() : x), (WyvtilsConfig.INSTANCE.getActionBarPosition() ? WyvtilsConfig.INSTANCE.getActionBarY() : y), color);
                 } else {
-                    return textRenderer.draw(matrices, text, (QaltilsConfig.INSTANCE.getActionBarPosition() ? QaltilsConfig.INSTANCE.getActionBarX() : x), (QaltilsConfig.INSTANCE.getActionBarPosition() ? QaltilsConfig.INSTANCE.getActionBarY() : y), color);
+                    return textRenderer.draw(matrices, text, (WyvtilsConfig.INSTANCE.getActionBarPosition() ? WyvtilsConfig.INSTANCE.getActionBarX() : x), (WyvtilsConfig.INSTANCE.getActionBarPosition() ? WyvtilsConfig.INSTANCE.getActionBarY() : y), color);
                 }
             }
         } else {
@@ -69,17 +69,17 @@ public abstract class InGameHudMixin {
     @ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;scale(FFF)V"))
     private void modifyTitleTranslate(Args args) {
         if (((float) args.get(0)) == 4.0F) {
-            args.set(0, 4.0F * QaltilsConfig.INSTANCE.getTitleScale());
-            args.set(1, 4.0F * QaltilsConfig.INSTANCE.getTitleScale());
+            args.set(0, 4.0F * WyvtilsConfig.INSTANCE.getTitleScale());
+            args.set(1, 4.0F * WyvtilsConfig.INSTANCE.getTitleScale());
         } else if (((float) args.get(0)) == 2.0F) {
-            args.set(0, 2.0F * QaltilsConfig.INSTANCE.getSubtitleScale());
-            args.set(1, 2.0F * QaltilsConfig.INSTANCE.getSubtitleScale());
+            args.set(0, 2.0F * WyvtilsConfig.INSTANCE.getSubtitleScale());
+            args.set(1, 2.0F * WyvtilsConfig.INSTANCE.getSubtitleScale());
         }
     }
 
     @Inject(method = "renderScoreboardSidebar", at = @At("HEAD"), cancellable = true)
     private void cancelScoreboard(MatrixStack matrices, ScoreboardObjective objective, CallbackInfo ci) {
-        if (!QaltilsConfig.INSTANCE.getSidebar()) {
+        if (!WyvtilsConfig.INSTANCE.getSidebar()) {
             ci.cancel();
         } else if (MinecraftClient.getInstance().currentScreen instanceof SidebarGui) {
             ci.cancel();
@@ -96,15 +96,15 @@ public abstract class InGameHudMixin {
 
     @ModifyVariable(method = "renderScoreboardSidebar", at = @At("STORE"), index = 12)
     private int modifyY(int m) {
-        sidebarY = (QaltilsConfig.INSTANCE.getSidebarPosition() ? QaltilsConfig.INSTANCE.getSidebarY() : m);
+        sidebarY = (WyvtilsConfig.INSTANCE.getSidebarPosition() ? WyvtilsConfig.INSTANCE.getSidebarY() : m);
         return sidebarY;
     }
 
 
     @ModifyVariable(method = "renderScoreboardSidebar", at = @At("STORE"), index = 14)
     private int modifyX(int m, MatrixStack matrices, ScoreboardObjective objective) {
-        if (QaltilsConfig.INSTANCE.getSidebarPosition()) {
-            return QaltilsConfig.INSTANCE.getSidebarX() - sidebarWidth - 3;
+        if (WyvtilsConfig.INSTANCE.getSidebarPosition()) {
+            return WyvtilsConfig.INSTANCE.getSidebarX() - sidebarWidth - 3;
         } else {
             return m;
         }
@@ -113,20 +113,20 @@ public abstract class InGameHudMixin {
 
     @ModifyVariable(method = "renderScoreboardSidebar", at = @At("STORE"), index = 25)
     private int modifyX2(int m) {
-        sidebarX = (QaltilsConfig.INSTANCE.getSidebarPosition() ? QaltilsConfig.INSTANCE.getSidebarX() - 1 : m);
+        sidebarX = (WyvtilsConfig.INSTANCE.getSidebarPosition() ? WyvtilsConfig.INSTANCE.getSidebarX() - 1 : m);
         return sidebarX;
     }
 
     @Inject(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lcom/mojang/datafixers/util/Pair;getSecond()Ljava/lang/Object;"))
     private void scale(MatrixStack matrices, ScoreboardObjective objective, CallbackInfo ci) {
-        float iHaveNoIdeaWhatToNameThisFloat = QaltilsConfig.INSTANCE.getSidebarScale() - 1.0f;
+        float iHaveNoIdeaWhatToNameThisFloat = WyvtilsConfig.INSTANCE.getSidebarScale() - 1.0f;
         matrices.translate(-sidebarX * iHaveNoIdeaWhatToNameThisFloat, -sidebarY * iHaveNoIdeaWhatToNameThisFloat, 0.0f);
-        matrices.scale(QaltilsConfig.INSTANCE.getSidebarScale(), QaltilsConfig.INSTANCE.getSidebarScale(), 1.0F);
+        matrices.scale(WyvtilsConfig.INSTANCE.getSidebarScale(), WyvtilsConfig.INSTANCE.getSidebarScale(), 1.0F);
     }
 
     @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I"))
     private int addTextShadow(TextRenderer textRenderer, MatrixStack matrices, Text text, float x, float y, int color) {
-        if (QaltilsConfig.INSTANCE.getSidebarTextShadow()) {
+        if (WyvtilsConfig.INSTANCE.getSidebarTextShadow()) {
             return textRenderer.drawWithShadow(matrices, text, x, y, color);
         } else {
             return textRenderer.draw(matrices, text, x, y, color);
@@ -135,15 +135,15 @@ public abstract class InGameHudMixin {
 
     @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;fill(Lnet/minecraft/client/util/math/MatrixStack;IIIII)V"))
     private void removeBackground(MatrixStack matrices, int x1, int y1, int x2, int y2, int color) {
-        if (QaltilsConfig.INSTANCE.getSidebarBackground()) {
-            DrawableHelper.fill(matrices, x1, y1, sidebarX, y2, QaltilsConfig.INSTANCE.getSidebarBackgroundColor().getRGB());
+        if (WyvtilsConfig.INSTANCE.getSidebarBackground()) {
+            DrawableHelper.fill(matrices, x1, y1, sidebarX, y2, WyvtilsConfig.INSTANCE.getSidebarBackgroundColor().getRGB());
         }
     }
 
     @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Lnet/minecraft/client/util/math/MatrixStack;Ljava/lang/String;FFI)I"))
     private int modifyRedText(TextRenderer textRenderer, MatrixStack matrices, String text, float x, float y, int color) {
-        if (QaltilsConfig.INSTANCE.getSidebarScorePoints()) {
-            if (QaltilsConfig.INSTANCE.getSidebarTextShadow()) {
+        if (WyvtilsConfig.INSTANCE.getSidebarScorePoints()) {
+            if (WyvtilsConfig.INSTANCE.getSidebarTextShadow()) {
                 return textRenderer.drawWithShadow(matrices, text, x, y, color);
             } else {
                 return textRenderer.draw(matrices, text, x, y, color);

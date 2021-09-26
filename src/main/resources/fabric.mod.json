@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "id": "qaltils",
+  "id": "wyvtils",
   "version": "${version}",
-  "name": "Qaltils",
+  "name": "Wyvtils",
   "description": "Utilities, for 1.17.1.",
   "authors": [
     "Qalcyo"
   ],
   "contact": {
-    "issues": "https://github.com/Qalcyo/Qaltils/issues/",
-    "sources": "https://github.com/Qalcyo/Qaltils/"
+    "issues": "https://github.com/Qalcyo/Wyvtils/issues/",
+    "sources": "https://github.com/Qalcyo/Wyvtils/"
   },
   "license": "GNU Lesser General Public License version 3 (LGPLv3)",
   "environment": "client",
@@ -17,18 +17,18 @@
     "client": [
       {
         "adapter": "kotlin",
-        "value": "xyz.qalcyo.qaltils.Qaltils"
+        "value": "xyz.qalcyo.wyvtils.Wyvtils"
       }
     ],
     "preLaunch": [
       "gg.essential.loader.stage0.EssentialSetupPreLaunch"
     ],
     "modmenu": [
-      "xyz.qalcyo.qaltils.config.QaltilsModMenu"
+      "xyz.qalcyo.wyvtils.config.WyvtilsModMenu"
     ]
   },
   "mixins": [
-    "mixins.qaltils.json"
+    "mixins.wyvtils.json"
   ],
   "depends": {
     "fabricloader": ">=0.11.6",

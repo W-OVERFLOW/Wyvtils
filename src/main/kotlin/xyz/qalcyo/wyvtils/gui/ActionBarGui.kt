@@ -1,4 +1,4 @@
-package xyz.qalcyo.qaltils.gui
+package xyz.qalcyo.wyvtils.gui
 
 import com.mojang.blaze3d.systems.RenderSystem
 import gg.essential.api.EssentialAPI
@@ -8,13 +8,13 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.InputUtil
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import xyz.qalcyo.qaltils.config.QaltilsConfig
-import xyz.qalcyo.qaltils.config.QaltilsConfig.actionBarX
-import xyz.qalcyo.qaltils.config.QaltilsConfig.actionBarY
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.actionBarX
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.actionBarY
 import java.awt.Color
 import java.util.*
 
-class ActionBarGui(private var parent: Screen?) : Screen(Text.of("Qaltils")) {
+class ActionBarGui(private var parent: Screen?) : Screen(Text.of("Wyvtils")) {
 
     private var prevX = 0
     private var prevY = 0
@@ -30,7 +30,7 @@ class ActionBarGui(private var parent: Screen?) : Screen(Text.of("Qaltils")) {
         this.drawTextBackground(matrices, textRenderer)
         textRenderer.draw(
             matrices,
-            "Qaltils Action Bar",
+            "Wyvtils Action Bar",
             actionBarX.toFloat(),
             actionBarY.toFloat(),
             Color.WHITE.rgb
@@ -76,7 +76,7 @@ class ActionBarGui(private var parent: Screen?) : Screen(Text.of("Qaltils")) {
 
 
     override fun onClose() {
-        QaltilsConfig.markAndWrite()
+        WyvtilsConfig.markAndWrite()
         EssentialAPI.getGuiUtil().openScreen(parent)
         parent = null
     }

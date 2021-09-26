@@ -1,16 +1,16 @@
-package xyz.qalcyo.qaltils.gui
+package xyz.qalcyo.wyvtils.gui
 
 import gg.essential.api.EssentialAPI
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.InputUtil
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import xyz.qalcyo.qaltils.config.QaltilsConfig
-import xyz.qalcyo.qaltils.config.QaltilsConfig.sidebarScale
-import xyz.qalcyo.qaltils.config.QaltilsConfig.sidebarX
-import xyz.qalcyo.qaltils.config.QaltilsConfig.sidebarY
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.sidebarScale
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.sidebarX
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.sidebarY
 
-class SidebarGui(private var parent: Screen?) : Screen(Text.of("Qaltils")) {
+class SidebarGui(private var parent: Screen?) : Screen(Text.of("Wyvtils")) {
     private var prevX = 0
     private var prevY = 0
     private var sidebarDragging = false
@@ -35,21 +35,21 @@ class SidebarGui(private var parent: Screen?) : Screen(Text.of("Qaltils")) {
             ++p
             val t: Int = y - p * 9
             val var10001: Int = x - 2
-            if (QaltilsConfig.sidebarBackground) fill(
+            if (WyvtilsConfig.sidebarBackground) fill(
                 matrices,
                 var10001,
                 t,
                 sidebarX - 1,
                 t + 9,
-                QaltilsConfig.sidebarBackgroundColor.rgb
+                WyvtilsConfig.sidebarBackgroundColor.rgb
             )
-            if (QaltilsConfig.sidebarTextShadow) {
+            if (WyvtilsConfig.sidebarTextShadow) {
                 textRenderer.drawWithShadow(matrices, s, x.toFloat(), t.toFloat(), -1)
             } else {
                 textRenderer.draw(matrices, s, x.toFloat(), t.toFloat(), -1)
             }
-            if (p != 3 && QaltilsConfig.sidebarScorePoints) {
-                if (QaltilsConfig.sidebarTextShadow) {
+            if (p != 3 && WyvtilsConfig.sidebarScorePoints) {
+                if (WyvtilsConfig.sidebarTextShadow) {
                     textRenderer.drawWithShadow(
                         matrices,
                         p.toString(),
@@ -108,7 +108,7 @@ class SidebarGui(private var parent: Screen?) : Screen(Text.of("Qaltils")) {
 
 
     override fun onClose() {
-        QaltilsConfig.markAndWrite()
+        WyvtilsConfig.markAndWrite()
         EssentialAPI.getGuiUtil().openScreen(parent)
         parent = null
     }

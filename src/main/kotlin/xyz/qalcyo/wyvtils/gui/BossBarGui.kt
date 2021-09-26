@@ -1,4 +1,4 @@
-package xyz.qalcyo.qaltils.gui
+package xyz.qalcyo.wyvtils.gui
 
 import com.mojang.blaze3d.systems.RenderSystem
 import gg.essential.api.EssentialAPI
@@ -10,20 +10,20 @@ import net.minecraft.entity.boss.BossBar
 import net.minecraft.text.StringVisitable
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
-import xyz.qalcyo.qaltils.config.QaltilsConfig
-import xyz.qalcyo.qaltils.config.QaltilsConfig.bossBarBar
-import xyz.qalcyo.qaltils.config.QaltilsConfig.bossBarShadow
-import xyz.qalcyo.qaltils.config.QaltilsConfig.bossBarText
-import xyz.qalcyo.qaltils.config.QaltilsConfig.bossBarX
-import xyz.qalcyo.qaltils.config.QaltilsConfig.bossBarY
-import xyz.qalcyo.qaltils.config.QaltilsConfig.bossbarScale
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.bossBarBar
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.bossBarShadow
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.bossBarText
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.bossBarX
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.bossBarY
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.bossbarScale
 import java.util.*
 
-class BossBarGui(private var parent: Screen?) : Screen(Text.of("Qaltils")) {
+class BossBarGui(private var parent: Screen?) : Screen(Text.of("Wyvtils")) {
 
     private val bossBar = ClientBossBar(
         UUID.fromString("cd899a14-de78-4de8-8d31-9d42fff31d7a"),
-        Text.of("Qaltils"),
+        Text.of("Wyvtils"),
         1.0F,
         BossBar.Color.PURPLE,
         BossBar.Style.NOTCHED_20,
@@ -123,7 +123,7 @@ class BossBarGui(private var parent: Screen?) : Screen(Text.of("Qaltils")) {
 
 
     override fun onClose() {
-        QaltilsConfig.markAndWrite()
+        WyvtilsConfig.markAndWrite()
         EssentialAPI.getGuiUtil().openScreen(parent)
         parent = null
     }
