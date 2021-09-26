@@ -50,7 +50,7 @@ import java.io.File
 object Wyvtils {
     const val MODID = "wyvtils"
     const val MOD_NAME = "Wyvtils"
-    const val VERSION = "1.2.0-BETA7"
+    const val VERSION = "1.2.0-BETA8"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
     lateinit var jarFile: File
