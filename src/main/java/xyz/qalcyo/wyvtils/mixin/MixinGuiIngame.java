@@ -34,16 +34,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig;
 import xyz.qalcyo.wyvtils.gui.BossHealthGui;
 import xyz.qalcyo.wyvtils.gui.SidebarGui;
+import xyz.qalcyo.wyvtils.utils.GlUtil;
 
 import java.awt.Color;
 
 @Mixin(GuiIngame.class)
-public class MixinGuiIngame {
+public abstract class MixinGuiIngame {
 
     @Shadow
     @Final
     protected Minecraft mc;
+
+    @Shadow public abstract FontRenderer getFontRenderer();
+
     private int i;
+    private int x;
+    private int bottom;
+    private int lines = 0;
 
     @Inject(method = "renderBossHealth", at = @At("HEAD"), cancellable = true)
     protected void renderBossHealth(CallbackInfo ci) {
@@ -105,22 +112,26 @@ public class MixinGuiIngame {
             float iHaveNoIdeaWhatToNameThisFloat = WyvtilsConfig.INSTANCE.getSidebarScale() - 1.0f;
             GlStateManager.translate(-WyvtilsConfig.INSTANCE.getSidebarX() * iHaveNoIdeaWhatToNameThisFloat, -WyvtilsConfig.INSTANCE.getSidebarY() * iHaveNoIdeaWhatToNameThisFloat, 0.0f);
             GlStateManager.scale(WyvtilsConfig.INSTANCE.getSidebarScale(), WyvtilsConfig.INSTANCE.getSidebarScale(), 1.0F);
+            lines = 0;
         }
     }
 
     @ModifyArg(method = "renderScoreboard", at = @At(value = "INVOKE", target = "Ljava/lang/Math;max(II)I"), index = 0)
     private int max(int i, int width) {
+        ++lines;
         this.i = Math.max(i, width);
         return i;
     }
 
     @ModifyVariable(method = "renderScoreboard", at = @At("STORE"), ordinal = 2)
     private int modifyHeight(int x) {
+        this.bottom = x;
         return (WyvtilsConfig.INSTANCE.getSidebarPosition() ? WyvtilsConfig.INSTANCE.getSidebarY() : x);
     }
 
     @ModifyVariable(method = "renderScoreboard", at = @At("STORE"), ordinal = 4)
     private int modifyWidth(int x) {
+        this.x = x;
         return (WyvtilsConfig.INSTANCE.getSidebarPosition() ? WyvtilsConfig.INSTANCE.getSidebarX() - i : x);
     }
 
@@ -149,6 +160,9 @@ public class MixinGuiIngame {
     private void popMatrix(ScoreObjective objective, ScaledResolution scaledRes, CallbackInfo ci) {
         if (WyvtilsConfig.INSTANCE.getSidebar()) {
             GlStateManager.popMatrix();
+            if (WyvtilsConfig.INSTANCE.getBackgroundBorder()) {
+                GlUtil.INSTANCE.drawHollowRectangle(x - 2 - WyvtilsConfig.INSTANCE.getBorderNumber(), bottom - (lines + 1) * getFontRenderer().FONT_HEIGHT - 1 - WyvtilsConfig.INSTANCE.getBorderNumber(), i + WyvtilsConfig.INSTANCE.getBorderNumber() * 2 + 4, (lines + 1) * getFontRenderer().FONT_HEIGHT + 1 + WyvtilsConfig.INSTANCE.getBorderNumber() * 2, WyvtilsConfig.INSTANCE.getBorderNumber(), WyvtilsConfig.INSTANCE.getBorderColor().getRGB());
+            }
         }
     }
 
