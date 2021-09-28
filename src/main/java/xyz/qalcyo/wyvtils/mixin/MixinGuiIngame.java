@@ -51,6 +51,7 @@ public abstract class MixinGuiIngame {
     private int x;
     private int bottom;
     private int lines = 0;
+    private int count = 0;
 
     @Inject(method = "renderBossHealth", at = @At("HEAD"), cancellable = true)
     protected void renderBossHealth(CallbackInfo ci) {
@@ -109,10 +110,8 @@ public abstract class MixinGuiIngame {
             ci.cancel();
         } else {
             GlStateManager.pushMatrix();
-            float iHaveNoIdeaWhatToNameThisFloat = WyvtilsConfig.INSTANCE.getSidebarScale() - 1.0f;
-            GlStateManager.translate(-WyvtilsConfig.INSTANCE.getSidebarX() * iHaveNoIdeaWhatToNameThisFloat, -WyvtilsConfig.INSTANCE.getSidebarY() * iHaveNoIdeaWhatToNameThisFloat, 0.0f);
-            GlStateManager.scale(WyvtilsConfig.INSTANCE.getSidebarScale(), WyvtilsConfig.INSTANCE.getSidebarScale(), 1.0F);
             lines = 0;
+            count = 0;
         }
     }
 
@@ -125,7 +124,7 @@ public abstract class MixinGuiIngame {
 
     @ModifyVariable(method = "renderScoreboard", at = @At("STORE"), ordinal = 2)
     private int modifyHeight(int x) {
-        this.bottom = x;
+        bottom = x;
         return (WyvtilsConfig.INSTANCE.getSidebarPosition() ? WyvtilsConfig.INSTANCE.getSidebarY() : x);
     }
 
@@ -137,6 +136,16 @@ public abstract class MixinGuiIngame {
 
     @ModifyVariable(method = "renderScoreboard", at = @At("STORE"), ordinal = 7)
     private int modifyWidth2(int x) {
+        count++;
+        if (count == 1) {
+            float iHaveNoIdeaWhatToNameThisFloat = WyvtilsConfig.INSTANCE.getSidebarScale() - 1.0f;
+            if (WyvtilsConfig.INSTANCE.getSidebarPosition()) {
+                GlStateManager.translate(-WyvtilsConfig.INSTANCE.getSidebarX() * iHaveNoIdeaWhatToNameThisFloat, -WyvtilsConfig.INSTANCE.getSidebarY() * iHaveNoIdeaWhatToNameThisFloat, 0.0f);
+            } else {
+                GlStateManager.translate(-(this.x + i) * iHaveNoIdeaWhatToNameThisFloat, -bottom * iHaveNoIdeaWhatToNameThisFloat, 0.0f);
+            }
+            GlStateManager.scale(WyvtilsConfig.INSTANCE.getSidebarScale(), WyvtilsConfig.INSTANCE.getSidebarScale(), 1.0F);
+        }
         return (WyvtilsConfig.INSTANCE.getSidebarPosition() ? WyvtilsConfig.INSTANCE.getSidebarX() : x);
     }
 
@@ -159,10 +168,14 @@ public abstract class MixinGuiIngame {
     @Inject(method = "renderScoreboard", at = @At("TAIL"))
     private void popMatrix(ScoreObjective objective, ScaledResolution scaledRes, CallbackInfo ci) {
         if (WyvtilsConfig.INSTANCE.getSidebar()) {
-            GlStateManager.popMatrix();
             if (WyvtilsConfig.INSTANCE.getBackgroundBorder()) {
-                GlUtil.INSTANCE.drawHollowRectangle(x - 2 - WyvtilsConfig.INSTANCE.getBorderNumber(), bottom - (lines + 1) * getFontRenderer().FONT_HEIGHT - 1 - WyvtilsConfig.INSTANCE.getBorderNumber(), i + WyvtilsConfig.INSTANCE.getBorderNumber() * 2 + 4, (lines + 1) * getFontRenderer().FONT_HEIGHT + 1 + WyvtilsConfig.INSTANCE.getBorderNumber() * 2, WyvtilsConfig.INSTANCE.getBorderNumber(), WyvtilsConfig.INSTANCE.getBorderColor().getRGB());
+                if (WyvtilsConfig.INSTANCE.getSidebarPosition()) {
+                    GlUtil.INSTANCE.drawHollowRectangle(WyvtilsConfig.INSTANCE.getSidebarX() - i - 2 - WyvtilsConfig.INSTANCE.getBorderNumber(), WyvtilsConfig.INSTANCE.getSidebarY() - (lines + 1) * getFontRenderer().FONT_HEIGHT - 1 - WyvtilsConfig.INSTANCE.getBorderNumber(), i + WyvtilsConfig.INSTANCE.getBorderNumber() * 2 + 2, (lines + 1) * getFontRenderer().FONT_HEIGHT + 1 + WyvtilsConfig.INSTANCE.getBorderNumber() * 2, WyvtilsConfig.INSTANCE.getBorderNumber(), WyvtilsConfig.INSTANCE.getBorderColor().getRGB());
+                } else {
+                    GlUtil.INSTANCE.drawHollowRectangle(x - 2 - WyvtilsConfig.INSTANCE.getBorderNumber(), bottom - (lines + 1) * getFontRenderer().FONT_HEIGHT - 1 - WyvtilsConfig.INSTANCE.getBorderNumber(), i + WyvtilsConfig.INSTANCE.getBorderNumber() * 2 + 4, (lines + 1) * getFontRenderer().FONT_HEIGHT + 1 + WyvtilsConfig.INSTANCE.getBorderNumber() * 2, WyvtilsConfig.INSTANCE.getBorderNumber(), WyvtilsConfig.INSTANCE.getBorderColor().getRGB());
+                }
             }
+            GlStateManager.popMatrix();
         }
     }
 

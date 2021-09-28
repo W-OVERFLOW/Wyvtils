@@ -56,6 +56,14 @@ object WyvtilsConfig :
 
     @Property(
         type = PropertyType.SWITCH,
+        name = "Hide Locraw Messages",
+        description = "Hide locraw messages in chat (e.g {\"server\": \"something\"}).\nBreaks HeightLimitMod locraw.",
+        category = "General"
+    )
+    var hideLocraw = true
+
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Remove Non-NPCs",
         description = "Remove every entity from rendering except NPCs, armorstands, and your own player.",
         category = "General"
@@ -181,7 +189,7 @@ object WyvtilsConfig :
         description = "Automatically turn off the bossbar when the player goes into a lobby, and turn it back on when exiting it.",
         category = "Bossbar"
     )
-    var autoBossbarLobby = true
+    var autoBossbarLobby = false
 
     @Property(
         type = PropertyType.SWITCH,
@@ -552,7 +560,7 @@ object WyvtilsConfig :
         min = 1,
         max = 20
     )
-    var borderNumber = 10
+    var borderNumber = 2
 
     @Property(
         type = PropertyType.SWITCH,

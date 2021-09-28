@@ -28,6 +28,7 @@ import net.minecraft.util.IChatComponent
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.client.event.sound.PlaySoundEvent
 import net.minecraftforge.event.world.WorldEvent
+import net.minecraftforge.fml.common.eventhandler.EventPriority
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import xyz.matthewtgm.requisite.events.FontRendererEvent
@@ -72,6 +73,7 @@ object Listener {
     @SubscribeEvent
     fun onChatReceivedEvent(e: ClientChatReceivedEvent) {
         val unformattedText = e.message.unformattedText.withoutFormattingCodes()
+
         if (WyvtilsConfig.autoGetAPI) {
             /*/
             Adapted from Moulberry's NotEnoughUpdates, under the Attribution-NonCommercial 3.0 license.
@@ -155,6 +157,14 @@ object Listener {
                 )
             }
             e.isCanceled = true
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    fun onChatLow(e : ClientChatReceivedEvent) {
+        val unformattedText = e.message.unformattedText.withoutFormattingCodes()
+        if (unformattedText.startsWith("{") && unformattedText.contains("server") && unformattedText.endsWith("}")) {
+            e.isCanceled = WyvtilsConfig.hideLocraw
         }
     }
 

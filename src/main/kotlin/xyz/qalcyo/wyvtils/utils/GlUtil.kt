@@ -4,11 +4,11 @@ import net.minecraft.client.gui.Gui
 
 
 object GlUtil {
-    fun drawRectangle(xPosition: Int,
-                      yPosition: Int,
-                      width: Int,
-                      height: Int,
-    color: Int) {
+    private fun drawRectangle(xPosition: Int,
+                              yPosition: Int,
+                              width: Int,
+                              height: Int,
+                              color: Int) {
         Gui.drawRect(xPosition, yPosition, xPosition + width, yPosition + height, color)
     }
 

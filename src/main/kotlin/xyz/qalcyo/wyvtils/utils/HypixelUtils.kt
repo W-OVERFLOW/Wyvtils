@@ -250,8 +250,6 @@ object HypixelUtils {
     fun onLocraw(event: LocrawReceivedEvent) {
         locraw = event.locraw
         if (WyvtilsConfig.autoBossbarLobby) {
-            println(event.locraw.gameMode)
-            println(event.locraw.gameType)
             if (event.locraw.gameMode.isNullOrBlank() || event.locraw.gameType == null) {
                 WyvtilsConfig.bossBar = false
                 WyvtilsConfig.markDirty()
