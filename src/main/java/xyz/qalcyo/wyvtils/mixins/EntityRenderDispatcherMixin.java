@@ -24,6 +24,8 @@ public abstract class EntityRenderDispatcherMixin {
 
     @Shadow
     private boolean renderHitboxes;
+    @Shadow
+    public abstract void setRenderHitboxes(boolean value);
 
     @Inject(method = "renderHitbox", at = @At("HEAD"), cancellable = true)
     private static void cancelHitbox(MatrixStack matrices, VertexConsumer vertices, Entity entity, float tickDelta, CallbackInfo ci) {
@@ -66,9 +68,6 @@ public abstract class EntityRenderDispatcherMixin {
         args.set(2, WyvtilsConfig.INSTANCE.getHitboxEyelineColor().getBlue());
         args.set(3, WyvtilsConfig.INSTANCE.getHitboxEyelineColor().getAlpha());
     }
-
-    @Shadow
-    public abstract void setRenderHitboxes(boolean value);
 
     @Inject(method = "render", at = @At("HEAD"))
     private void forceHitboxes(Entity entity, double x, double y, double z, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {

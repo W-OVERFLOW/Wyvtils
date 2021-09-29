@@ -7,13 +7,14 @@ import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.text.Text;
-import xyz.qalcyo.wyvtils.config.WyvtilsConfig;
-import xyz.qalcyo.wyvtils.gui.SidebarGui;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig;
+import xyz.qalcyo.wyvtils.gui.SidebarGui;
+import xyz.qalcyo.wyvtils.utils.GlUtil;
 
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin {
@@ -22,8 +23,9 @@ public abstract class InGameHudMixin {
     private int scaledHeight;
 
     private int sidebarWidth;
-    private int sidebarY;
-    private int sidebarX;
+    private int bottom;
+    private int right;
+    private int count = 0;
 
     @Shadow
     protected abstract void drawTextBackground(MatrixStack matrices, TextRenderer textRenderer, int yOffset, int width, int color);
@@ -85,6 +87,7 @@ public abstract class InGameHudMixin {
             ci.cancel();
         } else {
             matrices.push();
+            count = 0;
         }
     }
 
@@ -96,8 +99,12 @@ public abstract class InGameHudMixin {
 
     @ModifyVariable(method = "renderScoreboardSidebar", at = @At("STORE"), index = 12)
     private int modifyY(int m) {
-        sidebarY = (WyvtilsConfig.INSTANCE.getSidebarPosition() ? WyvtilsConfig.INSTANCE.getSidebarY() : m);
-        return sidebarY;
+        bottom = (WyvtilsConfig.INSTANCE.getSidebarPosition() ? WyvtilsConfig.INSTANCE.getSidebarY() : m);
+        return bottom;
+    }
+    @Inject(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lcom/mojang/datafixers/util/Pair;getFirst()Ljava/lang/Object;"))
+    private void count(MatrixStack matrices, ScoreboardObjective objective, CallbackInfo ci) {
+        ++count;
     }
 
 
@@ -113,14 +120,14 @@ public abstract class InGameHudMixin {
 
     @ModifyVariable(method = "renderScoreboardSidebar", at = @At("STORE"), index = 25)
     private int modifyX2(int m) {
-        sidebarX = (WyvtilsConfig.INSTANCE.getSidebarPosition() ? WyvtilsConfig.INSTANCE.getSidebarX() - 1 : m);
-        return sidebarX;
+        right = (WyvtilsConfig.INSTANCE.getSidebarPosition() ? WyvtilsConfig.INSTANCE.getSidebarX() - 1 : m);
+        return right;
     }
 
     @Inject(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lcom/mojang/datafixers/util/Pair;getSecond()Ljava/lang/Object;"))
     private void scale(MatrixStack matrices, ScoreboardObjective objective, CallbackInfo ci) {
         float iHaveNoIdeaWhatToNameThisFloat = WyvtilsConfig.INSTANCE.getSidebarScale() - 1.0f;
-        matrices.translate(-sidebarX * iHaveNoIdeaWhatToNameThisFloat, -sidebarY * iHaveNoIdeaWhatToNameThisFloat, 0.0f);
+        matrices.translate(-right * iHaveNoIdeaWhatToNameThisFloat, -bottom * iHaveNoIdeaWhatToNameThisFloat, 0.0f);
         matrices.scale(WyvtilsConfig.INSTANCE.getSidebarScale(), WyvtilsConfig.INSTANCE.getSidebarScale(), 1.0F);
     }
 
@@ -136,7 +143,7 @@ public abstract class InGameHudMixin {
     @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;fill(Lnet/minecraft/client/util/math/MatrixStack;IIIII)V"))
     private void removeBackground(MatrixStack matrices, int x1, int y1, int x2, int y2, int color) {
         if (WyvtilsConfig.INSTANCE.getSidebarBackground()) {
-            DrawableHelper.fill(matrices, x1, y1, sidebarX, y2, WyvtilsConfig.INSTANCE.getSidebarBackgroundColor().getRGB());
+            DrawableHelper.fill(matrices, x1, y1, right, y2, WyvtilsConfig.INSTANCE.getSidebarBackgroundColor().getRGB());
         }
     }
 
@@ -154,6 +161,9 @@ public abstract class InGameHudMixin {
 
     @Inject(method = "renderScoreboardSidebar", at = @At("TAIL"))
     private void pop(MatrixStack matrices, ScoreboardObjective objective, CallbackInfo ci) {
+        if (WyvtilsConfig.INSTANCE.getBackgroundBorder()) {
+            GlUtil.INSTANCE.drawHollowRectangle(matrices, right - sidebarWidth - WyvtilsConfig.INSTANCE.getBorderNumber() * 2, bottom - count * 9 - WyvtilsConfig.INSTANCE.getBorderNumber() * 3 - 2, sidebarWidth + WyvtilsConfig.INSTANCE.getBorderNumber() * 3, count * 9 + WyvtilsConfig.INSTANCE.getBorderNumber() * 4 + 2, WyvtilsConfig.INSTANCE.getBorderNumber(), WyvtilsConfig.INSTANCE.getBorderColor().getRGB());
+        }
         matrices.pop();
     }
 

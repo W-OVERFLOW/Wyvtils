@@ -362,6 +362,32 @@ object WyvtilsConfig : Vigilant(
 
     @Property(
         type = PropertyType.SWITCH,
+        name = "Background Border",
+        category = "Sidebar",
+        description = "Enable a border to border the background."
+    )
+    var backgroundBorder = false
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Border Color",
+        category = "Sidebar",
+        description = "Select a color to set for the background border."
+    )
+    var borderColor: Color = Color.WHITE
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Border Width",
+        category = "Sidebar",
+        description = "Set the width of the background border.",
+        min = 1,
+        max = 20
+    )
+    var borderNumber = 2
+
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Sidebar Position",
         category = "Sidebar",
         description = "Toggle the sidebar position editor."
