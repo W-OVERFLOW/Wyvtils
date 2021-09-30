@@ -22,8 +22,8 @@ import gg.essential.api.EssentialAPI
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent
-import xyz.qalcyo.requisite.core.hypixel.events.LocrawReceivedEvent
-import xyz.qalcyo.requisite.core.hypixel.locraw.HypixelLocraw
+import xyz.qalcyo.requisite.core.integration.hypixel.events.LocrawReceivedEvent
+import xyz.qalcyo.requisite.core.integration.hypixel.locraw.HypixelLocraw
 import xyz.qalcyo.wyvtils.Wyvtils
 import xyz.qalcyo.wyvtils.Wyvtils.mc
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig
@@ -34,7 +34,7 @@ import java.util.*
 object HypixelUtils {
     lateinit var winstreak: String
     var gexp: String? = null
-    private var locraw:HypixelLocraw? = null
+    private var locraw: HypixelLocraw? = null
     @Suppress("ObjectPropertyName") private var `troll age` = false
     val skyblock
     get() = EssentialAPI.getMinecraftUtil().isHypixel() && mc.theWorld.scoreboard.getObjectiveInDisplaySlot(1)

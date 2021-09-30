@@ -30,7 +30,7 @@ import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import xyz.qalcyo.requisite.Requisite
 import xyz.qalcyo.requisite.core.events.FontRendererEvent
-import xyz.qalcyo.requisite.core.hypixel.events.LocrawReceivedEvent
+import xyz.qalcyo.requisite.core.integration.hypixel.events.LocrawReceivedEvent
 import xyz.qalcyo.wyvtils.commands.WyvtilsCommands
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig
 import xyz.qalcyo.wyvtils.listeners.Listener
