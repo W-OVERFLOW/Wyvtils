@@ -18,16 +18,16 @@
 
 package xyz.qalcyo.wyvtils.gui
 
+import gg.essential.api.EssentialAPI
 import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.util.EnumChatFormatting
+import org.lwjgl.input.Keyboard
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig.sidebarScale
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig.sidebarX
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig.sidebarY
-import org.lwjgl.input.Keyboard
-import xyz.matthewtgm.requisite.util.GuiHelper
 import java.io.IOException
 
 class SidebarGui : GuiScreen() {
@@ -43,7 +43,7 @@ class SidebarGui : GuiScreen() {
 
     override fun actionPerformed(button: GuiButton) {
         when (button.id) {
-            0 -> GuiHelper.open(WyvtilsConfig.gui())
+            0 -> EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
         }
     }
 

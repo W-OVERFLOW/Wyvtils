@@ -22,8 +22,8 @@ import gg.essential.api.EssentialAPI
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent
-import xyz.matthewtgm.requisite.events.LocrawReceivedEvent
-import xyz.matthewtgm.requisite.util.HypixelHelper
+import xyz.qalcyo.requisite.core.hypixel.events.LocrawReceivedEvent
+import xyz.qalcyo.requisite.core.hypixel.locraw.HypixelLocraw
 import xyz.qalcyo.wyvtils.Wyvtils
 import xyz.qalcyo.wyvtils.Wyvtils.mc
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig
@@ -34,7 +34,7 @@ import java.util.*
 object HypixelUtils {
     lateinit var winstreak: String
     var gexp: String? = null
-    private var locraw: HypixelHelper.HypixelLocraw? = null
+    private var locraw:HypixelLocraw? = null
     @Suppress("ObjectPropertyName") private var `troll age` = false
     val skyblock
     get() = EssentialAPI.getMinecraftUtil().isHypixel() && mc.theWorld.scoreboard.getObjectiveInDisplaySlot(1)
@@ -132,7 +132,7 @@ object HypixelUtils {
         val uuid = mc.thePlayer.gameProfile.id.toString().replace("-", "")
         val playerStats = APIUtil.getJSONResponse("https://api.hypixel.net/player?key=${WyvtilsConfig.apiKey};uuid=$uuid").asJsonObject["player"].asJsonObject["stats"]
         when (locraw?.gameType) {
-            HypixelHelper.HypixelLocraw.GameType.BEDWARS -> {
+            HypixelLocraw.GameType.BEDWARS -> {
                 try {
                     winstreak = playerStats.asJsonObject["Bedwars"].asJsonObject["winstreak"].asInt.toString()
                 } catch (e: Exception) {
@@ -140,7 +140,7 @@ object HypixelUtils {
                     return false
                 }
             }
-            HypixelHelper.HypixelLocraw.GameType.SKYWARS -> {
+            HypixelLocraw.GameType.SKYWARS -> {
                 try {
                     winstreak = playerStats.asJsonObject["SkyWars"].asJsonObject["win_streak"].asInt.toString()
                 } catch (e: Exception) {
@@ -148,7 +148,7 @@ object HypixelUtils {
                     return false
                 }
             }
-            HypixelHelper.HypixelLocraw.GameType.DUELS -> {
+            HypixelLocraw.GameType.DUELS -> {
                 try {
                     winstreak = playerStats.asJsonObject["Duels"].asJsonObject["current_winstreak"].asInt.toString()
                 } catch (e: Exception) {
@@ -165,7 +165,7 @@ object HypixelUtils {
         val uuid = getUUID(username)
         val playerStats = APIUtil.getJSONResponse("https://api.hypixel.net/player?key=${WyvtilsConfig.apiKey};uuid=$uuid").asJsonObject["player"].asJsonObject["stats"]
         when (locraw?.gameType) {
-            HypixelHelper.HypixelLocraw.GameType.BEDWARS -> {
+            HypixelLocraw.GameType.BEDWARS -> {
                 try {
                     winstreak = playerStats.asJsonObject["Bedwars"].asJsonObject["winstreak"].asInt.toString()
                 } catch (e: Exception) {
@@ -173,7 +173,7 @@ object HypixelUtils {
                     return false
                 }
             }
-            HypixelHelper.HypixelLocraw.GameType.SKYWARS -> {
+            HypixelLocraw.GameType.SKYWARS -> {
                 try {
                     winstreak = playerStats.asJsonObject["SkyWars"].asJsonObject["win_streak"].asInt.toString()
                 } catch (e: Exception) {
@@ -181,7 +181,7 @@ object HypixelUtils {
                     return false
                 }
             }
-            HypixelHelper.HypixelLocraw.GameType.DUELS -> {
+            HypixelLocraw.GameType.DUELS -> {
                 try {
                     winstreak = playerStats.asJsonObject["Duels"].asJsonObject["current_winstreak"].asInt.toString()
                 } catch (e: Exception) {
@@ -246,7 +246,6 @@ object HypixelUtils {
         return uuidResponse["id"].asString
     }
 
-    @SubscribeEvent
     fun onLocraw(event: LocrawReceivedEvent) {
         locraw = event.locraw
         if (WyvtilsConfig.autoBossbarLobby) {

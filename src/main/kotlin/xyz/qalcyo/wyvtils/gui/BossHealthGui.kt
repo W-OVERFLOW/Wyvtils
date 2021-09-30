@@ -18,6 +18,7 @@
 
 package xyz.qalcyo.wyvtils.gui
 
+import gg.essential.api.EssentialAPI
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.*
 import net.minecraft.client.renderer.GlStateManager
@@ -29,7 +30,6 @@ import xyz.qalcyo.wyvtils.config.WyvtilsConfig.bossBarY
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig.bossbarScale
 import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11
-import xyz.matthewtgm.requisite.util.GuiHelper
 import java.awt.Color
 import java.io.IOException
 
@@ -47,7 +47,7 @@ class BossHealthGui : GuiScreen() {
 
     override fun actionPerformed(button: GuiButton) {
         when (button.id) {
-            0 -> GuiHelper.open(WyvtilsConfig.gui())
+            0 -> EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
         }
     }
 

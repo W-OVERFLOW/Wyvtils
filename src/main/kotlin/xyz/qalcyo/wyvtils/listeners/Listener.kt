@@ -31,13 +31,13 @@ import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.EventPriority
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
-import xyz.matthewtgm.requisite.events.FontRendererEvent
-import xyz.matthewtgm.requisite.mixins.sound.PositionedSoundAccessor
-import xyz.matthewtgm.requisite.util.ServerHelper
-import xyz.matthewtgm.requisite.util.StringHelper
+import xyz.qalcyo.mango.Objects
+import xyz.qalcyo.requisite.Requisite
+import xyz.qalcyo.requisite.core.events.FontRendererEvent
 import xyz.qalcyo.wyvtils.Wyvtils
 import xyz.qalcyo.wyvtils.Wyvtils.mc
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig
+import xyz.qalcyo.wyvtils.mixin.PositionedSoundAccessor
 import xyz.qalcyo.wyvtils.utils.HypixelUtils
 import xyz.qalcyo.wyvtils.utils.containsAny
 import xyz.qalcyo.wyvtils.utils.withoutFormattingCodes
@@ -85,7 +85,7 @@ object Listener {
                 Multithreading.runAsync {
                     if (!HypixelUtils.isValidKey(tempApiKey)
                     ) {
-                        if (!ServerHelper.hypixel()) {
+                        if (!Requisite.getInstance().hypixelHelper.isOnHypixel) {
                             Wyvtils.sendMessage(EnumChatFormatting.RED.toString() + "You are not running this command on Hypixel! This mod needs an Hypixel API key!")
                         } else {
                             Wyvtils.sendMessage(EnumChatFormatting.RED.toString() + "The API Key was invalid! Please try running the command again.")
@@ -100,7 +100,7 @@ object Listener {
             }
             //Stolen code ends here
         }
-        if ((WyvtilsConfig.autoGetGEXP || WyvtilsConfig.autoGetWinstreak) && ServerHelper.hypixel()) {
+        if ((WyvtilsConfig.autoGetGEXP || WyvtilsConfig.autoGetWinstreak) && Requisite.getInstance().hypixelHelper.isOnHypixel) {
             if (!victoryDetected) {
                 Multithreading.runAsync {
                     if (unformattedText.startsWith(" ")) {
@@ -222,7 +222,6 @@ object Listener {
         }
     }
 
-    @SubscribeEvent
     fun onStringRendered(e: FontRendererEvent.RenderEvent) {
         if (!WyvtilsConfig.chatHightlight && e.text != null && mc.theWorld != null && e.text.contains(mc.thePlayer.gameProfile.name) && WyvtilsConfig.highlightName && !changeTextColor) {
             if (e.text.containsAny("§", "\u00A7")) {
@@ -332,6 +331,23 @@ object Listener {
                 }
             }
         }
-        return StringHelper.join(array, color + mc.thePlayer.gameProfile.name + EnumChatFormatting.RESET)
+        return join(array, color + mc.thePlayer.gameProfile.name + EnumChatFormatting.RESET)
+    }
+    private fun join(iterable: Iterable<*>, separator: String): String {
+        return join(iterable.iterator(), separator)
+    }
+
+    private fun join(iterator: Iterator<*>, separator: String): String {
+        if (!iterator.hasNext()) return ""
+        val first = iterator.next()
+        if (!iterator.hasNext()) return Objects.stringify(first)
+        val buf = StringBuilder()
+        if (first != null) buf.append(first)
+        while (iterator.hasNext()) {
+            buf.append(separator)
+            val obj = iterator.next()
+            if (obj != null) buf.append(obj)
+        }
+        return buf.toString()
     }
 }

@@ -13,5 +13,8 @@
     "MixinRenderManager",
     "MixinSoundManager"
   ],
-  "verbose": true
+  "verbose": true,
+  "client": [
+    "PositionedSoundAccessor"
+  ]
 }

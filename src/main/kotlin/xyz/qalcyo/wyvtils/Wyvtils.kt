@@ -22,12 +22,15 @@ import gg.essential.api.EssentialAPI
 import gg.essential.universal.ChatColor
 import net.minecraft.client.Minecraft
 import net.minecraft.util.EnumChatFormatting
+import net.minecraftforge.common.MinecraftForge.EVENT_BUS
+import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
-import xyz.matthewtgm.requisite.util.ChatHelper
-import xyz.matthewtgm.requisite.util.ForgeHelper
+import xyz.qalcyo.requisite.Requisite
+import xyz.qalcyo.requisite.core.events.FontRendererEvent
+import xyz.qalcyo.requisite.core.hypixel.events.LocrawReceivedEvent
 import xyz.qalcyo.wyvtils.commands.WyvtilsCommands
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig
 import xyz.qalcyo.wyvtils.listeners.Listener
@@ -60,7 +63,7 @@ object Wyvtils {
     var isConfigInitialized = false
 
     fun sendMessage(message: String?) {
-        ChatHelper.sendMessage("${EnumChatFormatting.DARK_PURPLE}[Wyvtils] ", message)
+        Requisite.getInstance().chatHelper.send("${EnumChatFormatting.DARK_PURPLE}[Wyvtils] ", message)
     }
 
     /*/
@@ -99,7 +102,10 @@ object Wyvtils {
                 else -> ""
             }
         }
-        ForgeHelper.registerEventListeners(Listener, HypixelUtils)
+        EVENT_BUS.register(Listener)
+        EVENT_BUS.register(HypixelUtils)
+        Requisite.getInstance().eventBus.register(LocrawReceivedEvent::class.java, HypixelUtils::onLocraw)
+        Requisite.getInstance().eventBus.register(FontRendererEvent.RenderEvent::class.java, Listener::onStringRendered)
         WyvtilsCommands.register()
         /*/
         ClientRegistry.registerKeyBinding(chatKeybind)
@@ -109,7 +115,7 @@ object Wyvtils {
 
     @Mod.EventHandler
     private fun onFMLLoad(event: FMLLoadCompleteEvent) {
-        if (ForgeHelper.isModLoaded("bossbar_customizer") && WyvtilsConfig.bossBarCustomization) {
+        if (Loader.isModLoaded("bossbar_customizer") && WyvtilsConfig.bossBarCustomization) {
             WyvtilsConfig.bossBarCustomization = false
             WyvtilsConfig.markDirty()
             WyvtilsConfig.writeData()

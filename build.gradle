@@ -71,7 +71,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'xyz.matthewtgm:Requisite:1.1.1'
+    implementation files ('1.8.9.jar')
     include 'com.github.Qalcyo:RequisiteEssentialLoader:0a78589683'
     implementation 'xyz.matthewtgm:RequisiteLaunchwrapper:1.1'
     implementation 'gg.essential:loader-launchwrapper:1.1.1'

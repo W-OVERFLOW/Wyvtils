@@ -31,12 +31,12 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import xyz.qalcyo.requisite.Requisite;
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig;
 import xyz.qalcyo.wyvtils.gui.BossHealthGui;
 import xyz.qalcyo.wyvtils.gui.SidebarGui;
-import xyz.qalcyo.wyvtils.utils.GlUtil;
 
-import java.awt.Color;
+import java.awt.*;
 
 @Mixin(GuiIngame.class)
 public abstract class MixinGuiIngame {
@@ -170,9 +170,9 @@ public abstract class MixinGuiIngame {
         if (WyvtilsConfig.INSTANCE.getSidebar()) {
             if (WyvtilsConfig.INSTANCE.getBackgroundBorder()) {
                 if (WyvtilsConfig.INSTANCE.getSidebarPosition()) {
-                    GlUtil.INSTANCE.drawHollowRectangle(WyvtilsConfig.INSTANCE.getSidebarX() - i - 2 - WyvtilsConfig.INSTANCE.getBorderNumber(), WyvtilsConfig.INSTANCE.getSidebarY() - (lines + 1) * getFontRenderer().FONT_HEIGHT - 1 - WyvtilsConfig.INSTANCE.getBorderNumber(), i + WyvtilsConfig.INSTANCE.getBorderNumber() * 2 + 2, (lines + 1) * getFontRenderer().FONT_HEIGHT + 1 + WyvtilsConfig.INSTANCE.getBorderNumber() * 2, WyvtilsConfig.INSTANCE.getBorderNumber(), WyvtilsConfig.INSTANCE.getBorderColor().getRGB());
+                    Requisite.getInstance().getRenderHelper().drawHollowRect(WyvtilsConfig.INSTANCE.getSidebarX() - i - 2 - WyvtilsConfig.INSTANCE.getBorderNumber(), WyvtilsConfig.INSTANCE.getSidebarY() - (lines + 1) * getFontRenderer().FONT_HEIGHT - 1 - WyvtilsConfig.INSTANCE.getBorderNumber(), i + WyvtilsConfig.INSTANCE.getBorderNumber() * 2 + 2, (lines + 1) * getFontRenderer().FONT_HEIGHT + 1 + WyvtilsConfig.INSTANCE.getBorderNumber() * 2, WyvtilsConfig.INSTANCE.getBorderNumber(), WyvtilsConfig.INSTANCE.getBorderColor().getRGB());
                 } else {
-                    GlUtil.INSTANCE.drawHollowRectangle(x - 2 - WyvtilsConfig.INSTANCE.getBorderNumber(), bottom - (lines + 1) * getFontRenderer().FONT_HEIGHT - 1 - WyvtilsConfig.INSTANCE.getBorderNumber(), i + WyvtilsConfig.INSTANCE.getBorderNumber() * 2 + 4, (lines + 1) * getFontRenderer().FONT_HEIGHT + 1 + WyvtilsConfig.INSTANCE.getBorderNumber() * 2, WyvtilsConfig.INSTANCE.getBorderNumber(), WyvtilsConfig.INSTANCE.getBorderColor().getRGB());
+                    Requisite.getInstance().getRenderHelper().drawHollowRect(x - 2 - WyvtilsConfig.INSTANCE.getBorderNumber(), bottom - (lines + 1) * getFontRenderer().FONT_HEIGHT - 1 - WyvtilsConfig.INSTANCE.getBorderNumber(), i + WyvtilsConfig.INSTANCE.getBorderNumber() * 2 + 4, (lines + 1) * getFontRenderer().FONT_HEIGHT + 1 + WyvtilsConfig.INSTANCE.getBorderNumber() * 2, WyvtilsConfig.INSTANCE.getBorderNumber(), WyvtilsConfig.INSTANCE.getBorderColor().getRGB());
                 }
             }
             GlStateManager.popMatrix();
