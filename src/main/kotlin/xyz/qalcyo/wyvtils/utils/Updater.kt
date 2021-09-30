@@ -40,13 +40,13 @@ import java.io.IOException
 
 
 object Updater {
-    var updateUrl: String = ""
-    lateinit var latestTag: String
+    var latestTag = ""
     var shouldUpdate = false
+    var updateUrl = ""
 
     /**
-     * Adapted from SimpleToggleSprint under AGPLv3
-     * https://github.com/My-Name-Is-Jeff/SimpleToggleSprint/blob/1.8.9/LICENSE
+     * Stolen from SimpleTimeChanger under AGPLv3
+     * https://github.com/My-Name-Is-Jeff/SimpleTimeChanger/blob/master/LICENSE
      */
     fun update() {
         CoroutineScope(Dispatchers.IO + CoroutineName("${Wyvtils.MOD_NAME}-UpdateChecker")).launch {
@@ -54,15 +54,11 @@ object Updater {
                 APIUtil.getJSONResponse("https://api.github.com/repos/Qalcyo/${Wyvtils.MODID}/releases/latest")
             latestTag = latestRelease.get("tag_name").asString
 
-            val currentVersion = DefaultArtifactVersion(Wyvtils.VERSION.substringBefore("-"))
-            val latestVersion = DefaultArtifactVersion(latestTag.substringAfter("v").substringBefore("-"))
-
-            if ((Wyvtils.VERSION.contains("BETA") && currentVersion >= latestVersion)) {
-                return@launch
-            } else if (currentVersion < latestVersion) {
+            val currentVersion = ModVersion(Wyvtils.VERSION)
+            latestTag = latestRelease.get("tag_name").asString.substringAfter("v")
+            val latestVersion = ModVersion(latestTag)
+            if (currentVersion < latestVersion) {
                 updateUrl = latestRelease["assets"].asJsonArray[0].asJsonObject["browser_download_url"].asString
-            }
-            if (updateUrl.isNotEmpty()) {
                 EssentialAPI.getNotifications()
                     .push(
                         "Mod Update",
@@ -77,8 +73,8 @@ object Updater {
     }
 
     /**
-     * Adapted from RequisiteLaunchwrapper under LGPLv2.1
-     * https://github.com/TGMDevelopment/RequisiteLaunchwrapper/blob/main/LICENSE
+     * Adapted from RequisiteLaunchwrapper under LGPLv3
+     * https://github.com/Qalcyo/RequisiteLaunchwrapper/blob/main/LICENSE
      */
     fun download(url: String, file: File): Boolean {
         if (file.exists()) return true
@@ -142,6 +138,54 @@ object Updater {
             throw IOException("Unable to find suitable java runtime at $java")
         }
         return java
+    }
+
+    /**
+     * Stolen from SimpleTimeChanger under AGPLv3
+     * https://github.com/My-Name-Is-Jeff/SimpleTimeChanger/blob/master/LICENSE
+     */
+    class ModVersion(private val versionString: String) : Comparable<ModVersion> {
+
+        companion object {
+            val regex = Regex("^(?<version>[\\d.]+)-?(?<type>\\D+)?(?<typever>\\d+\\.?\\d*)?\$")
+        }
+
+        private val matched by lazy {
+            regex.find(versionString)
+        }
+        private val isSafe = matched != null
+
+        val version = matched!!.groups["version"]!!.value
+        private val versionArtifact = DefaultArtifactVersion(version)
+        private val specialVersionType by lazy {
+            val typeString = matched!!.groups["type"]?.value ?: return@lazy UpdateType.RELEASE
+
+            return@lazy UpdateType.values().find { typeString == it.prefix } ?: UpdateType.UNKNOWN
+        }
+        private val specialVersion by lazy {
+            if (specialVersionType == UpdateType.RELEASE) return@lazy null
+            return@lazy matched!!.groups["typever"]?.value?.toDoubleOrNull()
+        }
+
+        override fun compareTo(other: ModVersion): Int {
+            if (!isSafe || !other.isSafe) return -1
+            return if (versionArtifact.compareTo(other.versionArtifact) == 0) {
+                if (specialVersionType.ordinal == other.specialVersionType.ordinal) {
+                    specialVersion!!.compareTo(other.specialVersion!!)
+                } else other.specialVersionType.ordinal - specialVersionType.ordinal
+            } else versionArtifact.compareTo(other.versionArtifact)
+        }
+    }
+
+    /**
+     * Stolen from SimpleTimeChanger under AGPLv3
+     * https://github.com/My-Name-Is-Jeff/SimpleTimeChanger/blob/master/LICENSE
+     */
+    enum class UpdateType(val prefix: String) {
+        UNKNOWN("unknown"),
+        RELEASE(""),
+        RELEASECANDIDATE("RC"),
+        PRERELEASE("BETA"),
     }
 
 }

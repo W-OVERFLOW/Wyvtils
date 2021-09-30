@@ -11,10 +11,8 @@
     "MixinGuiIngameForgeHook",
     "MixinMinecraft",
     "MixinRenderManager",
-    "MixinSoundManager"
-  ],
-  "verbose": true,
-  "client": [
+    "MixinSoundManager",
     "PositionedSoundAccessor"
-  ]
+  ],
+  "verbose": true
 }
