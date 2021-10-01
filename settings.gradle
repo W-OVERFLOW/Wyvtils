@@ -40,4 +40,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "Wyvtils"
+rootProject.name = mod_name

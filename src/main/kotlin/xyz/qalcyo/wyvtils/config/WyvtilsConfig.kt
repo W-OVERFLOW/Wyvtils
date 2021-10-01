@@ -28,6 +28,8 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.util.EnumChatFormatting
 import xyz.qalcyo.wyvtils.Wyvtils
+import xyz.qalcyo.wyvtils.Wyvtils.MODID
+import xyz.qalcyo.wyvtils.Wyvtils.MOD_NAME
 import xyz.qalcyo.wyvtils.Wyvtils.mc
 import xyz.qalcyo.wyvtils.gui.ActionBarGui
 import xyz.qalcyo.wyvtils.gui.BossHealthGui
@@ -41,8 +43,8 @@ import java.io.File
 @Suppress("unused")
 object WyvtilsConfig :
     Vigilant(
-        File(Wyvtils.modDir, "wyvtils.toml"),
-        "${EnumChatFormatting.DARK_PURPLE}Wyvtils",
+        File(Wyvtils.modDir, "${MODID}.toml"),
+        "${EnumChatFormatting.DARK_PURPLE}${MOD_NAME}",
         sortingBehavior = ConfigSorting
     ) {
 
@@ -232,7 +234,7 @@ object WyvtilsConfig :
     fun openBossHealthGui() {
         if (bossBarCustomization) EssentialAPI.getGuiUtil().openScreen(BossHealthGui())
         else EssentialAPI.getNotifications()
-            .push("Wyvtils", "You can't do that, you haven't enabled Bossbar Customization!")
+            .push(MOD_NAME, "You can't do that, you haven't enabled Bossbar Customization!")
     }
 
     @Property(
@@ -319,7 +321,7 @@ object WyvtilsConfig :
     fun openActionBarGui() {
         if (actionBarPosition && actionBarCustomization) EssentialAPI.getGuiUtil().openScreen(ActionBarGui())
         else EssentialAPI.getNotifications()
-            .push("Wyvtils", "You can't do that, you don't have Action Bar position enabled!")
+            .push(MOD_NAME, "You can't do that, you don't have Action Bar position enabled!")
     }
 
     @Property(
@@ -579,7 +581,7 @@ object WyvtilsConfig :
     fun openSidebarGui() {
         if (sidebarPosition) EssentialAPI.getGuiUtil().openScreen(SidebarGui())
         else EssentialAPI.getNotifications()
-            .push("Wyvtils", "You can't do that, you don't have Sidebar position enabled!")
+            .push(MOD_NAME, "You can't do that, you don't have Sidebar position enabled!")
     }
 
     @Property(
@@ -628,44 +630,44 @@ object WyvtilsConfig :
     @Property(
         type = PropertyType.BUTTON,
         name = "Update Now",
-        description = "Update Wyvtils by clicking the button.",
+        description = "Update $MOD_NAME by clicking the button.",
         category = "Updater"
     )
     fun update() {
         if (Updater.shouldUpdate) EssentialAPI.getGuiUtil()
             .openScreen(DownloadConfirmGui(mc.currentScreen)) else EssentialAPI.getNotifications()
-            .push("Wyvtils", "No update had been detected at startup, and thus the update GUI has not been shown.")
+            .push(MOD_NAME, "No update had been detected at startup, and thus the update GUI has not been shown.")
     }
 
     init {
         initialize()
         setCategoryDescription(
             "General",
-            "This category is for configuring general parts of Wyvtils."
+            "This category is for configuring general parts of $MOD_NAME."
         )
         setCategoryDescription(
             "Action Bar",
-            "Configure action bar-related features in Wyvtils."
+            "Configure action bar-related features in $MOD_NAME."
         )
         setCategoryDescription(
             "Text",
-            "Configure text-related features in Wyvtils."
+            "Configure text-related features in $MOD_NAME."
         )
         setCategoryDescription(
             "GEXP",
-            "Configure GEXP-related features in Wyvtils."
+            "Configure GEXP-related features in $MOD_NAME."
         )
         setCategoryDescription(
             "Bossbar",
-            "Configure bossbar-related features in Wyvtils."
+            "Configure bossbar-related features in $MOD_NAME."
         )
         setCategoryDescription(
             "Sound",
-            "Configure sound-related features in Wyvtils."
+            "Configure sound-related features in $MOD_NAME."
         )
         setCategoryDescription(
             "Hitboxes",
-            "Configure hitbox-related features in Wyvtils."
+            "Configure hitbox-related features in $MOD_NAME."
         )
         registerListener("textColor") { _: Int ->
             Listener.changeTextColor = true

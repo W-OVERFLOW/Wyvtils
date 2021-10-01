@@ -17,44 +17,41 @@
  */
 
 plugins {
-    // Languages
-    id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.5.30'
-
-    // Build
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
-    id 'net.minecraftforge.gradle.forge' version 'ddb1eb0'
-
-    // Libraries
-    id 'org.spongepowered.mixin' version 'd5f9873'
+    id "java"
+    id "org.jetbrains.kotlin.jvm" version "1.5.30"
+    id "com.github.johnrengelman.shadow" version "6.1.0"
+    id "net.minecraftforge.gradle.forge" version "ddb1eb0"
+    id "org.spongepowered.mixin" version "d5f9873"
 }
 
-version = '1.2.0-BETA10'
-group = 'xyz.qalcyo'
-archivesBaseName = 'Wyvtils [1.8.9]'
+version = mod_ver
+group = "xyz.qalcyo"
+archivesBaseName = "$mod_name [1.8.9]"
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
 tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+    options.encoding = "UTF-8"
 }
 
 compileKotlin {
     kotlinOptions {
-        jvmTarget = '1.8'
-        freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
+        jvmTarget = "1.8"
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
     }
 }
 
 minecraft {
-    version = '1.8.9-11.15.1.2318-1.8.9'
-    runDir = 'run'
-    mappings = 'stable_22'
-
+    version = "1.8.9-11.15.1.2318-1.8.9"
+    runDir = "run"
+    mappings = "stable_22"
+    replace("@NAME@", mod_name)
+    replace("@VER@": mod_ver)
+    replace("@ID@", mod_id)
     makeObfSourceJar = false
 
-    clientRunArgs += '--tweakClass xyz.qalcyo.requisiteessentialloader.RequisiteEssentialTweaker'
-    clientRunArgs += '--mixin mixins.wyvtils.json'
+    clientRunArgs += "--tweakClass xyz.qalcyo.requisiteessentialloader.RequisiteEssentialTweaker"
+    clientRunArgs += "--mixin mixins.${mod_id}.json"
 }
 
 configurations {
@@ -65,85 +62,85 @@ configurations {
 
 repositories {
     mavenCentral()
-    maven { url 'https://repo.sk1er.club/repository/maven-releases/' }
-    maven { url 'https://jitpack.io/' }
-    maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
+    maven { url "https://repo.sk1er.club/repository/maven-releases/" }
+    maven { url "https://jitpack.io/" }
+    maven { url "https://repo.spongepowered.org/repository/maven-public/" }
 }
 
 dependencies {
-    implementation files ('1.8.9.jar')
-    include 'com.github.Qalcyo:RequisiteEssentialLoader:0a78589683'
-    implementation 'xyz.matthewtgm:RequisiteLaunchwrapper:1.1'
-    implementation 'gg.essential:loader-launchwrapper:1.1.1'
-    implementation 'gg.essential:essential-1.8.9-forge:1459+release-launch'
+    implementation files ("1.8.9.jar")
+    include "com.github.Qalcyo:RequisiteEssentialLoader:0a78589683"
+    implementation "xyz.matthewtgm:RequisiteLaunchwrapper:1.1"
+    implementation "gg.essential:loader-launchwrapper:1.1.1"
+    implementation "gg.essential:essential-1.8.9-forge:1459+release-launch"
 
-    annotationProcessor 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
+    annotationProcessor "org.spongepowered:mixin:0.7.11-SNAPSHOT"
 }
 
 jar {
     manifest.attributes(
-            'ModSide': 'CLIENT',
-            'ForceLoadAsMod': true,
-            'MixinConfigs': 'mixins.wyvtils.json',
-            'TweakClass': 'xyz.qalcyo.requisiteessentialloader.RequisiteEssentialTweaker',
-            'TweakOrder': '0'
+            "ModSide": "CLIENT",
+            "ForceLoadAsMod": true,
+            "MixinConfigs": "mixins.${mod_id}.json",
+            "TweakClass": "xyz.qalcyo.requisiteessentialloader.RequisiteEssentialTweaker",
+            "TweakOrder": "0"
     )
 
     enabled = false
 }
 
 processResources {
-    inputs.property 'version', project.version
-    inputs.property 'mcversion', project.minecraft.version
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
 
     from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-        include 'bundle.project.json'
+        include "mcmod.info"
+        include "bundle.project.json"
 
         expand(
-                'version': project.version,
-                'mcversion': project.minecraft.version
+                "version": project.version,
+                "mcversion": project.minecraft.version
         )
     }
 
     from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-        exclude 'bundle.project.json'
+        exclude "mcmod.info"
+        exclude "bundle.project.json"
     }
 }
 
 tasks.reobfJar.dependsOn tasks.shadowJar
 
 shadowJar {
-    archiveClassifier.set('')
+    archiveClassifier.set("")
     configurations = [project.configurations.include]
     duplicatesStrategy DuplicatesStrategy.EXCLUDE
 
-    exclude 'LICENSE.md'
-    exclude 'pack.mcmeta'
-    exclude 'dummyThing'
-    exclude '**/module-info.class'
-    exclude '*.so'
-    exclude '*.dylib'
-    exclude '*.dll'
-    exclude '*.jnilib'
-    exclude 'ibxm/**'
-    exclude 'com/jcraft/**'
-    exclude 'org/lwjgl/**'
-    exclude 'net/java/**'
+    exclude "LICENSE.md"
+    exclude "pack.mcmeta"
+    exclude "dummyThing"
+    exclude "**/module-info.class"
+    exclude "*.so"
+    exclude "*.dylib"
+    exclude "*.dll"
+    exclude "*.jnilib"
+    exclude "ibxm/**"
+    exclude "com/jcraft/**"
+    exclude "org/lwjgl/**"
+    exclude "net/java/**"
 
-    exclude 'META-INF/proguard/**'
-    exclude 'META-INF/maven/**'
-    exclude 'META-INF/versions/**'
-    exclude 'META-INF/com.android.tools/**'
+    exclude "META-INF/proguard/**"
+    exclude "META-INF/maven/**"
+    exclude "META-INF/versions/**"
+    exclude "META-INF/com.android.tools/**"
 
-    exclude 'fabric.mod.json'
+    exclude "fabric.mod.json"
 }
 
 mixin {
     disableRefMapWarning = true
     defaultObfuscationEnv searge
-    add sourceSets.main, "mixins.wyvtils.refmap.json"
+    add sourceSets.main, "mixins.${mod_id}.refmap.json"
 }
 
 reobf {
@@ -154,7 +151,7 @@ reobf {
 
 sourceSets {
     main {
-        ext.refMap = "mixins.wyvtils.refmap.json"
+        ext.refMap = "mixins.${mod_id}.refmap.json"
         output.resourcesDir = file("${buildDir}/classes/kotlin/main")
     }
 }

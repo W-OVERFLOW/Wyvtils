@@ -24,7 +24,11 @@ import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.util.EnumChatFormatting
 import org.lwjgl.input.Keyboard
+import xyz.qalcyo.requisite.Requisite
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.backgroundBorder
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.borderColor
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig.borderNumber
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig.sidebarScale
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig.sidebarX
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig.sidebarY
@@ -92,6 +96,16 @@ class SidebarGui : GuiScreen() {
                     553648127, WyvtilsConfig.sidebarTextShadow
                 )
             }
+        }
+        if (backgroundBorder) {
+            Requisite.getInstance().renderHelper.drawHollowRect(
+                sidebarX - i - 2 - borderNumber,
+                sidebarY - 4 * fontRendererObj.FONT_HEIGHT - 1 - borderNumber,
+                i + borderNumber * 2 + 2,
+                4 * fontRendererObj.FONT_HEIGHT + 1 + borderNumber * 2,
+                borderNumber,
+                borderColor.rgb
+            )
         }
         GlStateManager.popMatrix()
         mc.mcProfiler.endSection()

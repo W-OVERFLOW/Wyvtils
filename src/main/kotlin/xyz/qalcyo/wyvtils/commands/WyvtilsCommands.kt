@@ -30,11 +30,13 @@ import xyz.qalcyo.wyvtils.config.WyvtilsConfig
 import xyz.qalcyo.wyvtils.utils.HypixelUtils
 
 @Suppress("unused")
-object WyvtilsCommands : Command("wyvtils", true) {
+object WyvtilsCommands : Command(Wyvtils.MODID, true) {
 
     override val commandAliases = setOf(
         Alias("wyvtil"),
-        Alias("wyvtilities") // will be removed soon
+        Alias("wyvtilities"),
+        Alias("wytil"),
+        Alias("wytils")
     )
 
     @DefaultHandler
@@ -42,12 +44,12 @@ object WyvtilsCommands : Command("wyvtils", true) {
         EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
     }
 
-    @SubCommand("config", description = "Opens the config GUI for Wyvtils")
+    @SubCommand("config", description = "Opens the config GUI for ${Wyvtils.MOD_NAME}")
     fun config() {
         EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
     }
 
-    @SubCommand("setkey", description = "Sets the API key for Wyvtils.")
+    @SubCommand("setkey", description = "Sets the API key for ${Wyvtils.MOD_NAME}.")
     fun setKey(@DisplayName("api key") apiKey: String) {
         Multithreading.runAsync {
             try {
@@ -78,46 +80,46 @@ object WyvtilsCommands : Command("wyvtils", true) {
                 if (type == null) {
                     if (HypixelUtils.getGEXP(username)) {
                         EssentialAPI.getNotifications()
-                            .push("Wyvtils", "$username currently has " + HypixelUtils.gexp + " guild EXP.")
+                            .push(Wyvtils.MOD_NAME, "$username currently has " + HypixelUtils.gexp + " guild EXP.")
                     } else {
                         EssentialAPI.getNotifications()
-                            .push("Wyvtils", "There was a problem trying to get $username's GEXP.")
+                            .push(Wyvtils.MOD_NAME, "There was a problem trying to get $username's GEXP.")
                     }
                 } else {
                     if (type == "daily") {
                         if (HypixelUtils.getGEXP(username)) {
                             EssentialAPI.getNotifications()
                                 .push(
-                                    "Wyvtils",
+                                    Wyvtils.MOD_NAME,
                                     "$username currently has " + HypixelUtils.gexp + " daily guild EXP."
                                 )
                         } else {
                             EssentialAPI.getNotifications()
-                                .push("Wyvtils", "There was a problem trying to get $username's daily GEXP.")
+                                .push(Wyvtils.MOD_NAME, "There was a problem trying to get $username's daily GEXP.")
                         }
                     } else if (type == "weekly") {
                         if (HypixelUtils.getWeeklyGEXP(username)) {
                             EssentialAPI.getNotifications()
                                 .push(
-                                    "Wyvtils",
+                                    Wyvtils.MOD_NAME,
                                     "$username currently has " + HypixelUtils.gexp + " weekly guild EXP."
                                 )
                         } else {
                             EssentialAPI.getNotifications()
-                                .push("Wyvtils", "There was a problem trying to get $username's weekly GEXP.")
+                                .push(Wyvtils.MOD_NAME, "There was a problem trying to get $username's weekly GEXP.")
                         }
                     } else {
                         EssentialAPI.getNotifications()
-                            .push("Wyvtils", "The type argument was not valid.")
+                            .push(Wyvtils.MOD_NAME, "The type argument was not valid.")
                     }
                 }
             } else {
                 if (HypixelUtils.getGEXP()) {
                     EssentialAPI.getNotifications()
-                        .push("Wyvtils", "You currently have " + HypixelUtils.gexp + " guild EXP.")
+                        .push(Wyvtils.MOD_NAME, "You currently have " + HypixelUtils.gexp + " guild EXP.")
                 } else {
                     EssentialAPI.getNotifications()
-                        .push("Wyvtils", "There was a problem trying to get your GEXP.")
+                        .push(Wyvtils.MOD_NAME, "There was a problem trying to get your GEXP.")
                 }
             }
         }
@@ -135,13 +137,13 @@ object WyvtilsCommands : Command("wyvtils", true) {
                     if (HypixelUtils.getWinstreak(username, gamemode)) {
                         EssentialAPI.getNotifications()
                             .push(
-                                "Wyvtils",
+                                Wyvtils.MOD_NAME,
                                 "$username currently has a " + HypixelUtils.winstreak + " winstreak in $gamemode."
                             )
                     } else {
                         EssentialAPI.getNotifications()
                             .push(
-                                "Wyvtils",
+                                Wyvtils.MOD_NAME,
                                 "There was a problem trying to get $username's winstreak in $gamemode."
                             )
                     }
@@ -149,21 +151,21 @@ object WyvtilsCommands : Command("wyvtils", true) {
                     if (HypixelUtils.getWinstreak(username)) {
                         EssentialAPI.getNotifications()
                             .push(
-                                "Wyvtils",
+                                Wyvtils.MOD_NAME,
                                 "$username currently has a " + HypixelUtils.winstreak + " winstreak."
                             )
                     } else {
                         EssentialAPI.getNotifications()
-                            .push("Wyvtils", "There was a problem trying to get $username's winstreak.")
+                            .push(Wyvtils.MOD_NAME, "There was a problem trying to get $username's winstreak.")
                     }
                 }
             } else {
                 if (HypixelUtils.getWinstreak()) {
                     EssentialAPI.getNotifications()
-                        .push("Wyvtils", "You currently have a " + HypixelUtils.winstreak + " winstreak.")
+                        .push(Wyvtils.MOD_NAME, "You currently have a " + HypixelUtils.winstreak + " winstreak.")
                 } else {
                     EssentialAPI.getNotifications()
-                        .push("Wyvtils", "There was a problem trying to get your winstreak.")
+                        .push(Wyvtils.MOD_NAME, "There was a problem trying to get your winstreak.")
                 }
             }
         }

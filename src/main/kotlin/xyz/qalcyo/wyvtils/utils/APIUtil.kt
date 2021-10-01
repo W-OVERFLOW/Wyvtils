@@ -40,7 +40,7 @@ object APIUtil {
     private val parser = JsonParser()
 
     private val builder: HttpClientBuilder =
-        HttpClients.custom().setUserAgent("Wyvtils/${Wyvtils.VERSION}")
+        HttpClients.custom().setUserAgent("${Wyvtils.MOD_NAME}/${Wyvtils.VERSION}")
             .addInterceptorFirst { request: HttpRequest, _: HttpContext? ->
                 if (!request.containsHeader("Pragma")) request.addHeader("Pragma", "no-cache")
                 if (!request.containsHeader("Cache-Control")) request.addHeader("Cache-Control", "no-cache")

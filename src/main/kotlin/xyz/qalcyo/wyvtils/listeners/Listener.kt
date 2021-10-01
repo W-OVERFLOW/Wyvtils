@@ -161,7 +161,7 @@ object Listener {
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    fun onChatLow(e : ClientChatReceivedEvent) {
+    fun onChatLow(e: ClientChatReceivedEvent) {
         val unformattedText = e.message.unformattedText.withoutFormattingCodes()
         if (unformattedText.startsWith("{") && unformattedText.contains("server") && unformattedText.endsWith("}")) {
             e.isCanceled = WyvtilsConfig.hideLocraw
@@ -333,6 +333,7 @@ object Listener {
         }
         return join(array, color + mc.thePlayer.gameProfile.name + EnumChatFormatting.RESET)
     }
+
     private fun join(iterable: Iterable<*>, separator: String): String {
         return join(iterable.iterator(), separator)
     }

@@ -51,24 +51,24 @@ import java.io.File
     modLanguageAdapter = "gg.essential.api.utils.KotlinAdapter"
 )
 object Wyvtils {
-    const val MODID = "wyvtils"
-    const val MOD_NAME = "Wyvtils"
-    const val VERSION = "1.2.0-BETA10"
+    const val MODID = "@ID@"
+    const val MOD_NAME = "@NAME@"
+    const val VERSION = "@VER@"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
     lateinit var jarFile: File
-    val modDir = File(File(File(File(mc.mcDataDir, "config"), "Qalcyo"), "Wyvtils"), "1.8.9")
+    val modDir = File(File(File(File(mc.mcDataDir, "config"), "Qalcyo"), MOD_NAME), "1.8.9")
 
     @JvmField
     var isConfigInitialized = false
 
     fun sendMessage(message: String?) {
-        Requisite.getInstance().chatHelper.send("${EnumChatFormatting.DARK_PURPLE}[Wyvtils] ", message)
+        Requisite.getInstance().chatHelper.send("${EnumChatFormatting.DARK_PURPLE}[$MOD_NAME] ", message)
     }
 
     /*/
-    val chatKeybind = KeyBinding("Chat Swapper", Keyboard.KEY_V, "Wyvtils")
-    val titleKeybind = KeyBinding("Clear Title", Keyboard.KEY_Z, "Wyvtils")
+    val chatKeybind = KeyBinding("Chat Swapper", Keyboard.KEY_V, MOD_NAME)
+    val titleKeybind = KeyBinding("Clear Title", Keyboard.KEY_Z, MOD_NAME)
      */
 
     @Mod.EventHandler
@@ -120,8 +120,8 @@ object Wyvtils {
             WyvtilsConfig.markDirty()
             WyvtilsConfig.writeData()
             EssentialAPI.getNotifications().push(
-                "Wyvtils",
-                "Bossbar Customizer (the mod) has been detected, and so the Wyvtils Bossbar related features have been disabled."
+                MOD_NAME,
+                "Bossbar Customizer (the mod) has been detected, and so the $MOD_NAME Bossbar related features have been disabled."
             )
         }
         Updater.update()

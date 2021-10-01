@@ -35,16 +35,20 @@ object HypixelUtils {
     lateinit var winstreak: String
     var gexp: String? = null
     private var locraw: HypixelLocraw? = null
-    @Suppress("ObjectPropertyName") private var `troll age` = false
+    @Suppress("ObjectPropertyName")
+    private var `troll age` = false
     val skyblock
-    get() = EssentialAPI.getMinecraftUtil().isHypixel() && mc.theWorld.scoreboard.getObjectiveInDisplaySlot(1)
-        ?.let { it -> it.displayName.withoutFormattingCodes().toCharArray().filter { it.code in 21..126 }.joinToString(separator = "").contains("SKYBLOCK") } ?: false
+        get() = EssentialAPI.getMinecraftUtil().isHypixel() && mc.theWorld.scoreboard.getObjectiveInDisplaySlot(1)
+            ?.let { it ->
+                it.displayName.withoutFormattingCodes().toCharArray().filter { it.code in 21..126 }
+                    .joinToString(separator = "").contains("SKYBLOCK")
+            } ?: false
     val lobby
-    get() = if (EssentialAPI.getMinecraftUtil().isHypixel()) {
-        locraw?.gameMode.isNullOrBlank() || locraw?.gameType == null
-    } else {
-        false
-    }
+        get() = if (EssentialAPI.getMinecraftUtil().isHypixel()) {
+            locraw?.gameMode.isNullOrBlank() || locraw?.gameType == null
+        } else {
+            false
+        }
 
     private fun getCurrentESTTime(): String? {
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -130,7 +134,8 @@ object HypixelUtils {
 
     fun getWinstreak(): Boolean {
         val uuid = mc.thePlayer.gameProfile.id.toString().replace("-", "")
-        val playerStats = APIUtil.getJSONResponse("https://api.hypixel.net/player?key=${WyvtilsConfig.apiKey};uuid=$uuid").asJsonObject["player"].asJsonObject["stats"]
+        val playerStats =
+            APIUtil.getJSONResponse("https://api.hypixel.net/player?key=${WyvtilsConfig.apiKey};uuid=$uuid").asJsonObject["player"].asJsonObject["stats"]
         when (locraw?.gameType) {
             HypixelLocraw.GameType.BEDWARS -> {
                 try {
@@ -163,7 +168,8 @@ object HypixelUtils {
 
     fun getWinstreak(username: String): Boolean {
         val uuid = getUUID(username)
-        val playerStats = APIUtil.getJSONResponse("https://api.hypixel.net/player?key=${WyvtilsConfig.apiKey};uuid=$uuid").asJsonObject["player"].asJsonObject["stats"]
+        val playerStats =
+            APIUtil.getJSONResponse("https://api.hypixel.net/player?key=${WyvtilsConfig.apiKey};uuid=$uuid").asJsonObject["player"].asJsonObject["stats"]
         when (locraw?.gameType) {
             HypixelLocraw.GameType.BEDWARS -> {
                 try {
@@ -196,7 +202,8 @@ object HypixelUtils {
 
     fun getWinstreak(username: String, game: String): Boolean {
         val uuid = getUUID(username)
-        val playerStats = APIUtil.getJSONResponse("https://api.hypixel.net/player?key=${WyvtilsConfig.apiKey};uuid=$uuid").asJsonObject["player"].asJsonObject["stats"]
+        val playerStats =
+            APIUtil.getJSONResponse("https://api.hypixel.net/player?key=${WyvtilsConfig.apiKey};uuid=$uuid").asJsonObject["player"].asJsonObject["stats"]
         when (game.lowercase()) {
             "bedwars" -> {
                 try {
