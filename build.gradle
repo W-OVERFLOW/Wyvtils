@@ -18,7 +18,7 @@
 
 plugins {
     id "java"
-    id "org.jetbrains.kotlin.jvm" version "1.5.30"
+    id "org.jetbrains.kotlin.jvm" version "1.5.31"
     id "com.github.johnrengelman.shadow" version "6.1.0"
     id "net.minecraftforge.gradle.forge" version "ddb1eb0"
     id "org.spongepowered.mixin" version "d5f9873"
@@ -72,7 +72,7 @@ dependencies {
     include "com.github.Qalcyo:RequisiteEssentialLoader:0a78589683"
     implementation "xyz.matthewtgm:RequisiteLaunchwrapper:1.1"
     implementation "gg.essential:loader-launchwrapper:1.1.1"
-    implementation "gg.essential:essential-1.8.9-forge:1459+release-launch"
+    implementation "gg.essential:essential-1.8.9-forge:1495+release-launch"
 
     annotationProcessor "org.spongepowered:mixin:0.7.11-SNAPSHOT"
 }

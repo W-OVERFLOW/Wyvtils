@@ -19,30 +19,39 @@
 package xyz.qalcyo.wyvtils.gui
 
 import gg.essential.api.EssentialAPI
+import gg.essential.elementa.WindowScreen
+import gg.essential.universal.UMatrixStack
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.*
+import net.minecraft.client.gui.FontRenderer
+import net.minecraft.client.gui.Gui
+import net.minecraft.client.gui.GuiButton
+import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.boss.BossStatus
-import net.minecraft.util.EnumChatFormatting
-import xyz.qalcyo.wyvtils.config.WyvtilsConfig
-import xyz.qalcyo.wyvtils.config.WyvtilsConfig.bossBarX
-import xyz.qalcyo.wyvtils.config.WyvtilsConfig.bossBarY
-import xyz.qalcyo.wyvtils.config.WyvtilsConfig.bossbarScale
 import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11
+import xyz.qalcyo.wyvtils.Wyvtils
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig
 import java.awt.Color
-import java.io.IOException
 
 
-class BossHealthGui : GuiScreen() {
-
-    private var dragging = false
-    private var prevX = 0
-    private var prevY = 0
-
-    override fun initGui() {
+class BossHealthGui : WindowScreen(restoreCurrentGuiOnClose = true, enableRepeatKeys = true) {
+    override fun initScreen(width: Int, height: Int) {
+        window.onMouseDrag { mouseX, mouseY, mouseButton ->
+            if (mouseButton == 100) {
+                WyvtilsConfig.bossBarX = mouseX.toInt()
+                WyvtilsConfig.bossBarX = mouseY.toInt()
+            }
+        }.onKeyType { _, keyCode ->
+            when (keyCode) {
+                Keyboard.KEY_UP -> WyvtilsConfig.bossBarX -= 5
+                Keyboard.KEY_DOWN -> WyvtilsConfig.bossBarX += 5
+                Keyboard.KEY_LEFT -> WyvtilsConfig.bossBarX -= 5
+                Keyboard.KEY_RIGHT -> WyvtilsConfig.bossBarX += 5
+            }
+        }
+        super.initScreen(width, height)
         buttonList.add(GuiButton(0, width / 2 - 50, height - 20, 100, 20, "Close"))
-        super.initGui()
     }
 
     override fun actionPerformed(button: GuiButton) {
@@ -51,107 +60,60 @@ class BossHealthGui : GuiScreen() {
         }
     }
 
-    override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
-        updatePos(mouseX, mouseY)
-        mc.textureManager.bindTexture(icons)
+    override fun onDrawScreen(matrixStack: UMatrixStack, mouseX: Int, mouseY: Int, partialTicks: Float) {
+        super.onDrawScreen(matrixStack, mouseX, mouseY, partialTicks)
+        Wyvtils.mc.textureManager.bindTexture(icons)
         GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0)
-        mc.mcProfiler.startSection("bossHealthGui")
+        Wyvtils.mc.mcProfiler.startSection("bossHealthGui")
         GlStateManager.pushMatrix()
-        val iHaveNoIdeaWhatToNameThisFloat = bossbarScale - 1.0f
+        val iHaveNoIdeaWhatToNameThisFloat = WyvtilsConfig.bossbarScale - 1.0f
         GlStateManager.translate(
-            -bossBarX * iHaveNoIdeaWhatToNameThisFloat,
-            -bossBarY * iHaveNoIdeaWhatToNameThisFloat,
+            -WyvtilsConfig.bossBarX * iHaveNoIdeaWhatToNameThisFloat,
+            -WyvtilsConfig.bossBarY * iHaveNoIdeaWhatToNameThisFloat,
             0.0f
         )
-        GlStateManager.scale(bossbarScale, bossbarScale, 1.0f)
+        GlStateManager.scale(WyvtilsConfig.bossbarScale, WyvtilsConfig.bossbarScale, 1.0f)
         GlStateManager.enableBlend()
-        val fontrenderer: FontRenderer = mc.fontRendererObj
+        val fontrenderer: FontRenderer = Wyvtils.mc.fontRendererObj
         if (WyvtilsConfig.firstLaunchBossbar) {
             WyvtilsConfig.firstLaunchBossbar = false
-            bossBarX = ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2
-            bossBarY = 12
+            WyvtilsConfig.bossBarX = ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2
+            WyvtilsConfig.bossBarY = 12
             WyvtilsConfig.markDirty()
             WyvtilsConfig.writeData()
         }
-        val s = if (BossStatus.bossName == null && mc.currentScreen != null) {
+        val s = if (BossStatus.bossName == null && Wyvtils.mc.currentScreen != null) {
             "Example Text"
         } else {
             BossStatus.bossName
         }
         if (WyvtilsConfig.bossBarBar) {
-            mc.ingameGUI?.drawTexturedModalRect(bossBarX - 91, bossBarY, 0, 74, 182, 5)
-            mc.ingameGUI?.drawTexturedModalRect(bossBarX - 91, bossBarY, 0, 74, 182, 5)
-            mc.ingameGUI?.drawTexturedModalRect(bossBarX - 91, bossBarY, 0, 79, 1, 5)
+            Wyvtils.mc.ingameGUI?.drawTexturedModalRect(WyvtilsConfig.bossBarX - 91, WyvtilsConfig.bossBarY, 0, 74, 182, 5)
+            Wyvtils.mc.ingameGUI?.drawTexturedModalRect(WyvtilsConfig.bossBarX - 91, WyvtilsConfig.bossBarY, 0, 74, 182, 5)
+            Wyvtils.mc.ingameGUI?.drawTexturedModalRect(WyvtilsConfig.bossBarX - 91, WyvtilsConfig.bossBarY, 0, 79, 1, 5)
         }
         if (WyvtilsConfig.bossBarText) {
             fontrenderer.drawString(
                 s,
-                (bossBarX - mc.fontRendererObj.getStringWidth(s) / 2).toString().toFloat(),
-                bossBarY.toFloat() - 10,
+                (WyvtilsConfig.bossBarX - Wyvtils.mc.fontRendererObj.getStringWidth(s) / 2).toString().toFloat(),
+                WyvtilsConfig.bossBarY.toFloat() - 10,
                 Color.WHITE.rgb, WyvtilsConfig.bossBarShadow
             )
         }
-        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
-        if (WyvtilsConfig.bossBarBar) mc.textureManager.bindTexture(Gui.icons)
+        if (WyvtilsConfig.bossBarBar) Wyvtils.mc.textureManager.bindTexture(Gui.icons)
         GlStateManager.disableBlend()
         GlStateManager.popMatrix()
-        mc.mcProfiler.endSection()
-        val scale = 1
-        GlStateManager.pushMatrix()
-        GlStateManager.scale(scale.toFloat(), scale.toFloat(), 0f)
-        drawCenteredString(
-            fontRendererObj,
-            EnumChatFormatting.WHITE.toString() + "(drag bossbar to edit position!)",
-            width / 2 / scale,
-            5 / scale + 55,
-            -1
-        )
-        GlStateManager.popMatrix()
-        super.drawScreen(mouseX, mouseY, partialTicks)
-    }
-
-    @Throws(IOException::class)
-    override fun mouseClicked(mouseX: Int, mouseY: Int, mouseButton: Int) {
-        super.mouseClicked(mouseX, mouseY, mouseButton)
-        prevX = mouseX
-        prevY = mouseY
-        if (mouseButton == 0) {
-            dragging = true
-        }
-    }
-
-    override fun keyTyped(typedChar: Char, keyCode: Int) {
-        super.keyTyped(typedChar, keyCode)
-        when (keyCode) {
-            Keyboard.KEY_UP -> bossBarY -= 5
-            Keyboard.KEY_DOWN -> bossBarY += 5
-            Keyboard.KEY_LEFT -> bossBarX -= 5
-            Keyboard.KEY_RIGHT -> bossBarX += 5
-        }
-    }
-
-    private fun updatePos(x: Int, y: Int) {
-        if (dragging) {
-            bossBarX = prevX
-            bossBarY = prevY
-        }
-        prevX = x
-        prevY = y
-    }
-
-    override fun mouseReleased(mouseX: Int, mouseY: Int, state: Int) {
-        super.mouseReleased(mouseX, mouseY, state)
-        dragging = false
+        Wyvtils.mc.mcProfiler.endSection()
     }
 
     override fun doesGuiPauseGame(): Boolean {
         return false
     }
 
-    override fun onGuiClosed() {
+    override fun onScreenClose() {
+        super.onScreenClose()
         WyvtilsConfig.markDirty()
         WyvtilsConfig.writeData()
-        super.onGuiClosed()
     }
 
 }

@@ -33,7 +33,7 @@ import xyz.qalcyo.wyvtils.Wyvtils.MOD_NAME
 import xyz.qalcyo.wyvtils.Wyvtils.mc
 import xyz.qalcyo.wyvtils.gui.ActionBarGui
 import xyz.qalcyo.wyvtils.gui.BossHealthGui
-import xyz.qalcyo.wyvtils.gui.DownloadConfirmGui
+import xyz.qalcyo.wyvtils.gui.DownloadGui
 import xyz.qalcyo.wyvtils.gui.SidebarGui
 import xyz.qalcyo.wyvtils.listeners.Listener
 import xyz.qalcyo.wyvtils.utils.Updater
@@ -141,36 +141,6 @@ object WyvtilsConfig :
 
     @Property(
         type = PropertyType.SWITCH,
-        name = "Sound Boost",
-        description = "Make the volume of sounds that are important for PVP louder.",
-        category = "Sound"
-    )
-    var soundBoost = false
-
-    @Property(
-        type = PropertyType.SLIDER,
-        name = "Sound Multiplier",
-        description = "How much louder the sound is. There is a volume limit, so it doesn't break your ears.\n" +
-                "1 will make the sound the same.",
-        category = "Sound",
-        min = 0,
-        max = 15
-    )
-    var soundMultiplier = 1
-
-    @Property(
-        type = PropertyType.SLIDER,
-        name = "Sound Decrease",
-        description = "How much quieter the non-important sounds are.\n" +
-                "1 will make the sound the same.",
-        category = "Sound",
-        min = 0,
-        max = 15
-    )
-    var soundDecrease = 1
-
-    @Property(
-        type = PropertyType.SWITCH,
         name = "Bossbar Customization",
         description = "Toggle Bossbar customization",
         category = "Bossbar"
@@ -216,6 +186,30 @@ object WyvtilsConfig :
         category = "Bossbar"
     )
     var bossBarBar = true
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Text Color",
+        description = "Change the text color of the bossbar.",
+        category = "Bossbar"
+    )
+    var bossbarTextColor: Color = Color.WHITE
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Bar Colour Customization",
+        description = "Change the bar colour of the bossbar.",
+        category = "Bossbar"
+    )
+    var bossbarBarColorOn = false
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Bar Color",
+        description = "Change the bar color of the bossbar.",
+        category = "Bossbar"
+    )
+    var bossbarBarColor: Color = Color.BLUE
 
     @Property(
         type = PropertyType.PERCENT_SLIDER,
@@ -374,7 +368,6 @@ object WyvtilsConfig :
     )
     var titleShadow = true
 
-    /*/
     @Property(
         type = PropertyType.SELECTOR,
         name = "Chat Type 1",
@@ -391,7 +384,6 @@ object WyvtilsConfig :
     )
     var chatType2 = 0
 
-     */
 
     @Property(
         type = PropertyType.SWITCH,
@@ -463,7 +455,7 @@ object WyvtilsConfig :
         category = "Hitbox",
         description = "Change the color of the hitbox of players when they are within the crosshair of the player.",
     )
-    var hitboxCrosshairColor: Color = Color.RED
+    var hitboxCrosshairColor: Color = Color.WHITE
 
     @Property(
         type = PropertyType.SWITCH,
@@ -635,7 +627,7 @@ object WyvtilsConfig :
     )
     fun update() {
         if (Updater.shouldUpdate) EssentialAPI.getGuiUtil()
-            .openScreen(DownloadConfirmGui(mc.currentScreen)) else EssentialAPI.getNotifications()
+            .openScreen(DownloadGui(mc.currentScreen)) else EssentialAPI.getNotifications()
             .push(MOD_NAME, "No update had been detected at startup, and thus the update GUI has not been shown.")
     }
 
@@ -662,10 +654,6 @@ object WyvtilsConfig :
             "Configure bossbar-related features in $MOD_NAME."
         )
         setCategoryDescription(
-            "Sound",
-            "Configure sound-related features in $MOD_NAME."
-        )
-        setCategoryDescription(
             "Hitboxes",
             "Configure hitbox-related features in $MOD_NAME."
         )
@@ -673,7 +661,6 @@ object WyvtilsConfig :
             Listener.changeTextColor = true
         }
         addDependency("textColor", "highlightName")
-        addDependency("soundMultiplier", "soundBoost")
         listOf(
             "bossBar",
             "bossBarText",

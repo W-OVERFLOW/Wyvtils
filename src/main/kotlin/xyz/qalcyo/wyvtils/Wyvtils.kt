@@ -28,16 +28,18 @@ import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
+import org.lwjgl.input.Keyboard
 import xyz.qalcyo.requisite.Requisite
 import xyz.qalcyo.requisite.core.events.FontRendererEvent
 import xyz.qalcyo.requisite.core.integration.hypixel.events.LocrawReceivedEvent
+import xyz.qalcyo.requisite.core.keybinds.KeyBind
+import xyz.qalcyo.requisite.core.keybinds.KeyBinds
 import xyz.qalcyo.wyvtils.commands.WyvtilsCommands
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig
 import xyz.qalcyo.wyvtils.listeners.Listener
+import xyz.qalcyo.wyvtils.mixin.AccessorGuiIngame
 import xyz.qalcyo.wyvtils.utils.HypixelUtils
 import xyz.qalcyo.wyvtils.utils.Updater
-import xyz.qalcyo.wyvtils.utils.equalsAny
-import xyz.qalcyo.wyvtils.utils.startsWithAny
 import java.io.File
 
 
@@ -58,7 +60,7 @@ object Wyvtils {
         get() = Minecraft.getMinecraft()
     lateinit var jarFile: File
     val modDir = File(File(File(File(mc.mcDataDir, "config"), "Qalcyo"), MOD_NAME), "1.8.9")
-
+    private var current: Int = 1
     @JvmField
     var isConfigInitialized = false
 
@@ -66,10 +68,25 @@ object Wyvtils {
         Requisite.getInstance().chatHelper.send("${EnumChatFormatting.DARK_PURPLE}[$MOD_NAME] ", message)
     }
 
-    /*/
-    val chatKeybind = KeyBinding("Chat Swapper", Keyboard.KEY_V, MOD_NAME)
-    val titleKeybind = KeyBinding("Clear Title", Keyboard.KEY_Z, MOD_NAME)
-     */
+    val chatKeybind: KeyBind = KeyBinds.from("Chat Swapper", MOD_NAME, Keyboard.KEY_NONE) {
+        when (current) {
+            1 -> {
+                check(WyvtilsConfig.chatType2)
+                current += 1
+            }
+            2 -> {
+                check(WyvtilsConfig.chatType1)
+                current -= 1
+            }
+        }
+    }
+    val titleKeybind: KeyBind = KeyBinds.from("Clear Title", MOD_NAME, Keyboard.KEY_NONE) {
+        (mc.ingameGUI as AccessorGuiIngame).displayedTitle = ""
+        (mc.ingameGUI as AccessorGuiIngame).setDisplayedSubTitle("")
+    }
+    val sidebarKeybind: KeyBind = KeyBinds.from("Toggle Sidebar Temporarily", MOD_NAME, Keyboard.KEY_NONE) {
+        WyvtilsConfig.sidebar = !WyvtilsConfig.sidebar
+    }
 
     @Mod.EventHandler
     private fun onFMLPreInitialization(event: FMLPreInitializationEvent) {
@@ -105,12 +122,11 @@ object Wyvtils {
         EVENT_BUS.register(Listener)
         EVENT_BUS.register(HypixelUtils)
         Requisite.getInstance().eventBus.register(LocrawReceivedEvent::class.java, HypixelUtils::onLocraw)
-        Requisite.getInstance().eventBus.register(FontRendererEvent.RenderEvent::class.java, Listener::onStringRendered)
+        Requisite.getInstance().eventBus.register(FontRendererEvent.RenderStringEvent::class.java, Listener::onStringRendered)
         WyvtilsCommands.register()
-        /*/
-        ClientRegistry.registerKeyBinding(chatKeybind)
-        ClientRegistry.registerKeyBinding(titleKeybind)
-         */
+        Requisite.getInstance().keyBindRegistry.register(chatKeybind)
+        Requisite.getInstance().keyBindRegistry.register(titleKeybind)
+        Requisite.getInstance().keyBindRegistry.register(sidebarKeybind)
     }
 
     @Mod.EventHandler
@@ -127,21 +143,14 @@ object Wyvtils {
         Updater.update()
     }
 
-    fun checkSound(name: String): Boolean {
-        if (name.equalsAny(
-                "random.successful_hit",
-                "random.break",
-                "random.drink",
-                "random.eat",
-                "random.bow",
-                "random.bowhit",
-                "mob.ghast.fireball",
-                "mob.ghast.charge"
-            ) || (name.startsWithAny("dig.", "step.", "game.player.") && name != "game.player.hurt")
-        ) {
-            return true
+    private fun check(option: Int) {
+        when (option) {
+            0 -> mc.thePlayer.sendChatMessage("/chat a")
+            1 -> mc.thePlayer.sendChatMessage("/chat p")
+            2 -> mc.thePlayer.sendChatMessage("/chat g")
+            3 -> mc.thePlayer.sendChatMessage("/chat o")
+            else -> return
         }
-        return false
     }
 
 }

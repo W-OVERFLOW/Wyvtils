@@ -21,12 +21,10 @@ package xyz.qalcyo.wyvtils.listeners
 import gg.essential.api.EssentialAPI
 import gg.essential.api.utils.Multithreading
 import gg.essential.universal.ChatColor
-import net.minecraft.client.audio.PositionedSound
 import net.minecraft.util.ChatComponentText
 import net.minecraft.util.EnumChatFormatting
 import net.minecraft.util.IChatComponent
 import net.minecraftforge.client.event.ClientChatReceivedEvent
-import net.minecraftforge.client.event.sound.PlaySoundEvent
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.EventPriority
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -37,7 +35,6 @@ import xyz.qalcyo.requisite.core.events.FontRendererEvent
 import xyz.qalcyo.wyvtils.Wyvtils
 import xyz.qalcyo.wyvtils.Wyvtils.mc
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig
-import xyz.qalcyo.wyvtils.mixin.PositionedSoundAccessor
 import xyz.qalcyo.wyvtils.utils.HypixelUtils
 import xyz.qalcyo.wyvtils.utils.containsAny
 import xyz.qalcyo.wyvtils.utils.withoutFormattingCodes
@@ -45,7 +42,6 @@ import xyz.qalcyo.wyvtils.utils.withoutFormattingCodes
 
 object Listener {
 
-    //private var current: Int = 1
     private var victoryDetected = false
     var color: String = ""
     var changeTextColor = false
@@ -210,86 +206,18 @@ object Listener {
         }
     }
 
-    @SubscribeEvent
-    fun onSoundPlayed(e: PlaySoundEvent) {
-        if (e.result is PositionedSound) {
-            val positionedSound = (e.result as PositionedSound as PositionedSoundAccessor)
-            if (Wyvtils.checkSound(e.name) && WyvtilsConfig.soundBoost) {
-                positionedSound.setVolume((e.result as PositionedSound).volume * WyvtilsConfig.soundMultiplier)
-            } else if (WyvtilsConfig.soundBoost && e.name != "game.player.hurt") {
-                positionedSound.setVolume((e.result as PositionedSound).volume / WyvtilsConfig.soundDecrease)
-            }
-        }
-    }
-
-    fun onStringRendered(e: FontRendererEvent.RenderEvent) {
-        if (!WyvtilsConfig.chatHightlight && e.text != null && mc.theWorld != null && e.text.contains(mc.thePlayer.gameProfile.name) && WyvtilsConfig.highlightName && !changeTextColor) {
-            if (e.text.containsAny("§", "\u00A7")) {
-                e.text = smartReplaceStringWithName(e.text)
+    fun onStringRendered(e: FontRendererEvent.RenderStringEvent) {
+        if (!WyvtilsConfig.chatHightlight && e.string != null && mc.theWorld != null && e.string.contains(mc.thePlayer.gameProfile.name) && WyvtilsConfig.highlightName && !changeTextColor) {
+            if (e.string.containsAny("§", "\u00A7")) {
+                e.string = smartReplaceStringWithName(e.string)
             } else {
-                e.text = e.text.replace(
+                e.string = e.string.replace(
                     mc.thePlayer.gameProfile.name,
                     color + mc.thePlayer.gameProfile.name + EnumChatFormatting.RESET
                 )
             }
         }
     }
-
-    /*/
-    @SubscribeEvent
-    fun onKeyInput(event: BetterInputEvent.KeyboardInputEvent?) {
-        if (mc.currentScreen != null) return
-        if (Keyboard.getEventKeyState() && Keyboard.getEventKey() == titleKeybind.keyCode) {
-            titlePressed()
-        }
-        if (!ServerHelper.hypixel()) return
-        if (Keyboard.getEventKeyState() && Keyboard.getEventKey() == chatKeybind.keyCode) {
-            chatPressed()
-        }
-
-    }
-
-    @SubscribeEvent
-    fun onMouseInput(event: BetterInputEvent.MouseInputEvent?) {
-        if (mc.currentScreen != null) return
-        if (Mouse.getEventButtonState() && Mouse.getEventButton() == titleKeybind.keyCode + 100) {
-            titlePressed()
-        }
-        if (!ServerHelper.hypixel()) return
-        if (Mouse.getEventButtonState() && Mouse.getEventButton() == chatKeybind.keyCode + 100) {
-            chatPressed()
-        }
-    }
-
-    private fun titlePressed() {
-        (mc.ingameGUI as AccessorGuiIngame).displayedTitle = ""
-        (mc.ingameGUI as AccessorGuiIngame).setDisplayedSubTitle("")
-    }
-
-    private fun chatPressed() {
-        when (current) {
-            1 -> {
-                check(WyvtilsConfig.chatType2)
-                current += 1
-            }
-            2 -> {
-                check(WyvtilsConfig.chatType1)
-                current -= 1
-            }
-        }
-    }
-
-    private fun check(option: Int) {
-        when (option) {
-            0 -> mc.thePlayer.sendChatMessage("/chat a")
-            1 -> mc.thePlayer.sendChatMessage("/chat p")
-            2 -> mc.thePlayer.sendChatMessage("/chat g")
-            3 -> mc.thePlayer.sendChatMessage("/chat o")
-            else -> return
-        }
-    }
-
-     */
 
     private fun replaceMessage(
         message: IChatComponent,

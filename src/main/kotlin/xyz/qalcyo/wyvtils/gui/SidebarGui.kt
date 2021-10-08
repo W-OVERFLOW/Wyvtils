@@ -19,9 +19,9 @@
 package xyz.qalcyo.wyvtils.gui
 
 import gg.essential.api.EssentialAPI
+import gg.essential.elementa.WindowScreen
+import gg.essential.universal.UMatrixStack
 import net.minecraft.client.gui.GuiButton
-import net.minecraft.client.gui.GuiScreen
-import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.util.EnumChatFormatting
 import org.lwjgl.input.Keyboard
 import xyz.qalcyo.requisite.Requisite
@@ -32,17 +32,25 @@ import xyz.qalcyo.wyvtils.config.WyvtilsConfig.borderNumber
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig.sidebarScale
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig.sidebarX
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig.sidebarY
-import java.io.IOException
 
-class SidebarGui : GuiScreen() {
+class SidebarGui : WindowScreen(restoreCurrentGuiOnClose = true, enableRepeatKeys = true) {
 
-    private var dragging = false
-    private var prevX = 0
-    private var prevY = 0
-
-    override fun initGui() {
+    override fun initScreen(width: Int, height: Int) {
+        window.onMouseDrag { mouseX, mouseY, mouseButton ->
+            if (mouseButton == 100) {
+                sidebarX = mouseX.toInt()
+                sidebarY = mouseY.toInt()
+            }
+        }.onKeyType { _, keyCode ->
+            when (keyCode) {
+                Keyboard.KEY_UP -> sidebarY -= 5
+                Keyboard.KEY_DOWN -> sidebarY += 5
+                Keyboard.KEY_LEFT -> sidebarX -= 5
+                Keyboard.KEY_RIGHT -> sidebarX += 5
+            }
+        }
+        super.initScreen(width, height)
         buttonList.add(GuiButton(0, width / 2 - 50, height - 20, 100, 20, "Close"))
-        super.initGui()
     }
 
     override fun actionPerformed(button: GuiButton) {
@@ -51,14 +59,13 @@ class SidebarGui : GuiScreen() {
         }
     }
 
-    override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
-        updatePos(mouseX, mouseY)
+    override fun onDrawScreen(matrixStack: UMatrixStack, mouseX: Int, mouseY: Int, partialTicks: Float) {
+        super.onDrawScreen(matrixStack, mouseX, mouseY, partialTicks)
         mc.mcProfiler.startSection("sidebarGui")
-        GlStateManager.pushMatrix()
+        matrixStack.push()
         val mscale = sidebarScale - 1.0f
-        GlStateManager.translate(-sidebarX * mscale, -sidebarY * mscale, 0.0f)
-        GlStateManager.scale(sidebarScale, sidebarScale, 1.0f)
-
+        matrixStack.translate(-sidebarX * mscale, -sidebarY * mscale, 0.0f)
+        matrixStack.scale(sidebarScale, sidebarScale, 1.0f)
         val i: Int = fontRendererObj.getStringWidth("Wyvtils!!!!")
 
         val j1: Int = sidebarY
@@ -107,53 +114,18 @@ class SidebarGui : GuiScreen() {
                 borderColor.rgb
             )
         }
-        GlStateManager.popMatrix()
+        matrixStack.pop()
         mc.mcProfiler.endSection()
-        super.drawScreen(mouseX, mouseY, partialTicks)
-    }
-
-    @Throws(IOException::class)
-    override fun mouseClicked(mouseX: Int, mouseY: Int, mouseButton: Int) {
-        super.mouseClicked(mouseX, mouseY, mouseButton)
-        prevX = mouseX
-        prevY = mouseY
-        if (mouseButton == 0) {
-            dragging = true
-        }
-    }
-
-    override fun keyTyped(typedChar: Char, keyCode: Int) {
-        super.keyTyped(typedChar, keyCode)
-        when (keyCode) {
-            Keyboard.KEY_UP -> sidebarY -= 5
-            Keyboard.KEY_DOWN -> sidebarY += 5
-            Keyboard.KEY_LEFT -> sidebarX -= 5
-            Keyboard.KEY_RIGHT -> sidebarX += 5
-        }
-    }
-
-    private fun updatePos(x: Int, y: Int) {
-        if (dragging) {
-            sidebarX = prevX
-            sidebarY = prevY
-        }
-        prevX = x
-        prevY = y
-    }
-
-    override fun mouseReleased(mouseX: Int, mouseY: Int, state: Int) {
-        super.mouseReleased(mouseX, mouseY, state)
-        dragging = false
     }
 
     override fun doesGuiPauseGame(): Boolean {
         return false
     }
 
-    override fun onGuiClosed() {
+    override fun onScreenClose() {
+        super.onScreenClose()
         WyvtilsConfig.markDirty()
         WyvtilsConfig.writeData()
-        super.onGuiClosed()
     }
 
 }

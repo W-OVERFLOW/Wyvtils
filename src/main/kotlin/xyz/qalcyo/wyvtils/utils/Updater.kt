@@ -27,12 +27,12 @@ import net.minecraft.util.Util
 import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion
 import xyz.qalcyo.wyvtils.Wyvtils
 import xyz.qalcyo.wyvtils.Wyvtils.mc
-import xyz.qalcyo.wyvtils.gui.DownloadConfirmGui
 import org.apache.http.HttpResponse
 import org.apache.http.client.HttpClient
 import org.apache.http.client.config.RequestConfig
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.HttpClientBuilder
+import xyz.qalcyo.wyvtils.gui.DownloadGui
 import java.awt.Desktop
 import java.io.File
 import java.io.FileOutputStream
@@ -65,7 +65,7 @@ object Updater {
                         "${Wyvtils.MOD_NAME} $latestTag is available!\nClick here to download it!",
                         5f
                     ) {
-                        EssentialAPI.getGuiUtil().openScreen(DownloadConfirmGui(mc.currentScreen))
+                        EssentialAPI.getGuiUtil().openScreen(DownloadGui(mc.currentScreen))
                     }
                 shouldUpdate = true
             }
@@ -104,7 +104,7 @@ object Updater {
      * https://github.com/Skytils/SkytilsMod/blob/1.x/LICENSE.md
      */
     fun addShutdownHook() {
-        EssentialAPI.getShutdownHookUtil().register(Thread {
+        EssentialAPI.getShutdownHookUtil().register {
             println("Deleting old ${Wyvtils.MOD_NAME} jar file...")
             try {
                 val runtime = getJavaRuntime()
@@ -113,15 +113,19 @@ object Updater {
                     Desktop.getDesktop().open(Wyvtils.jarFile.parentFile)
                 }
                 println("Using runtime $runtime")
-                val file = File("config/Wyvest/Deleter-1.2.jar")
+                val file = File("config/Qalcyo/Deleter-1.2.jar")
                 println("\"$runtime\" -jar \"${file.absolutePath}\" \"${Wyvtils.jarFile.absolutePath}\"")
+                if (Util.getOSType() == Util.EnumOS.LINUX) {
+                    println("On Linux, giving Deleter jar execute permissions")
+                    Runtime.getRuntime()
+                        .exec("chmod +x \"${file.absolutePath}\"")
+                }
                 Runtime.getRuntime()
                     .exec("\"$runtime\" -jar \"${file.absolutePath}\" \"${Wyvtils.jarFile.absolutePath}\"")
             } catch (e: Throwable) {
                 e.printStackTrace()
             }
-            Thread.currentThread().interrupt()
-        })
+        }
     }
 
     /**
@@ -184,8 +188,8 @@ object Updater {
     enum class UpdateType(val prefix: String) {
         UNKNOWN("unknown"),
         RELEASE(""),
-        RELEASECANDIDATE("RC"),
-        PRERELEASE("BETA"),
+        RELEASECANDIDATE("rc"),
+        PRERELEASE("beta"),
     }
 
 }

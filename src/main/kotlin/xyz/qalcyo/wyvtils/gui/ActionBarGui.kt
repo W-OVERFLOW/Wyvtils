@@ -19,27 +19,35 @@
 package xyz.qalcyo.wyvtils.gui
 
 import gg.essential.api.EssentialAPI
+import gg.essential.elementa.WindowScreen
+import gg.essential.universal.UMatrixStack
 import net.minecraft.client.gui.GuiButton
-import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
-import xyz.qalcyo.wyvtils.config.WyvtilsConfig
-import xyz.qalcyo.wyvtils.config.WyvtilsConfig.actionBarX
-import xyz.qalcyo.wyvtils.config.WyvtilsConfig.actionBarY
-import xyz.qalcyo.wyvtils.mixin.AccessorGuiIngame
 import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11
+import xyz.qalcyo.wyvtils.Wyvtils
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig
+import xyz.qalcyo.wyvtils.mixin.AccessorGuiIngame
 import java.awt.Color
-import java.io.IOException
 
-class ActionBarGui : GuiScreen() {
+class ActionBarGui : WindowScreen(restoreCurrentGuiOnClose = true, enableRepeatKeys = true) {
 
-    private var dragging = false
-    private var prevX = 0
-    private var prevY = 0
-
-    override fun initGui() {
+    override fun initScreen(width: Int, height: Int) {
+        window.onMouseDrag { mouseX, mouseY, mouseButton ->
+            if (mouseButton == 100) {
+                WyvtilsConfig.actionBarX = mouseX.toInt()
+                WyvtilsConfig.actionBarY = mouseY.toInt()
+            }
+        }.onKeyType { _, keyCode ->
+            when (keyCode) {
+                Keyboard.KEY_UP -> WyvtilsConfig.actionBarY -= 5
+                Keyboard.KEY_DOWN -> WyvtilsConfig.actionBarY += 5
+                Keyboard.KEY_LEFT -> WyvtilsConfig.actionBarX -= 5
+                Keyboard.KEY_RIGHT -> WyvtilsConfig.actionBarX += 5
+            }
+        }
+        super.initScreen(width, height)
         buttonList.add(GuiButton(0, width / 2 - 50, height - 20, 100, 20, "Close"))
-        super.initGui()
     }
 
     override fun actionPerformed(button: GuiButton) {
@@ -48,73 +56,38 @@ class ActionBarGui : GuiScreen() {
         }
     }
 
-    override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
-        updatePos(mouseX, mouseY)
-        mc.mcProfiler.startSection("actionBarGui")
-        val ingameGui = mc.ingameGUI as AccessorGuiIngame
+    override fun onDrawScreen(matrixStack: UMatrixStack, mouseX: Int, mouseY: Int, partialTicks: Float) {
+        super.onDrawScreen(matrixStack, mouseX, mouseY, partialTicks)
+        Wyvtils.mc.mcProfiler.startSection("actionBarGui")
+        val ingameGui = Wyvtils.mc.ingameGUI as AccessorGuiIngame
         GlStateManager.pushMatrix()
         GlStateManager.enableBlend()
         GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0)
-        mc.fontRendererObj.drawString(
+        Wyvtils.mc.fontRendererObj.drawString(
             if (ingameGui.recordPlaying.isNullOrEmpty()) {
                 "Wyvtils Action Bar"
             } else {
                 ingameGui.recordPlaying
             },
-            actionBarX.toFloat(),
-            actionBarY.toFloat(),
+            WyvtilsConfig.actionBarX.toFloat(),
+            WyvtilsConfig.actionBarY.toFloat(),
             Color.WHITE.rgb,
             WyvtilsConfig.actionBarShadow
         )
         GlStateManager.disableBlend()
         GlStateManager.popMatrix()
 
-        mc.mcProfiler.endSection()
-        super.drawScreen(mouseX, mouseY, partialTicks)
-    }
-
-    @Throws(IOException::class)
-    override fun mouseClicked(mouseX: Int, mouseY: Int, mouseButton: Int) {
-        super.mouseClicked(mouseX, mouseY, mouseButton)
-        prevX = mouseX
-        prevY = mouseY
-        if (mouseButton == 0) {
-            dragging = true
-        }
-    }
-
-    override fun keyTyped(typedChar: Char, keyCode: Int) {
-        super.keyTyped(typedChar, keyCode)
-        when (keyCode) {
-            Keyboard.KEY_UP -> actionBarY -= 5
-            Keyboard.KEY_DOWN -> actionBarY += 5
-            Keyboard.KEY_LEFT -> actionBarX -= 5
-            Keyboard.KEY_RIGHT -> actionBarX += 5
-        }
-    }
-
-    private fun updatePos(x: Int, y: Int) {
-        if (dragging) {
-            actionBarX = prevX
-            actionBarY = prevY
-        }
-        prevX = x
-        prevY = y
-    }
-
-    override fun mouseReleased(mouseX: Int, mouseY: Int, state: Int) {
-        super.mouseReleased(mouseX, mouseY, state)
-        dragging = false
+        Wyvtils.mc.mcProfiler.endSection()
     }
 
     override fun doesGuiPauseGame(): Boolean {
         return false
     }
 
-    override fun onGuiClosed() {
+    override fun onScreenClose() {
+        super.onScreenClose()
         WyvtilsConfig.markDirty()
         WyvtilsConfig.writeData()
-        super.onGuiClosed()
     }
 
 }

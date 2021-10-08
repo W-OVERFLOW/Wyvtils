@@ -50,8 +50,8 @@ public abstract class MixinGuiIngame {
     private int i;
     private int x;
     private int bottom;
-    private int lines = 0;
-    private int count = 0;
+    private int lines;
+    private int count;
 
     @Inject(method = "renderBossHealth", at = @At("HEAD"), cancellable = true)
     protected void renderBossHealth(CallbackInfo ci) {
@@ -67,6 +67,10 @@ public abstract class MixinGuiIngame {
         float iHaveNoIdeaWhatToNameThisFloat = WyvtilsConfig.INSTANCE.getBossbarScale() - 1.0f;
         GlStateManager.translate(-WyvtilsConfig.INSTANCE.getBossBarX() * iHaveNoIdeaWhatToNameThisFloat, -WyvtilsConfig.INSTANCE.getBossBarY() * iHaveNoIdeaWhatToNameThisFloat, 0.0f);
         GlStateManager.scale(WyvtilsConfig.INSTANCE.getBossbarScale(), WyvtilsConfig.INSTANCE.getBossbarScale(), 1.0F);
+        if (WyvtilsConfig.INSTANCE.getBossbarBarColorOn()) {
+            GlStateManager.color(WyvtilsConfig.INSTANCE.getBossbarBarColor().getRed(), WyvtilsConfig.INSTANCE.getBossbarBarColor().getGreen(), WyvtilsConfig.INSTANCE.getBossbarBarColor().getBlue(), WyvtilsConfig.INSTANCE.getBossbarBarColor().getAlpha());
+        }
+        checkFirstTime();
     }
 
     @Inject(method = "renderBossHealth", at = @At("TAIL"))
@@ -76,20 +80,20 @@ public abstract class MixinGuiIngame {
 
     @Redirect(method = "renderBossHealth", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/FontRenderer;drawStringWithShadow(Ljava/lang/String;FFI)I"))
     private int injected(FontRenderer fontRenderer, String text, float x, float y, int color) {
+        GlStateManager.color(WyvtilsConfig.INSTANCE.getBossbarTextColor().getRed(), WyvtilsConfig.INSTANCE.getBossbarTextColor().getGreen(), WyvtilsConfig.INSTANCE.getBossbarTextColor().getBlue(), WyvtilsConfig.INSTANCE.getBossbarTextColor().getAlpha());
         if (WyvtilsConfig.INSTANCE.getBossBarCustomization()) {
             if (WyvtilsConfig.INSTANCE.getBossBarText()) {
-                checkFirstTime();
-                return fontRenderer.drawString(
+                fontRenderer.drawString(
                         BossStatus.bossName,
                         Float.parseFloat(String.valueOf(WyvtilsConfig.INSTANCE.getBossBarX() - (fontRenderer.getStringWidth(text) / 2))), WyvtilsConfig.INSTANCE.getBossBarY() - 10,
                         Color.WHITE.getRGB(), WyvtilsConfig.INSTANCE.getBossBarShadow()
                 );
-            } else {
-                return 1;
             }
         } else {
-            return fontRenderer.drawStringWithShadow(text, x, y, color);
+            fontRenderer.drawStringWithShadow(text, x, y, color);
         }
+        GlStateManager.resetColor();
+        return 1;
     }
 
     @Redirect(method = "renderBossHealth", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiIngame;drawTexturedModalRect(IIIIII)V"))

@@ -27,4 +27,13 @@ public interface AccessorGuiIngame {
 
     @Accessor
     String getRecordPlaying();
+
+    @Accessor
+    String getDisplayedTitle();
+
+    @Accessor
+    void setDisplayedTitle(String title);
+
+    @Accessor
+    void setDisplayedSubTitle(String title);
 }
