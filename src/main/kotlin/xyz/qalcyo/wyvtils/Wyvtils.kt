@@ -1,5 +1,6 @@
 package xyz.qalcyo.wyvtils
 
+import gg.essential.api.EssentialAPI
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
@@ -34,7 +35,7 @@ object Wyvtils : ClientModInitializer {
         WyvtilsConfig.preload()
         ClientTickEvents.END_CLIENT_TICK.register {
             while (keyBinding.wasPressed() && it.currentScreen == null) {
-                it.setScreen(WyvtilsConfig.gui())
+                EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
                 return@register
             }
         }

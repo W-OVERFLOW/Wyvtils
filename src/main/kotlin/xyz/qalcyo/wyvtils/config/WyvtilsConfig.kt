@@ -203,6 +203,7 @@ object WyvtilsConfig : Vigilant(
     )
     fun openActionBarGui() {
         if (actionBarPosition && actionBarCustomization) EssentialAPI.getGuiUtil().openScreen(ActionBarGui(gui()))
+        else EssentialAPI.getNotifications().push("Wyvtils", "You don't have Action Bar Position enabled!")
     }
 
     @Property(
@@ -402,6 +403,7 @@ object WyvtilsConfig : Vigilant(
     )
     fun openSidebarGui() {
         if (sidebarPosition) EssentialAPI.getGuiUtil().openScreen(SidebarGui(gui()))
+        else EssentialAPI.getNotifications().push("Wyvtils", "You don't have Sidebar Position enabled!")
     }
 
     @Property(

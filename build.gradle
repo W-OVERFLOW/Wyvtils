@@ -35,19 +35,25 @@ dependencies {
     modImplementation("com.terraformersmc:modmenu:2.0.4") {
         transitive = false
     }
-    modImplementation('gg.essential:essential-1.17.1-fabric:1436+release-launch-1.17') {
+    implementation('gg.essential:essential-1.17.1-fabric:1507+release-launch-1.17') {
         exclude(group: "net.fabricmc")
-        transitive = false
+        exclude(group: "gg.essential")
+    }
+    modImplementation('gg.essential:vigilance-1.17.1-fabric:179+next') {
+        exclude(group: "net.fabricmc")
+        exclude(group: "gg.essential")
+    }
+    modImplementation('gg.essential:universalcraft-1.17.1-fabric:162+next') {
+        exclude(group: "net.fabricmc")
+    }
+    modImplementation('gg.essential:elementa-1.17.1-fabric:384+next') {
+        exclude(group: "net.fabricmc")
+        exclude(group: "gg.essential")
     }
     modImplementation include('gg.essential:loader-fabric:1.0.0') {
         transitive = false
     }
     modImplementation("net.fabricmc:fabric-language-kotlin:1.6.4+kotlin.1.5.30")
-    modImplementation('gg.essential:vigilance-1.17.1-fabric:179+next') {
-        exclude(group: "net.fabricmc")
-        exclude module: 'kotlin-reflect'
-        exclude module: 'kotlin-stdlib-jdk8'
-    }
 }
 
 processResources {
