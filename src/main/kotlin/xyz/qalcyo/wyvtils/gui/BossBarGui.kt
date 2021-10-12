@@ -10,7 +10,6 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.InputUtil
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.boss.BossBar
-import net.minecraft.text.StringVisitable
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig
@@ -76,7 +75,7 @@ class BossBarGui(private var parent: Screen?) : WindowScreen(version = ElementaV
 
         if (bossBarText) {
             val text = bossBar.name
-            val m = client!!.textRenderer.getWidth(text as StringVisitable)
+            val m = client!!.textRenderer.getWidth(text)
             val n = i / 2 - m / 2
             val o = j - 9
             if (bossBarShadow) {
