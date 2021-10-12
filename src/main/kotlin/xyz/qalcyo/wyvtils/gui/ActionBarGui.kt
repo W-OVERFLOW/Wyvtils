@@ -19,6 +19,7 @@
 package xyz.qalcyo.wyvtils.gui
 
 import gg.essential.api.EssentialAPI
+import gg.essential.elementa.ElementaVersion
 import gg.essential.elementa.WindowScreen
 import gg.essential.universal.UMatrixStack
 import net.minecraft.client.gui.GuiButton
@@ -30,7 +31,7 @@ import xyz.qalcyo.wyvtils.config.WyvtilsConfig
 import xyz.qalcyo.wyvtils.mixin.AccessorGuiIngame
 import java.awt.Color
 
-class ActionBarGui : WindowScreen(restoreCurrentGuiOnClose = true, enableRepeatKeys = true) {
+class ActionBarGui : WindowScreen(restoreCurrentGuiOnClose = true, enableRepeatKeys = true, version = ElementaVersion.V1) {
 
     override fun initScreen(width: Int, height: Int) {
         window.onMouseDrag { mouseX, mouseY, mouseButton ->

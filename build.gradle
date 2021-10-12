@@ -72,7 +72,7 @@ dependencies {
     include "com.github.Qalcyo:RequisiteEssentialLoader:0a78589683"
     implementation "xyz.matthewtgm:RequisiteLaunchwrapper:1.1"
     implementation "gg.essential:loader-launchwrapper:1.1.1"
-    implementation "gg.essential:essential-1.8.9-forge:1495+release-launch"
+    implementation "gg.essential:essential-1.8.9-forge:1501+release-launch"
 
     annotationProcessor "org.spongepowered:mixin:0.7.11-SNAPSHOT"
 }

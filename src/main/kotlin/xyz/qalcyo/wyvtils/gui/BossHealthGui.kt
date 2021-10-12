@@ -19,6 +19,7 @@
 package xyz.qalcyo.wyvtils.gui
 
 import gg.essential.api.EssentialAPI
+import gg.essential.elementa.ElementaVersion
 import gg.essential.elementa.WindowScreen
 import gg.essential.universal.UMatrixStack
 import net.minecraft.client.Minecraft
@@ -35,7 +36,7 @@ import xyz.qalcyo.wyvtils.config.WyvtilsConfig
 import java.awt.Color
 
 
-class BossHealthGui : WindowScreen(restoreCurrentGuiOnClose = true, enableRepeatKeys = true) {
+class BossHealthGui : WindowScreen(restoreCurrentGuiOnClose = true, enableRepeatKeys = true, version = ElementaVersion.V1) {
     override fun initScreen(width: Int, height: Int) {
         window.onMouseDrag { mouseX, mouseY, mouseButton ->
             if (mouseButton == 100) {

@@ -21,6 +21,7 @@ package xyz.qalcyo.wyvtils.gui
 import gg.essential.api.EssentialAPI
 import gg.essential.api.gui.buildConfirmationModal
 import gg.essential.api.utils.Multithreading
+import gg.essential.elementa.ElementaVersion
 import gg.essential.elementa.WindowScreen
 import gg.essential.elementa.dsl.childOf
 import net.minecraft.client.gui.GuiScreen
@@ -28,7 +29,7 @@ import xyz.qalcyo.wyvtils.Wyvtils
 import xyz.qalcyo.wyvtils.utils.Updater
 import java.io.File
 
-class DownloadGui(private val parent: GuiScreen): WindowScreen(restoreCurrentGuiOnClose = true) {
+class DownloadGui(private val parent: GuiScreen): WindowScreen(restoreCurrentGuiOnClose = true, version = ElementaVersion.V1) {
     override fun initScreen(width: Int, height: Int) {
         super.initScreen(width, height)
         EssentialAPI.getEssentialComponentFactory().buildConfirmationModal {
