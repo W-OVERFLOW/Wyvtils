@@ -18,18 +18,15 @@
 
 buildscript {
     repositories {
-        maven {
-            url = 'https://maven.minecraftforge.net/'
-        }
-        maven {
-            url = 'https://jitpack.io/'
-        }
-        maven {
-            url = 'https://repo.spongepowered.org/maven/'
-        }
+        gradlePluginPortal()
+        mavenCentral()
+
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+        maven { url 'https://maven.minecraftforge.net' }
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
-        classpath('com.github.Deftu:ForgeGradle:c00c291546:all')
+        classpath('com.github.Wyvest:ForgeGradle:364653e3cf:all')
         classpath('dev.isXander:MixinGradle:0.6-SNAPSHOT')
     }
 }

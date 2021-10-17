@@ -40,6 +40,5 @@ pluginManagement {
 rootProject.name = mod_name
 include(
         'core',
-        '1.8.9',
-        '1.17.1'
+        '1.8.9'
 )
