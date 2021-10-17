@@ -300,6 +300,50 @@ object WyvtilsConfig :
 
     @Property(
         type = PropertyType.SWITCH,
+        name = "Action Bar Background",
+        description = "Add a background to the action bar.",
+        category = "Action Bar"
+    )
+    var actionBarBackground = false
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Action Bar Round Background",
+        description = "Make the background of the action bar rounded.",
+        category = "Action Bar"
+    )
+    var actionBarRound = false
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Rounded Background Radius",
+        description = "Set the corner radius of the rounded background.",
+        category = "Action Bar",
+        min = 0,
+        max = 10
+    )
+    var actionBarRoundRadius = 4
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Background Padding Amount",
+        description = "Change the amount of padding added to the background.",
+        category = "Action Bar",
+        min = 0,
+        max = 10
+    )
+    var actionBarPadding = 2
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Background Color",
+        description = "Change the text color for the HUD.",
+        category = "Action Bar"
+    )
+    var actionBarBackgroundColor: Color = Color(0, 0, 0, 128)
+
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Action Bar Position",
         description = "Toggle the action bar position customization.",
         category = "Action Bar"

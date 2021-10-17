@@ -19,12 +19,14 @@
 package xyz.qalcyo.wyvtils.mixin;
 
 import net.minecraft.client.Minecraft;
-import xyz.qalcyo.wyvtils.config.WyvtilsConfig;
+import net.minecraft.client.gui.Gui;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import xyz.qalcyo.requisite.Requisite;
+import xyz.qalcyo.wyvtils.config.WyvtilsConfig;
 
 @Pseudo
 @Mixin(targets = "club.sk1er.patcher.hooks.GuiIngameForgeHook")
@@ -36,12 +38,28 @@ public class MixinGuiIngameForgeHook {
         if (!WyvtilsConfig.INSTANCE.getActionBarCustomization()) return;
         int newX;
         int newY;
+        int width = Minecraft.getMinecraft().fontRendererObj.getStringWidth(recordPlaying);
         if (WyvtilsConfig.INSTANCE.getActionBarPosition()) {
             newX = WyvtilsConfig.INSTANCE.getActionBarX();
             newY = WyvtilsConfig.INSTANCE.getActionBarY();
         } else {
-            newX = -Minecraft.getMinecraft().fontRendererObj.getStringWidth(recordPlaying) >> 1;
+            newX = -width >> 1;
             newY = -4;
+        }
+        if (WyvtilsConfig.INSTANCE.getActionBarBackground()) {
+            if (WyvtilsConfig.INSTANCE.getActionBarBackgroundColor().getAlpha() != 0) {
+                if (WyvtilsConfig.INSTANCE.getActionBarRound()) {
+                    Requisite.getInstance().getRenderHelper().drawRoundedRect(newX - WyvtilsConfig.INSTANCE.getActionBarPadding(), newY - WyvtilsConfig.INSTANCE.getActionBarPadding(), width + WyvtilsConfig.INSTANCE.getActionBarPadding(), Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT + WyvtilsConfig.INSTANCE.getActionBarPadding(), WyvtilsConfig.INSTANCE.getActionBarRoundRadius(), WyvtilsConfig.INSTANCE.getActionBarBackgroundColor().getRGB());
+                } else {
+                    Gui.drawRect(
+                            newX - WyvtilsConfig.INSTANCE.getActionBarPadding(),
+                            newY - WyvtilsConfig.INSTANCE.getActionBarPadding(),
+                            width + newX + WyvtilsConfig.INSTANCE.getActionBarPadding(),
+                            Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT + newY + WyvtilsConfig.INSTANCE.getActionBarPadding(),
+                            WyvtilsConfig.INSTANCE.getActionBarBackgroundColor().getRGB()
+                    );
+                }
+            }
         }
         Minecraft.getMinecraft().fontRendererObj.drawString(
                 recordPlaying,

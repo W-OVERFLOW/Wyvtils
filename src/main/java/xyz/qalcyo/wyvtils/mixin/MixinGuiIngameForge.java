@@ -46,7 +46,6 @@ public class MixinGuiIngameForge {
     private void removeTranslation(float x, float y, float z) {
         if ((!WyvtilsConfig.INSTANCE.getActionBarPosition() && WyvtilsConfig.INSTANCE.getActionBarCustomization()) || !WyvtilsConfig.INSTANCE.getActionBarCustomization()) {
             GlStateManager.translate(x, y, z);
-
         }
     }
 
