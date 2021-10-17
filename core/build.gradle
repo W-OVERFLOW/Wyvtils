@@ -16,24 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.wyvtils.mixin;
+apply plugin: 'java'
 
-import net.minecraft.client.gui.GuiIngame;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
-@Mixin(GuiIngame.class)
-public interface AccessorGuiIngame {
+buildConfig {
+    className('WyvtilsInfo')
+    packageName('xyz.qalcyo.wyvtils.core')
 
-    @Accessor
-    String getRecordPlaying();
+    buildConfigField('String', 'NAME', "\"${mod_name}\"")
+    buildConfigField('String', 'VER', "\"${mod_ver}\"")
+    buildConfigField('String', 'ID', "\"${mod_id}\"")
+}
 
-    @Accessor
-    String getDisplayedTitle();
-
-    @Accessor
-    void setDisplayedTitle(String title);
-
-    @Accessor
-    void setDisplayedSubTitle(String title);
+dependencies {
+    // Hey! Hi
 }

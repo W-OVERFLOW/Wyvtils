@@ -18,26 +18,28 @@
 
 pluginManagement {
     repositories {
+        maven {
+            name = 'SonaType'
+            url = 'https://oss.sonatype.org/content/repositories/snapshots/'
+        }
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
+        }
+        maven {
+            name = 'Jitpack'
+            url = 'https://jitpack.io/'
+        }
+
         gradlePluginPortal()
         mavenCentral()
-
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
-        maven { url 'https://maven.minecraftforge.net' }
-        maven { url 'https://jitpack.io' }
-    }
-
-    resolutionStrategy {
-        eachPlugin {
-            switch (requested.id.id) {
-                case 'net.minecraftforge.gradle.forge':
-                    useModule "com.github.asbyth:ForgeGradle:${requested.version}"
-                    break
-                case 'org.spongepowered.mixin':
-                    useModule "com.github.Skytils:MixinGradle:${requested.version}"
-                    break
-            }
-        }
+        mavenLocal()
     }
 }
 
 rootProject.name = mod_name
+include(
+        'core',
+        '1.8.9',
+        '1.17.1'
+)

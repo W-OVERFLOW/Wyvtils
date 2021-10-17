@@ -1,0 +1,119 @@
+/*
+ * Wyvtils, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Wyvtils
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+buildscript {
+    repositories {
+        maven {
+            url = 'https://maven.minecraftforge.net/'
+        }
+        maven {
+            url = 'https://jitpack.io/'
+        }
+        maven {
+            url = 'https://repo.spongepowered.org/maven/'
+        }
+    }
+    dependencies {
+        classpath('com.github.Deftu:ForgeGradle:c00c291546:all')
+        classpath('dev.isXander:MixinGradle:0.6-SNAPSHOT')
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'java'
+
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+
+minecraft {
+    version = '1.8.9-11.15.1.2318-1.8.9'
+    mappings = 'stable_22'
+
+    runDir = 'run'
+    clientRunArgs += "--tweakClass gg.essential.loader.stage0.EssentialSetupTweaker"
+    clientRunArgs += "--mixin mixins.${mod_id}.json"
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url = "http://maven.deftu.xyz/repository/maven-public/"
+        allowInsecureProtocol = true
+    }
+    maven {
+        url = "https://repo.sk1er.club/repository/maven-public/"
+    }
+    maven {
+        url = "https://repo.spongepowered.org/maven/"
+    }
+    maven {
+        url = "https://jitpack.io/"
+    }
+}
+
+dependencies {
+    implementation(project(':core')) {
+        //exclude module: 'essential-1.8.9-forge'
+    }
+
+    shade ("gg.essential:loader-launchwrapper:1.1.1") {
+        transitive = false
+    }
+    implementation "gg.essential:essential-1.8.9-forge:1520+release-launch"
+
+    annotationProcessor('org.spongepowered:mixin:0.7.11-SNAPSHOT')
+}
+
+mixin {
+    disableRefMapWarning = true
+    add(sourceSets.main, 'mixins.wyvtils.refmap.json')
+}
+
+sourceSets {
+    main {
+        ext.refMap = "mixins.wyvtils.refmap.json"
+    }
+}
+
+jar {
+    manifest.attributes(
+            "ModSide": "CLIENT",
+            "ForceLoadAsMod": true,
+            "MixinConfigs": "mixins.${mod_id}.json",
+            "TweakClass": "gg.essential.loader.stage0.EssentialSetupTweaker",
+            "TweakOrder": "0"
+    )
+
+    enabled = false
+}
+
+reobfJar {
+    archivesBaseName = mod_name
+    version = mod_ver
+}
+
+task moveResources {
+    doLast {
+        try {
+            ant.move file: "${buildDir}/resources/main", todir: "${buildDir}/classes/kotlin"
+        } catch (Exception ignored) {
+        }
+    }
+}
+
+classes.dependsOn(moveResources)

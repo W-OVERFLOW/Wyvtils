@@ -1,0 +1,90 @@
+/*
+ * Wyvtils, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Wyvtils
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+plugins {
+    id "fabric-loom" version "0.9-SNAPSHOT"
+}
+
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
+
+loom {
+    mixin.defaultRefmapName = "mixins.wyvtils.refmap.json"
+}
+
+repositories {
+    mavenCentral()
+    maven { url "https://maven.shedaniel.me/" }
+    maven {
+        name 'Terraformers'
+        url 'https://maven.terraformersmc.com/releases/'
+    }
+    maven { url 'https://repo.sk1er.club/repository/maven-releases/' }
+    maven { url 'https://jitpack.io/' }
+    maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
+}
+
+dependencies {
+    implementation(project(':core')) {
+        //exclude module: 'essential-1.8.9-forge'
+    }
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation("com.terraformersmc:modmenu:2.0.4") {
+        transitive = false
+    }
+    implementation('gg.essential:essential-1.17.1-fabric:1507+release-launch-1.17') {
+        exclude(group: "net.fabricmc")
+        exclude(group: "gg.essential")
+    }
+    modImplementation('gg.essential:vigilance-1.17.1-fabric:179+next') {
+        exclude(group: "net.fabricmc")
+        exclude(group: "gg.essential")
+    }
+    modImplementation('gg.essential:universalcraft-1.17.1-fabric:162+next') {
+        exclude(group: "net.fabricmc")
+    }
+    modImplementation('gg.essential:elementa-1.17.1-fabric:384+next') {
+        exclude(group: "net.fabricmc")
+        exclude(group: "gg.essential")
+    }
+    modImplementation include('gg.essential:loader-fabric:1.0.0') {
+        transitive = false
+    }
+    modImplementation("net.fabricmc:fabric-language-kotlin:1.6.4+kotlin.1.5.30")
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.encoding = "UTF-8"
+
+    it.options.release = 16
+}
+
+java {
+    withSourcesJar()
+}
