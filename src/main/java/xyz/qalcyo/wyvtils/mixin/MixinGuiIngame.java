@@ -35,6 +35,7 @@ import xyz.qalcyo.requisite.Requisite;
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig;
 import xyz.qalcyo.wyvtils.gui.BossHealthGui;
 import xyz.qalcyo.wyvtils.gui.SidebarGui;
+import xyz.qalcyo.wyvtils.utils.HypixelUtils;
 
 import java.awt.*;
 
@@ -60,6 +61,10 @@ public abstract class MixinGuiIngame {
             return;
         }
         if (WyvtilsConfig.INSTANCE.getBossBarCustomization() && !WyvtilsConfig.INSTANCE.getBossBar()) {
+            ci.cancel();
+            return;
+        }
+        if (WyvtilsConfig.INSTANCE.getAutoBossbarLobby() && HypixelUtils.INSTANCE.getLobby()) {
             ci.cancel();
             return;
         }

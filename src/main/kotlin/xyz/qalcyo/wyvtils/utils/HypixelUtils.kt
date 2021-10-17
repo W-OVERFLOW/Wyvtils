@@ -20,8 +20,6 @@ package xyz.qalcyo.wyvtils.utils
 
 import gg.essential.api.EssentialAPI
 import net.minecraft.util.EnumChatFormatting
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import net.minecraftforge.fml.common.network.FMLNetworkEvent
 import xyz.qalcyo.requisite.core.integration.hypixel.events.LocrawReceivedEvent
 import xyz.qalcyo.requisite.core.integration.hypixel.locraw.HypixelLocraw
 import xyz.qalcyo.wyvtils.Wyvtils
@@ -255,25 +253,6 @@ object HypixelUtils {
 
     fun onLocraw(event: LocrawReceivedEvent) {
         locraw = event.locraw
-        if (WyvtilsConfig.autoBossbarLobby) {
-            if (event.locraw.gameMode.isNullOrBlank() || event.locraw.gameType == null) {
-                WyvtilsConfig.bossBar = false
-                `troll age` = true
-            } else {
-                if (`troll age`) {
-                    WyvtilsConfig.bossBar = true
-                    `troll age` = false
-                }
-            }
-        }
-    }
-
-    @SubscribeEvent
-    fun onLeave(event: FMLNetworkEvent.ClientDisconnectionFromServerEvent) {
-        if (`troll age`) {
-            WyvtilsConfig.bossBar = true
-            `troll age` = false
-        }
     }
 
 }
