@@ -28,14 +28,11 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
-import xyz.qalcyo.mango.Objects
 import xyz.qalcyo.requisite.Requisite
-import xyz.qalcyo.requisite.core.events.FontRendererEvent
 import xyz.qalcyo.wyvtils.Wyvtils
 import xyz.qalcyo.wyvtils.Wyvtils.mc
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig
 import xyz.qalcyo.wyvtils.utils.HypixelUtils
-import xyz.qalcyo.wyvtils.utils.containsAny
 import xyz.qalcyo.wyvtils.utils.withoutFormattingCodes
 
 
@@ -197,19 +194,6 @@ object Listener {
         }
     }
 
-    fun onStringRendered(e: FontRendererEvent.RenderStringEvent) {
-        if (!WyvtilsConfig.chatHightlight && e.string != null && mc.theWorld != null && e.string.contains(mc.thePlayer.gameProfile.name) && WyvtilsConfig.highlightName && !changeTextColor) {
-            if (e.string.containsAny("§", "\u00A7")) {
-                e.string = smartReplaceStringWithName(e.string)
-            } else {
-                e.string = e.string.replace(
-                    mc.thePlayer.gameProfile.name,
-                    color + mc.thePlayer.gameProfile.name + EnumChatFormatting.RESET
-                )
-            }
-        }
-    }
-
     private fun replaceMessage(
         message: IChatComponent,
         username: String,
@@ -230,44 +214,5 @@ object Listener {
         return copy
     }
 
-    private fun smartReplaceStringWithName(string: String): String {
-        var number = -1
-        var code: String? = null
-        val array = string.split(Regex.fromLiteral(mc.thePlayer.gameProfile.name)).toMutableList()
-        for (split in array) {
-            number += 1
-            if (number % 2 == 0 || number == 0) {
-                val subString = split.substringAfterLast("\u00A7", null.toString())
-                code = if (subString != "null") {
-                    subString.first().toString()
-                } else {
-                    null
-                }
-                continue
-            } else {
-                if (code != null) {
-                    array[number] = "\u00A7$code" + array[number]
-                }
-            }
-        }
-        return join(array, color + mc.thePlayer.gameProfile.name + EnumChatFormatting.RESET)
-    }
 
-    private fun join(iterable: Iterable<*>, separator: String): String {
-        return join(iterable.iterator(), separator)
-    }
-
-    private fun join(iterator: Iterator<*>, separator: String): String {
-        if (!iterator.hasNext()) return ""
-        val first = iterator.next()
-        if (!iterator.hasNext()) return Objects.stringify(first)
-        val buf = StringBuilder()
-        if (first != null) buf.append(first)
-        while (iterator.hasNext()) {
-            buf.append(separator)
-            val obj = iterator.next()
-            if (obj != null) buf.append(obj)
-        }
-        return buf.toString()
-    }
 }

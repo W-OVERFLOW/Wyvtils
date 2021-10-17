@@ -258,14 +258,10 @@ object HypixelUtils {
         if (WyvtilsConfig.autoBossbarLobby) {
             if (event.locraw.gameMode.isNullOrBlank() || event.locraw.gameType == null) {
                 WyvtilsConfig.bossBar = false
-                WyvtilsConfig.markDirty()
-                WyvtilsConfig.writeData()
                 `troll age` = true
             } else {
                 if (`troll age`) {
                     WyvtilsConfig.bossBar = true
-                    WyvtilsConfig.markDirty()
-                    WyvtilsConfig.writeData()
                     `troll age` = false
                 }
             }
@@ -276,8 +272,6 @@ object HypixelUtils {
     fun onLeave(event: FMLNetworkEvent.ClientDisconnectionFromServerEvent) {
         if (`troll age`) {
             WyvtilsConfig.bossBar = true
-            WyvtilsConfig.markDirty()
-            WyvtilsConfig.writeData()
             `troll age` = false
         }
     }

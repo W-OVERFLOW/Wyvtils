@@ -36,6 +36,7 @@ import xyz.qalcyo.requisite.core.keybinds.KeyBind
 import xyz.qalcyo.requisite.core.keybinds.KeyBinds
 import xyz.qalcyo.wyvtils.commands.WyvtilsCommands
 import xyz.qalcyo.wyvtils.config.WyvtilsConfig
+import xyz.qalcyo.wyvtils.listeners.HighlightManager
 import xyz.qalcyo.wyvtils.listeners.Listener
 import xyz.qalcyo.wyvtils.mixin.AccessorGuiIngame
 import xyz.qalcyo.wyvtils.utils.HypixelUtils
@@ -122,7 +123,7 @@ object Wyvtils {
         EVENT_BUS.register(Listener)
         EVENT_BUS.register(HypixelUtils)
         Requisite.getInstance().eventBus.register(LocrawReceivedEvent::class.java, HypixelUtils::onLocraw)
-        Requisite.getInstance().eventBus.register(FontRendererEvent.RenderStringEvent::class.java, Listener::onStringRendered)
+        Requisite.getInstance().eventBus.register(FontRendererEvent.RenderStringEvent::class.java, HighlightManager::onStringRendered)
         WyvtilsCommands.register()
         Requisite.getInstance().keyBindRegistry.register(chatKeybind)
         Requisite.getInstance().keyBindRegistry.register(titleKeybind)
