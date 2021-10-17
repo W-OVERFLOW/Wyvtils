@@ -10,7 +10,8 @@
     "MixinGuiIngameForge",
     "MixinGuiIngameForgeHook",
     "MixinMinecraft",
-    "MixinRenderManager"
+    "MixinRenderManager",
+    "MixinGuiNewChat"
   ],
   "verbose": true
 }

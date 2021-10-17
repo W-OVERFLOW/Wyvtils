@@ -59,7 +59,7 @@ object WyvtilsConfig :
     @Property(
         type = PropertyType.SWITCH,
         name = "Hide Locraw Messages",
-        description = "Hide locraw messages in chat (e.g {\"server\": \"something\"}).\nBreaks HeightLimitMod locraw.",
+        description = "Hide locraw messages in chat (e.g {\"server\": \"something\"}).",
         category = "General"
     )
     var hideLocraw = true

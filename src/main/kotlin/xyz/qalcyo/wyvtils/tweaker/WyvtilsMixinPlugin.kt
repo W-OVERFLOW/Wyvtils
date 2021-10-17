@@ -33,7 +33,7 @@ class WyvtilsMixinPlugin : IMixinConfigPlugin {
 
     override fun shouldApplyMixin(targetClassName: String, mixinClassName: String): Boolean {
         if (!mixinClassName.startsWith("xyz.qalcyo.wyvtils.mixin")) {
-            println("Mixin $mixinClassName for $targetClassName is foreign, disabling.")
+            println("how did mixin $mixinClassName for $targetClassName get here lmao")
             return false
         }
         return true

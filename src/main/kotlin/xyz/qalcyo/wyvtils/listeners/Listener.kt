@@ -26,7 +26,6 @@ import net.minecraft.util.EnumChatFormatting
 import net.minecraft.util.IChatComponent
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.event.world.WorldEvent
-import net.minecraftforge.fml.common.eventhandler.EventPriority
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import xyz.qalcyo.mango.Objects
@@ -153,14 +152,6 @@ object Listener {
                 )
             }
             e.isCanceled = true
-        }
-    }
-
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    fun onChatLow(e: ClientChatReceivedEvent) {
-        val unformattedText = e.message.unformattedText.withoutFormattingCodes()
-        if (unformattedText.startsWith("{") && unformattedText.contains("server") && unformattedText.endsWith("}")) {
-            e.isCanceled = WyvtilsConfig.hideLocraw
         }
     }
 
