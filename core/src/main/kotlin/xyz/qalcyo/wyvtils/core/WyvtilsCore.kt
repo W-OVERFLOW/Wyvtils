@@ -16,30 +16,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        maven {
-            name = 'SonaType'
-            url = 'https://oss.sonatype.org/content/repositories/snapshots/'
-        }
-        maven {
-            name = 'Fabric'
-            url = 'https://maven.fabricmc.net/'
-        }
-        maven {
-            name = 'Jitpack'
-            url = 'https://jitpack.io/'
-        }
+package xyz.qalcyo.wyvtils.core
 
-        gradlePluginPortal()
-        mavenCentral()
-        mavenLocal()
+import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig
+import java.io.File
+
+object WyvtilsCore {
+    var jarFile: File? = null
+    var modDir: File? = null
+
+    fun onInitialization(version: MinecraftVersions) {
+        if (version == MinecraftVersions.EIGHT) {
+            println("hello Minecraft 1.8.9")
+        }
+        if (version == MinecraftVersions.SEVENTEEN) {
+            println("hello 1.17.1")
+        }
+        WyvtilsConfig.preload()
     }
 }
-
-rootProject.name = mod_name
-include(
-        'core',
-        '1.8.9',
-        '1.17.1'
-)

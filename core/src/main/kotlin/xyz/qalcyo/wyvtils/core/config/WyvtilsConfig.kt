@@ -16,30 +16,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        maven {
-            name = 'SonaType'
-            url = 'https://oss.sonatype.org/content/repositories/snapshots/'
-        }
-        maven {
-            name = 'Fabric'
-            url = 'https://maven.fabricmc.net/'
-        }
-        maven {
-            name = 'Jitpack'
-            url = 'https://jitpack.io/'
-        }
+package xyz.qalcyo.wyvtils.core.config
 
-        gradlePluginPortal()
-        mavenCentral()
-        mavenLocal()
+import gg.essential.vigilance.Vigilant
+import gg.essential.vigilance.data.Property
+import gg.essential.vigilance.data.PropertyType
+import xyz.qalcyo.wyvtils.core.WyvtilsCore
+import xyz.qalcyo.wyvtils.core.WyvtilsInfo
+import java.io.File
+
+object WyvtilsConfig: Vigilant(
+    File(WyvtilsCore.modDir, "${WyvtilsInfo.ID}.toml")
+) {
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Test",
+        description = "Hello",
+        category = "General"
+    )
+    var test = true
+
+    init {
+        initialize()
     }
 }
-
-rootProject.name = mod_name
-include(
-        'core',
-        '1.8.9',
-        '1.17.1'
-)

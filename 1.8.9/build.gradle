@@ -65,7 +65,7 @@ repositories {
 
 dependencies {
     implementation(project(':core')) {
-        //exclude module: 'essential-1.8.9-forge'
+        exclude module: 'essential-1.8.9-forge'
     }
 
     shade ("gg.essential:loader-launchwrapper:1.1.1") {

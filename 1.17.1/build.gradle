@@ -20,18 +20,14 @@ plugins {
     id "fabric-loom" version "0.8-SNAPSHOT"
 }
 
-/*/
 sourceCompatibility = JavaVersion.VERSION_16
 targetCompatibility = JavaVersion.VERSION_16
 
- */
 
-/*/
 minecraft {
-    mixin.defaultRefmapName = "mixins.wyvtils.refmap.json"
+    //mixin.defaultRefmapName = "mixins.wyvtils.refmap.json"
 }
 
- */
 
 repositories {
     mavenCentral()
@@ -47,7 +43,7 @@ repositories {
 
 dependencies {
     implementation(project(':core')) {
-        //exclude module: 'essential-1.8.9-forge'
+        exclude module: 'essential-1.8.9-forge'
     }
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
@@ -90,9 +86,7 @@ tasks.withType(JavaCompile).configureEach {
 
     it.options.release = 16
 }
-/*/
+
 java {
     withSourcesJar()
 }
-
- */

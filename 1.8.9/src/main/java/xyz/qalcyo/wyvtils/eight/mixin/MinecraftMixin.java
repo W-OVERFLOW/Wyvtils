@@ -16,30 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        maven {
-            name = 'SonaType'
-            url = 'https://oss.sonatype.org/content/repositories/snapshots/'
-        }
-        maven {
-            name = 'Fabric'
-            url = 'https://maven.fabricmc.net/'
-        }
-        maven {
-            name = 'Jitpack'
-            url = 'https://jitpack.io/'
-        }
+package xyz.qalcyo.wyvtils.eight.mixin;
 
-        gradlePluginPortal()
-        mavenCentral()
-        mavenLocal()
+import net.minecraft.client.Minecraft;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+@Mixin(Minecraft.class)
+public class MinecraftMixin {
+    @Inject(method = "startGame", at = @At("HEAD"))
+    private void a(CallbackInfo ci) {
+        System.out.println("HI!!!");
     }
 }
-
-rootProject.name = mod_name
-include(
-        'core',
-        '1.8.9',
-        '1.17.1'
-)

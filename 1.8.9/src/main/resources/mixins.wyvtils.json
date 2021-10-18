@@ -1,0 +1,10 @@
+{
+  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.7",
+  "package": "xyz.qalcyo.wyvtils.eight.mixin",
+  "refmap": "mixins.wyvtils.refmap.json",
+  "mixins": [
+    "MinecraftMixin"
+  ],
+  "verbose": true
+}

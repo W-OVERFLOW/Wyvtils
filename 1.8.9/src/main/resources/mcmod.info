@@ -1,0 +1,18 @@
+[
+  {
+    "modid": "wyvtils",
+    "name": "Wyvtils",
+    "description": "Useful utilities for general usage.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "https://github.com/Qalcyo/Wyvtils/releases/latest",
+    "updateUrl": "https://github.com/Qalcyo/Wyvtils/releases/latest",
+    "authorList": [
+      "Qalcyo"
+    ],
+    "credits": "ModCore Inc. for Essential",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

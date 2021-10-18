@@ -16,30 +16,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        maven {
-            name = 'SonaType'
-            url = 'https://oss.sonatype.org/content/repositories/snapshots/'
-        }
-        maven {
-            name = 'Fabric'
-            url = 'https://maven.fabricmc.net/'
-        }
-        maven {
-            name = 'Jitpack'
-            url = 'https://jitpack.io/'
-        }
+package xyz.qalcyo.wyvtils.eight.commands
 
-        gradlePluginPortal()
-        mavenCentral()
-        mavenLocal()
+import gg.essential.api.EssentialAPI
+import gg.essential.api.commands.Command
+import gg.essential.api.commands.DefaultHandler
+import xyz.qalcyo.wyvtils.core.WyvtilsInfo
+import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig
+
+object WyvtilsCommand: Command(WyvtilsInfo.ID, true) {
+    @DefaultHandler
+    fun handle() {
+        EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
     }
 }
-
-rootProject.name = mod_name
-include(
-        'core',
-        '1.8.9',
-        '1.17.1'
-)
