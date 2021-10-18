@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "wyvtils",
+  "version": "${version}",
+  "name": "Wyvtils",
+  "description": "Utilities, for 1.17.1.",
+  "authors": [
+    "Qalcyo"
+  ],
+  "contact": {
+    "issues": "https://github.com/Qalcyo/Wyvtils/issues/",
+    "sources": "https://github.com/Qalcyo/Wyvtils/"
+  },
+  "license": "GNU Lesser General Public License version 3 (LGPLv3)",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "xyz.qalcyo.wyvtils.seventeen.Wyvtils"
+      }
+    ],
+    "preLaunch": [
+      "gg.essential.loader.stage0.EssentialSetupPreLaunch"
+    ],
+    "modmenu": [
+      "xyz.qalcyo.wyvtils.core.config.WyvtilsModMenu"
+    ]
+  },
+  "mixins": [
+    "mixins.wyvtils.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.6",
+    "fabric": "*",
+    "fabric-language-kotlin": ">=1.6.4+kotlin.1.5.30",
+    "minecraft": "1.17.x",
+    "java": ">=16",
+    "fabric-key-binding-api-v1": "*"
+  },
+  "recommends": {
+    "modmenu": ">=2.0.0"
+  }
+}

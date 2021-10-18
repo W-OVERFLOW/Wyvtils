@@ -36,12 +36,15 @@ apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'java'
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+archivesBaseName = mod_name
+version = mod_ver
 
 minecraft {
     version = '1.8.9-11.15.1.2318-1.8.9'
     mappings = 'stable_22'
 
     runDir = 'run'
+    makeObfSourceJar = false
     clientRunArgs += "--tweakClass gg.essential.loader.stage0.EssentialSetupTweaker"
     clientRunArgs += "--mixin mixins.${mod_id}.json"
 }
@@ -65,7 +68,7 @@ repositories {
 
 dependencies {
     implementation(project(':core')) {
-        exclude module: 'essential-1.8.9-forge'
+        exclude(group: "gg.essential")
     }
 
     shade ("gg.essential:loader-launchwrapper:1.1.1") {
@@ -97,11 +100,6 @@ jar {
     )
 
     enabled = false
-}
-
-reobfJar {
-    archivesBaseName = mod_name
-    version = mod_ver
 }
 
 task moveResources {

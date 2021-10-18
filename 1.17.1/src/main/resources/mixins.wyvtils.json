@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "refmap": "mixins.wyvtils.refmap.json",
+  "package": "xyz.qalcyo.wyvtils.seventeen.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "MinecraftMixin"
+  ]
+}

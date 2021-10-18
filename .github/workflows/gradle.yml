@@ -11,7 +11,7 @@ jobs:
       - name: Java setup
         uses: actions/setup-java@v1
         with:
-          java-version: 8
+          java-version: 16
       - name: Cache Gradle packages
         uses: actions/cache@v2
         with:
@@ -22,9 +22,4 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Build
-        run: chmod +x gradlew; ./gradlew setupCiWorkspace && ./gradlew build
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v1
-        with:
-          name: build-artifacts
-          path: build/libs
+        run: chmod +x gradlew; ./gradlew build

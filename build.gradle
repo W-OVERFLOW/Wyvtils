@@ -98,11 +98,3 @@ allprojects {
 
     jar.finalizedBy(shadowJar)
 }
-
-configure(subprojects.findAll { it.name != "core" }) {
-    jar.enabled = false
-    shadowJar {
-        archiveBaseName.set(mod_name)
-        archiveVersion.set(mod_ver)
-    }
-}

@@ -22,10 +22,11 @@ plugins {
 
 sourceCompatibility = JavaVersion.VERSION_16
 targetCompatibility = JavaVersion.VERSION_16
-
+archivesBaseName = mod_name
+version = mod_ver
 
 minecraft {
-    //mixin.defaultRefmapName = "mixins.wyvtils.refmap.json"
+   refmapName = "mixins.wyvtils.refmap.json"
 }
 
 
@@ -43,7 +44,7 @@ repositories {
 
 dependencies {
     implementation(project(':core')) {
-        exclude module: 'essential-1.8.9-forge'
+        exclude(group: "gg.essential")
     }
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
