@@ -20,7 +20,9 @@ buildscript {
     repositories {
         gradlePluginPortal()
         mavenCentral()
-
+        maven {
+            url = "https://repo.spongepowered.org/maven/"
+        }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
         maven { url 'https://maven.minecraftforge.net' }
         maven { url 'https://jitpack.io' }
@@ -84,9 +86,67 @@ dependencies {
     annotationProcessor('org.spongepowered:mixin:0.7.11-SNAPSHOT')
 }
 
+tasks.reobfJar.dependsOn tasks.shadowJar
+
+shadowJar {
+    archiveClassifier.set("")
+    configurations = [project.configurations.shade]
+    duplicatesStrategy DuplicatesStrategy.EXCLUDE
+
+    exclude "LICENSE.md"
+    exclude "pack.mcmeta"
+    exclude "dummyThing"
+    exclude "**/module-info.class"
+    exclude "*.so"
+    exclude "*.dylib"
+    exclude "*.dll"
+    exclude "*.jnilib"
+    exclude "ibxm/**"
+    exclude "com/jcraft/**"
+    exclude "org/lwjgl/**"
+    exclude "net/java/**"
+
+    exclude "META-INF/proguard/**"
+    exclude "META-INF/maven/**"
+    exclude "META-INF/versions/**"
+    exclude "META-INF/com.android.tools/**"
+
+    exclude "fabric.mod.json"
+}
+//TODO: fix process resources
+processResources {
+    if (duplicatesStrategy != DuplicatesStrategy.EXCLUDE) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include "mcmod.info"
+        //include "bundle.project.json"
+
+        expand(
+                "version": project.version,
+                "mcversion": project.minecraft.version
+        )
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude "mcmod.info"
+        //exclude "bundle.project.json"
+    }
+}
+
+reobf {
+    shadowJar {
+        classpath = sourceSets.main.compileClasspath
+    }
+}
+
 mixin {
     disableRefMapWarning = true
-    add(sourceSets.main, 'mixins.wyvtils.refmap.json')
+    defaultObfuscationEnv searge
+    add sourceSets.main, "mixins.${mod_id}.refmap.json"
 }
 
 sourceSets {

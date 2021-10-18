@@ -16,10 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.wyvtils.core.config
+package xyz.qalcyo.wyvtils.seventeen.config
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory
 import com.terraformersmc.modmenu.api.ModMenuApi
+import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig
 
 class WyvtilsModMenu: ModMenuApi {
     override fun getModConfigScreenFactory(): ConfigScreenFactory<*> {

@@ -18,7 +18,7 @@
 
 package xyz.qalcyo.wyvtils.eight
 
-import gg.essential.universal.UMinecraft
+import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
@@ -40,7 +40,7 @@ object Wyvtils {
 
     @Mod.EventHandler
     fun onPreInit(e: FMLPreInitializationEvent) {
-        WyvtilsCore.modDir = File(File(File(File(UMinecraft.getMinecraft().mcDataDir, "config"), "Qalcyo"), WyvtilsInfo.NAME), "1.8.9")
+        WyvtilsCore.modDir = File(File(File(File(Minecraft.getMinecraft().mcDataDir, "config"), "Qalcyo"), WyvtilsInfo.NAME), "1.8.9")
         if (!WyvtilsCore.modDir!!.exists()) WyvtilsCore.modDir!!.mkdirs()
         WyvtilsCore.jarFile = e.sourceFile
     }

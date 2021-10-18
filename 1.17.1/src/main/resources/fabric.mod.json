@@ -24,7 +24,7 @@
       "gg.essential.loader.stage0.EssentialSetupPreLaunch"
     ],
     "modmenu": [
-      "xyz.qalcyo.wyvtils.core.config.WyvtilsModMenu"
+      "xyz.qalcyo.wyvtils.seventeen.config.WyvtilsModMenu"
     ]
   },
   "mixins": [
