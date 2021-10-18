@@ -45,6 +45,11 @@ repositories {
 dependencies {
     shade(project(':core')) {
         exclude(group: "gg.essential")
+        exclude(module: "kotlin-reflect")
+        exclude(module: "kotlin-stdlib-jdk8")
+        exclude(module: "kotlin-stdlib-jdk7")
+        exclude(module: "kotlin-stdlib")
+        exclude(module: "kotlinx-coroutines-core")
     }
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"

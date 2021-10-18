@@ -69,6 +69,11 @@ repositories {
 dependencies {
     shade(project(':core')) {
         exclude(group: "gg.essential")
+        exclude(module: "kotlin-reflect")
+        exclude(module: "kotlin-stdlib-jdk8")
+        exclude(module: "kotlin-stdlib-jdk7")
+        exclude(module: "kotlin-stdlib")
+        exclude(module: "kotlinx-coroutines-core")
     }
 
     shade ("gg.essential:loader-launchwrapper:1.1.1") {
