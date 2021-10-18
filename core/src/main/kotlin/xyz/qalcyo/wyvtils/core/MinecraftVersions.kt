@@ -19,6 +19,7 @@
 package xyz.qalcyo.wyvtils.core
 
 enum class MinecraftVersions {
+    UNSET,
     EIGHT,
     SEVENTEEN
 }

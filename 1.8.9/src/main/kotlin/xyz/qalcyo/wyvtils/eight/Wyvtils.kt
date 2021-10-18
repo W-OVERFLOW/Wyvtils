@@ -19,6 +19,7 @@
 package xyz.qalcyo.wyvtils.eight
 
 import net.minecraft.client.Minecraft
+import net.minecraftforge.common.MinecraftForge.EVENT_BUS
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
@@ -26,6 +27,7 @@ import xyz.qalcyo.wyvtils.core.MinecraftVersions
 import xyz.qalcyo.wyvtils.core.WyvtilsCore
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo
 import xyz.qalcyo.wyvtils.eight.commands.WyvtilsCommand
+import xyz.qalcyo.wyvtils.eight.listener.Listener
 import java.io.File
 
 @Mod(
@@ -38,6 +40,9 @@ import java.io.File
 )
 object Wyvtils {
 
+    val mc: Minecraft
+    get() = Minecraft.getMinecraft()
+
     @Mod.EventHandler
     fun onPreInit(e: FMLPreInitializationEvent) {
         WyvtilsCore.modDir = File(File(File(File(Minecraft.getMinecraft().mcDataDir, "config"), "Qalcyo"), WyvtilsInfo.NAME), "1.8.9")
@@ -49,5 +54,6 @@ object Wyvtils {
     fun onInit(e: FMLInitializationEvent) {
         WyvtilsCore.onInitialization(MinecraftVersions.EIGHT)
         WyvtilsCommand.register()
+        EVENT_BUS.register(Listener)
     }
 }

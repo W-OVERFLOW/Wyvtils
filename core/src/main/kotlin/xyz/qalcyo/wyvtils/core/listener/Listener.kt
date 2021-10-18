@@ -16,27 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.wyvtils.core
+package xyz.qalcyo.wyvtils.core.listener
 
-import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig
-import java.io.File
+object Listener {
+    fun onTick() {
 
-object WyvtilsCore {
-    var jarFile: File? = null
-    var modDir: File? = null
-    var currentVersion: MinecraftVersions = MinecraftVersions.UNSET
-
-    fun onInitialization(version: MinecraftVersions) {
-        when (version) {
-            MinecraftVersions.EIGHT -> {
-                println("hello 1.8.9")
-            }
-            MinecraftVersions.SEVENTEEN -> {
-                println("hello 1.17.1")
-            }
-            else -> throw UnknownVersionException("This version is not supported by Wyvtils!")
-        }
-        currentVersion = version
-        WyvtilsConfig.preload()
     }
 }

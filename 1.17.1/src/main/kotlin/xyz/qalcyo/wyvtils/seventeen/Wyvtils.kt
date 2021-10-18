@@ -29,6 +29,7 @@ import org.lwjgl.glfw.GLFW
 import xyz.qalcyo.wyvtils.core.MinecraftVersions
 import xyz.qalcyo.wyvtils.core.WyvtilsCore
 import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig
+import xyz.qalcyo.wyvtils.core.listener.Listener
 import java.io.File
 
 object Wyvtils: ClientModInitializer {
@@ -49,6 +50,7 @@ object Wyvtils: ClientModInitializer {
         WyvtilsCore.jarFile = File(javaClass.protectionDomain.codeSource.location.toURI())
         WyvtilsCore.onInitialization(MinecraftVersions.SEVENTEEN)
         ClientTickEvents.END_CLIENT_TICK.register {
+            Listener.onTick()
             while (keyBinding.wasPressed() && it.currentScreen == null) {
                 EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
                 return@register
