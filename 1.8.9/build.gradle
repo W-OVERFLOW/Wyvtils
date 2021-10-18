@@ -67,7 +67,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(':core')) {
+    shade(project(':core')) {
         exclude(group: "gg.essential")
     }
 

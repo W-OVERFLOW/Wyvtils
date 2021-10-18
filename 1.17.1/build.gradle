@@ -43,7 +43,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(':core')) {
+    shade(project(':core')) {
         exclude(group: "gg.essential")
     }
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
