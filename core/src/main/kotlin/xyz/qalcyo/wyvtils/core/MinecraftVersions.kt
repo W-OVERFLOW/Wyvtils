@@ -18,8 +18,8 @@
 
 package xyz.qalcyo.wyvtils.core
 
-enum class MinecraftVersions {
-    UNSET,
-    EIGHT,
-    SEVENTEEN
+enum class MinecraftVersions(val versionString: String?) {
+    UNSET(null),
+    EIGHT("1.8.9"),
+    SEVENTEEN("1.17.1")
 }

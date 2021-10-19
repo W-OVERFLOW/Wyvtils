@@ -28,6 +28,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MinecraftMixin {
     @Inject(method = "<clinit>", at = @At("HEAD"))
     private static void hi(CallbackInfo ci) {
-        System.out.println("hi");
+        System.out.println("HII!!!!");
     }
 }

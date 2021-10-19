@@ -18,15 +18,22 @@
 
 package xyz.qalcyo.wyvtils.eight
 
+import gg.essential.api.EssentialAPI
+import gg.essential.api.utils.Multithreading
 import net.minecraft.client.Minecraft
 import net.minecraftforge.common.MinecraftForge.EVENT_BUS
+import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
+import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import xyz.qalcyo.wyvtils.core.MinecraftVersions
 import xyz.qalcyo.wyvtils.core.WyvtilsCore
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo
+import xyz.qalcyo.wyvtils.core.utils.Updater
 import xyz.qalcyo.wyvtils.eight.commands.WyvtilsCommand
+import xyz.qalcyo.wyvtils.eight.gui.DownloadGui
 import xyz.qalcyo.wyvtils.eight.listener.Listener
 import java.io.File
 
@@ -55,5 +62,28 @@ object Wyvtils {
         WyvtilsCore.onInitialization(MinecraftVersions.EIGHT)
         WyvtilsCommand.register()
         EVENT_BUS.register(Listener)
+    }
+
+    @Mod.EventHandler
+    fun onPostInit(e: FMLPostInitializationEvent) {
+        WyvtilsCore.isPatcherLoaded = Loader.isModLoaded("patcher")
+    }
+
+    @Mod.EventHandler
+    fun onLoadComplete(e: FMLLoadCompleteEvent) {
+        Multithreading.runAsync {
+            Updater.updateFuture!!.get()
+            if (Updater.shouldShowNotification) {
+                EssentialAPI.getNotifications()
+                    .push(
+                        "Mod Update",
+                        "${WyvtilsInfo.NAME} ${Updater.latestTag} is available!\nClick here to download it!",
+                        5f
+                    ) {
+                        EssentialAPI.getGuiUtil().openScreen(DownloadGui(mc.currentScreen))
+                    }
+                Updater.shouldShowNotification = false
+            }
+        }
     }
 }

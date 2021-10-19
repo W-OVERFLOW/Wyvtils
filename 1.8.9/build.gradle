@@ -36,7 +36,12 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'java'
-
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+    }
+}
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 archivesBaseName = mod_name
 version = mod_ver
@@ -76,6 +81,8 @@ dependencies {
         exclude(module: "kotlin-stdlib-jdk7")
         exclude(module: "kotlin-stdlib")
         exclude(module: "kotlinx-coroutines-core")
+        exclude(module: "httpclient")
+        exclude(module: "commons-lang3")
     }
 
     shade ("gg.essential:loader-launchwrapper:1.1.1") {

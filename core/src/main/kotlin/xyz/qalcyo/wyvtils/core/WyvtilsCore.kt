@@ -19,12 +19,14 @@
 package xyz.qalcyo.wyvtils.core
 
 import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig
+import xyz.qalcyo.wyvtils.core.utils.Updater
 import java.io.File
 
 object WyvtilsCore {
     var jarFile: File? = null
     var modDir: File? = null
     var currentVersion: MinecraftVersions = MinecraftVersions.UNSET
+    var isPatcherLoaded = false
 
     fun onInitialization(version: MinecraftVersions) {
         when (version) {
@@ -38,5 +40,6 @@ object WyvtilsCore {
         }
         currentVersion = version
         WyvtilsConfig.preload()
+        Updater.update()
     }
 }

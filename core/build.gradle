@@ -19,7 +19,12 @@
 apply plugin: 'java'
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
-
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+    }
+}
 buildConfig {
     className('WyvtilsInfo')
     packageName('xyz.qalcyo.wyvtils.core')
@@ -29,6 +34,15 @@ buildConfig {
     buildConfigField('String', 'ID', "\"${mod_id}\"")
 }
 
+repositories {
+    mavenCentral()
+    maven {
+        url = "https://jitpack.io/"
+    }
+}
+
 dependencies {
     implementation ("gg.essential:essential-1.8.9-forge:1520+release-launch")
+    implementation ("org.apache.httpcomponents:httpclient:4.3.3")
+    implementation("org.apache.commons:commons-lang3:3.3.2")
 }
