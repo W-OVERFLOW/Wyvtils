@@ -18,8 +18,8 @@
 
 package xyz.qalcyo.wyvtils.core.utils
 
-import org.apache.http.ParseException
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo
+import java.text.ParseException
 
 /**
  * Adapted from Kotlin under Apache License 2.0
@@ -59,7 +59,7 @@ class WyvtilsVersion(val major: Int, val minor: Int, val patch: Int, val beta: I
             if (match != null) {
                 return WyvtilsVersion(match.groups["major"]!!.value.toInt(), match.groups["minor"]!!.value.toInt(), match.groups["patch"]!!.value.toInt(), if (match.groups["beta"]?.value.isNullOrBlank()) 0 else match.groups["beta"]!!.value.toInt())
             } else {
-                throw ParseException("The string ($version) provided did not match the Wyvtils Version regex!")
+                throw ParseException("The string ($version) provided did not match the Wyvtils Version regex!", -1)
             }
         }
     }
