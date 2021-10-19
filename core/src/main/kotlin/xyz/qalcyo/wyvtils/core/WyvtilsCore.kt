@@ -27,6 +27,8 @@ object WyvtilsCore {
     var modDir: File? = null
     var currentVersion: MinecraftVersions = MinecraftVersions.UNSET
     var isPatcherLoaded = false
+    var awaitBossbarGui = false
+    var awaitBossbarReset = false
 
     fun onInitialization(version: MinecraftVersions) {
         when (version) {

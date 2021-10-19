@@ -24,20 +24,19 @@ import gg.essential.api.utils.Multithreading
 import gg.essential.elementa.ElementaVersion
 import gg.essential.elementa.WindowScreen
 import gg.essential.elementa.dsl.childOf
-import net.minecraft.client.gui.screen.Screen
 import xyz.qalcyo.wyvtils.core.WyvtilsCore
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo
 import xyz.qalcyo.wyvtils.core.utils.Updater
 import java.io.File
 
-class DownloadGui(private val parent: Screen?): WindowScreen(restoreCurrentGuiOnClose = true, version = ElementaVersion.V1) {
+class DownloadGui: WindowScreen(restoreCurrentGuiOnClose = true, version = ElementaVersion.V1) {
     override fun initScreen(width: Int, height: Int) {
         super.initScreen(width, height)
         EssentialAPI.getEssentialComponentFactory().buildConfirmationModal {
             this.text = "Are you sure you want to update?"
             this.secondaryText = "(This will update from v${WyvtilsInfo.VER} to ${Updater.latestTag})"
             this.onConfirm = {
-                EssentialAPI.getGuiUtil().openScreen(parent)
+                restorePreviousScreen()
                 Multithreading.runAsync {
                     if (Updater.download(
                             Updater.updateUrl,
@@ -60,7 +59,7 @@ class DownloadGui(private val parent: Screen?): WindowScreen(restoreCurrentGuiOn
                 }
             }
             this.onDeny = {
-                EssentialAPI.getGuiUtil().openScreen(parent)
+                restorePreviousScreen()
             }
         } childOf this.window
     }

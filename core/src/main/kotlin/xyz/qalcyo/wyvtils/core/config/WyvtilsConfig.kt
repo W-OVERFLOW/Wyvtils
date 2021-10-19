@@ -18,11 +18,14 @@
 
 package xyz.qalcyo.wyvtils.core.config
 
+import gg.essential.api.EssentialAPI
 import gg.essential.vigilance.Vigilant
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
+import xyz.qalcyo.wyvtils.core.MinecraftVersions
 import xyz.qalcyo.wyvtils.core.WyvtilsCore
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo
+import xyz.qalcyo.wyvtils.core.WyvtilsInfo.NAME
 import java.awt.Color
 import java.io.File
 
@@ -213,19 +216,11 @@ object WyvtilsConfig: Vigilant(
 
     @Property(
         type = PropertyType.SWITCH,
-        name = "Bar Colour Customization",
-        description = "Change the bar colour of the bossbar.",
+        name = "Override Color Codes",
+        description = "Override color codes and keep the color of the bossbar.",
         category = "Bossbar"
     )
-    var bossbarBarColorOn = false
-
-    @Property(
-        type = PropertyType.COLOR,
-        name = "Bar Color",
-        description = "Change the bar color of the bossbar.",
-        category = "Bossbar"
-    )
-    var bossbarBarColor: Color = Color.BLUE
+    var overrideColorCode = false
 
     @Property(
         type = PropertyType.PERCENT_SLIDER,
@@ -242,13 +237,9 @@ object WyvtilsConfig: Vigilant(
         category = "Bossbar"
     )
     fun openBossHealthGui() {
-        //TODO
-        /*/
-        if (bossBarCustomization) EssentialAPI.getGuiUtil().openScreen(BossHealthGui())
+        if (bossBarCustomization) WyvtilsCore.awaitBossbarGui = true
         else EssentialAPI.getNotifications()
             .push(NAME, "You can't do that, you haven't enabled Bossbar Customization!")
-
-         */
     }
 
     @Property(
@@ -258,16 +249,7 @@ object WyvtilsConfig: Vigilant(
         category = "Bossbar"
     )
     fun resetBossbar() {
-        //TODO
-        /*
-        mc.displayGuiScreen(null)
-        bossBarX = (ScaledResolution(Minecraft.getMinecraft()).scaledWidth / 2)
-        bossBarY = 12
-        WyvtilsConfig.markDirty()
-        WyvtilsConfig.writeData()
-        EssentialAPI.getGuiUtil().openScreen(gui())
-
-         */
+        WyvtilsCore.awaitBossbarReset = true
     }
 
     @Property(
@@ -731,16 +713,16 @@ object WyvtilsConfig: Vigilant(
     init {
         initialize()
         hidePropertyIf("disableTextShadow") {
-            WyvtilsCore.isPatcherLoaded
+            WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
         }
         hidePropertyIf("renderOwnNametag") {
-            WyvtilsCore.isPatcherLoaded
+            WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
         }
         hidePropertyIf("removeNametagBackground") {
-            WyvtilsCore.isPatcherLoaded
+            WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
         }
         hidePropertyIf("nametagTextShadow") {
-            WyvtilsCore.isPatcherLoaded
+            WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
         }
     }
 }

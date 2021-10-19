@@ -80,7 +80,7 @@ object Wyvtils {
                         "${WyvtilsInfo.NAME} ${Updater.latestTag} is available!\nClick here to download it!",
                         5f
                     ) {
-                        EssentialAPI.getGuiUtil().openScreen(DownloadGui(mc.currentScreen))
+                        EssentialAPI.getGuiUtil().openScreen(DownloadGui())
                     }
                 Updater.shouldShowNotification = false
             }

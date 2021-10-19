@@ -34,6 +34,7 @@ import xyz.qalcyo.wyvtils.core.WyvtilsInfo
 import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig
 import xyz.qalcyo.wyvtils.core.listener.Listener
 import xyz.qalcyo.wyvtils.core.utils.Updater
+import xyz.qalcyo.wyvtils.seventeen.gui.BossBarGui
 import xyz.qalcyo.wyvtils.seventeen.gui.DownloadGui
 import java.io.File
 
@@ -61,6 +62,19 @@ object Wyvtils: ClientModInitializer {
                 EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
                 return@register
             }
+            if (WyvtilsCore.awaitBossbarGui) {
+                WyvtilsCore.awaitBossbarGui = false
+                MinecraftClient.getInstance().setScreen(BossBarGui())
+            }
+            if (WyvtilsCore.awaitBossbarReset) {
+                WyvtilsCore.awaitBossbarReset = false
+                MinecraftClient.getInstance().setScreen(null)
+                WyvtilsConfig.bossBarX = MinecraftClient.getInstance().window.scaledWidth
+                WyvtilsConfig.bossBarY = 12
+                WyvtilsConfig.markDirty()
+                WyvtilsConfig.writeData()
+                EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
+            }
         }
 
         WorldRenderEvents.END.register {
@@ -71,7 +85,7 @@ object Wyvtils: ClientModInitializer {
                         "${WyvtilsInfo.NAME} ${Updater.latestTag} is available!\nClick here to download it!",
                         5f
                     ) {
-                        EssentialAPI.getGuiUtil().openScreen(DownloadGui(MinecraftClient.getInstance().currentScreen))
+                        EssentialAPI.getGuiUtil().openScreen(DownloadGui())
                     }
                 Updater.shouldShowNotification = false
             }
