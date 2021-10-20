@@ -16,6 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.wyvtils.core
+package xyz.qalcyo.wyvtils.core.utils
 
 class UnknownVersionException(reason: String): Exception(reason)

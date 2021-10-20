@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.wyvtils.core
+package xyz.qalcyo.wyvtils.core.utils
 
 enum class MinecraftVersions(val versionString: String?) {
     UNSET(null),

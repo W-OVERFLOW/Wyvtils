@@ -16,22 +16,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.wyvtils.eight.mixin;
+package xyz.qalcyo.wyvtils.seventeen.mixin;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.Mouse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig;
 
-@Mixin(Minecraft.class)
-public class MinecraftMixin {
-
-    @ModifyArg(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/InventoryPlayer;changeCurrentItem(I)V"), index = 0)
-    private int reverseScroll(int direction) {
+@Mixin(Mouse.class)
+public class MouseMixin {
+    @ModifyArg(method = "onMouseScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;scrollInHotbar(D)V"), index = 0)
+    private double reverseScroll(double direction) {
         if (WyvtilsConfig.INSTANCE.getReverseScrolling()) {
             if (direction == 0) {
-                return 0;
+                return direction;
             } else {
                 return direction * -1;
             }
@@ -39,5 +38,4 @@ public class MinecraftMixin {
             return direction;
         }
     }
-
 }

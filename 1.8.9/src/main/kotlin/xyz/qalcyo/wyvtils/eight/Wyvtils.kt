@@ -28,7 +28,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
-import xyz.qalcyo.wyvtils.core.MinecraftVersions
+import xyz.qalcyo.wyvtils.core.utils.MinecraftVersions
 import xyz.qalcyo.wyvtils.core.WyvtilsCore
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo
 import xyz.qalcyo.wyvtils.core.utils.Updater

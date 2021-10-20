@@ -19,6 +19,8 @@
 package xyz.qalcyo.wyvtils.core
 
 import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig
+import xyz.qalcyo.wyvtils.core.utils.MinecraftVersions
+import xyz.qalcyo.wyvtils.core.utils.UnknownVersionException
 import xyz.qalcyo.wyvtils.core.utils.Updater
 import java.io.File
 

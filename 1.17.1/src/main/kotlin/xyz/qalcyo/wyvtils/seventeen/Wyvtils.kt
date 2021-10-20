@@ -28,7 +28,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.util.InputUtil
 import org.lwjgl.glfw.GLFW
-import xyz.qalcyo.wyvtils.core.MinecraftVersions
+import xyz.qalcyo.wyvtils.core.utils.MinecraftVersions
 import xyz.qalcyo.wyvtils.core.WyvtilsCore
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo
 import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig
