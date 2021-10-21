@@ -24,7 +24,6 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
 import net.fabricmc.loader.api.FabricLoader
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.util.InputUtil
 import org.lwjgl.glfw.GLFW
@@ -60,15 +59,6 @@ object Wyvtils: ClientModInitializer {
             while (keyBinding.wasPressed() && it.currentScreen == null) {
                 EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
                 return@register
-            }
-            if (WyvtilsCore.awaitBossbarReset) {
-                WyvtilsCore.awaitBossbarReset = false
-                MinecraftClient.getInstance().setScreen(null)
-                WyvtilsConfig.bossBarX = MinecraftClient.getInstance().window.scaledWidth
-                WyvtilsConfig.bossBarY = 12
-                WyvtilsConfig.markDirty()
-                WyvtilsConfig.writeData()
-                EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
             }
         }
 

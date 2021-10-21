@@ -33,20 +33,18 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import org.lwjgl.input.Keyboard
 import xyz.qalcyo.requisite.Requisite
 import xyz.qalcyo.requisite.core.events.FontRendererEvent
-import xyz.qalcyo.requisite.core.integration.hypixel.events.LocrawReceivedEvent
 import xyz.qalcyo.requisite.core.keybinds.KeyBind
 import xyz.qalcyo.requisite.core.keybinds.KeyBinds
-import xyz.qalcyo.wyvtils.core.utils.MinecraftVersions
 import xyz.qalcyo.wyvtils.core.WyvtilsCore
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo
 import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig
+import xyz.qalcyo.wyvtils.core.utils.MinecraftVersions
 import xyz.qalcyo.wyvtils.core.utils.Updater
 import xyz.qalcyo.wyvtils.eight.commands.WyvtilsCommand
 import xyz.qalcyo.wyvtils.eight.gui.DownloadGui
 import xyz.qalcyo.wyvtils.eight.listener.HighlightManager
 import xyz.qalcyo.wyvtils.eight.listener.Listener
 import xyz.qalcyo.wyvtils.eight.mixin.AccessorGuiIngame
-import xyz.qalcyo.wyvtils.eight.utils.HypixelUtils
 import java.io.File
 
 @Mod(
@@ -65,13 +63,9 @@ object Wyvtils {
     fun sendMessage(message: String?) {
         Requisite.getInstance().chatHelper.send("${EnumChatFormatting.DARK_PURPLE}[${WyvtilsInfo.NAME}] ", message)
     }
-    private var current: Int = 1
-    val titleKeybind: KeyBind = KeyBinds.from("Clear Title", WyvtilsInfo.NAME, Keyboard.KEY_NONE) {
+    private val titleKeybind: KeyBind = KeyBinds.from("Clear Title", WyvtilsInfo.NAME, Keyboard.KEY_NONE) {
         (mc.ingameGUI as AccessorGuiIngame).displayedTitle = ""
         (mc.ingameGUI as AccessorGuiIngame).setDisplayedSubTitle("")
-    }
-    val sidebarKeybind: KeyBind = KeyBinds.from("Toggle Sidebar Temporarily", WyvtilsInfo.NAME, Keyboard.KEY_NONE) {
-        WyvtilsConfig.sidebar = !WyvtilsConfig.sidebar
     }
 
     @Mod.EventHandler
@@ -108,9 +102,7 @@ object Wyvtils {
             }
         }
         Requisite.getInstance().eventBus.register(FontRendererEvent.RenderStringEvent::class.java, HighlightManager::onStringRendered)
-        Requisite.getInstance().eventBus.register(LocrawReceivedEvent::class.java, HypixelUtils::onLocraw)
         Requisite.getInstance().keyBindRegistry.register(titleKeybind)
-        Requisite.getInstance().keyBindRegistry.register(sidebarKeybind)
     }
 
     @Mod.EventHandler
@@ -133,16 +125,6 @@ object Wyvtils {
                     }
                 Updater.shouldShowNotification = false
             }
-        }
-    }
-
-    private fun check(option: Int) {
-        when (option) {
-            0 -> mc.thePlayer.sendChatMessage("/chat a")
-            1 -> mc.thePlayer.sendChatMessage("/chat p")
-            2 -> mc.thePlayer.sendChatMessage("/chat g")
-            3 -> mc.thePlayer.sendChatMessage("/chat o")
-            else -> return
         }
     }
 }
