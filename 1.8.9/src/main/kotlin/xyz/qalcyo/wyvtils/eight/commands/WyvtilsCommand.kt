@@ -21,12 +21,26 @@ package xyz.qalcyo.wyvtils.eight.commands
 import gg.essential.api.EssentialAPI
 import gg.essential.api.commands.Command
 import gg.essential.api.commands.DefaultHandler
+import gg.essential.api.commands.SubCommand
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo
 import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig
 
-object WyvtilsCommand: Command(WyvtilsInfo.ID, true) {
+object WyvtilsCommand : Command(WyvtilsInfo.ID, true) {
+    override val commandAliases = setOf(
+        Alias("wyvtil"),
+        Alias("wyvtilities"),
+        Alias("wytil"),
+        Alias("wytils")
+    )
+
     @DefaultHandler
     fun handle() {
         EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
     }
+
+    @SubCommand("config", description = "Opens the config GUI for ${WyvtilsInfo.NAME}")
+    fun config() {
+        EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
+    }
+
 }

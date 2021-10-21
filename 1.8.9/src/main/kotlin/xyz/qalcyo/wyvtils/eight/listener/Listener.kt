@@ -18,8 +18,61 @@
 
 package xyz.qalcyo.wyvtils.eight.listener
 
+import net.minecraft.util.ChatComponentText
+import net.minecraft.util.EnumChatFormatting
+import net.minecraft.util.IChatComponent
+import net.minecraftforge.client.event.ClientChatReceivedEvent
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import xyz.qalcyo.wyvtils.core.WyvtilsCore.changeTextColor
+import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig
+import xyz.qalcyo.wyvtils.eight.Wyvtils.mc
+import xyz.qalcyo.wyvtils.eight.listener.HighlightManager.color
+
+
 object Listener {
 
+    @SubscribeEvent
+    fun onChatReceivedEvent(e: ClientChatReceivedEvent) {
+        if (WyvtilsConfig.chatHightlight && e.message.formattedText != null && mc.theWorld != null && e.message.formattedText.contains(
+                mc.thePlayer.gameProfile.name
+            ) && WyvtilsConfig.highlightName && !changeTextColor
+        ) {
+            if (e.message is ChatComponentText) {
+                mc.ingameGUI.chatGUI.printChatMessage(
+                    replaceMessage(e.message, mc.thePlayer.name, color + mc.thePlayer.name + EnumChatFormatting.RESET)
+                )
+            } else {
+                mc.ingameGUI.chatGUI.printChatMessage(
+                    ChatComponentText(
+                        e.message.formattedText.replace(
+                            mc.thePlayer.name,
+                            color + mc.thePlayer.name + EnumChatFormatting.RESET.toString(),
+                            true
+                        )
+                    )
+                )
+            }
+            e.isCanceled = true
+        }
+    }
 
-
+    private fun replaceMessage(
+        message: IChatComponent,
+        username: String,
+        replacement: String
+    ): ChatComponentText {
+        val originalText = message.unformattedTextForChat
+        val copy = ChatComponentText(originalText).setChatStyle(message.chatStyle) as ChatComponentText
+        for (sibling in message.siblings) {
+            copy.appendSibling(
+                ChatComponentText(
+                    sibling.unformattedTextForChat.replace(
+                        username,
+                        replacement
+                    )
+                ).setChatStyle(sibling.chatStyle)
+            )
+        }
+        return copy
+    }
 }

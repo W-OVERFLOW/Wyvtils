@@ -28,13 +28,12 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.util.InputUtil
 import org.lwjgl.glfw.GLFW
-import xyz.qalcyo.wyvtils.core.utils.MinecraftVersions
 import xyz.qalcyo.wyvtils.core.WyvtilsCore
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo
 import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig
 import xyz.qalcyo.wyvtils.core.listener.Listener
+import xyz.qalcyo.wyvtils.core.utils.MinecraftVersions
 import xyz.qalcyo.wyvtils.core.utils.Updater
-import xyz.qalcyo.wyvtils.seventeen.gui.BossBarGui
 import xyz.qalcyo.wyvtils.seventeen.gui.DownloadGui
 import java.io.File
 
@@ -61,10 +60,6 @@ object Wyvtils: ClientModInitializer {
             while (keyBinding.wasPressed() && it.currentScreen == null) {
                 EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
                 return@register
-            }
-            if (WyvtilsCore.awaitBossbarGui) {
-                WyvtilsCore.awaitBossbarGui = false
-                MinecraftClient.getInstance().setScreen(BossBarGui())
             }
             if (WyvtilsCore.awaitBossbarReset) {
                 WyvtilsCore.awaitBossbarReset = false

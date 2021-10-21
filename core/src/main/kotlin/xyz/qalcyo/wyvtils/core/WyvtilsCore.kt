@@ -31,6 +31,7 @@ object WyvtilsCore {
     var isPatcherLoaded = false
     var awaitBossbarGui = false
     var awaitBossbarReset = false
+    var changeTextColor = false
 
     fun onInitialization(version: MinecraftVersions) {
         when (version) {

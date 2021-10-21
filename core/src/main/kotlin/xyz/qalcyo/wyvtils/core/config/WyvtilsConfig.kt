@@ -22,10 +22,10 @@ import gg.essential.api.EssentialAPI
 import gg.essential.vigilance.Vigilant
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
-import xyz.qalcyo.wyvtils.core.utils.MinecraftVersions
 import xyz.qalcyo.wyvtils.core.WyvtilsCore
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo.NAME
+import xyz.qalcyo.wyvtils.core.utils.MinecraftVersions
 import java.awt.Color
 import java.io.File
 
@@ -55,23 +55,6 @@ object WyvtilsConfig: Vigilant(
         category = "General"
     )
     var removeNonNPCS = false
-
-    @Property(
-        type = PropertyType.TEXT,
-        name = "API Key",
-        description = "The API key, used for some features. Can be also automatically set by typing in /api new ingame.",
-        category = "General",
-        protectedText = true
-    )
-    var apiKey = ""
-
-    @Property(
-        type = PropertyType.SWITCH,
-        name = "Automatically Get API Key",
-        description = "Automatically get the API Key from /api new.",
-        category = "General"
-    )
-    var autoGetAPI = true
 
     @Property(
         type = PropertyType.SWITCH,
@@ -107,31 +90,6 @@ object WyvtilsConfig: Vigilant(
         subcategory = "Nametags"
     )
     var nametagTextShadow = false
-
-    @Property(
-        type = PropertyType.SWITCH,
-        name = "Automatically Check GEXP",
-        description = "Automatically check your GEXP after you win a Hypixel game. \\u00a7cRequires an API Key.",
-        category = "Automatic"
-    )
-    var autoGetGEXP = true
-
-    @Property(
-        type = PropertyType.SELECTOR,
-        name = "GEXP Mode",
-        description = "Choose which GEXP to get.",
-        category = "Automatic",
-        options = ["Daily", "Weekly"]
-    )
-    var gexpMode = 0
-
-    @Property(
-        type = PropertyType.SWITCH,
-        name = "Automatically Check Winstreak",
-        description = "Automatically check your winstreak after you win a Hypixel game. \\u00a7cRequires an API Key.",
-        category = "Automatic"
-    )
-    var autoGetWinstreak = false
 
     @Property(
         type = PropertyType.SWITCH,
@@ -212,7 +170,7 @@ object WyvtilsConfig: Vigilant(
         description = "Change the text color of the bossbar.",
         category = "Bossbar"
     )
-    var bossbarTextColor: Color = Color.WHITE
+    var bossBarTextColor: Color = Color.WHITE
 
     @Property(
         type = PropertyType.SWITCH,
@@ -228,7 +186,7 @@ object WyvtilsConfig: Vigilant(
         description = "Set the scale for the bossbar.",
         category = "Bossbar"
     )
-    var bossbarScale = 1.0F
+    var bossBarScale = 1.0F
 
     @Property(
         type = PropertyType.BUTTON,
@@ -438,23 +396,6 @@ object WyvtilsConfig: Vigilant(
         category = "Titles"
     )
     var titleShadow = true
-
-    @Property(
-        type = PropertyType.SELECTOR,
-        name = "Chat Type 1",
-        category = "Chat Switcher",
-        options = ["All", "Party", "Guild", "Officer"]
-    )
-    var chatType1 = 0
-
-    @Property(
-        type = PropertyType.SELECTOR,
-        name = "Chat Type 2",
-        category = "Chat Switcher",
-        options = ["All", "Party", "Guild", "Officer", "None"]
-    )
-    var chatType2 = 0
-
 
     @Property(
         type = PropertyType.SWITCH,
@@ -723,6 +664,9 @@ object WyvtilsConfig: Vigilant(
         }
         hidePropertyIf("nametagTextShadow") {
             WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
+        }
+        registerListener("textColor") { _: Int ->
+            WyvtilsCore.changeTextColor = true
         }
     }
 }

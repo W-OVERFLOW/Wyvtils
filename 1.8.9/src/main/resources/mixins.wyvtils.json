@@ -4,7 +4,8 @@
   "package": "xyz.qalcyo.wyvtils.eight.mixin",
   "refmap": "mixins.wyvtils.refmap.json",
   "mixins": [
-    "MinecraftMixin"
+    "MinecraftMixin",
+    "AccessorGuiIngame"
   ],
   "verbose": true
 }

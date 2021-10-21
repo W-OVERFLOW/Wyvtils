@@ -52,7 +52,7 @@ minecraft {
 
     runDir = 'run'
     makeObfSourceJar = false
-    clientRunArgs += "--tweakClass gg.essential.loader.stage0.EssentialSetupTweaker"
+    clientRunArgs += "--tweakClass xyz.qalcyo.requisiteessentialloader.RequisiteEssentialTweaker"
     clientRunArgs += "--mixin mixins.${mod_id}.json"
 }
 
@@ -84,11 +84,15 @@ dependencies {
         exclude(module: "httpclient")
         exclude(module: "commons-lang3")
     }
-
+    shade ("com.github.Qalcyo:RequisiteEssentialLoader:39dee241bb") {
+        transitive = false
+    }
     shade ("gg.essential:loader-launchwrapper:1.1.1") {
         transitive = false
     }
-    implementation "gg.essential:essential-1.8.9-forge:1520+release-launch"
+    implementation "xyz.qalcyo.requisite:Requisite:2.0-beta1"
+    implementation "gg.essential:essential-1.8.9-forge:1539+release-launch"
+    provided files('1.8.9.jar')
 
     annotationProcessor('org.spongepowered:mixin:0.7.11-SNAPSHOT')
 }
@@ -167,7 +171,7 @@ jar {
             "ModSide": "CLIENT",
             "ForceLoadAsMod": true,
             "MixinConfigs": "mixins.${mod_id}.json",
-            "TweakClass": "gg.essential.loader.stage0.EssentialSetupTweaker",
+            "TweakClass": "xyz.qalcyo.requisiteessentialloader.RequisiteEssentialTweaker",
             "TweakOrder": "0"
     )
 

@@ -65,9 +65,11 @@ dependencies {
     modImplementation("com.terraformersmc:modmenu:2.0.4") {
         transitive = false
     }
-    implementation('gg.essential:essential-1.17.1-fabric:1507+release-launch-1.17') {
+    implementation('gg.essential:essential-1.17.1-fabric:1540+release-launch-1.17') {
         exclude(group: "net.fabricmc")
-        exclude(group: "gg.essential")
+        exclude(module: "vigilance-1.17.1-fabric")
+        exclude(module: "universalcraft-1.17.1-fabric")
+        exclude(module: "elementa-1.17.1-fabric")
     }
     modImplementation('gg.essential:vigilance-1.17.1-fabric:179+next') {
         exclude(group: "net.fabricmc")

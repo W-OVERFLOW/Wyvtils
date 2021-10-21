@@ -42,7 +42,7 @@ repositories {
 }
 
 dependencies {
-    implementation ("gg.essential:essential-1.8.9-forge:1520+release-launch")
+    implementation ("gg.essential:essential-1.8.9-forge:1539+release-launch")
     implementation ("org.apache.httpcomponents:httpclient:4.3.3")
     implementation("org.apache.commons:commons-lang3:3.3.2")
 }
