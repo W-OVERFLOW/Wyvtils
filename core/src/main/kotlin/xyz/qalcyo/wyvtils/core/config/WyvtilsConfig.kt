@@ -18,11 +18,13 @@
 
 package xyz.qalcyo.wyvtils.core.config
 
+import gg.essential.universal.ChatColor
 import gg.essential.vigilance.Vigilant
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
 import xyz.qalcyo.wyvtils.core.WyvtilsCore
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo
+import xyz.qalcyo.wyvtils.core.listener.Listener
 import xyz.qalcyo.wyvtils.core.utils.MinecraftVersions
 import java.awt.Color
 import java.io.File
@@ -156,27 +158,91 @@ object WyvtilsConfig: Vigilant(
 
     @Property(
         type = PropertyType.SWITCH,
-        name = "Toggle Hitboxes for Items",
-        category = "Hitbox",
-        description = "Toggle the hitboxes of items."
+        name = "Toggle Player Hitboxes",
+        description = "Turn on and off player hitboxes from displaying.",
+        category = "Hitbox"
     )
-    var itemHitBox = true
+    var playerHitbox = true
 
     @Property(
         type = PropertyType.SWITCH,
-        name = "Toggle Hitboxes for Itemframes",
-        category = "Hitbox",
-        description = "Toggle the hitboxes of itemframes."
+        name = "Toggle Passive Hitboxes",
+        description = "Turn on and off passive entity hitboxes from displaying.",
+        category = "Hitbox"
     )
-    var itemFrameHitBox = true
+    var passiveHitbox = true
 
     @Property(
         type = PropertyType.SWITCH,
-        name = "Toggle Hitboxes for Non-Players",
-        category = "Hitbox",
-        description = "Toggle the hitboxes of non-players."
+        name = "Toggle Monster Hitboxes",
+        description = "Turn on and off monster hitboxes from displaying.",
+        category = "Hitbox"
     )
-    var nonplayerHitbox = true
+    var monsterHitbox = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Armorstand Hitboxes",
+        description = "Turn on and off player armorstand from displaying.",
+        category = "Hitbox"
+    )
+    var armorstandHitbox = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Fireball Hitboxes",
+        description = "Turn on and off fireball hitboxes from displaying.",
+        category = "Hitbox"
+    )
+    var fireballHitbox = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Minecart Hitboxes",
+        description = "Turn on and off minecart hitboxes from displaying.",
+        category = "Hitbox"
+    )
+    var minecartHitbox = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Wither Skull Hitboxes",
+        description = "Turn on and off wither skull hitboxes from displaying.",
+        category = "Hitbox"
+    )
+    var witherSkullHitboxes = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Item Hitboxes",
+        description = "Turn on and off item hitboxes from displaying.",
+        category = "Hitbox"
+    )
+    var itemHitbox = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Firework Hitboxes",
+        description = "Turn on and off firework hitboxes from displaying.",
+        category = "Hitbox"
+    )
+    var fireworkHitbox = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle XP Orb Hitboxes",
+        description = "Turn on and off XP Orb hitboxes from displaying.",
+        category = "Hitbox"
+    )
+    var xpOrbHitbox = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Projectile Hitboxes",
+        description = "Turn on and off projectile hitboxes from displaying.",
+        category = "Hitbox"
+    )
+    var projectileHitbox = true
 
     @Property(
         type = PropertyType.SWITCH,
@@ -193,6 +259,14 @@ object WyvtilsConfig: Vigilant(
         description = "Don't render the hitbox if the player's hitbox is you."
     )
     var disableForSelf = false
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Hitbox Box",
+        category = "Hitbox",
+        description = "Toggle the hitbox box of entities."
+    )
+    var hitboxBox = true
 
     @Property(
         type = PropertyType.COLOR,
@@ -290,8 +364,25 @@ object WyvtilsConfig: Vigilant(
         hidePropertyIf("nametagTextShadow") {
             WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
         }
-        registerListener("textColor") { _: Int ->
-            WyvtilsCore.changeTextColor = true
+        registerListener("textColor") { color: Int ->
+            Listener.color = when (color) {
+                0 -> ChatColor.BLACK.toString()
+                1 -> ChatColor.DARK_BLUE.toString()
+                2 -> ChatColor.DARK_GREEN.toString()
+                3 -> ChatColor.DARK_AQUA.toString()
+                4 -> ChatColor.DARK_RED.toString()
+                5 -> ChatColor.DARK_PURPLE.toString()
+                6 -> ChatColor.GOLD.toString()
+                7 -> ChatColor.GRAY.toString()
+                8 -> ChatColor.DARK_GRAY.toString()
+                9 -> ChatColor.BLUE.toString()
+                10 -> ChatColor.GREEN.toString()
+                11 -> ChatColor.AQUA.toString()
+                12 -> ChatColor.RED.toString()
+                13 -> ChatColor.LIGHT_PURPLE.toString()
+                14 -> ChatColor.YELLOW.toString()
+                else -> ChatColor.WHITE.toString()
+            }
         }
     }
 }

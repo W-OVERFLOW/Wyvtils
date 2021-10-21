@@ -16,22 +16,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.wyvtils.seventeen.mixin;
+package xyz.qalcyo.wyvtils.eight.mixin;
 
-import net.minecraft.client.Mouse;
+import net.minecraft.client.gui.GuiNewChat;
+import net.minecraft.util.IChatComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.qalcyo.wyvtils.core.WyvtilsCore;
-import xyz.qalcyo.wyvtils.core.listener.events.MouseScrollEvent;
+import xyz.qalcyo.wyvtils.core.listener.events.MessageReceivedEvent;
 
-@Mixin(Mouse.class)
-public class MouseMixin {
-    @ModifyArg(method = "onMouseScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;scrollInHotbar(D)V"), index = 0)
-    private double reverseScroll(double direction) {
-        MouseScrollEvent scrollEvent = new MouseScrollEvent(direction, false);
-        WyvtilsCore.INSTANCE.getEventBus().post(scrollEvent);
-        if (scrollEvent.getCancelled()) return 0D;
-        return scrollEvent.getScroll();
+@Mixin(GuiNewChat.class)
+public class GuiNewChatMixin {
+    @Inject(method = "printChatMessage", at = @At("HEAD"), cancellable = true)
+    private void cancelLocraw(IChatComponent chatComponent, CallbackInfo ci) {
+        MessageReceivedEvent event = new MessageReceivedEvent((chatComponent.getUnformattedText() == null ? "" : chatComponent.getUnformattedText()), false);
+        WyvtilsCore.INSTANCE.getEventBus().post(event);
+        if (event.getCancelled()) ci.cancel();
     }
 }

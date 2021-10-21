@@ -22,22 +22,18 @@ import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig;
+import xyz.qalcyo.wyvtils.core.WyvtilsCore;
+import xyz.qalcyo.wyvtils.core.listener.events.MouseScrollEvent;
 
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
 
     @ModifyArg(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/InventoryPlayer;changeCurrentItem(I)V"), index = 0)
     private int reverseScroll(int direction) {
-        if (WyvtilsConfig.INSTANCE.getReverseScrolling()) {
-            if (direction == 0) {
-                return 0;
-            } else {
-                return direction * -1;
-            }
-        } else {
-            return direction;
-        }
+        MouseScrollEvent scrollEvent = new MouseScrollEvent(direction, false);
+        WyvtilsCore.INSTANCE.getEventBus().post(scrollEvent);
+        if (scrollEvent.getCancelled()) return 0;
+        return (int) Math.round(scrollEvent.getScroll());
     }
 
 }

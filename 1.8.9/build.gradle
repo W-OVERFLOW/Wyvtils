@@ -83,6 +83,7 @@ dependencies {
         exclude(module: "kotlinx-coroutines-core")
         exclude(module: "httpclient")
         exclude(module: "commons-lang3")
+        exclude(module: "Mango")
     }
     shade ("com.github.Qalcyo:RequisiteEssentialLoader:39dee241bb") {
         transitive = false

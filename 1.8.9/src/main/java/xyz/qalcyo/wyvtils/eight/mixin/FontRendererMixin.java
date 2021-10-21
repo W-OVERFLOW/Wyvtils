@@ -18,24 +18,27 @@
 
 package xyz.qalcyo.wyvtils.eight.mixin;
 
-import net.minecraft.client.gui.GuiNewChat;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.client.gui.FontRenderer;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import xyz.qalcyo.wyvtils.core.listener.events.StringRenderEvent;
 
-@Mixin(GuiNewChat.class)
-public class MixinGuiNewChat {
-    @Inject(method = "printChatMessage", at = @At("HEAD"), cancellable = true)
-    private void cancelLocraw(IChatComponent chatComponent, CallbackInfo ci) {
-        if (WyvtilsConfig.INSTANCE.getHideLocraw()) {
-            String stripped = EnumChatFormatting.getTextWithoutFormattingCodes(chatComponent.getUnformattedText());
-            if (stripped.startsWith("{") && stripped.contains("server") && stripped.endsWith("}")) {
-                ci.cancel();
-            }
-        }
+@Mixin(FontRenderer.class)
+public class FontRendererMixin {
+    @Unique
+    private StringRenderEvent drawStringEvent;
+
+    @Inject(method = "renderString", at = @At("HEAD"))
+    private void onStringRendered(String text, float x, float y, int colour, boolean dropShadow, CallbackInfoReturnable<Integer> cir) {
+        drawStringEvent = new StringRenderEvent(text == null ? "" : text);
+    }
+
+    @ModifyVariable(method = "renderString", at = @At("HEAD"), argsOnly = true, ordinal = 0)
+    private String onStringRendered_modifyText(String original) {
+        return drawStringEvent.getString();
     }
 }

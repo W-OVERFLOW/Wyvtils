@@ -20,24 +20,19 @@ package xyz.qalcyo.wyvtils.seventeen.mixin;
 
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig;
+import xyz.qalcyo.wyvtils.core.WyvtilsCore;
+import xyz.qalcyo.wyvtils.core.listener.events.MessageReceivedEvent;
 
 @Mixin(ChatHud.class)
 public class ChatHudMixin {
     @Inject(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At("HEAD"), cancellable = true)
     private void cancelLocraw(Text message, int messageId, CallbackInfo ci) {
-        if (WyvtilsConfig.INSTANCE.getHideLocraw()) {
-            if (message.asString() == null) return;
-            String stripped = Formatting.strip(message.asString());
-            assert stripped != null;
-            if (stripped.startsWith("{") && stripped.contains("server") && stripped.endsWith("}")) {
-                ci.cancel();
-            }
-        }
+        MessageReceivedEvent event = new MessageReceivedEvent((message.asString() == null ? "" : message.asString()), false);
+        WyvtilsCore.INSTANCE.getEventBus().post(event);
+        if (event.getCancelled()) ci.cancel();
     }
 }

@@ -8,6 +8,8 @@
   },
   "mixins": [
     "ChatHudMixin",
-    "MouseMixin"
+    "EntityRenderDispatcherMixin",
+    "MouseMixin",
+    "TextRendererMixin"
   ]
 }

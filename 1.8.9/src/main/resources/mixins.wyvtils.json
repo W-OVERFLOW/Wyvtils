@@ -6,7 +6,9 @@
   "mixins": [
     "MinecraftMixin",
     "AccessorGuiIngame",
-    "MixinGuiNewChat"
+    "GuiNewChatMixin",
+    "FontRendererMixin",
+    "RenderManagerMixin"
   ],
   "verbose": true
 }
