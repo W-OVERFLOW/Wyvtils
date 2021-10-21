@@ -7,7 +7,7 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "BossBarHudMixin",
+    "ChatHudMixin",
     "MouseMixin"
   ]
 }

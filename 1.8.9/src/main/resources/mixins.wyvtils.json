@@ -5,7 +5,8 @@
   "refmap": "mixins.wyvtils.refmap.json",
   "mixins": [
     "MinecraftMixin",
-    "AccessorGuiIngame"
+    "AccessorGuiIngame",
+    "MixinGuiNewChat"
   ],
   "verbose": true
 }

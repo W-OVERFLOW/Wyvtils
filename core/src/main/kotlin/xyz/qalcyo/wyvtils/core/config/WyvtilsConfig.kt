@@ -18,13 +18,11 @@
 
 package xyz.qalcyo.wyvtils.core.config
 
-import gg.essential.api.EssentialAPI
 import gg.essential.vigilance.Vigilant
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
 import xyz.qalcyo.wyvtils.core.WyvtilsCore
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo
-import xyz.qalcyo.wyvtils.core.WyvtilsInfo.NAME
 import xyz.qalcyo.wyvtils.core.utils.MinecraftVersions
 import java.awt.Color
 import java.io.File
@@ -47,14 +45,6 @@ object WyvtilsConfig: Vigilant(
         category = "General"
     )
     var hideLocraw = true
-
-    @Property(
-        type = PropertyType.SWITCH,
-        name = "Remove Non-NPCs",
-        description = "Remove every entity from rendering except NPCs, armorstands, and your own player.",
-        category = "General"
-    )
-    var removeNonNPCS = false
 
     @Property(
         type = PropertyType.SWITCH,
