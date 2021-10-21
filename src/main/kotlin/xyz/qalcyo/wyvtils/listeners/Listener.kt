@@ -59,7 +59,8 @@ object Listener {
         " - Damage Dealt - ",
         "Winning Team -",
         "1st - ",
-        " Duel - "
+        " Duel - ",
+        "YOU LOSE!"
     )
 
     @SubscribeEvent
