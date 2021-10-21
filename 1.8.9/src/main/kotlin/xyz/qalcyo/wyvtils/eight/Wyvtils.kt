@@ -66,18 +66,6 @@ object Wyvtils {
         Requisite.getInstance().chatHelper.send("${EnumChatFormatting.DARK_PURPLE}[${WyvtilsInfo.NAME}] ", message)
     }
     private var current: Int = 1
-    val chatKeybind: KeyBind = KeyBinds.from("Chat Swapper", WyvtilsInfo.NAME, Keyboard.KEY_NONE) {
-        when (current) {
-            1 -> {
-                check(WyvtilsConfig.chatType2)
-                current += 1
-            }
-            2 -> {
-                check(WyvtilsConfig.chatType1)
-                current -= 1
-            }
-        }
-    }
     val titleKeybind: KeyBind = KeyBinds.from("Clear Title", WyvtilsInfo.NAME, Keyboard.KEY_NONE) {
         (mc.ingameGUI as AccessorGuiIngame).displayedTitle = ""
         (mc.ingameGUI as AccessorGuiIngame).setDisplayedSubTitle("")
@@ -121,7 +109,6 @@ object Wyvtils {
         }
         Requisite.getInstance().eventBus.register(FontRendererEvent.RenderStringEvent::class.java, HighlightManager::onStringRendered)
         Requisite.getInstance().eventBus.register(LocrawReceivedEvent::class.java, HypixelUtils::onLocraw)
-        Requisite.getInstance().keyBindRegistry.register(chatKeybind)
         Requisite.getInstance().keyBindRegistry.register(titleKeybind)
         Requisite.getInstance().keyBindRegistry.register(sidebarKeybind)
     }
