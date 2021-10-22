@@ -54,8 +54,6 @@ object Updater {
             val currentVersion = WyvtilsVersion.CURRENT
             latestTag = latestRelease.get("tag_name").asString.substringAfter("v")
             val latestVersion = WyvtilsVersion.fromString(latestTag)
-            println(currentVersion.toString())
-            println(latestVersion.toString())
             if (currentVersion < latestVersion) {
                 updateUrl = latestRelease["assets"].asJsonArray[0].asJsonObject["browser_download_url"].asString
                 shouldUpdate = true

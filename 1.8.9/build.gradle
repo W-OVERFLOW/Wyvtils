@@ -42,8 +42,9 @@ compileKotlin {
         freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
     }
 }
+
+archivesBaseName = mod_name + " [1.8.9]"
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
-archivesBaseName = mod_name
 version = mod_ver
 
 minecraft {

@@ -40,15 +40,7 @@ object WyvtilsCore {
     }
 
     fun onInitialization(version: MinecraftVersions) {
-        when (version) {
-            MinecraftVersions.EIGHT -> {
-                println("hello 1.8.9")
-            }
-            MinecraftVersions.SEVENTEEN -> {
-                println("hello 1.17.1")
-            }
-            else -> throw UnknownVersionException("This version is not supported by Wyvtils!")
-        }
+        if (version != MinecraftVersions.SEVENTEEN || version != MinecraftVersions.EIGHT) throw UnknownVersionException("This version is not supported by Wyvtils!")
         currentVersion = version
         WyvtilsConfig.preload()
         Updater.update()
