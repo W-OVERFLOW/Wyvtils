@@ -85,6 +85,7 @@ dependencies {
         exclude(module: "commons-lang3")
         exclude(module: "keventbus")
     }
+    implementation ('xyz.qalcyo.mango:Mango:1.8')
     implementation("com.github.Wyvest:keventbus:e8e05ea")
     shade ("gg.essential:loader-launchwrapper:1.1.1") {
         transitive = false

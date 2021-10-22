@@ -20,6 +20,8 @@ package xyz.qalcyo.wyvtils.eight
 
 import gg.essential.api.EssentialAPI
 import gg.essential.api.utils.Multithreading
+import gg.essential.lib.kbrewster.eventbus.Subscribe
+import gg.essential.universal.UDesktop
 import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.Mod
@@ -29,11 +31,14 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import xyz.qalcyo.wyvtils.core.WyvtilsCore
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo
+import xyz.qalcyo.wyvtils.core.listener.events.ChatRefreshEvent
 import xyz.qalcyo.wyvtils.core.utils.MinecraftVersions
 import xyz.qalcyo.wyvtils.core.utils.Updater
 import xyz.qalcyo.wyvtils.eight.commands.WyvtilsCommand
 import xyz.qalcyo.wyvtils.eight.gui.DownloadGui
+import xyz.qalcyo.wyvtils.eight.mixin.GuiNewChatAccessor
 import java.io.File
+import java.net.URI
 
 @Mod(
     modid = WyvtilsInfo.ID,
@@ -46,11 +51,12 @@ import java.io.File
 object Wyvtils {
 
     val mc: Minecraft
-    get() = Minecraft.getMinecraft()
+        get() = Minecraft.getMinecraft()
 
     @Mod.EventHandler
     fun onPreInit(e: FMLPreInitializationEvent) {
-        WyvtilsCore.modDir = File(File(File(File(Minecraft.getMinecraft().mcDataDir, "config"), "Qalcyo"), WyvtilsInfo.NAME), "1.8.9")
+        WyvtilsCore.modDir =
+            File(File(File(File(Minecraft.getMinecraft().mcDataDir, "config"), "Qalcyo"), WyvtilsInfo.NAME), "1.8.9")
         if (!WyvtilsCore.modDir!!.exists()) WyvtilsCore.modDir!!.mkdirs()
         WyvtilsCore.jarFile = e.sourceFile
     }
@@ -61,8 +67,8 @@ object Wyvtils {
         WyvtilsCommand.register()
         WyvtilsCore.eventBus.register(this)
         //Requisite.getInstance().keyBindRegistry.register(KeyBinds.from("Clear Title", WyvtilsInfo.NAME, Keyboard.KEY_NONE) {
-            //(mc.ingameGUI as AccessorGuiIngame).displayedTitle = ""
-            //(mc.ingameGUI as AccessorGuiIngame).setDisplayedSubTitle("")
+        //(mc.ingameGUI as GuiIngameAccessor).displayedTitle = ""
+        //(mc.ingameGUI as GuiIngameAccessor).setDisplayedSubTitle("")
         //})
     }
 
@@ -85,6 +91,33 @@ object Wyvtils {
                         EssentialAPI.getGuiUtil().openScreen(DownloadGui())
                     }
                 Updater.shouldShowNotification = false
+            }
+        }
+    }
+
+    @Subscribe
+    fun onChatRefresh(e: ChatRefreshEvent) {
+        val chat = Minecraft.getMinecraft().ingameGUI.chatGUI as GuiNewChatAccessor
+        try {
+            Minecraft.getMinecraft().ingameGUI.chatGUI.refreshChat()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            EssentialAPI.getNotifications().push(
+                WyvtilsInfo.NAME,
+                "There was a critical error while trying to refresh the chat. Please go to inv.wtf/qalcyo or click on this notification to fix this issue."
+            ) {
+                UDesktop.browse(URI.create("https://inv.wtf/qalcyo"))
+            }
+            chat.drawnChatLines.clear()
+            Minecraft.getMinecraft().ingameGUI.chatGUI.resetScroll()
+            for (line in chat.chatLines.asReversed()) {
+                if (line?.chatComponent == null) continue
+                chat.invokeSetChatLine(
+                    line.chatComponent,
+                    line.chatLineID,
+                    line.updatedCounter,
+                    true
+                )
             }
         }
     }

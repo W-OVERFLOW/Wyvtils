@@ -18,21 +18,27 @@
 
 package xyz.qalcyo.wyvtils.seventeen.mixin;
 
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.hud.ChatHud;
-import net.minecraft.text.Text;
+import net.minecraft.client.util.ChatMessages;
+import net.minecraft.text.OrderedText;
+import net.minecraft.text.StringVisitable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import xyz.qalcyo.wyvtils.core.WyvtilsCore;
-import xyz.qalcyo.wyvtils.core.listener.events.MessageReceivedEvent;
+import xyz.qalcyo.wyvtils.core.listener.events.MessageRenderEvent;
+
+import java.util.Collections;
+import java.util.List;
 
 @Mixin(ChatHud.class)
 public class ChatHudMixin {
-    @Inject(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At("HEAD"), cancellable = true)
-    private void cancelLocraw(Text message, int messageId, CallbackInfo ci) {
-        MessageReceivedEvent event = new MessageReceivedEvent((message.asString() == null ? "" : message.asString()), false);
+
+    @Redirect(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/ChatMessages;breakRenderedChatMessageLines(Lnet/minecraft/text/StringVisitable;ILnet/minecraft/client/font/TextRenderer;)Ljava/util/List;"))
+    private List<OrderedText> cancelLocraw(StringVisitable message, int width, TextRenderer textRenderer) {
+        MessageRenderEvent event = new MessageRenderEvent(message.getString(), false);
         WyvtilsCore.INSTANCE.getEventBus().post(event);
-        if (event.getCancelled()) ci.cancel();
+        return event.getCancelled() ? Collections.emptyList() : ChatMessages.breakRenderedChatMessageLines(message, width, textRenderer);
     }
 }

@@ -16,21 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.wyvtils.eight.mixin;
+package xyz.qalcyo.wyvtils.core.listener.events
 
-import net.minecraft.client.gui.GuiIngame;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
-
-@Mixin(GuiIngame.class)
-public interface AccessorGuiIngame {
-
-    @Accessor
-    String getDisplayedTitle();
-
-    @Accessor
-    void setDisplayedTitle(String title);
-
-    @Accessor
-    void setDisplayedSubTitle(String title);
-}
+class ChatRefreshEvent: Event(cancelled = false)

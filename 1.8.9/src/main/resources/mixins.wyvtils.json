@@ -5,10 +5,11 @@
   "refmap": "mixins.wyvtils.refmap.json",
   "mixins": [
     "MinecraftMixin",
-    "AccessorGuiIngame",
+    "GuiIngameAccessor",
     "GuiNewChatMixin",
     "FontRendererMixin",
-    "RenderManagerMixin"
+    "RenderManagerMixin",
+    "GuiNewChatAccessor"
   ],
   "verbose": true
 }

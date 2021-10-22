@@ -19,12 +19,15 @@
 package xyz.qalcyo.wyvtils.seventeen
 
 import gg.essential.api.EssentialAPI
+import gg.essential.lib.kbrewster.eventbus.Subscribe
 import gg.essential.universal.ChatColor
+import gg.essential.universal.UDesktop
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.util.InputUtil
 import org.lwjgl.glfw.GLFW
@@ -32,12 +35,15 @@ import xyz.qalcyo.wyvtils.core.WyvtilsCore
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo
 import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig
 import xyz.qalcyo.wyvtils.core.listener.Listener
+import xyz.qalcyo.wyvtils.core.listener.events.ChatRefreshEvent
 import xyz.qalcyo.wyvtils.core.utils.MinecraftVersions
 import xyz.qalcyo.wyvtils.core.utils.Updater
 import xyz.qalcyo.wyvtils.seventeen.gui.DownloadGui
+import xyz.qalcyo.wyvtils.seventeen.mixin.ChatHudAccessor
 import java.io.File
+import java.net.URI
 
-object Wyvtils: ClientModInitializer {
+object Wyvtils : ClientModInitializer {
 
     private val keyBinding: KeyBinding = KeyBindingHelper.registerKeyBinding(
         KeyBinding(
@@ -49,7 +55,8 @@ object Wyvtils: ClientModInitializer {
     )
 
     override fun onInitializeClient() {
-        WyvtilsCore.modDir = File(File(File(FabricLoader.getInstance().configDir.toFile(), "Qalcyo"), "Wyvtils"), "1.17.1")
+        WyvtilsCore.modDir =
+            File(File(File(FabricLoader.getInstance().configDir.toFile(), "Qalcyo"), "Wyvtils"), "1.17.1")
         if (!WyvtilsCore.modDir!!.exists()) {
             WyvtilsCore.modDir!!.mkdirs()
         }
@@ -92,5 +99,28 @@ object Wyvtils: ClientModInitializer {
                 Updater.shouldShowNotification = false
             }
         }
+        WyvtilsCore.eventBus.register(this)
     }
+
+    @Subscribe
+    fun onChatRefresh(e: ChatRefreshEvent) {
+        val chat = MinecraftClient.getInstance().inGameHud.chatHud as ChatHudAccessor
+        try {
+            MinecraftClient.getInstance().inGameHud.chatHud.reset()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            EssentialAPI.getNotifications().push(
+                WyvtilsInfo.NAME,
+                "There was a critical error while trying to refresh the chat. Please go to inv.wtf/qalcyo or click on this notification to fix this issue."
+            ) {
+                UDesktop.browse(URI.create("https://inv.wtf/qalcyo"))
+            }
+            chat.visibleMessages.clear()
+            MinecraftClient.getInstance().inGameHud.chatHud.resetScroll()
+            for (i in chat.messages.asReversed()) {
+                chat.invokeAddMessage(i.text, i.id, i.creationTick, true)
+            }
+        }
+    }
+
 }

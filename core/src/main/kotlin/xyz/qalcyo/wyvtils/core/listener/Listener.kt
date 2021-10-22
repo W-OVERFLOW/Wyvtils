@@ -25,7 +25,7 @@ import gg.essential.universal.ChatColor
 import xyz.qalcyo.mango.Strings
 import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig
 import xyz.qalcyo.wyvtils.core.listener.events.HitboxRenderEvent
-import xyz.qalcyo.wyvtils.core.listener.events.MessageReceivedEvent
+import xyz.qalcyo.wyvtils.core.listener.events.MessageRenderEvent
 import xyz.qalcyo.wyvtils.core.listener.events.MouseScrollEvent
 import xyz.qalcyo.wyvtils.core.listener.events.StringRenderEvent
 import xyz.qalcyo.wyvtils.core.listener.events.entity.*
@@ -55,7 +55,7 @@ object Listener {
     private var cachedUsername = ""
 
     @Subscribe
-    fun onMessage(e: MessageReceivedEvent) {
+    fun onMessage(e: MessageRenderEvent) {
         if (WyvtilsConfig.hideLocraw) {
             val stripped = strip(e.message)
             if (stripped.startsWith("{") && stripped.contains("server") && stripped.endsWith("}")) {

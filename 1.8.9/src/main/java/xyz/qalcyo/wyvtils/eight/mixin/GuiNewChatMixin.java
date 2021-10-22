@@ -18,21 +18,25 @@
 
 package xyz.qalcyo.wyvtils.eight.mixin;
 
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiNewChat;
+import net.minecraft.client.gui.GuiUtilRenderComponents;
 import net.minecraft.util.IChatComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import xyz.qalcyo.wyvtils.core.WyvtilsCore;
-import xyz.qalcyo.wyvtils.core.listener.events.MessageReceivedEvent;
+import xyz.qalcyo.wyvtils.core.listener.events.MessageRenderEvent;
+
+import java.util.Collections;
+import java.util.List;
 
 @Mixin(GuiNewChat.class)
 public class GuiNewChatMixin {
-    @Inject(method = "printChatMessage", at = @At("HEAD"), cancellable = true)
-    private void cancelLocraw(IChatComponent chatComponent, CallbackInfo ci) {
-        MessageReceivedEvent event = new MessageReceivedEvent((chatComponent.getUnformattedText() == null ? "" : chatComponent.getUnformattedText()), false);
+    @Redirect(method = "setChatLine", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiUtilRenderComponents;splitText(Lnet/minecraft/util/IChatComponent;ILnet/minecraft/client/gui/FontRenderer;ZZ)Ljava/util/List;"))
+    private List<IChatComponent> filterDrawnTextComponents(IChatComponent p_178908_0_, int p_178908_1_, FontRenderer p_178908_2_, boolean p_178908_3_, boolean p_178908_4_) {
+        MessageRenderEvent event = new MessageRenderEvent(p_178908_0_.getUnformattedText(), false);
         WyvtilsCore.INSTANCE.getEventBus().post(event);
-        if (event.getCancelled()) ci.cancel();
+        return event.getCancelled() ? Collections.emptyList() : GuiUtilRenderComponents.splitText(p_178908_0_, p_178908_1_, p_178908_2_, p_178908_3_, p_178908_4_);
     }
 }

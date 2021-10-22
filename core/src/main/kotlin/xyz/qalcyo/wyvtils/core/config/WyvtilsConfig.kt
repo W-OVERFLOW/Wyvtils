@@ -25,6 +25,7 @@ import gg.essential.vigilance.data.PropertyType
 import xyz.qalcyo.wyvtils.core.WyvtilsCore
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo
 import xyz.qalcyo.wyvtils.core.listener.Listener
+import xyz.qalcyo.wyvtils.core.listener.events.ChatRefreshEvent
 import xyz.qalcyo.wyvtils.core.utils.MinecraftVersions
 import java.awt.Color
 import java.io.File
@@ -372,10 +373,12 @@ object WyvtilsConfig: Vigilant(
         hidePropertyIf("highlightName") {
             WyvtilsCore.currentVersion == MinecraftVersions.SEVENTEEN
         }
+        /*/
         hidePropertyIf("chatHighlight") {
             //WyvtilsCore.currentVersion == MinecraftVersions.SEVENTEEN
             true
         }
+         */
         hidePropertyIf("textColor") {
             WyvtilsCore.currentVersion == MinecraftVersions.SEVENTEEN
         }
@@ -410,6 +413,10 @@ object WyvtilsConfig: Vigilant(
                 14 -> ChatColor.YELLOW.toString()
                 else -> ChatColor.WHITE.toString()
             }
+        }
+        registerListener("hideLocraw") { boolean: Boolean ->
+            hideLocraw = boolean
+            WyvtilsCore.eventBus.post(ChatRefreshEvent())
         }
     }
 }
