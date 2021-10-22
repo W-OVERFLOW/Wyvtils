@@ -38,7 +38,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -53,7 +52,6 @@ import java.awt.*;
 
 @Mixin(RenderManager.class)
 public class RenderManagerMixin {
-    @Unique
     private HitboxRenderEvent event;
 
     @Inject(method = "doRenderEntity", at = @At(value = "HEAD"))
@@ -132,7 +130,7 @@ public class RenderManagerMixin {
      * Modified to be more compact.
      */
     private double getReachDistanceFromEntity(Entity entity) {
-        if (entity == null) return -1;
+        if (entity == null) return -1.0;
         Minecraft.getMinecraft().mcProfiler.startSection("Calculating Reach Dist");
 
         double maxSize = 6D;
@@ -144,7 +142,7 @@ public class RenderManagerMixin {
         Vec3 adjustedPos = eyePos.addVector(lookPos.xCoord * maxSize, lookPos.yCoord * maxSize, lookPos.zCoord * maxSize);
         MovingObjectPosition movingObjectPosition = otherHitbox.calculateIntercept(eyePos, adjustedPos);
         if (movingObjectPosition == null)
-            return 0;
+            return -1.0;
         // finally calculate distance between both vectors
         double dist = eyePos.distanceTo(movingObjectPosition.hitVec);
         Minecraft.getMinecraft().mcProfiler.endSection();

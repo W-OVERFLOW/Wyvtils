@@ -91,6 +91,7 @@ object WyvtilsConfig: Vigilant(
     )
     var highlightName = false
 
+    //TODO: actually make this work
     @Property(
         type = PropertyType.SWITCH,
         name = "Only Highlight In Chat",
@@ -353,16 +354,42 @@ object WyvtilsConfig: Vigilant(
     init {
         initialize()
         hidePropertyIf("disableTextShadow") {
-            WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
+            //WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
+            true
         }
         hidePropertyIf("renderOwnNametag") {
-            WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
+            //WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
+            true
         }
         hidePropertyIf("removeNametagBackground") {
-            WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
+            //WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
+            true
         }
         hidePropertyIf("nametagTextShadow") {
-            WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
+            //WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
+            true
+        }
+        hidePropertyIf("highlightName") {
+            WyvtilsCore.currentVersion == MinecraftVersions.SEVENTEEN
+        }
+        hidePropertyIf("chatHighlight") {
+            //WyvtilsCore.currentVersion == MinecraftVersions.SEVENTEEN
+            true
+        }
+        hidePropertyIf("textColor") {
+            WyvtilsCore.currentVersion == MinecraftVersions.SEVENTEEN
+        }
+        hidePropertyIf("title") {
+            true
+        }
+        hidePropertyIf("titleScale") {
+            true
+        }
+        hidePropertyIf("subtitleScale") {
+            true
+        }
+        hidePropertyIf("titleShadow") {
+            true
         }
         registerListener("textColor") { color: Int ->
             Listener.color = when (color) {

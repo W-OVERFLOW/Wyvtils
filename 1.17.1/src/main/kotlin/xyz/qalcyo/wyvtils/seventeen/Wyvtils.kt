@@ -19,20 +19,19 @@
 package xyz.qalcyo.wyvtils.seventeen
 
 import gg.essential.api.EssentialAPI
-import me.kbrewster.eventbus.Subscribe
+import gg.essential.universal.ChatColor
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
 import net.fabricmc.loader.api.FabricLoader
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.util.InputUtil
 import org.lwjgl.glfw.GLFW
 import xyz.qalcyo.wyvtils.core.WyvtilsCore
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo
 import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig
-import xyz.qalcyo.wyvtils.core.listener.events.UpdatePlayerEvent
+import xyz.qalcyo.wyvtils.core.listener.Listener
 import xyz.qalcyo.wyvtils.core.utils.MinecraftVersions
 import xyz.qalcyo.wyvtils.core.utils.Updater
 import xyz.qalcyo.wyvtils.seventeen.gui.DownloadGui
@@ -62,7 +61,24 @@ object Wyvtils: ClientModInitializer {
                 return@register
             }
         }
-
+        Listener.color = when (WyvtilsConfig.textColor) {
+            0 -> ChatColor.BLACK.toString()
+            1 -> ChatColor.DARK_BLUE.toString()
+            2 -> ChatColor.DARK_GREEN.toString()
+            3 -> ChatColor.DARK_AQUA.toString()
+            4 -> ChatColor.DARK_RED.toString()
+            5 -> ChatColor.DARK_PURPLE.toString()
+            6 -> ChatColor.GOLD.toString()
+            7 -> ChatColor.GRAY.toString()
+            8 -> ChatColor.DARK_GRAY.toString()
+            9 -> ChatColor.BLUE.toString()
+            10 -> ChatColor.GREEN.toString()
+            11 -> ChatColor.AQUA.toString()
+            12 -> ChatColor.RED.toString()
+            13 -> ChatColor.LIGHT_PURPLE.toString()
+            14 -> ChatColor.YELLOW.toString()
+            else -> ChatColor.WHITE.toString()
+        }
         WorldRenderEvents.END.register {
             if (Updater.shouldShowNotification) {
                 EssentialAPI.getNotifications()
@@ -75,14 +91,6 @@ object Wyvtils: ClientModInitializer {
                     }
                 Updater.shouldShowNotification = false
             }
-            WyvtilsCore.username = MinecraftClient.getInstance().player?.gameProfile?.name ?: ""
         }
-        WyvtilsCore.eventBus.register(this)
-        WyvtilsCore.username = MinecraftClient.getInstance().player?.gameProfile?.name ?: ""
-    }
-
-    @Subscribe
-    fun onGetUpdate(e: UpdatePlayerEvent) {
-        e.username = MinecraftClient.getInstance().player?.gameProfile?.name ?: ""
     }
 }

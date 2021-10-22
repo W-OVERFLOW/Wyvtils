@@ -75,7 +75,7 @@ repositories {
 
 dependencies {
     shade(project(':core')) {
-        exclude(group: "gg.essential")
+        exclude(module: "essential-1.8.9-forge")
         exclude(module: "kotlin-reflect")
         exclude(module: "kotlin-stdlib-jdk8")
         exclude(module: "kotlin-stdlib-jdk7")
@@ -83,17 +83,13 @@ dependencies {
         exclude(module: "kotlinx-coroutines-core")
         exclude(module: "httpclient")
         exclude(module: "commons-lang3")
-        exclude(module: "Mango")
+        exclude(module: "keventbus")
     }
-    shade ("com.github.Qalcyo:RequisiteEssentialLoader:39dee241bb") {
-        transitive = false
-    }
+    implementation("com.github.Wyvest:keventbus:e8e05ea")
     shade ("gg.essential:loader-launchwrapper:1.1.1") {
         transitive = false
     }
-    implementation "xyz.qalcyo.requisite:Requisite:2.0-beta1"
     implementation "gg.essential:essential-1.8.9-forge:1539+release-launch"
-    provided files('1.8.9.jar')
 
     annotationProcessor('org.spongepowered:mixin:0.7.11-SNAPSHOT')
 }
@@ -172,7 +168,7 @@ jar {
             "ModSide": "CLIENT",
             "ForceLoadAsMod": true,
             "MixinConfigs": "mixins.${mod_id}.json",
-            "TweakClass": "xyz.qalcyo.requisiteessentialloader.RequisiteEssentialTweaker",
+            "TweakClass": "gg.essential.loader.stage0.EssentialSetupTweaker",
             "TweakOrder": "0"
     )
 

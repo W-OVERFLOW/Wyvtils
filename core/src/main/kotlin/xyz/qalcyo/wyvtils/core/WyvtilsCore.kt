@@ -18,17 +18,15 @@
 
 package xyz.qalcyo.wyvtils.core
 
+import gg.essential.lib.kbrewster.eventbus.eventbus
+import gg.essential.lib.kbrewster.eventbus.invokers.LMFInvoker
 import gg.essential.universal.ChatColor
-import me.kbrewster.eventbus.eventbus
-import me.kbrewster.eventbus.invokers.LMFInvoker
 import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig
 import xyz.qalcyo.wyvtils.core.listener.Listener
-import xyz.qalcyo.wyvtils.core.listener.events.UpdatePlayerEvent
 import xyz.qalcyo.wyvtils.core.utils.MinecraftVersions
 import xyz.qalcyo.wyvtils.core.utils.UnknownVersionException
 import xyz.qalcyo.wyvtils.core.utils.Updater
 import java.io.File
-import javax.swing.Timer
 
 object WyvtilsCore {
     var jarFile: File? = null
@@ -38,12 +36,7 @@ object WyvtilsCore {
     val eventBus = eventbus {
         invoker { LMFInvoker() }
         exceptionHandler { exception -> println("Error occurred in method: ${exception.message}")  }
-    }
-    var username = ""
-    private var timer = Timer(10000) {
-        val event = UpdatePlayerEvent(username)
-        eventBus.post(event)
-        username = event.username
+        threadSaftey = true
     }
 
     fun onInitialization(version: MinecraftVersions) {
@@ -60,7 +53,6 @@ object WyvtilsCore {
         WyvtilsConfig.preload()
         Updater.update()
         eventBus.register(Listener)
-        timer.start()
         Listener.color = when (WyvtilsConfig.textColor) {
             0 -> ChatColor.BLACK.toString()
             1 -> ChatColor.DARK_BLUE.toString()

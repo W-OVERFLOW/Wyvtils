@@ -20,14 +20,13 @@ package xyz.qalcyo.wyvtils.core.listener
 
 import gg.essential.lib.caffeine.cache.Cache
 import gg.essential.lib.caffeine.cache.Caffeine
+import gg.essential.lib.kbrewster.eventbus.Subscribe
 import gg.essential.universal.ChatColor
-import gg.essential.universal.wrappers.UPlayer
-import me.kbrewster.eventbus.Subscribe
 import xyz.qalcyo.mango.Strings
-import xyz.qalcyo.wyvtils.core.WyvtilsCore
 import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig
 import xyz.qalcyo.wyvtils.core.listener.events.HitboxRenderEvent
 import xyz.qalcyo.wyvtils.core.listener.events.MessageReceivedEvent
+import xyz.qalcyo.wyvtils.core.listener.events.MouseScrollEvent
 import xyz.qalcyo.wyvtils.core.listener.events.StringRenderEvent
 import xyz.qalcyo.wyvtils.core.listener.events.entity.*
 import java.util.concurrent.LinkedBlockingQueue
@@ -53,6 +52,7 @@ object Listener {
 
     private val cache: Cache<String, String> = Caffeine.newBuilder().executor(POOL).maximumSize(5000).build()
     private val regex = Pattern.compile("(?i)§[0-9A-FK-OR]")
+    private var cachedUsername = ""
 
     @Subscribe
     fun onMessage(e: MessageReceivedEvent) {
@@ -65,8 +65,17 @@ object Listener {
     }
 
     @Subscribe
+    fun onMouseScroll(e: MouseScrollEvent) {
+        if (WyvtilsConfig.reverseScrolling) {
+            if (e.scroll != 0.0) {
+                e.scroll = e.scroll * -1
+            }
+        }
+    }
+
+    @Subscribe
     fun onHitbox(e: HitboxRenderEvent) {
-        if (WyvtilsConfig.hitbox) {
+        if (!WyvtilsConfig.hitbox) {
             e.cancelled = true
             return
         }
@@ -84,7 +93,7 @@ object Listener {
         }
         if (e.cancelled) return
         if (WyvtilsConfig.hitboxBox) {
-            e.boxColor = if (e.distance <= 3.0) WyvtilsConfig.hitboxCrosshairColor else WyvtilsConfig.hitboxColor
+            e.boxColor = if (e.distance <= 3.0 && e.distance != -1.0) WyvtilsConfig.hitboxCrosshairColor else WyvtilsConfig.hitboxColor
         } else {
             e.cancelBox = true
         }
@@ -102,27 +111,29 @@ object Listener {
 
     @Subscribe
     fun onStringRendered(e: StringRenderEvent) {
-        if (UPlayer.hasPlayer()) {
-            if (!WyvtilsConfig.chatHightlight && e.string.contains(
-                    WyvtilsCore.username
-                ) && WyvtilsConfig.highlightName
-            ) {
-                if (e.string.contains("\u00A7")) {
-                    e.string = cache.getIfPresent(e.string) ?: replaceAndPut(e.string)
-                } else {
-                    e.string = e.string.replace(
-                        WyvtilsCore.username,
-                        color + WyvtilsCore.username + ChatColor.RESET
-                    )
-                }
+        if (e.username != null && !WyvtilsConfig.chatHightlight && e.string.contains(
+                e.username
+            ) && WyvtilsConfig.highlightName
+        ) {
+            if (cachedUsername != e.username) {
+                cache.invalidateAll()
+                cachedUsername = e.username
+            }
+            if (e.string.contains("\u00A7")) {
+                e.string = cache.getIfPresent(e.string) ?: replaceAndPut(e.string, e.username)
+            } else {
+                e.string = e.string.replace(
+                    e.username,
+                    color + e.username + ChatColor.RESET
+                )
             }
         }
     }
 
-    private fun replaceAndPut(string: String): String {
+    private fun replaceAndPut(string: String, username: String): String {
         var number = -1
         var code: String? = null
-        val array = string.split(Regex.fromLiteral(WyvtilsCore.username)).toMutableList()
+        val array = string.split(username).toMutableList()
         for (split in array) {
             number += 1
             if (number % 2 == 0 || number == 0) {
@@ -140,7 +151,7 @@ object Listener {
             }
         }
         val joined =
-            Strings.join(array, color + WyvtilsCore.username + ChatColor.RESET)
+            Strings.join(array, color + username + ChatColor.RESET)
         cache.put(string, joined)
         return joined
     }

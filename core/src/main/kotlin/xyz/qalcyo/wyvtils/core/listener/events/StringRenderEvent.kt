@@ -18,4 +18,4 @@
 
 package xyz.qalcyo.wyvtils.core.listener.events
 
-data class StringRenderEvent(var string: String): Event(cancelled = false)
+data class StringRenderEvent(var string: String, val username: String?): Event(cancelled = false)

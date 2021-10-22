@@ -18,23 +18,24 @@
 
 package xyz.qalcyo.wyvtils.eight.mixin;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import xyz.qalcyo.wyvtils.core.WyvtilsCore;
 import xyz.qalcyo.wyvtils.core.listener.events.StringRenderEvent;
 
 @Mixin(FontRenderer.class)
 public class FontRendererMixin {
-    @Unique
     private StringRenderEvent drawStringEvent;
 
     @Inject(method = "renderString", at = @At("HEAD"))
     private void onStringRendered(String text, float x, float y, int colour, boolean dropShadow, CallbackInfoReturnable<Integer> cir) {
-        drawStringEvent = new StringRenderEvent(text == null ? "" : text);
+        drawStringEvent = new StringRenderEvent(text == null ? "" : text, Minecraft.getMinecraft().thePlayer == null ? null : Minecraft.getMinecraft().thePlayer.getName());
+        WyvtilsCore.INSTANCE.getEventBus().post(drawStringEvent);
     }
 
     @ModifyVariable(method = "renderString", at = @At("HEAD"), argsOnly = true, ordinal = 0)

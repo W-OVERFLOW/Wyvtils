@@ -18,55 +18,64 @@
 
 package xyz.qalcyo.wyvtils.seventeen.mixin;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.text.OrderedText;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import xyz.qalcyo.wyvtils.core.WyvtilsCore;
 import xyz.qalcyo.wyvtils.core.listener.events.StringRenderEvent;
 
 @Mixin(TextRenderer.class)
 public class TextRendererMixin {
-    @Unique
-    private StringRenderEvent drawStringEvent = null;
+    private StringRenderEvent drawStringEvent;
+    @Inject(method = "drawInternal(Ljava/lang/String;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZIIZ)I", at = @At("HEAD"))
+    private void onStringRendered(String text, float x, float y, int color, boolean shadow, Matrix4f matrix, VertexConsumerProvider vertexConsumers, boolean seeThrough, int backgroundColor, int light, boolean mirror, CallbackInfoReturnable<Integer> cir) {
+        drawStringEvent = new StringRenderEvent(text == null ? "" : text, MinecraftClient.getInstance().player == null ? null : MinecraftClient.getInstance().player.getName().asString());
+        WyvtilsCore.INSTANCE.getEventBus().post(drawStringEvent);
+    }
 
-    @Inject(method = "drawInternal(Lnet/minecraft/text/OrderedText;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I", at = @At("HEAD"))
-    private void onStringRendered(OrderedText text, float x, float y, int color, boolean shadow, Matrix4f matrix, VertexConsumerProvider vertexConsumerProvider, boolean seeThrough, int backgroundColor, int light, CallbackInfoReturnable<Integer> cir) {
-        if (text instanceof Text) {
-            drawStringEvent = new StringRenderEvent(((Text) text).asString() == null ? "" : ((Text) text).asString());
-        }
+    @Inject(method = "draw(Lnet/minecraft/text/Text;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I", at = @At("HEAD"))
+    private void onString(Text text, float x, float y, int color, boolean shadow, Matrix4f matrix, VertexConsumerProvider vertexConsumers, boolean seeThrough, int backgroundColor, int light, CallbackInfoReturnable<Integer> cir) {
+        drawStringEvent = new StringRenderEvent(text == null || text.asString() == null ? "" : text.asString(), MinecraftClient.getInstance().player == null ? null : MinecraftClient.getInstance().player.getName().asString());
+        WyvtilsCore.INSTANCE.getEventBus().post(drawStringEvent);
+    }
+
+    @ModifyVariable(method = "draw(Lnet/minecraft/text/Text;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I", at = @At("HEAD"), argsOnly = true, ordinal = 0)
+    private Text onStringRendered_modifyText(Text original) {
+        return Text.of(drawStringEvent.getString());
+    }
+
+    @ModifyVariable(method = "draw(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I", at = @At("HEAD"), argsOnly = true, ordinal = 0)
+    private Text thefunny(Text original) {
+        return Text.of(drawStringEvent.getString());
+    }
+
+    @ModifyVariable(method = "drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I", at = @At("HEAD"), argsOnly = true, ordinal = 0)
+    private Text thefunny2(Text original) {
+        return Text.of(drawStringEvent.getString());
+    }
+
+    @Inject(method = "drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I", at = @At("HEAD"))
+    private void on(MatrixStack matrices, Text text, float x, float y, int color, CallbackInfoReturnable<Integer> cir) {
+        drawStringEvent = new StringRenderEvent(text == null || text.asString() == null ? "" : text.asString(), MinecraftClient.getInstance().player == null ? null : MinecraftClient.getInstance().player.getName().asString());
+        WyvtilsCore.INSTANCE.getEventBus().post(drawStringEvent);
+    }
+
+    @Inject(method = "draw(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I", at = @At("HEAD"))
+    private void ona(MatrixStack matrices, Text text, float x, float y, int color, CallbackInfoReturnable<Integer> cir) {
+        drawStringEvent = new StringRenderEvent(text == null || text.asString() == null ? "" : text.asString(), MinecraftClient.getInstance().player == null ? null : MinecraftClient.getInstance().player.getName().asString());
+        WyvtilsCore.INSTANCE.getEventBus().post(drawStringEvent);
     }
 
     @ModifyVariable(method = "drawInternal(Ljava/lang/String;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZIIZ)I", at = @At("HEAD"), argsOnly = true, ordinal = 0)
     private String onStringRendered_modifyText(String original) {
-        if (drawStringEvent != null) {
-            String a = drawStringEvent.getString();
-            drawStringEvent = null;
-            return a;
-        } else {
-            return original;
-        }
-    }
-
-    @ModifyVariable(method = "drawInternal(Lnet/minecraft/text/OrderedText;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I", at = @At("HEAD"), argsOnly = true, ordinal = 0)
-    private OrderedText onStringRendered_modifyText(OrderedText original) {
-        if (drawStringEvent != null) {
-            OrderedText a = Text.of(drawStringEvent.getString()).asOrderedText();
-            drawStringEvent = null;
-            return a;
-        } else {
-            return original;
-        }
-    }
-
-    @Inject(method = "drawInternal(Ljava/lang/String;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZIIZ)I", at = @At("HEAD"))
-    private void onStringRendered(String text, float x, float y, int color, boolean shadow, Matrix4f matrix, VertexConsumerProvider vertexConsumers, boolean seeThrough, int backgroundColor, int light, boolean mirror, CallbackInfoReturnable<Integer> cir) {
-        drawStringEvent = new StringRenderEvent(text == null ? "" : text);
+        return drawStringEvent.getString();
     }
 }

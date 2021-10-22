@@ -27,16 +27,12 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
-import org.lwjgl.input.Keyboard
-import xyz.qalcyo.requisite.Requisite
-import xyz.qalcyo.requisite.core.keybinds.KeyBinds
 import xyz.qalcyo.wyvtils.core.WyvtilsCore
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo
 import xyz.qalcyo.wyvtils.core.utils.MinecraftVersions
 import xyz.qalcyo.wyvtils.core.utils.Updater
 import xyz.qalcyo.wyvtils.eight.commands.WyvtilsCommand
 import xyz.qalcyo.wyvtils.eight.gui.DownloadGui
-import xyz.qalcyo.wyvtils.eight.mixin.AccessorGuiIngame
 import java.io.File
 
 @Mod(
@@ -63,10 +59,11 @@ object Wyvtils {
     fun onInit(e: FMLInitializationEvent) {
         WyvtilsCore.onInitialization(MinecraftVersions.EIGHT)
         WyvtilsCommand.register()
-        Requisite.getInstance().keyBindRegistry.register(KeyBinds.from("Clear Title", WyvtilsInfo.NAME, Keyboard.KEY_NONE) {
-            (mc.ingameGUI as AccessorGuiIngame).displayedTitle = ""
-            (mc.ingameGUI as AccessorGuiIngame).setDisplayedSubTitle("")
-        })
+        WyvtilsCore.eventBus.register(this)
+        //Requisite.getInstance().keyBindRegistry.register(KeyBinds.from("Clear Title", WyvtilsInfo.NAME, Keyboard.KEY_NONE) {
+            //(mc.ingameGUI as AccessorGuiIngame).displayedTitle = ""
+            //(mc.ingameGUI as AccessorGuiIngame).setDisplayedSubTitle("")
+        //})
     }
 
     @Mod.EventHandler
