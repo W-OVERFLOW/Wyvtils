@@ -52,7 +52,7 @@ import java.awt.*;
 
 @Mixin(RenderManager.class)
 public class RenderManagerMixin {
-    private HitboxRenderEvent event;
+    private HitboxRenderEvent hitboxRenderEvent;
 
     @Inject(method = "doRenderEntity", at = @At(value = "HEAD"))
     private void forceHitbox(Entity p_doRenderEntity_1_, double p_doRenderEntity_2_, double p_doRenderEntity_3_, double p_doRenderEntity_4_, float p_doRenderEntity_5_, float p_doRenderEntity_6_, boolean p_doRenderEntity_8_, CallbackInfoReturnable<Boolean> cir) {
@@ -64,54 +64,54 @@ public class RenderManagerMixin {
 
 
     @Inject(method = "renderDebugBoundingBox", at = @At(value = "HEAD"), cancellable = true)
-    private void cancel(Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
+    private void invokeHitboxEvent(Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
         if (entityIn instanceof EntityPlayer) {
-            event = new HitboxRenderEvent(new PlayerEntity(entityIn instanceof EntityPlayerSP && ((EntityPlayer) entityIn).getGameProfile().getId() == Minecraft.getMinecraft().thePlayer.getGameProfile().getId()), getReachDistanceFromEntity(entityIn), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(new PlayerEntity(entityIn instanceof EntityPlayerSP && ((EntityPlayer) entityIn).getGameProfile().getId() == Minecraft.getMinecraft().thePlayer.getGameProfile().getId()), getReachDistanceFromEntity(entityIn), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
         } else if (entityIn instanceof EntityLiving) {
-            event = new HitboxRenderEvent(new LivingEntity(entityIn instanceof IMob), getReachDistanceFromEntity(entityIn), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(new LivingEntity(entityIn instanceof IMob), getReachDistanceFromEntity(entityIn), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
         } else if (entityIn instanceof EntityArmorStand) {
-            event = new HitboxRenderEvent(new ArmorstandEntity(), getReachDistanceFromEntity(entityIn), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(new ArmorstandEntity(), getReachDistanceFromEntity(entityIn), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
         } else if (entityIn instanceof EntityFireball) {
-            event = new HitboxRenderEvent((entityIn instanceof EntityWitherSkull ? new WitherSkullEntity() : new FireballEntity()), getReachDistanceFromEntity(entityIn), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent((entityIn instanceof EntityWitherSkull ? new WitherSkullEntity() : new FireballEntity()), getReachDistanceFromEntity(entityIn), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
         } else if (entityIn instanceof EntityMinecart) {
-            event = new HitboxRenderEvent(new MinecartEntity(), getReachDistanceFromEntity(entityIn), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(new MinecartEntity(), getReachDistanceFromEntity(entityIn), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
         } else if (entityIn instanceof EntityItem) {
-            event = new HitboxRenderEvent(new ItemEntity(), getReachDistanceFromEntity(entityIn), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(new ItemEntity(), getReachDistanceFromEntity(entityIn), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
         } else if (entityIn instanceof EntityFireworkRocket) {
-            event = new HitboxRenderEvent(new FireworkEntity(), getReachDistanceFromEntity(entityIn), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(new FireworkEntity(), getReachDistanceFromEntity(entityIn), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
         } else if (entityIn instanceof EntityXPOrb) {
-            event = new HitboxRenderEvent(new XPEntity(), getReachDistanceFromEntity(entityIn), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(new XPEntity(), getReachDistanceFromEntity(entityIn), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
         } else if (entityIn instanceof IProjectile) {
-            event = new HitboxRenderEvent(new ProjectileEntity(), getReachDistanceFromEntity(entityIn), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(new ProjectileEntity(), getReachDistanceFromEntity(entityIn), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
         } else {
-            event = new HitboxRenderEvent(new xyz.qalcyo.wyvtils.core.listener.events.entity.Entity(), getReachDistanceFromEntity(entityIn), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(new xyz.qalcyo.wyvtils.core.listener.events.entity.Entity(), getReachDistanceFromEntity(entityIn), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
         }
-        WyvtilsCore.INSTANCE.getEventBus().post(event);
-        if (event.getCancelled()) ci.cancel();
+        WyvtilsCore.INSTANCE.getEventBus().post(hitboxRenderEvent);
+        if (hitboxRenderEvent.getCancelled()) ci.cancel();
     }
 
     @Redirect(method = "renderDebugBoundingBox", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderGlobal;drawOutlinedBoundingBox(Lnet/minecraft/util/AxisAlignedBB;IIII)V"))
-    private void addHitBoxAndSight(AxisAlignedBB boundingBox, int red, int green, int blue, int alpha, Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks) {
+    private void cancelLineOfSightAndBox(AxisAlignedBB boundingBox, int red, int green, int blue, int alpha, Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks) {
         if (green == 255) {
-            if (!event.getCancelBox()) {
-                RenderGlobal.drawOutlinedBoundingBox((WyvtilsConfig.INSTANCE.getAccurateHitbox() ? boundingBox.expand(entityIn.getCollisionBorderSize(), entityIn.getCollisionBorderSize(), entityIn.getCollisionBorderSize()) : boundingBox), event.getBoxColor().getRed(), event.getBoxColor().getGreen(), event.getBoxColor().getBlue(), event.getBoxColor().getAlpha());
+            if (!hitboxRenderEvent.getCancelBox()) {
+                RenderGlobal.drawOutlinedBoundingBox((WyvtilsConfig.INSTANCE.getAccurateHitbox() ? boundingBox.expand(entityIn.getCollisionBorderSize(), entityIn.getCollisionBorderSize(), entityIn.getCollisionBorderSize()) : boundingBox), hitboxRenderEvent.getBoxColor().getRed(), hitboxRenderEvent.getBoxColor().getGreen(), hitboxRenderEvent.getBoxColor().getBlue(), hitboxRenderEvent.getBoxColor().getAlpha());
             }
         } else {
-            if (!event.getCancelLineOfSight())
-                RenderGlobal.drawOutlinedBoundingBox(boundingBox, event.getLineOfSightColor().getRed(), event.getLineOfSightColor().getGreen(), event.getLineOfSightColor().getBlue(), event.getLineOfSightColor().getAlpha());
+            if (!hitboxRenderEvent.getCancelLineOfSight())
+                RenderGlobal.drawOutlinedBoundingBox(boundingBox, hitboxRenderEvent.getLineOfSightColor().getRed(), hitboxRenderEvent.getLineOfSightColor().getGreen(), hitboxRenderEvent.getLineOfSightColor().getBlue(), hitboxRenderEvent.getLineOfSightColor().getAlpha());
         }
     }
 
     @Inject(method = "renderDebugBoundingBox", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WorldRenderer;begin(ILnet/minecraft/client/renderer/vertex/VertexFormat;)V"), cancellable = true)
-    private void addEyeLine(Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
-        if (!event.getCancelEyeLine()) {
+    private void cancelEyeLine(Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
+        if (!hitboxRenderEvent.getCancelEyeLine()) {
             Tessellator tessellator = Tessellator.getInstance();
             WorldRenderer worldrenderer = tessellator.getWorldRenderer();
             Vec3 vec3 = entityIn.getLook(partialTicks);
 
             worldrenderer.begin(3, DefaultVertexFormats.POSITION_COLOR);
-            worldrenderer.pos(x, y + (double) entityIn.getEyeHeight(), z).color(event.getEyeLineColor().getRed(), event.getEyeLineColor().getGreen(), event.getEyeLineColor().getBlue(), event.getEyeLineColor().getAlpha()).endVertex();
-            worldrenderer.pos(x + vec3.xCoord * 2.0D, y + (double) entityIn.getEyeHeight() + vec3.yCoord * 2.0D, z + vec3.zCoord * 2.0D).color(event.getEyeLineColor().getRed(), event.getEyeLineColor().getGreen(), event.getEyeLineColor().getBlue(), event.getEyeLineColor().getAlpha()).endVertex();
+            worldrenderer.pos(x, y + (double) entityIn.getEyeHeight(), z).color(hitboxRenderEvent.getEyeLineColor().getRed(), hitboxRenderEvent.getEyeLineColor().getGreen(), hitboxRenderEvent.getEyeLineColor().getBlue(), hitboxRenderEvent.getEyeLineColor().getAlpha()).endVertex();
+            worldrenderer.pos(x + vec3.xCoord * 2.0D, y + (double) entityIn.getEyeHeight() + vec3.yCoord * 2.0D, z + vec3.zCoord * 2.0D).color(hitboxRenderEvent.getEyeLineColor().getRed(), hitboxRenderEvent.getEyeLineColor().getGreen(), hitboxRenderEvent.getEyeLineColor().getBlue(), hitboxRenderEvent.getEyeLineColor().getAlpha()).endVertex();
             tessellator.draw();
         }
         GlStateManager.enableTexture2D();

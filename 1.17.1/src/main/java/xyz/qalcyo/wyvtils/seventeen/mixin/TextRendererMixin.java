@@ -31,7 +31,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.qalcyo.wyvtils.core.WyvtilsCore;
 import xyz.qalcyo.wyvtils.core.listener.events.StringRenderEvent;
-
+//TODO: Fix thread-safeness or something idk
 @Mixin(TextRenderer.class)
 public class TextRendererMixin {
     private StringRenderEvent drawStringEvent;

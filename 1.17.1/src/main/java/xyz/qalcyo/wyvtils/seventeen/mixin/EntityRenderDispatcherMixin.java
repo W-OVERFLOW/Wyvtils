@@ -32,6 +32,7 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.projectile.*;
 import net.minecraft.entity.projectile.thrown.ThrownEntity;
+import net.minecraft.util.math.Box;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -51,67 +52,65 @@ import java.awt.*;
 
 @Mixin(EntityRenderDispatcher.class)
 public abstract class EntityRenderDispatcherMixin {
-    private static HitboxRenderEvent event;
+    private static HitboxRenderEvent hitboxRenderEvent;
     @Shadow
     private boolean renderHitboxes;
+    @Shadow
+    public abstract void setRenderHitboxes(boolean value);
 
     @Inject(method = "renderHitbox", at = @At("HEAD"), cancellable = true)
-    private static void cancelHitbox(MatrixStack matrices, VertexConsumer vertices, Entity entityIn, float tickDelta, CallbackInfo ci) {
+    private static void invokeHitboxEvent(MatrixStack matrices, VertexConsumer vertices, Entity entityIn, float tickDelta, CallbackInfo ci) {
         if (entityIn instanceof net.minecraft.entity.player.PlayerEntity) {
-            event = new HitboxRenderEvent(new PlayerEntity(entityIn instanceof ClientPlayerEntity && ((net.minecraft.entity.player.PlayerEntity) entityIn).getGameProfile().getId() == (MinecraftClient.getInstance().player != null ? MinecraftClient.getInstance().player.getGameProfile().getId() : "null")), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(new PlayerEntity(entityIn instanceof ClientPlayerEntity && ((net.minecraft.entity.player.PlayerEntity) entityIn).getGameProfile().getId() == (MinecraftClient.getInstance().player != null ? MinecraftClient.getInstance().player.getGameProfile().getId() : "null")), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
         } else if (entityIn instanceof MobEntity) {
-            event = new HitboxRenderEvent(new LivingEntity(entityIn instanceof Monster), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(new LivingEntity(entityIn instanceof Monster), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
         } else if (entityIn instanceof ArmorStandEntity) {
-            event = new HitboxRenderEvent(new ArmorstandEntity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(new ArmorstandEntity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
         } else if (entityIn instanceof net.minecraft.entity.projectile.FireballEntity) {
-            event = new HitboxRenderEvent(new FireballEntity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(new FireballEntity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
         } else if (entityIn instanceof net.minecraft.entity.vehicle.MinecartEntity) {
-            event = new HitboxRenderEvent(new MinecartEntity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(new MinecartEntity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
         } else if (entityIn instanceof net.minecraft.entity.ItemEntity) {
-            event = new HitboxRenderEvent(new ItemEntity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(new ItemEntity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
         } else if (entityIn instanceof FireworkRocketEntity) {
-            event = new HitboxRenderEvent(new FireworkEntity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(new FireworkEntity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
         } else if (entityIn instanceof ExperienceOrbEntity) {
-            event = new HitboxRenderEvent(new XPEntity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(new XPEntity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
         } else if (entityIn instanceof TridentEntity || entityIn instanceof ShulkerBulletEntity || entityIn instanceof FishingBobberEntity || entityIn instanceof LlamaSpitEntity || entityIn instanceof ArrowEntity || entityIn instanceof ThrownEntity || entityIn instanceof SpectralArrowEntity) {
-            event = new HitboxRenderEvent(new ProjectileEntity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(new ProjectileEntity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
         } else {
-            event = new HitboxRenderEvent(new xyz.qalcyo.wyvtils.core.listener.events.entity.Entity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(new xyz.qalcyo.wyvtils.core.listener.events.entity.Entity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE, Color.WHITE, Color.WHITE, false, false, false, false);
         }
-        WyvtilsCore.INSTANCE.getEventBus().post(event);
-        if (event.getCancelled()) ci.cancel();
+        WyvtilsCore.INSTANCE.getEventBus().post(hitboxRenderEvent);
+        if (hitboxRenderEvent.getCancelled()) ci.cancel();
     }
 
-    @ModifyArgs(method = "renderHitbox", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;drawBox(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;Lnet/minecraft/util/math/Box;FFFF)V"))
-    private static void modifyArgs(Args args, MatrixStack matrices, VertexConsumer vertices, Entity entity, float tickDelta) {
-        args.set(3, (float) event.getBoxColor().getRed() / 255);
-        args.set(4, (float) event.getBoxColor().getGreen() / 255);
-        args.set(5, (float) event.getBoxColor().getBlue() / 255);
-        args.set(6, (float) event.getBoxColor().getAlpha() / 255);
+    @Redirect(method = "renderHitbox", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;drawBox(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;Lnet/minecraft/util/math/Box;FFFF)V"))
+    private static void modifyBox(MatrixStack matrices, VertexConsumer vertexConsumer, Box box, float red, float green, float blue, float alpha) {
+        if (!hitboxRenderEvent.getCancelBox()) {
+            WorldRenderer.drawBox(matrices, vertexConsumer, box, (float) hitboxRenderEvent.getBoxColor().getRed() / 255, (float) hitboxRenderEvent.getBoxColor().getGreen() / 255, (float) hitboxRenderEvent.getBoxColor().getBlue() / 255, (float) hitboxRenderEvent.getBoxColor().getAlpha() / 255);
+        }
     }
 
     @Redirect(method = "renderHitbox", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;drawBox(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;DDDDDDFFFF)V"))
     private static void modifyLineOfSight(MatrixStack matrices, VertexConsumer vertexConsumer, double x1, double y1, double z1, double x2, double y2, double z2, float red, float green, float blue, float alpha) {
-        if (!event.getCancelLineOfSight()) {
-            WorldRenderer.drawBox(matrices, vertexConsumer, x1, y1, z1, x2, y2, z2, (float) event.getLineOfSightColor().getRed() / 255, (float) event.getLineOfSightColor().getGreen() / 255, (float) event.getLineOfSightColor().getBlue() / 255, (float) event.getLineOfSightColor().getAlpha() / 255);
+        if (!hitboxRenderEvent.getCancelLineOfSight()) {
+            WorldRenderer.drawBox(matrices, vertexConsumer, x1, y1, z1, x2, y2, z2, (float) hitboxRenderEvent.getLineOfSightColor().getRed() / 255, (float) hitboxRenderEvent.getLineOfSightColor().getGreen() / 255, (float) hitboxRenderEvent.getLineOfSightColor().getBlue() / 255, (float) hitboxRenderEvent.getLineOfSightColor().getAlpha() / 255);
         }
     }
 
     @Inject(method = "renderHitbox", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/VertexConsumer;vertex(Lnet/minecraft/util/math/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;"), cancellable = true)
     private static void cancelEyeline(MatrixStack matrices, VertexConsumer vertices, Entity entity, float tickDelta, CallbackInfo ci) {
-        if (event.getCancelEyeLine()) ci.cancel();
+        if (hitboxRenderEvent.getCancelEyeLine()) ci.cancel();
     }
 
     @ModifyArgs(method = "renderHitbox", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/VertexConsumer;color(IIII)Lnet/minecraft/client/render/VertexConsumer;"))
-    private static void modifyArgs2(Args args) {
-        args.set(0, event.getEyeLineColor().getRed());
-        args.set(1, event.getEyeLineColor().getGreen());
-        args.set(2, event.getEyeLineColor().getBlue());
-        args.set(3, event.getEyeLineColor().getAlpha());
+    private static void modifyEyeLine(Args args) {
+        args.set(0, hitboxRenderEvent.getEyeLineColor().getRed());
+        args.set(1, hitboxRenderEvent.getEyeLineColor().getGreen());
+        args.set(2, hitboxRenderEvent.getEyeLineColor().getBlue());
+        args.set(3, hitboxRenderEvent.getEyeLineColor().getAlpha());
     }
-
-    @Shadow
-    public abstract void setRenderHitboxes(boolean value);
 
     @Inject(method = "render", at = @At("HEAD"))
     private void forceHitboxes(Entity entity, double x, double y, double z, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {

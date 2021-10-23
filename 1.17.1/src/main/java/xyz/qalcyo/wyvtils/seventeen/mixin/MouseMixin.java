@@ -28,7 +28,7 @@ import xyz.qalcyo.wyvtils.core.listener.events.MouseScrollEvent;
 @Mixin(Mouse.class)
 public class MouseMixin {
     @ModifyArg(method = "onMouseScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;scrollInHotbar(D)V"), index = 0)
-    private double reverseScroll(double direction) {
+    private double invokeScrollEvent(double direction) {
         MouseScrollEvent scrollEvent = new MouseScrollEvent(direction, false);
         WyvtilsCore.INSTANCE.getEventBus().post(scrollEvent);
         if (scrollEvent.getCancelled()) return 0D;

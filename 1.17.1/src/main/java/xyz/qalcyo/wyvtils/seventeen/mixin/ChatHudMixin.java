@@ -36,7 +36,7 @@ import java.util.List;
 public class ChatHudMixin {
 
     @Redirect(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/ChatMessages;breakRenderedChatMessageLines(Lnet/minecraft/text/StringVisitable;ILnet/minecraft/client/font/TextRenderer;)Ljava/util/List;"))
-    private List<OrderedText> cancelLocraw(StringVisitable message, int width, TextRenderer textRenderer) {
+    private List<OrderedText> invokeMessageEvent(StringVisitable message, int width, TextRenderer textRenderer) {
         MessageRenderEvent event = new MessageRenderEvent(message.getString(), false);
         WyvtilsCore.INSTANCE.getEventBus().post(event);
         return event.getCancelled() ? Collections.emptyList() : ChatMessages.breakRenderedChatMessageLines(message, width, textRenderer);

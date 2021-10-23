@@ -30,16 +30,16 @@ import xyz.qalcyo.wyvtils.core.listener.events.StringRenderEvent;
 
 @Mixin(FontRenderer.class)
 public class FontRendererMixin {
-    private StringRenderEvent drawStringEvent;
+    private StringRenderEvent stringRenderEvent;
 
     @Inject(method = "renderString", at = @At("HEAD"))
-    private void onStringRendered(String text, float x, float y, int colour, boolean dropShadow, CallbackInfoReturnable<Integer> cir) {
-        drawStringEvent = new StringRenderEvent(text == null ? "" : text, Minecraft.getMinecraft().thePlayer == null ? null : Minecraft.getMinecraft().thePlayer.getName());
-        WyvtilsCore.INSTANCE.getEventBus().post(drawStringEvent);
+    private void invokeStringDrawnEvent(String text, float x, float y, int colour, boolean dropShadow, CallbackInfoReturnable<Integer> cir) {
+        stringRenderEvent = new StringRenderEvent(text == null ? "" : text, Minecraft.getMinecraft().thePlayer == null ? null : Minecraft.getMinecraft().thePlayer.getName());
+        WyvtilsCore.INSTANCE.getEventBus().post(stringRenderEvent);
     }
 
     @ModifyVariable(method = "renderString", at = @At("HEAD"), argsOnly = true, ordinal = 0)
     private String onStringRendered_modifyText(String original) {
-        return drawStringEvent.getString();
+        return stringRenderEvent.getString();
     }
 }
