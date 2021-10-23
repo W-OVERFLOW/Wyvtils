@@ -18,22 +18,25 @@
 
 package xyz.qalcyo.wyvtils.seventeen.mixin;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xyz.qalcyo.wyvtils.core.WyvtilsCore;
-import xyz.qalcyo.wyvtils.core.listener.events.StringRenderEvent;
+import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig;
+
 //TODO: Fix thread-safeness or something idk
 @Mixin(TextRenderer.class)
 public class TextRendererMixin {
+    @ModifyVariable(method = "drawInternal(Ljava/lang/String;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZIIZ)I", at = @At("HEAD"), index = 5)
+    private boolean disableShadow(boolean textShadow) {
+        return (!WyvtilsConfig.INSTANCE.getDisableTextShadow() && textShadow);
+    }
+
+    @ModifyVariable(method = "drawInternal(Lnet/minecraft/text/OrderedText;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I", at = @At("HEAD"), index = 5)
+    private boolean disableShadow2(boolean textShadow) {
+        return (!WyvtilsConfig.INSTANCE.getDisableTextShadow() && textShadow);
+    }
+    /*/
     private StringRenderEvent drawStringEvent;
     @Inject(method = "drawInternal(Ljava/lang/String;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZIIZ)I", at = @At("HEAD"))
     private void onStringRendered(String text, float x, float y, int color, boolean shadow, Matrix4f matrix, VertexConsumerProvider vertexConsumers, boolean seeThrough, int backgroundColor, int light, boolean mirror, CallbackInfoReturnable<Integer> cir) {
@@ -78,4 +81,6 @@ public class TextRendererMixin {
     private String onStringRendered_modifyText(String original) {
         return drawStringEvent.getString();
     }
+
+     */
 }

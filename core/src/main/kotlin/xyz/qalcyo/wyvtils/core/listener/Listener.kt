@@ -24,10 +24,7 @@ import gg.essential.lib.kbrewster.eventbus.Subscribe
 import gg.essential.universal.ChatColor
 import xyz.qalcyo.mango.Strings
 import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig
-import xyz.qalcyo.wyvtils.core.listener.events.HitboxRenderEvent
-import xyz.qalcyo.wyvtils.core.listener.events.MessageRenderEvent
-import xyz.qalcyo.wyvtils.core.listener.events.MouseScrollEvent
-import xyz.qalcyo.wyvtils.core.listener.events.StringRenderEvent
+import xyz.qalcyo.wyvtils.core.listener.events.*
 import xyz.qalcyo.wyvtils.core.listener.events.entity.*
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
@@ -53,6 +50,14 @@ object Listener {
     private val cache: Cache<String, String> = Caffeine.newBuilder().executor(POOL).maximumSize(5000).build()
     private val regex = Pattern.compile("(?i)§[0-9A-FK-OR]")
     private var cachedUsername = ""
+
+    @Subscribe
+    fun onTitle(e: TitleEvent) {
+        e.cancelled = !WyvtilsConfig.title
+        e.shadow = WyvtilsConfig.titleShadow
+        e.titleScale = WyvtilsConfig.titleScale
+        e.subtitleScale = WyvtilsConfig.subtitleScale
+    }
 
     @Subscribe
     fun onMessage(e: MessageRenderEvent) {

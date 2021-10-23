@@ -51,6 +51,22 @@ object WyvtilsConfig: Vigilant(
 
     @Property(
         type = PropertyType.SWITCH,
+        name = "Left Hand",
+        description = "Move the player's hand to the left in first-person.",
+        category = "General"
+    )
+    var leftHand = false
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Item Physics",
+        description = "Make dropped items have physics.",
+        category = "General"
+    )
+    var itemPhysics = false
+
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Disable Text Shadow",
         description = "Disable the shadow on text rendering. Can boost performance.",
         category = "General"
@@ -355,44 +371,28 @@ object WyvtilsConfig: Vigilant(
     init {
         initialize()
         hidePropertyIf("disableTextShadow") {
-            //WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
-            true
+            WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
         }
         hidePropertyIf("renderOwnNametag") {
-            //WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
-            true
+            WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
         }
         hidePropertyIf("removeNametagBackground") {
-            //WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
-            true
+            WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
         }
         hidePropertyIf("nametagTextShadow") {
-            //WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
-            true
+            WyvtilsCore.currentVersion == MinecraftVersions.EIGHT
         }
         hidePropertyIf("highlightName") {
             WyvtilsCore.currentVersion == MinecraftVersions.SEVENTEEN
         }
-        /*/
-        hidePropertyIf("chatHighlight") {
-            //WyvtilsCore.currentVersion == MinecraftVersions.SEVENTEEN
-            true
-        }
-         */
         hidePropertyIf("textColor") {
             WyvtilsCore.currentVersion == MinecraftVersions.SEVENTEEN
         }
-        hidePropertyIf("title") {
-            true
+        hidePropertyIf("leftHand") {
+            WyvtilsCore.currentVersion == MinecraftVersions.SEVENTEEN
         }
-        hidePropertyIf("titleScale") {
-            true
-        }
-        hidePropertyIf("subtitleScale") {
-            true
-        }
-        hidePropertyIf("titleShadow") {
-            true
+        hidePropertyIf("itemPhysics") {
+            WyvtilsCore.currentVersion == MinecraftVersions.SEVENTEEN
         }
         registerListener("textColor") { color: Int ->
             Listener.color = when (color) {

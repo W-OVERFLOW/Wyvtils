@@ -10,6 +10,11 @@
     "ChatHudAccessor",
     "ChatHudMixin",
     "EntityRenderDispatcherMixin",
-    "MouseMixin"
+    "EntityRendererMixin",
+    "InGameHudMixin",
+    "LivingEntityRendererMixin",
+    "MouseMixin",
+    "TextRendererDrawerMixin",
+    "TextRendererMixin"
   ]
 }

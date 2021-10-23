@@ -45,6 +45,7 @@ import java.net.URI
 
 object Wyvtils : ClientModInitializer {
 
+    var needsToCancel = false
     private val keyBinding: KeyBinding = KeyBindingHelper.registerKeyBinding(
         KeyBinding(
             "key.wyvtils.keybind", // The translation key of the keybinding's name

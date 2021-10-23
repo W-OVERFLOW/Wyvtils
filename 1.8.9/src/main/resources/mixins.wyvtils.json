@@ -9,7 +9,10 @@
     "GuiNewChatMixin",
     "FontRendererMixin",
     "RenderManagerMixin",
-    "GuiNewChatAccessor"
+    "GuiNewChatAccessor",
+    "GuiIngameForgeMixin",
+    "ItemRendererMixin",
+    "RenderEntityItemMixin"
   ],
   "verbose": true
 }
