@@ -59,6 +59,14 @@ object WyvtilsConfig: Vigilant(
 
     @Property(
         type = PropertyType.SWITCH,
+        name = "Swap Bow Hand",
+        description = "Make the bow render in the opposite hand when equipped.",
+        category = "General"
+    )
+    var swapBow = false
+
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Item Physics",
         description = "Make dropped items have physics.",
         category = "General"
@@ -389,6 +397,9 @@ object WyvtilsConfig: Vigilant(
             WyvtilsCore.currentVersion == MinecraftVersions.SEVENTEEN
         }
         hidePropertyIf("leftHand") {
+            WyvtilsCore.currentVersion == MinecraftVersions.SEVENTEEN
+        }
+        hidePropertyIf("swapBow") {
             WyvtilsCore.currentVersion == MinecraftVersions.SEVENTEEN
         }
         hidePropertyIf("itemPhysics") {

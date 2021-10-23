@@ -99,6 +99,15 @@ object Wyvtils : ClientModInitializer {
                     }
                 Updater.shouldShowNotification = false
             }
+            if (WyvtilsConfig.firstTime) {
+                EssentialAPI.getNotifications().push(
+                    "Wyvtils",
+                    "Hello! As this is your first time using this mod, click the key Z on your keyboard to configure the many features in Wyvtils!"
+                )
+                WyvtilsConfig.firstTime = false
+                WyvtilsConfig.markDirty()
+                WyvtilsConfig.writeData()
+            }
         }
         WyvtilsCore.eventBus.register(this)
     }

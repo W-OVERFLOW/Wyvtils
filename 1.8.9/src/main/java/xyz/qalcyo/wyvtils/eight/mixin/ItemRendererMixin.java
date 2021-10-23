@@ -20,8 +20,11 @@ package xyz.qalcyo.wyvtils.eight.mixin;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.item.EnumAction;
+import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -29,12 +32,21 @@ import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig;
 
 @Mixin(ItemRenderer.class)
 public class ItemRendererMixin {
+    @Shadow private ItemStack itemToRender;
+
     //Original code from Terbium by Deftu
     @Inject(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;pushMatrix()V"))
     protected void onItemInFirstPersonRendered(float partialTicks, CallbackInfo ci) {
-        if (WyvtilsConfig.INSTANCE.getLeftHand()) {
-            GL11.glScaled(-1.0d, 1.0d, 1.0d);
-            GlStateManager.disableCull();
+        if (WyvtilsConfig.INSTANCE.getSwapBow() && itemToRender.getItemUseAction() == EnumAction.BOW) {
+            if (!WyvtilsConfig.INSTANCE.getLeftHand()) {
+                GL11.glScaled(-1.0d, 1.0d, 1.0d);
+                GlStateManager.disableCull();
+            }
+        } else {
+            if (WyvtilsConfig.INSTANCE.getLeftHand()) {
+                GL11.glScaled(-1.0d, 1.0d, 1.0d);
+                GlStateManager.disableCull();
+            }
         }
     }
 }

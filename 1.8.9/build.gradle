@@ -85,10 +85,17 @@ dependencies {
         exclude(module: "httpclient")
         exclude(module: "commons-lang3")
         exclude(module: "keventbus")
+        exclude(module: "Mango")
     }
-    implementation ('xyz.qalcyo.mango:Mango:1.8')
+    shade ("com.github.Qalcyo:RequisiteEssentialLoader:39dee241bb") {
+        transitive = false
+    }
     implementation("com.github.Wyvest:keventbus:e8e05ea")
     shade ("gg.essential:loader-launchwrapper:1.1.1") {
+        transitive = false
+    }
+    implementation('xyz.qalcyo.requisite:Requisite-1.8.9:2.0-beta5')
+    shade('xyz.qalcyo.requisite:RequisiteInstaller-1.8.9:1.3.1') {
         transitive = false
     }
     implementation "gg.essential:essential-1.8.9-forge:1539+release-launch"
@@ -170,7 +177,7 @@ jar {
             "ModSide": "CLIENT",
             "ForceLoadAsMod": true,
             "MixinConfigs": "mixins.${mod_id}.json",
-            "TweakClass": "gg.essential.loader.stage0.EssentialSetupTweaker",
+            "TweakClass": "xyz.qalcyo.requisiteessentialloader.RequisiteEssentialTweaker",
             "TweakOrder": "0"
     )
 

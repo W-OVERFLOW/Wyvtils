@@ -20,9 +20,9 @@ package xyz.qalcyo.wyvtils.eight.gui
 
 import gg.essential.api.EssentialAPI
 import gg.essential.api.gui.buildConfirmationModal
-import gg.essential.api.utils.Multithreading
 import gg.essential.elementa.WindowScreen
 import gg.essential.elementa.dsl.childOf
+import xyz.qalcyo.mango.Multithreading
 import xyz.qalcyo.wyvtils.core.WyvtilsCore
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo
 import xyz.qalcyo.wyvtils.core.utils.Updater

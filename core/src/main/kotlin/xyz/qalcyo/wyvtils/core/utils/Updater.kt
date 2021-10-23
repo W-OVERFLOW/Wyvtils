@@ -19,12 +19,12 @@
 package xyz.qalcyo.wyvtils.core.utils
 
 import gg.essential.api.EssentialAPI
-import gg.essential.api.utils.Multithreading
 import org.apache.http.HttpResponse
 import org.apache.http.client.HttpClient
 import org.apache.http.client.config.RequestConfig
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.HttpClientBuilder
+import xyz.qalcyo.mango.Multithreading
 import xyz.qalcyo.wyvtils.core.WyvtilsCore
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo
 import java.awt.Desktop

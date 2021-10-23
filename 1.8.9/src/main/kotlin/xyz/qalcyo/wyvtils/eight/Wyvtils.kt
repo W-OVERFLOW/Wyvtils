@@ -18,24 +18,31 @@
 
 package xyz.qalcyo.wyvtils.eight
 
-import gg.essential.api.EssentialAPI
-import gg.essential.api.utils.Multithreading
 import gg.essential.lib.kbrewster.eventbus.Subscribe
 import gg.essential.universal.UDesktop
 import net.minecraft.client.Minecraft
+import net.minecraftforge.common.MinecraftForge.EVENT_BUS
 import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.common.gameevent.TickEvent
+import org.lwjgl.input.Keyboard
+import xyz.qalcyo.mango.Multithreading
+import xyz.qalcyo.requisite.Requisite
+import xyz.qalcyo.requisite.core.keybinds.KeyBinds
 import xyz.qalcyo.wyvtils.core.WyvtilsCore
 import xyz.qalcyo.wyvtils.core.WyvtilsInfo
+import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig
 import xyz.qalcyo.wyvtils.core.listener.events.ChatRefreshEvent
 import xyz.qalcyo.wyvtils.core.utils.MinecraftVersions
 import xyz.qalcyo.wyvtils.core.utils.Updater
 import xyz.qalcyo.wyvtils.eight.commands.WyvtilsCommand
 import xyz.qalcyo.wyvtils.eight.gui.DownloadGui
+import xyz.qalcyo.wyvtils.eight.mixin.GuiIngameAccessor
 import xyz.qalcyo.wyvtils.eight.mixin.GuiNewChatAccessor
 import java.io.File
 import java.net.URI
@@ -66,10 +73,16 @@ object Wyvtils {
         WyvtilsCore.onInitialization(MinecraftVersions.EIGHT)
         WyvtilsCommand.register()
         WyvtilsCore.eventBus.register(this)
-        //Requisite.getInstance().keyBindRegistry.register(KeyBinds.from("Clear Title", WyvtilsInfo.NAME, Keyboard.KEY_NONE) {
-        //(mc.ingameGUI as GuiIngameAccessor).displayedTitle = ""
-        //(mc.ingameGUI as GuiIngameAccessor).setDisplayedSubTitle("")
-        //})
+        EVENT_BUS.register(this)
+        Requisite.getInstance().keyBindRegistry.register(
+            KeyBinds.from(
+                "Clear Title",
+                WyvtilsInfo.NAME,
+                Keyboard.KEY_NONE
+            ) {
+                (mc.ingameGUI as GuiIngameAccessor).displayedTitle = ""
+                (mc.ingameGUI as GuiIngameAccessor).setDisplayedSubTitle("")
+            })
     }
 
     @Mod.EventHandler
@@ -82,16 +95,29 @@ object Wyvtils {
         Multithreading.runAsync {
             Updater.updateFuture!!.get()
             if (Updater.shouldShowNotification) {
-                EssentialAPI.getNotifications()
+                Requisite.getInstance().notifications
                     .push(
                         "Mod Update",
-                        "${WyvtilsInfo.NAME} ${Updater.latestTag} is available!\nClick here to download it!",
-                        5f
+                        "${WyvtilsInfo.NAME} ${Updater.latestTag} is available!\nClick here to download it!"
                     ) {
-                        EssentialAPI.getGuiUtil().openScreen(DownloadGui())
+                        Requisite.getInstance().guiHelper.open(DownloadGui())
                     }
                 Updater.shouldShowNotification = false
             }
+        }
+    }
+
+    @SubscribeEvent
+    fun onTick(event: TickEvent.ClientTickEvent) {
+        if (event.phase != TickEvent.Phase.START) return
+        if (WyvtilsConfig.firstTime && mc.theWorld != null) {
+            Requisite.getInstance().notifications.push(
+                "Wyvtils",
+                "Hello! As this is your first time using this mod, type in /wyvtils in the chat to configure the many features in Wyvtils!"
+            )
+            WyvtilsConfig.firstTime = false
+            WyvtilsConfig.markDirty()
+            WyvtilsConfig.writeData()
         }
     }
 
@@ -102,7 +128,7 @@ object Wyvtils {
             Minecraft.getMinecraft().ingameGUI.chatGUI.refreshChat()
         } catch (e: Exception) {
             e.printStackTrace()
-            EssentialAPI.getNotifications().push(
+            Requisite.getInstance().notifications.push(
                 WyvtilsInfo.NAME,
                 "There was a critical error while trying to refresh the chat. Please go to inv.wtf/qalcyo or click on this notification to fix this issue."
             ) {
