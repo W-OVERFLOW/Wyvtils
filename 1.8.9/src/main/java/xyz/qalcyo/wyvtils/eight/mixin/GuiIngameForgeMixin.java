@@ -54,7 +54,7 @@ public class GuiIngameForgeMixin {
     }
 
     @ModifyArg(method = "renderTitle", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/FontRenderer;drawString(Ljava/lang/String;FFIZ)I"), index = 4, remap = true)
-    private boolean setShadow() {
+    private boolean setShadow(boolean shadow) {
         return titleEvent.getShadow();
     }
 }

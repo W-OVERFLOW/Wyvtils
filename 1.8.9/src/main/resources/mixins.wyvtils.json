@@ -4,15 +4,16 @@
   "package": "xyz.qalcyo.wyvtils.eight.mixin",
   "refmap": "mixins.wyvtils.refmap.json",
   "mixins": [
-    "MinecraftMixin",
-    "GuiIngameAccessor",
-    "GuiNewChatMixin",
     "FontRendererMixin",
-    "RenderManagerMixin",
-    "GuiNewChatAccessor",
+    "GuiIngameAccessor",
     "GuiIngameForgeMixin",
+    "GuiNewChatAccessor",
+    "GuiNewChatMixin",
     "ItemRendererMixin",
-    "RenderEntityItemMixin"
+    "MinecraftMixin",
+    "RenderEntityItemMixin",
+    "RenderManagerMixin",
+    "Sk1erOAMAnimationHandlerMixin"
   ],
   "verbose": true
 }
