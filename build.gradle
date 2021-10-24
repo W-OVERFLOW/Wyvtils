@@ -65,14 +65,25 @@ repositories {
     maven { url "https://repo.sk1er.club/repository/maven-releases/" }
     maven { url "https://jitpack.io/" }
     maven { url "https://repo.spongepowered.org/repository/maven-public/" }
+    maven {
+        url = "http://maven.deftu.xyz/repository/maven-public/"
+        allowInsecureProtocol = true
+    }
 }
 
 dependencies {
-    implementation files ("1.8.9.jar")
     include "com.github.Qalcyo:RequisiteEssentialLoader:0a78589683"
-    implementation "xyz.matthewtgm:RequisiteLaunchwrapper:1.1"
-    implementation "gg.essential:loader-launchwrapper:1.1.1"
-    implementation "gg.essential:essential-1.8.9-forge:1501+release-launch"
+    include ("gg.essential:loader-launchwrapper:1.1.1") {
+        transitive = false
+    }
+    implementation('xyz.qalcyo.requisite:Requisite-1.8.9:2.0-beta5')
+    include('xyz.qalcyo.requisite:RequisiteInstaller-1.8.9:1.3.1') {
+        transitive = false
+    }
+    include ("com.github.Qalcyo:RequisiteEssentialLoader:39dee241bb") {
+        transitive = false
+    }
+    implementation "gg.essential:essential-1.8.9-forge:1539+release-launch"
 
     annotationProcessor "org.spongepowered:mixin:0.7.11-SNAPSHOT"
 }

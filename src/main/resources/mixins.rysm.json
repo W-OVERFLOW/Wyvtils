@@ -1,0 +1,20 @@
+{
+  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.7",
+  "plugin": "xyz.qalcyo.rysm.tweaker.RysmMixinPlugin",
+  "package": "xyz.qalcyo.rysm.mixin",
+  "refmap": "mixins.rysm.refmap.json",
+  "mixins": [
+    "AccessorGuiIngame",
+    "MixinGuiIngame",
+    "MixinGuiIngameForge",
+    "MixinGuiIngameForgeHook",
+    "MixinGuiNewChat",
+    "MixinMinecraft",
+    "MixinRenderManager",
+    "Sk1erOAMAnimationHandlerMixin",
+    "ItemRendererMixin",
+    "RenderEntityItemMixin"
+  ],
+  "verbose": true
+}

@@ -1,12 +1,12 @@
 [
   {
-    "modid": "wyvtils",
-    "name": "Wyvtils",
+    "modid": "rysm",
+    "name": "Rysm",
     "description": "Useful utilities for general usage.",
     "version": "${version}",
     "mcversion": "${mcversion}",
-    "url": "https://github.com/Qalcyo/Wyvtils/releases/latest",
-    "updateUrl": "https://github.com/Qalcyo/Wyvtils/releases/latest",
+    "url": "https://github.com/Qalcyo/Rysm/releases/latest",
+    "updateUrl": "https://github.com/Qalcyo/Rysm/releases/latest",
     "authorList": [
       "Qalcyo"
     ],
