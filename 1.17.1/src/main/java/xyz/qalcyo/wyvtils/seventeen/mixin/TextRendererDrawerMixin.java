@@ -32,5 +32,4 @@ public class TextRendererDrawerMixin {
             cir.cancel();
         }
     }
-
 }

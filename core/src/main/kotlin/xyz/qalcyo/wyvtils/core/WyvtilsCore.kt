@@ -36,7 +36,6 @@ object WyvtilsCore {
     val eventBus = eventbus {
         invoker { LMFInvoker() }
         exceptionHandler { exception -> println("Error occurred in method: ${exception.message}")  }
-        threadSaftey = true
     }
 
     fun onInitialization(version: MinecraftVersions) {

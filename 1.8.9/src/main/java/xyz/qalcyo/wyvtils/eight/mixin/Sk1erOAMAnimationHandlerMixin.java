@@ -20,6 +20,7 @@ package xyz.qalcyo.wyvtils.eight.mixin;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,16 +35,26 @@ import xyz.qalcyo.wyvtils.core.config.WyvtilsConfig;
 @Mixin(targets = "club.sk1er.oldanimations.AnimationHandler")
 public class Sk1erOAMAnimationHandlerMixin {
     private boolean already = false;
+
     @Inject(method = "renderItemInFirstPerson", at = @At("HEAD"))
     private void hi(ItemRenderer renderer, ItemStack stack, float equipProgress, float partialTicks, CallbackInfoReturnable<Boolean> ci) {
         already = false;
     }
+
     @Inject(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;pushMatrix()V"), remap = true)
-    protected void onItemInFirstPersonRendered(CallbackInfoReturnable<Boolean> ci) {
-        if (WyvtilsConfig.INSTANCE.getLeftHand() && !already) {
-            GL11.glScaled(-1.0d, 1.0d, 1.0d);
-            GlStateManager.disableCull();
-            already = true;
+    protected void onItemInFirstPersonRendered(ItemRenderer renderer, ItemStack stack, float equipProgress, float partialTicks, CallbackInfoReturnable<Boolean> ci) {
+        if (WyvtilsConfig.INSTANCE.getSwapBow() && stack != null && stack.getItemUseAction() == EnumAction.BOW) {
+            if (!WyvtilsConfig.INSTANCE.getLeftHand() && !already) {
+                GL11.glScaled(-1.0d, 1.0d, 1.0d);
+                GlStateManager.disableCull();
+                already = true;
+            }
+        } else {
+            if (WyvtilsConfig.INSTANCE.getLeftHand() && !already) {
+                GL11.glScaled(-1.0d, 1.0d, 1.0d);
+                GlStateManager.disableCull();
+                already = true;
+            }
         }
     }
 }

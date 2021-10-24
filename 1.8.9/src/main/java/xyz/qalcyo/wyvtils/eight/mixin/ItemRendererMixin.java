@@ -37,7 +37,7 @@ public class ItemRendererMixin {
     //Original code from Terbium by Deftu
     @Inject(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;pushMatrix()V"))
     protected void onItemInFirstPersonRendered(float partialTicks, CallbackInfo ci) {
-        if (WyvtilsConfig.INSTANCE.getSwapBow() && itemToRender.getItemUseAction() == EnumAction.BOW) {
+        if (WyvtilsConfig.INSTANCE.getSwapBow() && itemToRender != null && itemToRender.getItemUseAction() == EnumAction.BOW) {
             if (!WyvtilsConfig.INSTANCE.getLeftHand()) {
                 GL11.glScaled(-1.0d, 1.0d, 1.0d);
                 GlStateManager.disableCull();
