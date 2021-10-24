@@ -1,4 +1,4 @@
-package xyz.qalcyo.wyvtils.gui
+package xyz.qalcyo.rysm.gui
 
 import com.mojang.blaze3d.systems.RenderSystem
 import gg.essential.api.EssentialAPI
@@ -10,9 +10,9 @@ import net.minecraft.client.gui.hud.BackgroundHelper
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.InputUtil
 import net.minecraft.client.util.math.MatrixStack
-import xyz.qalcyo.wyvtils.config.WyvtilsConfig
-import xyz.qalcyo.wyvtils.config.WyvtilsConfig.actionBarX
-import xyz.qalcyo.wyvtils.config.WyvtilsConfig.actionBarY
+import xyz.qalcyo.rysm.config.RysmConfig
+import xyz.qalcyo.rysm.config.RysmConfig.actionBarX
+import xyz.qalcyo.rysm.config.RysmConfig.actionBarY
 import java.awt.Color
 import java.util.*
 
@@ -42,7 +42,7 @@ class ActionBarGui(private var parent: Screen?) : WindowScreen(version = Element
         this.drawTextBackground(matrixStack.toMC(), textRenderer)
         textRenderer.draw(
             matrixStack.toMC(),
-            "Wyvtils Action Bar",
+            "Rysm Action Bar",
             actionBarX.toFloat(),
             actionBarY.toFloat(),
             Color.WHITE.rgb
@@ -55,7 +55,7 @@ class ActionBarGui(private var parent: Screen?) : WindowScreen(version = Element
 
 
     override fun onClose() {
-        WyvtilsConfig.markAndWrite()
+        RysmConfig.markAndWrite()
         EssentialAPI.getGuiUtil().openScreen(parent)
         parent = null
     }

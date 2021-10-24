@@ -1,7 +1,7 @@
 {
   "required": true,
-  "refmap": "mixins.wyvtils.refmap.json",
-  "package": "xyz.qalcyo.wyvtils.mixins",
+  "refmap": "mixins.rysm.refmap.json",
+  "package": "xyz.qalcyo.rysm.mixins",
   "compatibilityLevel": "JAVA_16",
   "injectors": {
     "defaultRequire": 1

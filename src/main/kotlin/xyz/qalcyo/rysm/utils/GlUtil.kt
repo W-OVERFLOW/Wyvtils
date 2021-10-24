@@ -1,4 +1,4 @@
-package xyz.qalcyo.wyvtils.utils
+package xyz.qalcyo.rysm.utils
 
 import net.minecraft.client.gui.DrawableHelper
 import net.minecraft.client.util.math.MatrixStack

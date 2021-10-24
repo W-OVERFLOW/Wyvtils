@@ -1,4 +1,4 @@
-package xyz.qalcyo.wyvtils
+package xyz.qalcyo.rysm
 
 import gg.essential.api.EssentialAPI
 import net.fabricmc.api.ClientModInitializer
@@ -8,14 +8,14 @@ import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.util.InputUtil
 import org.lwjgl.glfw.GLFW
-import xyz.qalcyo.wyvtils.config.WyvtilsConfig
+import xyz.qalcyo.rysm.config.RysmConfig
 import java.io.File
 
 
 @Suppress("unused")
-object Wyvtils : ClientModInitializer {
+object Rysm : ClientModInitializer {
     var needsToCancel = false
-    val modDir = File(File(File(FabricLoader.getInstance().configDir.toFile(), "Qalcyo"), "Wyvtils"), "1.17.1")
+    val modDir = File(File(File(FabricLoader.getInstance().configDir.toFile(), "Qalcyo"), "Rysm"), "1.17.1")
     lateinit var jarFile: File
 
     private val keyBinding: KeyBinding = KeyBindingHelper.registerKeyBinding(
@@ -32,10 +32,10 @@ object Wyvtils : ClientModInitializer {
             modDir.mkdirs()
         }
         jarFile = File(javaClass.protectionDomain.codeSource.location.toURI())
-        WyvtilsConfig.preload()
+        RysmConfig.preload()
         ClientTickEvents.END_CLIENT_TICK.register {
             while (keyBinding.wasPressed() && it.currentScreen == null) {
-                EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
+                EssentialAPI.getGuiUtil().openScreen(RysmConfig.gui())
                 return@register
             }
         }

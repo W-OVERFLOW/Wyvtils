@@ -1,4 +1,4 @@
-package xyz.qalcyo.wyvtils.gui
+package xyz.qalcyo.rysm.gui
 
 import com.mojang.blaze3d.systems.RenderSystem
 import gg.essential.api.EssentialAPI
@@ -12,20 +12,20 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.boss.BossBar
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
-import xyz.qalcyo.wyvtils.config.WyvtilsConfig
-import xyz.qalcyo.wyvtils.config.WyvtilsConfig.bossBarBar
-import xyz.qalcyo.wyvtils.config.WyvtilsConfig.bossBarShadow
-import xyz.qalcyo.wyvtils.config.WyvtilsConfig.bossBarText
-import xyz.qalcyo.wyvtils.config.WyvtilsConfig.bossBarX
-import xyz.qalcyo.wyvtils.config.WyvtilsConfig.bossBarY
-import xyz.qalcyo.wyvtils.config.WyvtilsConfig.bossbarScale
+import xyz.qalcyo.rysm.config.RysmConfig
+import xyz.qalcyo.rysm.config.RysmConfig.bossBarBar
+import xyz.qalcyo.rysm.config.RysmConfig.bossBarShadow
+import xyz.qalcyo.rysm.config.RysmConfig.bossBarText
+import xyz.qalcyo.rysm.config.RysmConfig.bossBarX
+import xyz.qalcyo.rysm.config.RysmConfig.bossBarY
+import xyz.qalcyo.rysm.config.RysmConfig.bossbarScale
 import java.util.*
 
 class BossBarGui(private var parent: Screen?) : WindowScreen(version = ElementaVersion.V1) {
 
     private val bossBar = ClientBossBar(
         UUID.fromString("cd899a14-de78-4de8-8d31-9d42fff31d7a"),
-        Text.of("Wyvtils"),
+        Text.of("Rysm"),
         1.0F,
         BossBar.Color.PURPLE,
         BossBar.Style.NOTCHED_20,
@@ -104,7 +104,7 @@ class BossBarGui(private var parent: Screen?) : WindowScreen(version = ElementaV
 
 
     override fun onClose() {
-        WyvtilsConfig.markAndWrite()
+        RysmConfig.markAndWrite()
         EssentialAPI.getGuiUtil().openScreen(parent)
         parent = null
     }

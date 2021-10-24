@@ -1,4 +1,4 @@
-package xyz.qalcyo.wyvtils.config
+package xyz.qalcyo.rysm.config
 
 import gg.essential.api.EssentialAPI
 import gg.essential.universal.ChatColor
@@ -6,17 +6,17 @@ import gg.essential.vigilance.Vigilant
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
 import net.minecraft.client.MinecraftClient
-import xyz.qalcyo.wyvtils.Wyvtils
-import xyz.qalcyo.wyvtils.gui.ActionBarGui
-import xyz.qalcyo.wyvtils.gui.BossBarGui
-import xyz.qalcyo.wyvtils.gui.SidebarGui
+import xyz.qalcyo.rysm.Rysm
+import xyz.qalcyo.rysm.gui.ActionBarGui
+import xyz.qalcyo.rysm.gui.BossBarGui
+import xyz.qalcyo.rysm.gui.SidebarGui
 import java.awt.Color
 import java.io.File
 
 @Suppress("unused")
-object WyvtilsConfig : Vigilant(
-    File(Wyvtils.modDir, "wyvtils.toml"),
-    "${ChatColor.DARK_PURPLE}Wyvtils"
+object RysmConfig : Vigilant(
+    File(Rysm.modDir, "rysm.toml"),
+    "${ChatColor.DARK_PURPLE}Rysm"
 ) {
 
     @Property(
@@ -114,8 +114,8 @@ object WyvtilsConfig : Vigilant(
         EssentialAPI.getGuiUtil().openScreen(null)
         bossBarX = MinecraftClient.getInstance().window.scaledWidth
         bossBarY = 12
-        WyvtilsConfig.markDirty()
-        WyvtilsConfig.writeData()
+        RysmConfig.markDirty()
+        RysmConfig.writeData()
         EssentialAPI.getGuiUtil().openScreen(gui())
     }
 
@@ -203,7 +203,7 @@ object WyvtilsConfig : Vigilant(
     )
     fun openActionBarGui() {
         if (actionBarPosition && actionBarCustomization) EssentialAPI.getGuiUtil().openScreen(ActionBarGui(gui()))
-        else EssentialAPI.getNotifications().push("Wyvtils", "You don't have Action Bar Position enabled!")
+        else EssentialAPI.getNotifications().push("Rysm", "You don't have Action Bar Position enabled!")
     }
 
     @Property(
@@ -403,7 +403,7 @@ object WyvtilsConfig : Vigilant(
     )
     fun openSidebarGui() {
         if (sidebarPosition) EssentialAPI.getGuiUtil().openScreen(SidebarGui(gui()))
-        else EssentialAPI.getNotifications().push("Wyvtils", "You don't have Sidebar Position enabled!")
+        else EssentialAPI.getNotifications().push("Rysm", "You don't have Sidebar Position enabled!")
     }
 
     @Property(
