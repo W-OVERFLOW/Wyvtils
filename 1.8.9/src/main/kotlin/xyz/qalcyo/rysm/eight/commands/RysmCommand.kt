@@ -16,30 +16,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        maven {
-            name = 'SonaType'
-            url = 'https://oss.sonatype.org/content/repositories/snapshots/'
-        }
-        maven {
-            name = 'Fabric'
-            url = 'https://maven.fabricmc.net/'
-        }
-        maven {
-            name = 'Jitpack'
-            url = 'https://jitpack.io/'
-        }
+package xyz.qalcyo.rysm.eight.commands
 
-        gradlePluginPortal()
-        mavenCentral()
-        mavenLocal()
+import gg.essential.api.EssentialAPI
+import gg.essential.api.commands.Command
+import gg.essential.api.commands.DefaultHandler
+import gg.essential.api.commands.SubCommand
+import xyz.qalcyo.rysm.core.RysmInfo
+import xyz.qalcyo.rysm.core.config.RysmConfig
+
+object RysmCommand : Command(RysmInfo.ID, true) {
+    override val commandAliases = setOf(
+        Alias("wyvtils"),
+        Alias("wyvtilities")
+    )
+
+    @DefaultHandler
+    fun handle() {
+        EssentialAPI.getGuiUtil().openScreen(RysmConfig.gui())
     }
-}
 
-rootProject.name = mod_name
-include(
-        'core',
-        '1.8.9',
-        '1.17.1'
-)
+    @SubCommand("config", description = "Opens the config GUI for ${RysmInfo.NAME}")
+    fun config() {
+        EssentialAPI.getGuiUtil().openScreen(RysmConfig.gui())
+    }
+
+}

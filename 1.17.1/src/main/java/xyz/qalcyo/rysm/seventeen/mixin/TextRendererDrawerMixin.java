@@ -16,30 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        maven {
-            name = 'SonaType'
-            url = 'https://oss.sonatype.org/content/repositories/snapshots/'
-        }
-        maven {
-            name = 'Fabric'
-            url = 'https://maven.fabricmc.net/'
-        }
-        maven {
-            name = 'Jitpack'
-            url = 'https://jitpack.io/'
-        }
+package xyz.qalcyo.rysm.seventeen.mixin;
 
-        gradlePluginPortal()
-        mavenCentral()
-        mavenLocal()
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import xyz.qalcyo.rysm.seventeen.Rysm;
+
+@Mixin(targets = "net/minecraft/client/font/TextRenderer$Drawer")
+public class TextRendererDrawerMixin {
+    @Inject(method = "drawLayer(IF)F", at = @At("HEAD"), cancellable = true)
+    private void cancel(int underlineColor, float x, CallbackInfoReturnable<Float> cir) {
+        if (Rysm.INSTANCE.getNeedsToCancel()) {
+            cir.cancel();
+        }
     }
 }
-
-rootProject.name = mod_name
-include(
-        'core',
-        '1.8.9',
-        '1.17.1'
-)

@@ -1,0 +1,20 @@
+{
+  "required": true,
+  "refmap": "mixins.rysm.refmap.json",
+  "package": "xyz.qalcyo.rysm.seventeen.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "ChatHudAccessor",
+    "ChatHudMixin",
+    "EntityRenderDispatcherMixin",
+    "EntityRendererMixin",
+    "InGameHudMixin",
+    "LivingEntityRendererMixin",
+    "MouseMixin",
+    "TextRendererDrawerMixin",
+    "TextRendererMixin"
+  ]
+}

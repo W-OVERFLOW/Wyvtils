@@ -1,0 +1,19 @@
+{
+  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.7",
+  "package": "xyz.qalcyo.rysm.eight.mixin",
+  "refmap": "mixins.rysm.refmap.json",
+  "mixins": [
+    "FontRendererMixin",
+    "GuiIngameAccessor",
+    "GuiIngameForgeMixin",
+    "GuiNewChatAccessor",
+    "GuiNewChatMixin",
+    "ItemRendererMixin",
+    "MinecraftMixin",
+    "RenderEntityItemMixin",
+    "RenderManagerMixin",
+    "Sk1erOAMAnimationHandlerMixin"
+  ],
+  "verbose": true
+}

@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "id": "wyvtils",
+  "id": "rysm",
   "version": "${version}",
-  "name": "Wyvtils",
+  "name": "Rysm",
   "description": "Utilities, for 1.17.1.",
   "authors": [
     "Qalcyo"
   ],
   "contact": {
-    "issues": "https://github.com/Qalcyo/Wyvtils/issues/",
-    "sources": "https://github.com/Qalcyo/Wyvtils/"
+    "issues": "https://github.com/Qalcyo/Rysm/issues/",
+    "sources": "https://github.com/Qalcyo/Rysm/"
   },
   "license": "GNU Lesser General Public License version 3 (LGPLv3)",
   "environment": "client",
@@ -17,18 +17,18 @@
     "client": [
       {
         "adapter": "kotlin",
-        "value": "xyz.qalcyo.wyvtils.seventeen.Wyvtils"
+        "value": "xyz.qalcyo.rysm.seventeen.Rysm"
       }
     ],
     "preLaunch": [
       "gg.essential.loader.stage0.EssentialSetupPreLaunch"
     ],
     "modmenu": [
-      "xyz.qalcyo.wyvtils.seventeen.config.WyvtilsModMenu"
+      "xyz.qalcyo.rysm.seventeen.config.RysmModMenu"
     ]
   },
   "mixins": [
-    "mixins.wyvtils.json"
+    "mixins.rysm.json"
   ],
   "depends": {
     "fabricloader": ">=0.11.6",

@@ -1,6 +1,6 @@
 /*
- * Wyvtils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Wyvtils
+ * Rysm, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Rysm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -26,8 +26,8 @@ compileKotlin {
     }
 }
 buildConfig {
-    className('WyvtilsInfo')
-    packageName('xyz.qalcyo.wyvtils.core')
+    className('RysmInfo')
+    packageName('xyz.qalcyo.rysm.core')
 
     buildConfigField('String', 'NAME', "\"${mod_name}\"")
     buildConfigField('String', 'VER', "\"${mod_ver}\"")

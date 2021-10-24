@@ -16,30 +16,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        maven {
-            name = 'SonaType'
-            url = 'https://oss.sonatype.org/content/repositories/snapshots/'
-        }
-        maven {
-            name = 'Fabric'
-            url = 'https://maven.fabricmc.net/'
-        }
-        maven {
-            name = 'Jitpack'
-            url = 'https://jitpack.io/'
-        }
+package xyz.qalcyo.rysm.eight.mixin;
 
-        gradlePluginPortal()
-        mavenCentral()
-        mavenLocal()
-    }
+import net.minecraft.client.gui.GuiIngame;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
+
+@Mixin(GuiIngame.class)
+public interface GuiIngameAccessor {
+
+    @Accessor
+    String getDisplayedTitle();
+
+    @Accessor
+    void setDisplayedTitle(String title);
+
+    @Accessor
+    void setDisplayedSubTitle(String title);
 }
-
-rootProject.name = mod_name
-include(
-        'core',
-        '1.8.9',
-        '1.17.1'
-)
