@@ -47,7 +47,7 @@ object Listener {
         )
     }
 
-    private val cache: Cache<String, String> = Caffeine.newBuilder().executor(POOL).maximumSize(5000).build()
+    val cache: Cache<String, String> = Caffeine.newBuilder().executor(POOL).maximumSize(5000).build()
     private val regex = Pattern.compile("(?i)§[0-9A-FK-OR]")
     private var cachedUsername = ""
 

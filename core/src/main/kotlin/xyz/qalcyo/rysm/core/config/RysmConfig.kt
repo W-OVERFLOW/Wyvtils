@@ -424,6 +424,7 @@ object RysmConfig: Vigilant(
                 14 -> ChatColor.YELLOW.toString()
                 else -> ChatColor.WHITE.toString()
             }
+            Listener.cache.invalidateAll()
         }
         registerListener("hideLocraw") { boolean: Boolean ->
             hideLocraw = boolean
