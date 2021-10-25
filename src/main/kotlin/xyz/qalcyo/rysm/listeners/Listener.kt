@@ -203,6 +203,7 @@ object Listener {
                     else -> ChatColor.WHITE.toString()
                 }
                 changeTextColor = false
+                HighlightManager.cache.invalidateAll()
             }
         }
     }
