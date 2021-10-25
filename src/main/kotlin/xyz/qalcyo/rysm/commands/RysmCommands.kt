@@ -1,6 +1,6 @@
 /*
- * Wyvtils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Wyvtils
+ * Rysm, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Rysm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -30,7 +30,7 @@ import xyz.qalcyo.rysm.config.RysmConfig
 import xyz.qalcyo.rysm.utils.HypixelUtils
 
 @Suppress("unused")
-object WyvtilsCommands : Command(Rysm.MODID, true) {
+object RysmCommands : Command(Rysm.MODID, true) {
 
     override val commandAliases = setOf(
         Alias("wyvtilities"),

@@ -1,6 +1,6 @@
 /*
- * Wyvtils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Wyvtils
+ * Rysm, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Rysm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -435,23 +435,6 @@ object RysmConfig :
         category = "Titles"
     )
     var titleShadow = true
-
-    @Property(
-        type = PropertyType.SELECTOR,
-        name = "Chat Type 1",
-        category = "Chat Switcher",
-        options = ["All", "Party", "Guild", "Officer"]
-    )
-    var chatType1 = 0
-
-    @Property(
-        type = PropertyType.SELECTOR,
-        name = "Chat Type 2",
-        category = "Chat Switcher",
-        options = ["All", "Party", "Guild", "Officer", "None"]
-    )
-    var chatType2 = 0
-
 
     @Property(
         type = PropertyType.SWITCH,

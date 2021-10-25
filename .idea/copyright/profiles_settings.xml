@@ -1,7 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="Wyvtils GNU LGPL 3.0">
+  <settings default="Rysm GNU LGPL 3.0">
     <module2copyright>
-      <element module="Project Files" copyright="Wyvtils GNU LGPL 3.0" />
+      <element module="Project Files" copyright="Rysm GNU LGPL 3.0" />
     </module2copyright>
     <LanguageOptions name="JAVA">
       <option name="fileTypeOverride" value="3" />

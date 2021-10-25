@@ -1,6 +1,6 @@
 /*
- * Wyvtils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Wyvtils
+ * Rysm, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Rysm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -33,7 +33,7 @@ class RysmMixinPlugin : IMixinConfigPlugin {
 
     override fun shouldApplyMixin(targetClassName: String, mixinClassName: String): Boolean {
         if (!mixinClassName.startsWith("xyz.qalcyo.rysm.mixin")) {
-            println("how did mixin $mixinClassName for $targetClassName get here lmao")
+            println("How did $mixinClassName for $targetClassName get here???")
             return false
         }
         return true

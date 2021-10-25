@@ -1,6 +1,6 @@
 /*
- * Wyvtils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Wyvtils
+ * Rysm, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Rysm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -31,7 +31,7 @@ import org.lwjgl.input.Keyboard
 import xyz.qalcyo.requisite.Requisite
 import xyz.qalcyo.requisite.core.keybinds.KeyBind
 import xyz.qalcyo.requisite.core.keybinds.KeyBinds
-import xyz.qalcyo.rysm.commands.WyvtilsCommands
+import xyz.qalcyo.rysm.commands.RysmCommands
 import xyz.qalcyo.rysm.config.RysmConfig
 import xyz.qalcyo.rysm.listeners.HighlightManager
 import xyz.qalcyo.rysm.listeners.Listener
@@ -108,7 +108,7 @@ object Rysm {
         EVENT_BUS.register(HypixelUtils)
         Requisite.getInstance().eventBus.register(HighlightManager)
         Requisite.getInstance().eventBus.register(HypixelUtils)
-        WyvtilsCommands.register()
+        RysmCommands.register()
         Requisite.getInstance().keyBindRegistry.register(titleKeybind)
         Requisite.getInstance().keyBindRegistry.register(sidebarKeybind)
     }

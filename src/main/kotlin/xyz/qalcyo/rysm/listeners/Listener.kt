@@ -1,6 +1,6 @@
 /*
- * Wyvtils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Wyvtils
+ * Rysm, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Rysm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -100,15 +100,28 @@ object Listener {
                             if (unformattedText.contains(triggers)) {
                                 victoryDetected = true
                                 if (RysmConfig.autoGetGEXP) {
-                                    if (HypixelUtils.getGEXP()) {
-                                        Requisite.getInstance().notifications
-                                            .push(
-                                                "Rysm",
-                                                "You currently have " + HypixelUtils.gexp + " guild EXP."
-                                            )
+                                    if (RysmConfig.gexpMode == 0) {
+                                        if (HypixelUtils.getGEXP()) {
+                                            Requisite.getInstance().notifications
+                                                .push(
+                                                    "Rysm",
+                                                    "You currently have " + HypixelUtils.gexp + " daily guild EXP."
+                                                )
+                                        } else {
+                                            Requisite.getInstance().notifications
+                                                .push("Rysm", "There was a problem trying to get your GEXP.")
+                                        }
                                     } else {
-                                        Requisite.getInstance().notifications
-                                            .push("Rysm", "There was a problem trying to get your GEXP.")
+                                        if (HypixelUtils.getWeeklyGEXP()) {
+                                            Requisite.getInstance().notifications
+                                                .push(
+                                                    "Rysm",
+                                                    "You currently have " + HypixelUtils.gexp + " weekly guild EXP."
+                                                )
+                                        } else {
+                                            Requisite.getInstance().notifications
+                                                .push("Rysm", "There was a problem trying to get your GEXP.")
+                                        }
                                     }
                                 }
                                 if (RysmConfig.autoGetWinstreak) {

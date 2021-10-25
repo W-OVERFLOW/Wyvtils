@@ -1,6 +1,6 @@
 /*
- * Wyvtils, a utility mod for 1.8.9.
- * Copyright (C) 2021 Wyvtils
+ * Rysm, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Rysm
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -19,55 +19,45 @@
 package xyz.qalcyo.rysm.utils
 
 import gg.essential.api.EssentialAPI
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import net.minecraft.util.Util
-import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion
-import xyz.qalcyo.rysm.Rysm
-import xyz.qalcyo.rysm.Rysm.mc
 import org.apache.http.HttpResponse
 import org.apache.http.client.HttpClient
 import org.apache.http.client.config.RequestConfig
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.HttpClientBuilder
-import xyz.qalcyo.requisite.Requisite
-import xyz.qalcyo.rysm.gui.DownloadGui
+import xyz.qalcyo.mango.Multithreading
+import xyz.qalcyo.rysm.Rysm
 import java.awt.Desktop
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-
+import java.text.ParseException
+import java.util.*
+import java.util.concurrent.Future
 
 object Updater {
     var latestTag = ""
     var shouldUpdate = false
+    var shouldShowNotification = false
     var updateUrl = ""
+    var updateFuture: Future<*>? = null
 
     /**
      * Stolen from SimpleTimeChanger under AGPLv3
      * https://github.com/My-Name-Is-Jeff/SimpleTimeChanger/blob/master/LICENSE
      */
     fun update() {
-        CoroutineScope(Dispatchers.IO + CoroutineName("${Rysm.MOD_NAME}-UpdateChecker")).launch {
+        updateFuture = Multithreading.submit {
             val latestRelease =
                 APIUtil.getJSONResponse("https://api.github.com/repos/Qalcyo/${Rysm.MODID}/releases/latest")
             latestTag = latestRelease.get("tag_name").asString
 
-            val currentVersion = ModVersion(Rysm.VERSION)
+            val currentVersion = RysmVersion.CURRENT
             latestTag = latestRelease.get("tag_name").asString.substringAfter("v")
-            val latestVersion = ModVersion(latestTag)
+            val latestVersion = RysmVersion.fromString(latestTag)
             if (currentVersion < latestVersion) {
                 updateUrl = latestRelease["assets"].asJsonArray[0].asJsonObject["browser_download_url"].asString
-                Requisite.getInstance().notifications
-                    .push(
-                        "Mod Update",
-                        "${Rysm.MOD_NAME} $latestTag is available!\nClick here to download it!"
-                    ) {
-                        EssentialAPI.getGuiUtil().openScreen(DownloadGui(mc.currentScreen))
-                    }
                 shouldUpdate = true
+                shouldShowNotification = true
             }
         }
     }
@@ -108,15 +98,20 @@ object Updater {
             println("Deleting old ${Rysm.MOD_NAME} jar file...")
             try {
                 val runtime = getJavaRuntime()
-                if (Util.getOSType() == Util.EnumOS.OSX) {
-                    println("On Mac, trying to open mods folder")
-                    Desktop.getDesktop().open(Rysm.jarFile.parentFile)
+                if (System.getProperty("os.name").lowercase(Locale.ENGLISH).contains("mac")) {
+                    val sipStatus = Runtime.getRuntime().exec("csrutil status")
+                    sipStatus.waitFor()
+                    if (!sipStatus.inputStream.use { it.bufferedReader().readText() }
+                            .contains("System Integrity Protection status: disabled.")) {
+                        println("SIP is NOT disabled, opening Finder.")
+                        Desktop.getDesktop().open(Rysm.jarFile.parentFile)
+                    }
                 }
                 println("Using runtime $runtime")
                 val file = File("config/Qalcyo/Deleter-1.2.jar")
                 println("\"$runtime\" -jar \"${file.absolutePath}\" \"${Rysm.jarFile.absolutePath}\"")
-                if (Util.getOSType() == Util.EnumOS.LINUX) {
-                    println("On Linux, giving Deleter jar execute permissions")
+                if (System.getProperty("os.name").lowercase(Locale.ENGLISH).containsAny("linux", "unix")) {
+                    println("On Linux, giving Deleter jar execute permissions...")
                     Runtime.getRuntime()
                         .exec("chmod +x \"${file.absolutePath}\"")
                 }
@@ -145,51 +140,47 @@ object Updater {
     }
 
     /**
-     * Stolen from SimpleTimeChanger under AGPLv3
-     * https://github.com/My-Name-Is-Jeff/SimpleTimeChanger/blob/master/LICENSE
+     * Adapted from Kotlin under Apache License 2.0
+     * https://github.com/JetBrains/kotlin/blob/master/license/LICENSE.txt
      */
-    class ModVersion(private val versionString: String) : Comparable<ModVersion> {
+    class RysmVersion(val major: Int, val minor: Int, val patch: Int, val beta: Int) : Comparable<RysmVersion> {
+
+        private val version = versionOf(major, minor, patch, beta)
+
+        private fun versionOf(major: Int, minor: Int, patch: Int, beta: Int): Int {
+            require(major in 0..MAX_COMPONENT_VALUE && minor in 0..MAX_COMPONENT_VALUE && patch in 0..MAX_COMPONENT_VALUE && beta in 0..MAX_COMPONENT_VALUE) {
+                "Version components are out of range: $major.$minor.$patch-beta$beta"
+            }
+            return major.shl(16) + minor.shl(8) + patch + beta
+        }
+
+        override fun toString(): String = "$major.$minor.$patch-beta$beta"
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            val otherVersion = (other as? RysmVersion) ?: return false
+            return this.version == otherVersion.version
+        }
+
+        override fun hashCode(): Int = version
+
+        override fun compareTo(other: RysmVersion): Int = version - other.version
 
         companion object {
-            val regex = Regex("^(?<version>[\\d.]+)-?(?<type>\\D+)?(?<typever>\\d+\\.?\\d*)?\$")
-        }
+            const val MAX_COMPONENT_VALUE = 255
+            val regex = Regex("^(?<major>[0|1-9\\d*])\\.(?<minor>[0|1-9\\d*])\\.(?<patch>[0|1-9\\d*])(?:-beta)?(?<beta>.*)?\$")
 
-        private val matched by lazy {
-            regex.find(versionString)
-        }
-        private val isSafe = matched != null
+            val CURRENT: RysmVersion = fromString(Rysm.VERSION)
 
-        val version = matched!!.groups["version"]!!.value
-        private val versionArtifact = DefaultArtifactVersion(version)
-        private val specialVersionType by lazy {
-            val typeString = matched!!.groups["type"]?.value ?: return@lazy UpdateType.RELEASE
-
-            return@lazy UpdateType.values().find { typeString == it.prefix } ?: UpdateType.UNKNOWN
+            fun fromString(version: String): RysmVersion {
+                val match = regex.matchEntire(version)
+                if (match != null) {
+                    return RysmVersion(match.groups["major"]!!.value.toInt(), match.groups["minor"]!!.value.toInt(), match.groups["patch"]!!.value.toInt(), if (match.groups["beta"]?.value.isNullOrBlank()) 0 else match.groups["beta"]!!.value.toInt())
+                } else {
+                    throw ParseException("The string ($version) provided did not match the Wyvtils Version regex!", -1)
+                }
+            }
         }
-        private val specialVersion by lazy {
-            if (specialVersionType == UpdateType.RELEASE) return@lazy null
-            return@lazy matched!!.groups["typever"]?.value?.toDoubleOrNull()
-        }
-
-        override fun compareTo(other: ModVersion): Int {
-            if (!isSafe || !other.isSafe) return -1
-            return if (versionArtifact.compareTo(other.versionArtifact) == 0) {
-                if (specialVersionType.ordinal == other.specialVersionType.ordinal) {
-                    specialVersion!!.compareTo(other.specialVersion!!)
-                } else other.specialVersionType.ordinal - specialVersionType.ordinal
-            } else versionArtifact.compareTo(other.versionArtifact)
-        }
-    }
-
-    /**
-     * Stolen from SimpleTimeChanger under AGPLv3
-     * https://github.com/My-Name-Is-Jeff/SimpleTimeChanger/blob/master/LICENSE
-     */
-    enum class UpdateType(val prefix: String) {
-        UNKNOWN("unknown"),
-        RELEASE(""),
-        RELEASECANDIDATE("rc"),
-        PRERELEASE("beta"),
     }
 
 }
