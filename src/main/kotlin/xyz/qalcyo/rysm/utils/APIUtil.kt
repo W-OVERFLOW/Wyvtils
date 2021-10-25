@@ -29,6 +29,7 @@ import org.apache.http.impl.client.HttpClientBuilder
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.protocol.HttpContext
 import org.apache.http.util.EntityUtils
+import xyz.qalcyo.rysm.RysmInfo
 import java.net.URL
 import java.util.*
 
@@ -40,7 +41,7 @@ object APIUtil {
     private val parser = JsonParser()
 
     private val builder: HttpClientBuilder =
-        HttpClients.custom().setUserAgent("${Rysm.MOD_NAME}/${Rysm.VERSION}")
+        HttpClients.custom().setUserAgent("${RysmInfo.NAME}/${RysmInfo.VER}")
             .addInterceptorFirst { request: HttpRequest, _: HttpContext? ->
                 if (!request.containsHeader("Pragma")) request.addHeader("Pragma", "no-cache")
                 if (!request.containsHeader("Cache-Control")) request.addHeader("Cache-Control", "no-cache")

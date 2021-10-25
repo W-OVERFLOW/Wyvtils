@@ -26,6 +26,7 @@ import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.HttpClientBuilder
 import xyz.qalcyo.mango.Multithreading
 import xyz.qalcyo.rysm.Rysm
+import xyz.qalcyo.rysm.RysmInfo
 import java.awt.Desktop
 import java.io.File
 import java.io.FileOutputStream
@@ -48,7 +49,7 @@ object Updater {
     fun update() {
         updateFuture = Multithreading.submit {
             val latestRelease =
-                APIUtil.getJSONResponse("https://api.github.com/repos/Qalcyo/${Rysm.MODID}/releases/latest")
+                APIUtil.getJSONResponse("https://api.github.com/repos/Qalcyo/${RysmInfo.ID}/releases/latest")
             latestTag = latestRelease.get("tag_name").asString
 
             val currentVersion = RysmVersion.CURRENT
@@ -95,7 +96,7 @@ object Updater {
      */
     fun addShutdownHook() {
         EssentialAPI.getShutdownHookUtil().register {
-            println("Deleting old ${Rysm.MOD_NAME} jar file...")
+            println("Deleting old ${RysmInfo.NAME} jar file...")
             try {
                 val runtime = getJavaRuntime()
                 if (System.getProperty("os.name").lowercase(Locale.ENGLISH).contains("mac")) {
@@ -170,7 +171,7 @@ object Updater {
             const val MAX_COMPONENT_VALUE = 255
             val regex = Regex("^(?<major>[0|1-9\\d*])\\.(?<minor>[0|1-9\\d*])\\.(?<patch>[0|1-9\\d*])(?:-beta)?(?<beta>.*)?\$")
 
-            val CURRENT: RysmVersion = fromString(Rysm.VERSION)
+            val CURRENT: RysmVersion = fromString(RysmInfo.VER)
 
             fun fromString(version: String): RysmVersion {
                 val match = regex.matchEntire(version)

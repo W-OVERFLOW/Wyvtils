@@ -25,6 +25,7 @@ import gg.essential.elementa.WindowScreen
 import gg.essential.elementa.dsl.childOf
 import net.minecraft.client.gui.GuiScreen
 import xyz.qalcyo.rysm.Rysm
+import xyz.qalcyo.rysm.RysmInfo
 import xyz.qalcyo.rysm.utils.Updater
 import java.io.File
 
@@ -33,25 +34,25 @@ class DownloadGui(private val parent: GuiScreen): WindowScreen(restoreCurrentGui
         super.initScreen(width, height)
         EssentialAPI.getEssentialComponentFactory().buildConfirmationModal {
             this.text = "Are you sure you want to update?"
-            this.secondaryText = "(This will update from v${Rysm.VERSION} to ${Updater.latestTag})"
+            this.secondaryText = "(This will update from v${RysmInfo.VER} to ${Updater.latestTag})"
             this.onConfirm = {
                 EssentialAPI.getGuiUtil().openScreen(parent)
                 Multithreading.runAsync {
                     if (Updater.download(
                             Updater.updateUrl,
-                            File("mods/${Rysm.MOD_NAME} [1.8.9]-${Updater.latestTag.substringAfter("v")}.jar")
+                            File("mods/${RysmInfo.NAME} [1.8.9]-${Updater.latestTag.substringAfter("v")}.jar")
                         ) && Updater.download(
                             "https://github.com/Qalcyo/Deleter/releases/download/v1.2/Deleter-1.2.jar",
                             File(Rysm.modDir.parentFile, "Deleter-1.2.jar")
                         )
                     ) {
                         EssentialAPI.getNotifications()
-                            .push(Rysm.MOD_NAME, "The ingame updater has successfully installed the newest version.")
+                            .push(RysmInfo.NAME, "The ingame updater has successfully installed the newest version.")
                         Updater.addShutdownHook()
                         Updater.shouldUpdate = false
                     } else {
                         EssentialAPI.getNotifications().push(
-                            Rysm.MOD_NAME,
+                            RysmInfo.NAME,
                             "The ingame updater has NOT installed the newest version as something went wrong."
                         )
                     }

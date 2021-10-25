@@ -28,9 +28,8 @@ import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.util.EnumChatFormatting
 import xyz.qalcyo.requisite.Requisite
 import xyz.qalcyo.rysm.Rysm
-import xyz.qalcyo.rysm.Rysm.MODID
-import xyz.qalcyo.rysm.Rysm.MOD_NAME
 import xyz.qalcyo.rysm.Rysm.mc
+import xyz.qalcyo.rysm.RysmInfo
 import xyz.qalcyo.rysm.gui.ActionBarGui
 import xyz.qalcyo.rysm.gui.BossHealthGui
 import xyz.qalcyo.rysm.gui.DownloadGui
@@ -43,8 +42,8 @@ import java.io.File
 @Suppress("unused")
 object RysmConfig :
     Vigilant(
-        File(Rysm.modDir, "${MODID}.toml"),
-        "${EnumChatFormatting.DARK_PURPLE}${MOD_NAME}",
+        File(Rysm.modDir, "${RysmInfo.ID}.toml"),
+        "${EnumChatFormatting.DARK_PURPLE}${RysmInfo.NAME}",
         sortingBehavior = ConfigSorting
     ) {
 
@@ -252,7 +251,7 @@ object RysmConfig :
     fun openBossHealthGui() {
         if (bossBarCustomization) Requisite.getInstance().guiHelper.open(BossHealthGui())
         else Requisite.getInstance().notifications
-            .push(MOD_NAME, "You can't do that, you haven't enabled Bossbar Customization!")
+            .push(RysmInfo.NAME, "You can't do that, you haven't enabled Bossbar Customization!")
     }
 
     @Property(
@@ -383,7 +382,7 @@ object RysmConfig :
     fun openActionBarGui() {
         if (actionBarPosition && actionBarCustomization) Requisite.getInstance().guiHelper.open(ActionBarGui())
         else Requisite.getInstance().notifications
-            .push(MOD_NAME, "You can't do that, you don't have Action Bar position enabled!")
+            .push(RysmInfo.NAME, "You can't do that, you don't have Action Bar position enabled!")
     }
 
     @Property(
@@ -624,7 +623,7 @@ object RysmConfig :
     fun openSidebarGui() {
         if (sidebarPosition) Requisite.getInstance().guiHelper.open(SidebarGui())
         else Requisite.getInstance().notifications
-            .push(MOD_NAME, "You can't do that, you don't have Sidebar position enabled!")
+            .push(RysmInfo.NAME, "You can't do that, you don't have Sidebar position enabled!")
     }
 
     @Property(
@@ -673,39 +672,39 @@ object RysmConfig :
     @Property(
         type = PropertyType.BUTTON,
         name = "Update Now",
-        description = "Update $MOD_NAME by clicking the button.",
+        description = "Update ${RysmInfo.NAME} by clicking the button.",
         category = "Updater"
     )
     fun update() {
         if (Updater.shouldUpdate) Requisite.getInstance().guiHelper.open(DownloadGui(mc.currentScreen)) else Requisite.getInstance().notifications
-            .push(MOD_NAME, "No update had been detected at startup, and thus the update GUI has not been shown.")
+            .push(RysmInfo.NAME, "No update had been detected at startup, and thus the update GUI has not been shown.")
     }
 
     init {
         initialize()
         setCategoryDescription(
             "General",
-            "This category is for configuring general parts of $MOD_NAME."
+            "This category is for configuring general parts of ${RysmInfo.NAME}."
         )
         setCategoryDescription(
             "Action Bar",
-            "Configure action bar-related features in $MOD_NAME."
+            "Configure action bar-related features in ${RysmInfo.NAME}."
         )
         setCategoryDescription(
             "Text",
-            "Configure text-related features in $MOD_NAME."
+            "Configure text-related features in ${RysmInfo.NAME}."
         )
         setCategoryDescription(
             "GEXP",
-            "Configure GEXP-related features in $MOD_NAME."
+            "Configure GEXP-related features in ${RysmInfo.NAME}."
         )
         setCategoryDescription(
             "Bossbar",
-            "Configure bossbar-related features in $MOD_NAME."
+            "Configure bossbar-related features in ${RysmInfo.NAME}."
         )
         setCategoryDescription(
             "Hitboxes",
-            "Configure hitbox-related features in $MOD_NAME."
+            "Configure hitbox-related features in ${RysmInfo.NAME}."
         )
         registerListener("textColor") { _: Int ->
             Listener.changeTextColor = true

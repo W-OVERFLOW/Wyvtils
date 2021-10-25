@@ -22,6 +22,7 @@ plugins {
     id "com.github.johnrengelman.shadow" version "6.1.0"
     id "net.minecraftforge.gradle.forge" version "ddb1eb0"
     id "org.spongepowered.mixin" version "d5f9873"
+    id "com.github.gmazzo.buildconfig" version "3.0.1"
 }
 
 version = mod_ver
@@ -33,7 +34,14 @@ sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
+buildConfig {
+    className('RysmInfo')
+    packageName('xyz.qalcyo.rysm')
 
+    buildConfigField('String', 'NAME', "\"${mod_name}\"")
+    buildConfigField('String', 'VER', "\"${mod_ver}\"")
+    buildConfigField('String', 'ID', "\"${mod_id}\"")
+}
 compileKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
@@ -45,9 +53,6 @@ minecraft {
     version = "1.8.9-11.15.1.2318-1.8.9"
     runDir = "run"
     mappings = "stable_22"
-    replace("@NAME@", mod_name)
-    replace("@VER@": mod_ver)
-    replace("@ID@", mod_id)
     makeObfSourceJar = false
 
     clientRunArgs += "--tweakClass xyz.qalcyo.requisiteessentialloader.RequisiteEssentialTweaker"
@@ -72,7 +77,6 @@ repositories {
 }
 
 dependencies {
-    include "com.github.Qalcyo:RequisiteEssentialLoader:0a78589683"
     include ("gg.essential:loader-launchwrapper:1.1.1") {
         transitive = false
     }

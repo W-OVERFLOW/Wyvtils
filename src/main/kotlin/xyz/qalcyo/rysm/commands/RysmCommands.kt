@@ -26,11 +26,13 @@ import net.minecraft.util.EnumChatFormatting
 import xyz.qalcyo.mango.Multithreading
 import xyz.qalcyo.requisite.Requisite
 import xyz.qalcyo.rysm.Rysm
+import xyz.qalcyo.rysm.RysmInfo
+import xyz.qalcyo.rysm.RysmInfo.NAME
 import xyz.qalcyo.rysm.config.RysmConfig
 import xyz.qalcyo.rysm.utils.HypixelUtils
 
 @Suppress("unused")
-object RysmCommands : Command(Rysm.MODID, true) {
+object RysmCommands : Command(RysmInfo.ID, true) {
 
     override val commandAliases = setOf(
         Alias("wyvtilities"),
@@ -42,12 +44,12 @@ object RysmCommands : Command(Rysm.MODID, true) {
         Requisite.getInstance().guiHelper.open(RysmConfig.gui())
     }
 
-    @SubCommand("config", description = "Opens the config GUI for ${Rysm.MOD_NAME}")
+    @SubCommand("config", description = "Opens the config GUI for $NAME")
     fun config() {
         Requisite.getInstance().guiHelper.open(RysmConfig.gui())
     }
 
-    @SubCommand("setkey", description = "Sets the API key for ${Rysm.MOD_NAME}.")
+    @SubCommand("setkey", description = "Sets the API key for $NAME.")
     fun setKey(@DisplayName("api key") apiKey: String) {
         Multithreading.runAsync {
             try {
@@ -78,46 +80,46 @@ object RysmCommands : Command(Rysm.MODID, true) {
                 if (type == null) {
                     if (HypixelUtils.getGEXP(username)) {
                         Requisite.getInstance().notifications
-                            .push(Rysm.MOD_NAME, "$username currently has " + HypixelUtils.gexp + " guild EXP.")
+                            .push(NAME, "$username currently has " + HypixelUtils.gexp + " guild EXP.")
                     } else {
                         Requisite.getInstance().notifications
-                            .push(Rysm.MOD_NAME, "There was a problem trying to get $username's GEXP.")
+                            .push(NAME, "There was a problem trying to get $username's GEXP.")
                     }
                 } else {
                     if (type == "daily") {
                         if (HypixelUtils.getGEXP(username)) {
                             Requisite.getInstance().notifications
                                 .push(
-                                    Rysm.MOD_NAME,
+                                    NAME,
                                     "$username currently has " + HypixelUtils.gexp + " daily guild EXP."
                                 )
                         } else {
                             Requisite.getInstance().notifications
-                                .push(Rysm.MOD_NAME, "There was a problem trying to get $username's daily GEXP.")
+                                .push(NAME, "There was a problem trying to get $username's daily GEXP.")
                         }
                     } else if (type == "weekly") {
                         if (HypixelUtils.getWeeklyGEXP(username)) {
                             Requisite.getInstance().notifications
                                 .push(
-                                    Rysm.MOD_NAME,
+                                    NAME,
                                     "$username currently has " + HypixelUtils.gexp + " weekly guild EXP."
                                 )
                         } else {
                             Requisite.getInstance().notifications
-                                .push(Rysm.MOD_NAME, "There was a problem trying to get $username's weekly GEXP.")
+                                .push(NAME, "There was a problem trying to get $username's weekly GEXP.")
                         }
                     } else {
                         Requisite.getInstance().notifications
-                            .push(Rysm.MOD_NAME, "The type argument was not valid.")
+                            .push(NAME, "The type argument was not valid.")
                     }
                 }
             } else {
                 if (HypixelUtils.getGEXP()) {
                     Requisite.getInstance().notifications
-                        .push(Rysm.MOD_NAME, "You currently have " + HypixelUtils.gexp + " guild EXP.")
+                        .push(NAME, "You currently have " + HypixelUtils.gexp + " guild EXP.")
                 } else {
                     Requisite.getInstance().notifications
-                        .push(Rysm.MOD_NAME, "There was a problem trying to get your GEXP.")
+                        .push(NAME, "There was a problem trying to get your GEXP.")
                 }
             }
         }
@@ -135,13 +137,13 @@ object RysmCommands : Command(Rysm.MODID, true) {
                     if (HypixelUtils.getWinstreak(username, gamemode)) {
                         Requisite.getInstance().notifications
                             .push(
-                                Rysm.MOD_NAME,
+                                NAME,
                                 "$username currently has a " + HypixelUtils.winstreak + " winstreak in $gamemode."
                             )
                     } else {
                         Requisite.getInstance().notifications
                             .push(
-                                Rysm.MOD_NAME,
+                                NAME,
                                 "There was a problem trying to get $username's winstreak in $gamemode."
                             )
                     }
@@ -149,21 +151,21 @@ object RysmCommands : Command(Rysm.MODID, true) {
                     if (HypixelUtils.getWinstreak(username)) {
                         Requisite.getInstance().notifications
                             .push(
-                                Rysm.MOD_NAME,
+                                NAME,
                                 "$username currently has a " + HypixelUtils.winstreak + " winstreak."
                             )
                     } else {
                         Requisite.getInstance().notifications
-                            .push(Rysm.MOD_NAME, "There was a problem trying to get $username's winstreak.")
+                            .push(NAME, "There was a problem trying to get $username's winstreak.")
                     }
                 }
             } else {
                 if (HypixelUtils.getWinstreak()) {
                     Requisite.getInstance().notifications
-                        .push(Rysm.MOD_NAME, "You currently have a " + HypixelUtils.winstreak + " winstreak.")
+                        .push(NAME, "You currently have a " + HypixelUtils.winstreak + " winstreak.")
                 } else {
                     Requisite.getInstance().notifications
-                        .push(Rysm.MOD_NAME, "There was a problem trying to get your winstreak.")
+                        .push(NAME, "There was a problem trying to get your winstreak.")
                 }
             }
         }

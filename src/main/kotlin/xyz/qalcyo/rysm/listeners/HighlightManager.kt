@@ -25,6 +25,7 @@ import xyz.qalcyo.eventbus.SubscribeEvent
 import xyz.qalcyo.mango.Strings
 import xyz.qalcyo.requisite.core.events.FontRendererEvent
 import xyz.qalcyo.rysm.Rysm
+import xyz.qalcyo.rysm.RysmInfo
 import xyz.qalcyo.rysm.config.RysmConfig
 import java.lang.String.format
 import java.util.concurrent.LinkedBlockingQueue
@@ -42,7 +43,7 @@ object HighlightManager {
     ) { r ->
         Thread(
             r,
-            format("Rysm Highlight Thread %s", counter.incrementAndGet())
+            format("${RysmInfo.NAME} Highlight Thread %s", counter.incrementAndGet())
         )
     }
 

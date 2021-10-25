@@ -43,33 +43,30 @@ import java.io.File
 
 @Suppress("MemberVisibilityCanBePrivate")
 @Mod(
-    modid = Rysm.MODID,
-    name = Rysm.MOD_NAME,
-    version = Rysm.VERSION,
+    modid = RysmInfo.ID,
+    name = RysmInfo.NAME,
+    version = RysmInfo.VER,
     acceptedMinecraftVersions = "[1.8.9]",
     clientSideOnly = true,
     modLanguageAdapter = "gg.essential.api.utils.KotlinAdapter"
 )
 object Rysm {
-    const val MODID = "@ID@"
-    const val MOD_NAME = "@NAME@"
-    const val VERSION = "@VER@"
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
     lateinit var jarFile: File
-    val modDir = File(File(File(File(mc.mcDataDir, "config"), "Qalcyo"), MOD_NAME), "1.8.9")
+    val modDir = File(File(File(File(mc.mcDataDir, "config"), "Qalcyo"), RysmInfo.NAME), "1.8.9")
     @JvmField
     var isConfigInitialized = false
 
     fun sendMessage(message: String?) {
-        Requisite.getInstance().chatHelper.send("${EnumChatFormatting.DARK_PURPLE}[$MOD_NAME] ", message)
+        Requisite.getInstance().chatHelper.send("${EnumChatFormatting.DARK_PURPLE}[${RysmInfo.NAME}] ", message)
     }
 
-    val titleKeybind: KeyBind = KeyBinds.from("Clear Title", MOD_NAME, Keyboard.KEY_NONE) {
+    val titleKeybind: KeyBind = KeyBinds.from("Clear Title", RysmInfo.NAME, Keyboard.KEY_NONE) {
         (mc.ingameGUI as AccessorGuiIngame).displayedTitle = ""
         (mc.ingameGUI as AccessorGuiIngame).setDisplayedSubTitle("")
     }
-    val sidebarKeybind: KeyBind = KeyBinds.from("Toggle Sidebar Temporarily", MOD_NAME, Keyboard.KEY_NONE) {
+    val sidebarKeybind: KeyBind = KeyBinds.from("Toggle Sidebar Temporarily", RysmInfo.NAME, Keyboard.KEY_NONE) {
         RysmConfig.sidebar = !RysmConfig.sidebar
     }
 
@@ -120,8 +117,8 @@ object Rysm {
             RysmConfig.markDirty()
             RysmConfig.writeData()
             Requisite.getInstance().notifications.push(
-                MOD_NAME,
-                "Bossbar Customizer (the mod) has been detected, and so the $MOD_NAME Bossbar related features have been disabled."
+                RysmInfo.NAME,
+                "Bossbar Customizer (the mod) has been detected, and so the ${RysmInfo.NAME} Bossbar related features have been disabled."
             )
         }
         Updater.update()
