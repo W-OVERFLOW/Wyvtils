@@ -21,21 +21,29 @@ package xyz.qalcyo.rysm.eight
 import gg.essential.lib.kbrewster.eventbus.Subscribe
 import gg.essential.universal.UDesktop
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.FontRenderer
+import net.minecraft.client.gui.GuiUtilRenderComponents
+import net.minecraft.util.IChatComponent
 import net.minecraftforge.common.MinecraftForge.EVENT_BUS
+import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import org.lwjgl.input.Keyboard
+import skytils.skytilsmod.features.impl.handlers.ChatTabs
 import xyz.qalcyo.mango.Multithreading
 import xyz.qalcyo.requisite.Requisite
 import xyz.qalcyo.requisite.core.keybinds.KeyBinds
 import xyz.qalcyo.rysm.core.RysmCore
+import xyz.qalcyo.rysm.core.RysmCore.eventBus
 import xyz.qalcyo.rysm.core.RysmInfo
 import xyz.qalcyo.rysm.core.config.RysmConfig
 import xyz.qalcyo.rysm.core.listener.events.ChatRefreshEvent
+import xyz.qalcyo.rysm.core.listener.events.MessageRenderEvent
 import xyz.qalcyo.rysm.core.utils.MinecraftVersions
 import xyz.qalcyo.rysm.core.utils.Updater
 import xyz.qalcyo.rysm.eight.commands.RysmCommand
@@ -44,6 +52,7 @@ import xyz.qalcyo.rysm.eight.mixin.GuiIngameAccessor
 import xyz.qalcyo.rysm.eight.mixin.GuiNewChatAccessor
 import java.io.File
 import java.net.URI
+import java.util.*
 
 @Mod(
     modid = RysmInfo.ID,
@@ -54,6 +63,8 @@ import java.net.URI
     modLanguageAdapter = "gg.essential.api.utils.KotlinAdapter"
 )
 object Rysm {
+
+    var isSkytils = false
 
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
@@ -70,7 +81,7 @@ object Rysm {
     fun onInit(e: FMLInitializationEvent) {
         RysmCore.onInitialization(MinecraftVersions.EIGHT)
         RysmCommand.register()
-        RysmCore.eventBus.register(this)
+        eventBus.register(this)
         EVENT_BUS.register(this)
         Requisite.getInstance().keyBindRegistry.register(
             KeyBinds.from(
@@ -81,6 +92,11 @@ object Rysm {
                 (mc.ingameGUI as GuiIngameAccessor).displayedTitle = ""
                 (mc.ingameGUI as GuiIngameAccessor).setDisplayedSubTitle("")
             })
+    }
+
+    @Mod.EventHandler
+    fun onPostInit(e: FMLPostInitializationEvent) {
+        isSkytils = Loader.isModLoaded("skytils")
     }
 
     @Mod.EventHandler
@@ -139,5 +155,20 @@ object Rysm {
                 )
             }
         }
+    }
+
+    fun handleChatSent(p_178908_0_: IChatComponent, p_178908_1_: Int, p_178908_2_: FontRenderer, p_178908_3_: Boolean, p_178908_4_: Boolean): List<IChatComponent> {
+        if (isSkytils) {
+            if (!ChatTabs.shouldAllow(p_178908_0_)) return Collections.emptyList()
+        }
+        val event = MessageRenderEvent(p_178908_0_.unformattedText, false)
+        eventBus.post(event)
+        return if (event.cancelled) emptyList() else GuiUtilRenderComponents.splitText(
+            p_178908_0_,
+            p_178908_1_,
+            p_178908_2_,
+            p_178908_3_,
+            p_178908_4_
+        )
     }
 }

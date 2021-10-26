@@ -167,7 +167,9 @@ mixin {
 }
 
 sourceSets {
+    dummy
     main {
+        compileClasspath += dummy.output
         ext.refMap = "mixins.rysm.refmap.json"
     }
 }

@@ -13,7 +13,8 @@
     "MinecraftMixin",
     "RenderEntityItemMixin",
     "RenderManagerMixin",
-    "Sk1erOAMAnimationHandlerMixin"
+    "Sk1erOAMAnimationHandlerMixin",
+    "SkytilsChatTabsMixin"
   ],
   "verbose": true
 }
