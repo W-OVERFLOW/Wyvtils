@@ -104,19 +104,19 @@ object Updater {
                     if (!sipStatus.inputStream.use { it.bufferedReader().readText() }
                             .contains("System Integrity Protection status: disabled.")) {
                         println("SIP is NOT disabled, opening Finder.")
-                        Desktop.getDesktop().open(RysmCore.jarFile!!.parentFile)
+                        Desktop.getDesktop().open(RysmCore.jarFile.parentFile)
                     }
                 }
                 println("Using runtime $runtime")
                 val file = File("config/Qalcyo/Deleter-1.2.jar")
-                println("\"$runtime\" -jar \"${file.absolutePath}\" \"${RysmCore.jarFile!!.absolutePath}\"")
+                println("\"$runtime\" -jar \"${file.absolutePath}\" \"${RysmCore.jarFile.absolutePath}\"")
                 if (System.getProperty("os.name").lowercase(Locale.ENGLISH).containsAny("linux", "unix")) {
                     println("On Linux, giving Deleter jar execute permissions...")
                     Runtime.getRuntime()
                         .exec("chmod +x \"${file.absolutePath}\"")
                 }
                 Runtime.getRuntime()
-                    .exec("\"$runtime\" -jar \"${file.absolutePath}\" \"${RysmCore.jarFile!!.absolutePath}\"")
+                    .exec("\"$runtime\" -jar \"${file.absolutePath}\" \"${RysmCore.jarFile.absolutePath}\"")
             } catch (e: Throwable) {
                 e.printStackTrace()
             }

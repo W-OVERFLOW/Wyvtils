@@ -58,8 +58,8 @@ object Rysm : ClientModInitializer {
     override fun onInitializeClient() {
         RysmCore.modDir =
             File(File(File(FabricLoader.getInstance().configDir.toFile(), "Qalcyo"), "Rysm"), "1.17.1")
-        if (!RysmCore.modDir!!.exists()) {
-            RysmCore.modDir!!.mkdirs()
+        if (!RysmCore.modDir.exists()) {
+            RysmCore.modDir.mkdirs()
         }
         RysmCore.jarFile = File(javaClass.protectionDomain.codeSource.location.toURI())
         RysmCore.onInitialization(MinecraftVersions.SEVENTEEN)

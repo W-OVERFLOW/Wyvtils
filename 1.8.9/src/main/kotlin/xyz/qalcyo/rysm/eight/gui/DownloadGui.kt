@@ -42,7 +42,7 @@ class DownloadGui: WindowScreen(restoreCurrentGuiOnClose = true) {
                             File("mods/${RysmInfo.NAME} [${RysmCore.currentVersion.versionString}]-${Updater.latestTag.substringAfter("v")}.jar")
                         ) && Updater.download(
                             "https://github.com/Qalcyo/Deleter/releases/download/v1.2/Deleter-1.2.jar",
-                            File(RysmCore.modDir!!.parentFile.parentFile, "Deleter-1.2.jar")
+                            File(RysmCore.modDir.parentFile.parentFile, "Deleter-1.2.jar")
                         )
                     ) {
                         EssentialAPI.getNotifications()

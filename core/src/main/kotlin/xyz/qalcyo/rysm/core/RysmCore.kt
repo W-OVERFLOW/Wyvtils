@@ -29,8 +29,8 @@ import xyz.qalcyo.rysm.core.utils.Updater
 import java.io.File
 
 object RysmCore {
-    var jarFile: File? = null
-    var modDir: File? = null
+    lateinit var jarFile: File
+    lateinit var modDir: File
     var currentVersion: MinecraftVersions = MinecraftVersions.UNSET
     val eventBus = eventbus {
         invoker { LMFInvoker() }

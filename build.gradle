@@ -40,7 +40,6 @@ allprojects {
         shade
         implementation.extendsFrom(shade)
     }
-
     repositories {
         mavenCentral()
 
