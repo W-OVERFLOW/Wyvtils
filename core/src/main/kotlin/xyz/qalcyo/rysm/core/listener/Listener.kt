@@ -26,6 +26,7 @@ import xyz.qalcyo.mango.Strings
 import xyz.qalcyo.rysm.core.config.RysmConfig
 import xyz.qalcyo.rysm.core.listener.events.*
 import xyz.qalcyo.rysm.core.listener.events.entity.*
+import xyz.qalcyo.rysm.core.utils.ColorUtils
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
@@ -43,7 +44,7 @@ object Listener {
     ) { r ->
         Thread(
             r,
-            java.lang.String.format("Rysm Highlight Thread %s", counter.incrementAndGet())
+            String.format("Rysm Highlight Thread %s", counter.incrementAndGet())
         )
     }
 
@@ -80,6 +81,7 @@ object Listener {
 
     @Subscribe
     fun onHitbox(e: HitboxRenderEvent) {
+
         if (!RysmConfig.hitbox) {
             e.cancelled = true
             return
@@ -98,17 +100,17 @@ object Listener {
         }
         if (e.cancelled) return
         if (RysmConfig.hitboxBox) {
-            e.boxColor = if (e.distance <= 3.0 && e.distance != -1.0) RysmConfig.hitboxCrosshairColor else RysmConfig.hitboxColor
+            e.boxColor = if (RysmConfig.hitboxChroma) ColorUtils.timeBasedChroma() else { if (e.distance <= 3.0 && e.distance != -1.0) RysmConfig.hitboxCrosshairColor.rgb else RysmConfig.hitboxColor.rgb }
         } else {
             e.cancelBox = true
         }
         if (RysmConfig.hitboxEyeLine) {
-            e.eyeLineColor = RysmConfig.hitboxEyelineColor
+            e.eyeLineColor = if (RysmConfig.hitboxLineChroma) ColorUtils.timeBasedChroma() else RysmConfig.hitboxEyelineColor.rgb
         } else {
             e.cancelEyeLine = true
         }
         if (RysmConfig.hitboxLineOfSight) {
-            e.lineOfSightColor = RysmConfig.hitboxLineOfSightColor
+            e.lineOfSightColor = if (RysmConfig.hitboxLineOfSightChroma) ColorUtils.timeBasedChroma() else RysmConfig.hitboxLineOfSightColor.rgb
         } else {
             e.cancelEyeLine = true
         }

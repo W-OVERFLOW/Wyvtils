@@ -312,6 +312,14 @@ object RysmConfig: Vigilant(
 
     @Property(
         type = PropertyType.SWITCH,
+        name = "Toggle Hitbox Chroma",
+        category = "Hitbox",
+        description = "Toggle hitbox chroma to the color."
+    )
+    var hitboxChroma = false
+
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Toggle Line Hitbox",
         category = "Hitbox",
         description = "Toggle the eye line hitbox of entities."
@@ -328,12 +336,19 @@ object RysmConfig: Vigilant(
 
     @Property(
         type = PropertyType.SWITCH,
+        name = "Toggle Hitbox Line Chroma",
+        category = "Hitbox",
+        description = "Toggle hitbox eye line chroma to the color."
+    )
+    var hitboxLineChroma = false
+
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Toggle Hitbox Line of Sight",
         category = "Hitbox",
         description = "Toggle the hitbox of entities."
     )
     var hitboxLineOfSight = true
-
 
     @Property(
         type = PropertyType.COLOR,
@@ -342,6 +357,14 @@ object RysmConfig: Vigilant(
         description = "Change the color of the hitbox's line of sight.",
     )
     var hitboxLineOfSightColor: Color = Color(255, 0, 0, 255)
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Hitbox Line of Sight Chroma",
+        category = "Hitbox",
+        description = "Toggle hitbox line of sight chroma to the color."
+    )
+    var hitboxLineOfSightChroma = false
 
     @Property(
         type = PropertyType.SWITCH,

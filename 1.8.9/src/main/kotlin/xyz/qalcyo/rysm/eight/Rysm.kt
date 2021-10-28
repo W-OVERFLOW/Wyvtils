@@ -33,6 +33,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
+import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion
 import org.lwjgl.input.Keyboard
 import skytils.skytilsmod.features.impl.handlers.ChatTabs
 import xyz.qalcyo.mango.Multithreading
@@ -65,6 +66,7 @@ import java.util.*
 object Rysm {
 
     var isSkytils = false
+    var isNewToggleChat = false
 
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
@@ -97,6 +99,14 @@ object Rysm {
     @Mod.EventHandler
     fun onPostInit(e: FMLPostInitializationEvent) {
         isSkytils = Loader.isModLoaded("skytils")
+        isNewToggleChat = run {
+            for (mod in Loader.instance().activeModList) {
+                if (mod.modId == "togglechatmod") {
+                    return@run DefaultArtifactVersion(mod.version) > DefaultArtifactVersion("3.1.1")
+                }
+            }
+            return@run false
+        }
     }
 
     @Mod.EventHandler
@@ -171,4 +181,6 @@ object Rysm {
             p_178908_4_
         )
     }
+
+
 }

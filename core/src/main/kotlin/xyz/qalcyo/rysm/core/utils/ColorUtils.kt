@@ -16,8 +16,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.rysm.core.listener.events
+package xyz.qalcyo.rysm.core.utils
 
-import xyz.qalcyo.rysm.core.listener.events.entity.Entity
+import java.awt.Color
 
-data class HitboxRenderEvent(val entity: Entity, val distance: Double, var boxColor: Int, var lineOfSightColor: Int, var eyeLineColor: Int, override var cancelled: Boolean = false, var cancelBox: Boolean, var cancelLineOfSight: Boolean, var cancelEyeLine: Boolean): Event()
+object ColorUtils {
+
+    fun timeBasedChroma(): Int {
+        val l = System.currentTimeMillis()
+        return Color.HSBtoRGB(l % 2000L / 2000.0f, 1.0f, 1.0f)
+    }
+
+    fun getRed(rgba: Int): Int {
+        return (rgba shr 16) and 0xFF
+    }
+
+    fun getGreen(rgba: Int): Int {
+        return (rgba shr 8) and 0xFF
+    }
+
+    fun getBlue(rgba: Int): Int {
+        return (rgba shr 0) and 0xFF
+    }
+
+    fun getAlpha(rgba: Int): Int {
+        return (rgba shr 24) and 0xFF
+    }
+}
