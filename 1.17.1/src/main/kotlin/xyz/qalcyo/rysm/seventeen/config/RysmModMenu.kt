@@ -22,6 +22,9 @@ import com.terraformersmc.modmenu.api.ConfigScreenFactory
 import com.terraformersmc.modmenu.api.ModMenuApi
 import xyz.qalcyo.rysm.core.config.RysmConfig
 
+/**
+ * Handles integration of the Mod Menu mod.
+ */
 class RysmModMenu: ModMenuApi {
     override fun getModConfigScreenFactory(): ConfigScreenFactory<*> {
         return ConfigScreenFactory {

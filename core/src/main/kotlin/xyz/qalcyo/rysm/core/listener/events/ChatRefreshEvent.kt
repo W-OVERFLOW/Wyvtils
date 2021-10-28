@@ -18,4 +18,7 @@
 
 package xyz.qalcyo.rysm.core.listener.events
 
+/**
+ * Called when a chat refresh needs to be handled.
+ */
 class ChatRefreshEvent: Event(cancelled = false)

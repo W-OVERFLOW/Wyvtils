@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.rysm.seventeen.mixin;
+package xyz.qalcyo.rysm.seventeen.mixin.renderer;
 
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
@@ -32,6 +32,11 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import xyz.qalcyo.rysm.core.config.RysmConfig;
 import xyz.qalcyo.rysm.seventeen.Rysm;
 
+/**
+ * This mixin handles the nametag text shadow and remove
+ * nametag background feature which are both version-independent
+ * features.
+ */
 @Mixin(EntityRenderer.class)
 public class EntityRendererMixin {
 

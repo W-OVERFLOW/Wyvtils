@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.rysm.seventeen.mixin;
+package xyz.qalcyo.rysm.seventeen.mixin.gui;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.hud.ChatHud;
@@ -32,9 +32,16 @@ import xyz.qalcyo.rysm.core.listener.events.MessageRenderEvent;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * This mixin handles the ChatRefreshEvent which is used
+ * in the core submodule to handle messages in chat.
+ */
 @Mixin(ChatHud.class)
 public class ChatHudMixin {
 
+    /**
+     * Sends and handles a MessageRenderEvent.
+     */
     @Redirect(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/ChatMessages;breakRenderedChatMessageLines(Lnet/minecraft/text/StringVisitable;ILnet/minecraft/client/font/TextRenderer;)Ljava/util/List;"))
     private List<OrderedText> invokeMessageEvent(StringVisitable message, int width, TextRenderer textRenderer) {
         MessageRenderEvent event = new MessageRenderEvent(message.getString(), false);

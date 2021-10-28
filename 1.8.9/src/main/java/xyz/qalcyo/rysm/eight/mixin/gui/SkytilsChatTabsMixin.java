@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.rysm.eight.mixin;
+package xyz.qalcyo.rysm.eight.mixin.gui;
 
 import net.minecraft.util.IChatComponent;
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,11 +27,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.qalcyo.rysm.core.RysmCore;
 import xyz.qalcyo.rysm.core.listener.events.MessageRenderEvent;
 
+/**
+ * This mixin handles compatibility with the MessageRenderEvent and
+ * another mod called Skytils, a skyblock utility mod.
+ */
+@SuppressWarnings("UnresolvedMixinReference")
 @Pseudo
 @Mixin(targets = "skytils.skytilsmod.features.impl.handlers.ChatTabs")
 public class SkytilsChatTabsMixin {
+
+    /**
+     * Sends the MessageRenderEvent and makes the shouldAllow method return whether the event
+     * was cancelled or not.
+     */
     @Inject(method = "shouldAllow", at = @At("HEAD"))
-    private void dg(IChatComponent chatComponent, CallbackInfoReturnable<Boolean> booleanCallbackInfoReturnable) {
+    private void handleRysmChatEvent(IChatComponent chatComponent, CallbackInfoReturnable<Boolean> booleanCallbackInfoReturnable) {
         MessageRenderEvent event = new MessageRenderEvent(chatComponent.getUnformattedText(), false);
         RysmCore.INSTANCE.getEventBus().post(event);
         if (event.getCancelled()) booleanCallbackInfoReturnable.setReturnValue(event.getCancelled());

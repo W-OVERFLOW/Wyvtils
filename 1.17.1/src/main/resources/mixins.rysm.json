@@ -7,14 +7,14 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "ChatHudAccessor",
-    "ChatHudMixin",
-    "EntityRenderDispatcherMixin",
-    "EntityRendererMixin",
-    "InGameHudMixin",
-    "LivingEntityRendererMixin",
+    "gui.ChatHudAccessor",
+    "gui.ChatHudMixin",
+    "renderer.EntityRenderDispatcherMixin",
+    "renderer.EntityRendererMixin",
+    "gui.InGameHudMixin",
+    "renderer.LivingEntityRendererMixin",
     "MouseMixin",
-    "TextRendererDrawerMixin",
-    "TextRendererMixin"
+    "renderer.TextRendererDrawerMixin",
+    "gui.TextRendererMixin"
   ]
 }

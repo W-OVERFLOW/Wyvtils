@@ -39,7 +39,7 @@ import xyz.qalcyo.rysm.core.listener.events.ChatRefreshEvent
 import xyz.qalcyo.rysm.core.utils.MinecraftVersions
 import xyz.qalcyo.rysm.core.utils.Updater
 import xyz.qalcyo.rysm.seventeen.gui.DownloadGui
-import xyz.qalcyo.rysm.seventeen.mixin.ChatHudAccessor
+import xyz.qalcyo.rysm.seventeen.mixin.gui.ChatHudAccessor
 import java.io.File
 import java.net.URI
 
@@ -55,6 +55,9 @@ object Rysm : ClientModInitializer {
         )
     )
 
+    /**
+     * Handles the initialization of the mod.
+     */
     override fun onInitializeClient() {
         RysmCore.modDir =
             File(File(File(FabricLoader.getInstance().configDir.toFile(), "Qalcyo"), "Rysm"), "1.17.1")

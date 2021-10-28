@@ -18,4 +18,7 @@
 
 package xyz.qalcyo.rysm.core.listener.events
 
+/**
+ * Called when a message is about to be rendered.
+ */
 data class MessageRenderEvent(val message: String, override var cancelled: Boolean = false): Event()

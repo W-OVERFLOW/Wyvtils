@@ -33,7 +33,9 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.regex.Pattern
 
-
+/**
+ * Handles mostly all the internal handling of Rysm.
+ */
 object Listener {
     var color: String = ""
     private var counter: AtomicInteger = AtomicInteger(0)

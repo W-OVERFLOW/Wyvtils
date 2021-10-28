@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.rysm.eight.mixin;
+package xyz.qalcyo.rysm.eight.mixin.renderer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -51,10 +51,19 @@ import xyz.qalcyo.rysm.core.utils.ColorUtils;
 
 import java.awt.*;
 
+/**
+ * This mixin sends and handles the HitboxRenderEvent
+ * which is used to handle hitbox related features in
+ * Rysm. This also manually adds some Rysm features related
+ * to the hitbox.
+ */
 @Mixin(RenderManager.class)
 public class RenderManagerMixin {
     private HitboxRenderEvent hitboxRenderEvent;
 
+    /**
+     * Forces the hitbox to render.
+     */
     @Inject(method = "doRenderEntity", at = @At(value = "HEAD"))
     private void forceHitbox(Entity p_doRenderEntity_1_, double p_doRenderEntity_2_, double p_doRenderEntity_3_, double p_doRenderEntity_4_, float p_doRenderEntity_5_, float p_doRenderEntity_6_, boolean p_doRenderEntity_8_, CallbackInfoReturnable<Boolean> cir) {
         if (RysmConfig.INSTANCE.getForceHitbox()) {
@@ -63,7 +72,9 @@ public class RenderManagerMixin {
         }
     }
 
-
+    /**
+     * Invokes a HitboxRenderEvent and cancels the rendering of the hitbox accordingly.
+     */
     @Inject(method = "renderDebugBoundingBox", at = @At(value = "HEAD"), cancellable = true)
     private void invokeHitboxEvent(Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
         if (entityIn instanceof EntityPlayer) {
@@ -91,6 +102,9 @@ public class RenderManagerMixin {
         if (hitboxRenderEvent.getCancelled()) ci.cancel();
     }
 
+    /**
+     * Cancels and changes the colour and size of the hitbox and hitbox line of sight accordingly.
+     */
     @Redirect(method = "renderDebugBoundingBox", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderGlobal;drawOutlinedBoundingBox(Lnet/minecraft/util/AxisAlignedBB;IIII)V"))
     private void cancelLineOfSightAndBox(AxisAlignedBB boundingBox, int red, int green, int blue, int alpha, Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks) {
         if (green == 255) {
@@ -103,6 +117,10 @@ public class RenderManagerMixin {
         }
     }
 
+
+    /**
+     * Cancels and changes the colour and size of the hitbox eye line accordingly.
+     */
     @Inject(method = "renderDebugBoundingBox", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WorldRenderer;begin(ILnet/minecraft/client/renderer/vertex/VertexFormat;)V"), cancellable = true)
     private void cancelEyeLine(Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
         if (!hitboxRenderEvent.getCancelEyeLine()) {

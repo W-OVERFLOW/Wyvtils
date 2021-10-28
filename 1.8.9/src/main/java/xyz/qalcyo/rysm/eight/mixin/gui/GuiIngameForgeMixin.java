@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.rysm.eight.mixin;
+package xyz.qalcyo.rysm.eight.mixin.gui;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.GuiIngameForge;
@@ -29,19 +29,31 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.qalcyo.rysm.core.RysmCore;
 import xyz.qalcyo.rysm.core.listener.events.TitleEvent;
 
+/**
+ * This mixin sends and handles the TitleEvent which is used
+ * in the core submodule to modify rendered titles and
+ * subtitles ingame.
+ */
 @SuppressWarnings("DefaultAnnotationParam")
 @Mixin(value = GuiIngameForge.class, remap = false)
 public class GuiIngameForgeMixin {
     private TitleEvent titleEvent;
+
+    /**
+     * Invokes the TitleEvent and cancels the title from rendering if asked.
+     */
     @Inject(method = "renderTitle", at = @At("HEAD"), cancellable = true)
-    private void removeTitle(int width, int height, float partialTicks, CallbackInfo ci) {
+    private void invokeAndCancelEvent(int width, int height, float partialTicks, CallbackInfo ci) {
         titleEvent = new TitleEvent(false, 1.0F, 1.0F, true);
         RysmCore.INSTANCE.getEventBus().post(titleEvent);
         if (titleEvent.getCancelled()) ci.cancel();
     }
 
+    /**
+     * Modifies the title scale based on the invoked event.
+     */
     @Redirect(method = "renderTitle", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V"), remap = true)
-    private void modifyTitleScale1(float x, float y, float z) {
+    private void modifyTitleScale(float x, float y, float z) {
         if (x == 4.0F) {
             //Title
             GlStateManager.scale(x * titleEvent.getTitleScale(), y * titleEvent.getTitleScale(), z * titleEvent.getTitleScale());
@@ -53,6 +65,9 @@ public class GuiIngameForgeMixin {
         }
     }
 
+    /**
+     * Sets the shadow of the title and subtitle based on the invoked event.
+     */
     @ModifyArg(method = "renderTitle", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/FontRenderer;drawString(Ljava/lang/String;FFIZ)I"), index = 4, remap = true)
     private boolean setShadow(boolean shadow) {
         return titleEvent.getShadow();

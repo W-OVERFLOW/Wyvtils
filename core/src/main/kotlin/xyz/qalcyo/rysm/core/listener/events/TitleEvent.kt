@@ -18,4 +18,7 @@
 
 package xyz.qalcyo.rysm.core.listener.events
 
+/**
+ * Called when titles are about to render.
+ */
 data class TitleEvent(override var cancelled: Boolean = false, var titleScale: Float, var subtitleScale: Float, var shadow: Boolean): Event()

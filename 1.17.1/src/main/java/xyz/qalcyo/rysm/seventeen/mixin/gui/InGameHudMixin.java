@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.rysm.seventeen.mixin;
+package xyz.qalcyo.rysm.seventeen.mixin.gui;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -30,23 +30,18 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import xyz.qalcyo.rysm.core.RysmCore;
 import xyz.qalcyo.rysm.core.listener.events.TitleEvent;
 
+/**
+ * This mixin sends and handles the TitleEvent which is used
+ * in the core submodule to modify rendered titles and
+ * subtitles ingame.
+ */
 @Mixin(InGameHud.class)
 public class InGameHudMixin {
     private TitleEvent titleEvent;
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I"))
-    private int redirect(TextRenderer instance, MatrixStack matrices, Text text, float x, float y, int color) {
-        if (!titleEvent.getCancelled()) {
-            if (titleEvent.getShadow()) {
-                return instance.drawWithShadow(matrices, text, x, y, color);
-            } else {
-                return instance.draw(matrices, text, x, y, color);
-            }
-        } else {
-            return -1;
-        }
-    }
-
+    /**
+     * Invokes the TitleEvent and modifies the title scale accordingly.
+     */
     @ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;scale(FFF)V"))
     private void modifyTitleTranslate(Args args) {
         titleEvent = new TitleEvent(false, 1.0F, 1.0F, true);
@@ -57,6 +52,22 @@ public class InGameHudMixin {
         } else if (((float) args.get(0)) == 2.0F) {
             args.set(0, 2.0F * titleEvent.getSubtitleScale());
             args.set(1, 2.0F * titleEvent.getSubtitleScale());
+        }
+    }
+
+    /**
+     * Cancels and sets the shadow of the title and subtitle based on the invoked event.
+     */
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I"))
+    private int redirect(TextRenderer instance, MatrixStack matrices, Text text, float x, float y, int color) {
+        if (!titleEvent.getCancelled()) {
+            if (titleEvent.getShadow()) {
+                return instance.drawWithShadow(matrices, text, x, y, color);
+            } else {
+                return instance.draw(matrices, text, x, y, color);
+            }
+        } else {
+            return -1;
         }
     }
 }

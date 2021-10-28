@@ -16,22 +16,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.rysm.eight.mixin;
+package xyz.qalcyo.rysm.eight.mixin.gui;
 
-import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.util.IChatComponent;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import xyz.qalcyo.rysm.eight.Rysm;
+import org.spongepowered.asm.mixin.gen.Accessor;
+import org.spongepowered.asm.mixin.gen.Invoker;
 
 import java.util.List;
 
+/**
+ * This mixin allows code to access usually protected or private
+ * variables in the GuiNewChat class.
+ */
 @Mixin(GuiNewChat.class)
-public class GuiNewChatMixin {
-    @Redirect(method = "setChatLine", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiUtilRenderComponents;splitText(Lnet/minecraft/util/IChatComponent;ILnet/minecraft/client/gui/FontRenderer;ZZ)Ljava/util/List;"))
-    private List<IChatComponent> invokeMessageEvent(IChatComponent p_178908_0_, int p_178908_1_, FontRenderer p_178908_2_, boolean p_178908_3_, boolean p_178908_4_) {
-        return Rysm.INSTANCE.handleChatSent(p_178908_0_, p_178908_1_, p_178908_2_, p_178908_3_, p_178908_4_);
-    }
+public interface GuiNewChatAccessor {
+    @Accessor
+    List<ChatLine> getChatLines();
+
+    @Accessor
+    List<ChatLine> getDrawnChatLines();
+
+    @Invoker
+    void invokeSetChatLine(IChatComponent chatComponent, int chatLineId, int updateCounter, boolean displayOnly);
 }

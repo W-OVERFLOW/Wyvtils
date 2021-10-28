@@ -25,6 +25,10 @@ import gg.essential.api.commands.SubCommand
 import xyz.qalcyo.rysm.core.RysmInfo
 import xyz.qalcyo.rysm.core.config.RysmConfig
 
+/**
+ * The command for Rysm.
+ * This is an easy way for opening the RysmConfig GUI.
+ */
 object RysmCommand : Command(RysmInfo.ID, true) {
     override val commandAliases = setOf(
         Alias("wyvtils"),

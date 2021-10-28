@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.rysm.seventeen.mixin;
+package xyz.qalcyo.rysm.seventeen.mixin.renderer;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
@@ -27,6 +27,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.qalcyo.rysm.core.config.RysmConfig;
 
+/**
+ * This mixin handles the Render Own Nametag feature
+ * which is a version-independent feature.
+ */
 @Mixin(LivingEntityRenderer.class)
 public class LivingEntityRendererMixin {
     @Inject(method = "hasLabel(Lnet/minecraft/entity/LivingEntity;)Z", at = @At(value = "TAIL", shift = At.Shift.BEFORE), cancellable = true)

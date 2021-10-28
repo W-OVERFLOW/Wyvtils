@@ -29,7 +29,15 @@ import xyz.qalcyo.rysm.core.RysmInfo
 import xyz.qalcyo.rysm.core.utils.Updater
 import java.io.File
 
+/**
+ * The GUI which is displayed when the user is asked for confirmation
+ * of an update.
+ */
 class DownloadGui: WindowScreen(restoreCurrentGuiOnClose = true, version = ElementaVersion.V1) {
+
+    /**
+     * Initializes the screen and builds an Essential Confirmation Modal.
+     */
     override fun initScreen(width: Int, height: Int) {
         super.initScreen(width, height)
         EssentialAPI.getEssentialComponentFactory().buildConfirmationModal {

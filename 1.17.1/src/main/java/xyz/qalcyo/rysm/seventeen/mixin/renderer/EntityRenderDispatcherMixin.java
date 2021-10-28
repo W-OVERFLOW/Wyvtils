@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.rysm.seventeen.mixin;
+package xyz.qalcyo.rysm.seventeen.mixin.renderer;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -51,14 +51,21 @@ import xyz.qalcyo.rysm.core.utils.ColorUtils;
 
 import java.awt.*;
 
+/**
+ * This mixin sends and handles the HitboxRenderEvent
+ * which is used to handle hitbox related features in
+ * Rysm. This also manually adds some Rysm features related
+ * to the hitbox.
+ */
 @Mixin(EntityRenderDispatcher.class)
 public abstract class EntityRenderDispatcherMixin {
     private static HitboxRenderEvent hitboxRenderEvent;
     @Shadow
     private boolean renderHitboxes;
-    @Shadow
-    public abstract void setRenderHitboxes(boolean value);
 
+    /**
+     * Invokes a HitboxRenderEvent and cancels the rendering of the hitbox accordingly.
+     */
     @Inject(method = "renderHitbox", at = @At("HEAD"), cancellable = true)
     private static void invokeHitboxEvent(MatrixStack matrices, VertexConsumer vertices, Entity entityIn, float tickDelta, CallbackInfo ci) {
         if (entityIn instanceof net.minecraft.entity.player.PlayerEntity) {
@@ -88,6 +95,9 @@ public abstract class EntityRenderDispatcherMixin {
         }
     }
 
+    /**
+     * Cancels and changes the colour and size of the hitbox accordingly.
+     */
     @Redirect(method = "renderHitbox", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;drawBox(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;Lnet/minecraft/util/math/Box;FFFF)V"))
     private static void modifyBox(MatrixStack matrices, VertexConsumer vertexConsumer, Box box, float red, float green, float blue, float alpha) {
         if (!hitboxRenderEvent.getCancelBox()) {
@@ -95,6 +105,9 @@ public abstract class EntityRenderDispatcherMixin {
         }
     }
 
+    /**
+     * Cancels and changes the colour and size of the hitbox line of sight accordingly.
+     */
     @Redirect(method = "renderHitbox", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;drawBox(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;DDDDDDFFFF)V"))
     private static void modifyLineOfSight(MatrixStack matrices, VertexConsumer vertexConsumer, double x1, double y1, double z1, double x2, double y2, double z2, float red, float green, float blue, float alpha) {
         if (!hitboxRenderEvent.getCancelLineOfSight()) {
@@ -102,11 +115,17 @@ public abstract class EntityRenderDispatcherMixin {
         }
     }
 
+    /**
+     * Cancels the hitbox eye line accordingly.
+     */
     @Inject(method = "renderHitbox", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/VertexConsumer;vertex(Lnet/minecraft/util/math/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;"), cancellable = true)
     private static void cancelEyeline(MatrixStack matrices, VertexConsumer vertices, Entity entity, float tickDelta, CallbackInfo ci) {
         if (hitboxRenderEvent.getCancelEyeLine()) ci.cancel();
     }
 
+    /**
+     * Changes the colour of the hitbox eye line accordingly.
+     */
     @ModifyArgs(method = "renderHitbox", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/VertexConsumer;color(IIII)Lnet/minecraft/client/render/VertexConsumer;"))
     private static void modifyEyeLine(Args args) {
         args.set(0, ColorUtils.INSTANCE.getRed(hitboxRenderEvent.getEyeLineColor()));
@@ -115,6 +134,12 @@ public abstract class EntityRenderDispatcherMixin {
         args.set(3, ColorUtils.INSTANCE.getAlpha(hitboxRenderEvent.getEyeLineColor()));
     }
 
+    @Shadow
+    public abstract void setRenderHitboxes(boolean value);
+
+    /**
+     * Forces the hitbox to render.
+     */
     @Inject(method = "render", at = @At("HEAD"))
     private void forceHitboxes(Entity entity, double x, double y, double z, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
         if (!renderHitboxes && RysmConfig.INSTANCE.getForceHitbox()) {

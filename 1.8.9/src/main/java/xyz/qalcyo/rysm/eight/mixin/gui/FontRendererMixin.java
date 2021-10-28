@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.rysm.eight.mixin;
+package xyz.qalcyo.rysm.eight.mixin.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -28,16 +28,27 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.qalcyo.rysm.core.RysmCore;
 import xyz.qalcyo.rysm.core.listener.events.StringRenderEvent;
 
+/**
+ * This mixin sends and handles the StringRenderEvent which is used
+ * in the core submodule to modify rendered text ingame.
+ */
 @Mixin(FontRenderer.class)
 public class FontRendererMixin {
     private StringRenderEvent stringRenderEvent;
 
+    /**
+     * Invokes the StringRenderEvent.
+     */
     @Inject(method = "renderString", at = @At("HEAD"))
     private void invokeStringDrawnEvent(String text, float x, float y, int colour, boolean dropShadow, CallbackInfoReturnable<Integer> cir) {
         stringRenderEvent = new StringRenderEvent(text == null ? "" : text, Minecraft.getMinecraft().thePlayer == null ? null : Minecraft.getMinecraft().thePlayer.getName());
         RysmCore.INSTANCE.getEventBus().post(stringRenderEvent);
     }
 
+    /**
+     * Redirects the text to render with the modified text from the invoked
+     * event.
+     */
     @ModifyVariable(method = "renderString", at = @At("HEAD"), argsOnly = true, ordinal = 0)
     private String onStringRendered_modifyText(String original) {
         return stringRenderEvent.getString();

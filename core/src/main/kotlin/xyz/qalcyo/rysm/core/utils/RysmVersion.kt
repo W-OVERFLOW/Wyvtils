@@ -22,7 +22,11 @@ import xyz.qalcyo.rysm.core.RysmInfo
 import java.text.ParseException
 
 /**
- * Adapted from Kotlin under Apache License 2.0
+ * A class which represents a version of Rysm.
+ *
+ * <p>
+ *
+ * Adapted from Kotlin under the Apache License 2.0
  * https://github.com/JetBrains/kotlin/blob/master/license/LICENSE.txt
  */
 class RysmVersion(val major: Int, val minor: Int, val patch: Int, val beta: Int) : Comparable<RysmVersion> {

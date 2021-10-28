@@ -46,6 +46,10 @@ object APIUtil {
                 if (!request.containsHeader("Cache-Control")) request.addHeader("Cache-Control", "no-cache")
             }
 
+    /**
+     * Gets a JSON and returns a JsonObject from the internet.
+     * @param urlString The URL to get the JSON from.
+     */
     fun getJSONResponse(urlString: String): JsonObject {
         val client = builder.build()
         try {

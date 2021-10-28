@@ -30,6 +30,9 @@ import java.awt.Color
 import java.io.File
 import xyz.qalcyo.rysm.core.RysmInfo
 
+/**
+ * The main configuration of the mod, powered by the Vigilance library.
+ */
 object RysmConfig: Vigilant(
     File(RysmCore.modDir, "${RysmInfo.ID}.toml")
 ) {

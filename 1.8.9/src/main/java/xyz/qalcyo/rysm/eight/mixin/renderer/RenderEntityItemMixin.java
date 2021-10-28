@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.rysm.eight.mixin;
+package xyz.qalcyo.rysm.eight.mixin.renderer;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -34,7 +34,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.qalcyo.rysm.core.config.RysmConfig;
 
-//Original code from Terbium by Deftu
+/**
+ * This mixin sends and handles the item physics feature which is a
+ * version-independent feature.
+ * Original code from Terbium by Deftu with permission.
+ */
 @Mixin(RenderEntityItem.class)
 public abstract class RenderEntityItemMixin extends Render<EntityItem> {
 
@@ -45,6 +49,9 @@ public abstract class RenderEntityItemMixin extends Render<EntityItem> {
     @Shadow
     protected abstract int func_177078_a(ItemStack stack);
 
+    /**
+     * Handles item physics.
+     */
     @Inject(method = "func_177077_a", at = @At("HEAD"), cancellable = true)
     protected void onRender(EntityItem p_177077_1_, double p_177077_2_, double p_177077_4_, double p_177077_6_, float p_177077_8_, IBakedModel p_177077_9_, CallbackInfoReturnable<Integer> cir) {
         if (RysmConfig.INSTANCE.getItemPhysics()) {

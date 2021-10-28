@@ -18,6 +18,9 @@
 
 package xyz.qalcyo.rysm.core.utils
 
+/**
+ * A set of enums that represent versions of Minecraft.
+ */
 enum class MinecraftVersions(val versionString: String?) {
     UNSET(null),
     EIGHT("1.8.9"),

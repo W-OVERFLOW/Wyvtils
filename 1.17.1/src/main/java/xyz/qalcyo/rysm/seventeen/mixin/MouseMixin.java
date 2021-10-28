@@ -25,8 +25,17 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import xyz.qalcyo.rysm.core.RysmCore;
 import xyz.qalcyo.rysm.core.listener.events.MouseScrollEvent;
 
+/**
+ * This mixin sends and handles the MouseScrollEvent which is used
+ * in the core submodule to modify the direction of the scroll wheel.
+ */
 @Mixin(Mouse.class)
 public class MouseMixin {
+
+    /**
+     * Calls a MouseScrollEvent and cancels and changes the direction
+     * accordingly.
+     */
     @ModifyArg(method = "onMouseScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;scrollInHotbar(D)V"), index = 0)
     private double invokeScrollEvent(double direction) {
         MouseScrollEvent scrollEvent = new MouseScrollEvent(direction, false);

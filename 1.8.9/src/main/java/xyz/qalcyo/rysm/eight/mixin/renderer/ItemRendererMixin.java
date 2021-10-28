@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.rysm.eight.mixin;
+package xyz.qalcyo.rysm.eight.mixin.renderer;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -30,11 +30,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.qalcyo.rysm.core.config.RysmConfig;
 
+/**
+ * This mixin handles the left hand and swap bow features
+ * in Rysm, which isn't handled in the core module because
+ * they are version-independent features.
+ * Original code from Terbium by Deftu with permission.
+ */
 @Mixin(ItemRenderer.class)
 public class ItemRendererMixin {
     @Shadow private ItemStack itemToRender;
 
-    //Original code from Terbium by Deftu
+    /**
+     * Rotates the hand.
+     */
     @Inject(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;pushMatrix()V"))
     protected void onItemInFirstPersonRendered(float partialTicks, CallbackInfo ci) {
         if (RysmConfig.INSTANCE.getSwapBow() && itemToRender != null && itemToRender.getItemUseAction() == EnumAction.BOW) {

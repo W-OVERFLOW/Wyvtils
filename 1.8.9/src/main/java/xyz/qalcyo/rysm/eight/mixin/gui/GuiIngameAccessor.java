@@ -16,26 +16,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.rysm.seventeen.mixin;
+package xyz.qalcyo.rysm.eight.mixin.gui;
 
-import net.minecraft.client.gui.hud.ChatHud;
-import net.minecraft.client.gui.hud.ChatHudLine;
-import net.minecraft.text.OrderedText;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.GuiIngame;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
-import org.spongepowered.asm.mixin.gen.Invoker;
 
-import java.util.List;
+/**
+ * This mixin allows code to access usually protected or private
+ * variables in the GuiIngame class.
+ */
+@Mixin(GuiIngame.class)
+public interface GuiIngameAccessor {
 
-@Mixin(ChatHud.class)
-public interface ChatHudAccessor {
     @Accessor
-    List<ChatHudLine<OrderedText>> getVisibleMessages();
+    String getDisplayedTitle();
 
     @Accessor
-    List<ChatHudLine<Text>> getMessages();
+    void setDisplayedTitle(String title);
 
-    @Invoker
-    void invokeAddMessage(Text message, int messageId, int timestamp, boolean refresh);
+    @Accessor
+    void setDisplayedSubTitle(String title);
 }

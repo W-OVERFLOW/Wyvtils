@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.rysm.eight.mixin;
+package xyz.qalcyo.rysm.eight.mixin.renderer;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -30,17 +30,29 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.qalcyo.rysm.core.config.RysmConfig;
 
+/**
+ * This mixin handles compatibility with the left hand
+ * and swap bow feature in Rysm with another mod called
+ * Sk1er Old Animations, which is a mod which backports
+ * 1.7 animations into 1.8.9.
+ */
 @SuppressWarnings("UnresolvedMixinReference")
 @Pseudo
 @Mixin(targets = "club.sk1er.oldanimations.AnimationHandler")
 public class Sk1erOAMAnimationHandlerMixin {
     private boolean already = false;
 
+    /**
+     * Resets internal variables to their original value.
+     */
     @Inject(method = "renderItemInFirstPerson", at = @At("HEAD"))
-    private void hi(ItemRenderer renderer, ItemStack stack, float equipProgress, float partialTicks, CallbackInfoReturnable<Boolean> ci) {
+    private void resetInternalVariables(ItemRenderer renderer, ItemStack stack, float equipProgress, float partialTicks, CallbackInfoReturnable<Boolean> ci) {
         already = false;
     }
 
+    /**
+     * Rotates the hand.
+     */
     @Inject(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;pushMatrix()V"), remap = true)
     protected void onItemInFirstPersonRendered(ItemRenderer renderer, ItemStack stack, float equipProgress, float partialTicks, CallbackInfoReturnable<Boolean> ci) {
         if (RysmConfig.INSTANCE.getSwapBow() && stack != null && stack.getItemUseAction() == EnumAction.BOW) {

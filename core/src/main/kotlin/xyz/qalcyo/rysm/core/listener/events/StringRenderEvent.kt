@@ -18,4 +18,7 @@
 
 package xyz.qalcyo.rysm.core.listener.events
 
+/**
+ * Called when text is rendered ingame.
+ */
 data class StringRenderEvent(var string: String, val username: String?): Event(cancelled = false)

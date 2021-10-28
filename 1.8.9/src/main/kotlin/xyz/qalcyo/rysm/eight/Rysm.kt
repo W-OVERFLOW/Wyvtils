@@ -49,8 +49,8 @@ import xyz.qalcyo.rysm.core.utils.MinecraftVersions
 import xyz.qalcyo.rysm.core.utils.Updater
 import xyz.qalcyo.rysm.eight.commands.RysmCommand
 import xyz.qalcyo.rysm.eight.gui.DownloadGui
-import xyz.qalcyo.rysm.eight.mixin.GuiIngameAccessor
-import xyz.qalcyo.rysm.eight.mixin.GuiNewChatAccessor
+import xyz.qalcyo.rysm.eight.mixin.gui.GuiIngameAccessor
+import xyz.qalcyo.rysm.eight.mixin.gui.GuiNewChatAccessor
 import java.io.File
 import java.net.URI
 import java.util.*
@@ -71,6 +71,9 @@ object Rysm {
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
 
+    /**
+     * Handles the pre-initialization of the mod.
+     */
     @Mod.EventHandler
     fun onPreInit(e: FMLPreInitializationEvent) {
         RysmCore.modDir =
@@ -79,6 +82,9 @@ object Rysm {
         RysmCore.jarFile = e.sourceFile
     }
 
+    /**
+     * Handles the initialization of the mod.
+     */
     @Mod.EventHandler
     fun onInit(e: FMLInitializationEvent) {
         RysmCore.onInitialization(MinecraftVersions.EIGHT)
@@ -96,6 +102,10 @@ object Rysm {
             })
     }
 
+    /**
+     * Sets some variables which can only be set accurately
+     * when run during the post-initialization.
+     */
     @Mod.EventHandler
     fun onPostInit(e: FMLPostInitializationEvent) {
         isSkytils = Loader.isModLoaded("skytils")
@@ -109,6 +119,9 @@ object Rysm {
         }
     }
 
+    /**
+     * Handles the ingame Updater.
+     */
     @Mod.EventHandler
     fun onLoadComplete(e: FMLLoadCompleteEvent) {
         Multithreading.runAsync {
@@ -167,6 +180,7 @@ object Rysm {
         }
     }
 
+    //TODO: Why is this here and not in the actual mixin in Java?
     fun handleChatSent(p_178908_0_: IChatComponent, p_178908_1_: Int, p_178908_2_: FontRenderer, p_178908_3_: Boolean, p_178908_4_: Boolean): List<IChatComponent> {
         if (isSkytils) {
             if (!ChatTabs.shouldAllow(p_178908_0_)) return Collections.emptyList()

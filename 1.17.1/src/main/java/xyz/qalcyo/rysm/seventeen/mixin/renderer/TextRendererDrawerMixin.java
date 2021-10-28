@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.rysm.seventeen.mixin;
+package xyz.qalcyo.rysm.seventeen.mixin.renderer;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,6 +24,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.qalcyo.rysm.seventeen.Rysm;
 
+/**
+ * This mixin handles the remove nametag background feature
+ * which is a version-independent feature.
+ */
 @Mixin(targets = "net/minecraft/client/font/TextRenderer$Drawer")
 public class TextRendererDrawerMixin {
     @Inject(method = "drawLayer(IF)F", at = @At("HEAD"), cancellable = true)

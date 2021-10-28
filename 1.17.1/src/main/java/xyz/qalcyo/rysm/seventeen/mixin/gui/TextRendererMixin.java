@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.rysm.seventeen.mixin;
+package xyz.qalcyo.rysm.seventeen.mixin.gui;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -33,6 +33,10 @@ import xyz.qalcyo.rysm.core.RysmCore;
 import xyz.qalcyo.rysm.core.config.RysmConfig;
 import xyz.qalcyo.rysm.core.listener.events.StringRenderEvent;
 
+/**
+ * This mixin sends and handles the StringRenderEvent which is used
+ * in the core submodule to modify rendered text ingame.
+ */
 @Mixin(TextRenderer.class)
 public class TextRendererMixin {
     @ModifyVariable(method = "drawInternal(Ljava/lang/String;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZIIZ)I", at = @At("HEAD"), index = 5)
