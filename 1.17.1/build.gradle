@@ -40,17 +40,14 @@ minecraft {
 repositories {
     mavenCentral()
     maven { url "https://maven.shedaniel.me/" }
-    maven {
-        name 'Terraformers'
-        url 'https://maven.terraformersmc.com/releases/'
-    }
-    maven { url 'https://repo.sk1er.club/repository/maven-releases/' }
-    maven { url 'https://jitpack.io/' }
-    maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
+    maven { url "https://maven.terraformersmc.com/releases/" }
+    maven { url "https://repo.sk1er.club/repository/maven-releases/" }
+    maven { url "https://jitpack.io/" }
+    maven { url "https://repo.spongepowered.org/repository/maven-public/" }
 }
 
 dependencies {
-    shade include(project(':core')) {
+    shade include(project(":core")) {
         exclude(module: "essential-1.8.9-forge")
         exclude(module: "vigilance-1.8.9-forge")
         exclude(module: "elementa-1.8.9-forge")
@@ -62,7 +59,7 @@ dependencies {
         exclude(module: "kotlinx-coroutines-core")
         exclude(module: "keventbus")
     }
-    shade include ('xyz.qalcyo.mango:Mango:1.8')
+    shade include ("xyz.qalcyo.mango:Mango:1.8")
     implementation("com.github.Wyvest:keventbus:e8e05ea")
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
@@ -71,24 +68,24 @@ dependencies {
     modImplementation("com.terraformersmc:modmenu:2.0.4") {
         transitive = false
     }
-    implementation('gg.essential:essential-1.17.1-fabric:1540+release-launch-1.17') {
+    implementation("gg.essential:essential-1.17.1-fabric:1540+release-launch-1.17") {
         exclude(group: "net.fabricmc")
         exclude(module: "vigilance-1.17.1-fabric")
         exclude(module: "universalcraft-1.17.1-fabric")
         exclude(module: "elementa-1.17.1-fabric")
     }
-    modImplementation('gg.essential:vigilance-1.17.1-fabric:179+next') {
+    modImplementation("gg.essential:vigilance-1.17.1-fabric:179+next") {
         exclude(group: "net.fabricmc")
         exclude(group: "gg.essential")
     }
-    modImplementation('gg.essential:universalcraft-1.17.1-fabric:162+next') {
+    modImplementation("gg.essential:universalcraft-1.17.1-fabric:162+next") {
         exclude(group: "net.fabricmc")
     }
-    modImplementation('gg.essential:elementa-1.17.1-fabric:384+next') {
+    modImplementation("gg.essential:elementa-1.17.1-fabric:384+next") {
         exclude(group: "net.fabricmc")
         exclude(group: "gg.essential")
     }
-    modImplementation include('gg.essential:loader-fabric:1.0.0') {
+    modImplementation include("gg.essential:loader-fabric:1.0.0") {
         transitive = false
     }
     modImplementation("net.fabricmc:fabric-language-kotlin:1.6.4+kotlin.1.5.30")

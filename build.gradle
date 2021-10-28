@@ -61,38 +61,38 @@ allprojects {
     jar {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         from {
-            'LICENSE'
+            "LICENSE"
         }
 
-        exclude 'META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'module-info.class'
+        exclude "META-INF/INDEX.LIST", "META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA", "module-info.class"
     }
 
     shadowJar {
-        archiveClassifier.set('')
+        archiveClassifier.set("")
         configurations = [project.configurations.shade]
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-        exclude('LICENSE.md')
-        exclude('pack.mcmeta')
-        exclude('dummyThing')
-        exclude('**/module-info.class')
-        exclude('*.so')
-        exclude('*.dylib')
-        exclude('*.dll')
-        exclude('*.jnilib')
-        exclude('ibxm/**')
-        exclude('com/jcraft/**')
-        exclude('org/lwjgl/**')
-        exclude('net/java/**')
+        exclude("LICENSE.md")
+        exclude("pack.mcmeta")
+        exclude("dummyThing")
+        exclude("**/module-info.class")
+        exclude("*.so")
+        exclude("*.dylib")
+        exclude("*.dll")
+        exclude("*.jnilib")
+        exclude("ibxm/**")
+        exclude("com/jcraft/**")
+        exclude("org/lwjgl/**")
+        exclude("net/java/**")
 
-        exclude('META-INF/proguard/**')
-        exclude('META-INF/maven/**')
-        exclude('META-INF/versions/**')
-        exclude('META-INF/com.android.tools/**')
+        exclude("META-INF/proguard/**")
+        exclude("META-INF/maven/**")
+        exclude("META-INF/versions/**")
+        exclude("META-INF/com.android.tools/**")
 
-        exclude('**/*.kotlin_metadata')
-        exclude('**/*.kotlin_module')
-        exclude('**/*.kotlin_builtins')
+        exclude("**/*.kotlin_metadata")
+        exclude("**/*.kotlin_module")
+        exclude("**/*.kotlin_builtins")
     }
 
     jar.finalizedBy(shadowJar)
