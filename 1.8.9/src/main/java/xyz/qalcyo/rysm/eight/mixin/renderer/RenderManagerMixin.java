@@ -46,7 +46,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.qalcyo.rysm.core.RysmCore;
 import xyz.qalcyo.rysm.core.config.RysmConfig;
 import xyz.qalcyo.rysm.core.listener.events.HitboxRenderEvent;
-import xyz.qalcyo.rysm.core.listener.events.entity.*;
 import xyz.qalcyo.rysm.core.utils.ColorUtils;
 
 import java.awt.*;
@@ -78,25 +77,25 @@ public class RenderManagerMixin {
     @Inject(method = "renderDebugBoundingBox", at = @At(value = "HEAD"), cancellable = true)
     private void invokeHitboxEvent(Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
         if (entityIn instanceof EntityPlayer) {
-            hitboxRenderEvent = new HitboxRenderEvent(new PlayerEntity(entityIn instanceof EntityPlayerSP && ((EntityPlayer) entityIn).getGameProfile().getId() == Minecraft.getMinecraft().thePlayer.getGameProfile().getId()), getReachDistanceFromEntity(entityIn), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent((entityIn instanceof EntityPlayerSP && ((EntityPlayer) entityIn).getGameProfile().getId() == Minecraft.getMinecraft().thePlayer.getGameProfile().getId()) ? xyz.qalcyo.rysm.core.listener.events.Entity.SELF : xyz.qalcyo.rysm.core.listener.events.Entity.PLAYER, getReachDistanceFromEntity(entityIn), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
         } else if (entityIn instanceof EntityLiving) {
-            hitboxRenderEvent = new HitboxRenderEvent(new LivingEntity(entityIn instanceof IMob), getReachDistanceFromEntity(entityIn), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(entityIn instanceof IMob ? xyz.qalcyo.rysm.core.listener.events.Entity.MONSTER : xyz.qalcyo.rysm.core.listener.events.Entity.LIVING, getReachDistanceFromEntity(entityIn), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
         } else if (entityIn instanceof EntityArmorStand) {
-            hitboxRenderEvent = new HitboxRenderEvent(new ArmorstandEntity(), getReachDistanceFromEntity(entityIn), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(xyz.qalcyo.rysm.core.listener.events.Entity.ARMORSTAND, getReachDistanceFromEntity(entityIn), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
         } else if (entityIn instanceof EntityFireball) {
-            hitboxRenderEvent = new HitboxRenderEvent((entityIn instanceof EntityWitherSkull ? new WitherSkullEntity() : new FireballEntity()), getReachDistanceFromEntity(entityIn), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent((entityIn instanceof EntityWitherSkull ? xyz.qalcyo.rysm.core.listener.events.Entity.WITHERSKULL : xyz.qalcyo.rysm.core.listener.events.Entity.FIREBALL), getReachDistanceFromEntity(entityIn), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
         } else if (entityIn instanceof EntityMinecart) {
-            hitboxRenderEvent = new HitboxRenderEvent(new MinecartEntity(), getReachDistanceFromEntity(entityIn), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(xyz.qalcyo.rysm.core.listener.events.Entity.MINECART, getReachDistanceFromEntity(entityIn), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
         } else if (entityIn instanceof EntityItem) {
-            hitboxRenderEvent = new HitboxRenderEvent(new ItemEntity(), getReachDistanceFromEntity(entityIn), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(xyz.qalcyo.rysm.core.listener.events.Entity.ITEM, getReachDistanceFromEntity(entityIn), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
         } else if (entityIn instanceof EntityFireworkRocket) {
-            hitboxRenderEvent = new HitboxRenderEvent(new FireworkEntity(), getReachDistanceFromEntity(entityIn), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(xyz.qalcyo.rysm.core.listener.events.Entity.FIREWORK, getReachDistanceFromEntity(entityIn), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
         } else if (entityIn instanceof EntityXPOrb) {
-            hitboxRenderEvent = new HitboxRenderEvent(new XPEntity(), getReachDistanceFromEntity(entityIn), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(xyz.qalcyo.rysm.core.listener.events.Entity.XP, getReachDistanceFromEntity(entityIn), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
         } else if (entityIn instanceof IProjectile) {
-            hitboxRenderEvent = new HitboxRenderEvent(new ProjectileEntity(), getReachDistanceFromEntity(entityIn), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(xyz.qalcyo.rysm.core.listener.events.Entity.PROJECTILE, getReachDistanceFromEntity(entityIn), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
         } else {
-            hitboxRenderEvent = new HitboxRenderEvent(new xyz.qalcyo.rysm.core.listener.events.entity.Entity(), getReachDistanceFromEntity(entityIn), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(xyz.qalcyo.rysm.core.listener.events.Entity.UNDEFINED, getReachDistanceFromEntity(entityIn), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
         }
         RysmCore.INSTANCE.getEventBus().post(hitboxRenderEvent);
         if (hitboxRenderEvent.getCancelled()) ci.cancel();

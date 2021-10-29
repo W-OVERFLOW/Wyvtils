@@ -16,6 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.rysm.core.listener.events.entity
+package xyz.qalcyo.rysm.core.listener.events
 
-class MinecartEntity: Entity()
+enum class Entity {
+    ARMORSTAND,
+    FIREBALL,
+    FIREWORK,
+    ITEM,
+    LIVING,
+    MONSTER,
+    MINECART,
+    PLAYER,
+    SELF,
+    PROJECTILE,
+    WITHERSKULL,
+    UNDEFINED,
+    XP
+}

@@ -25,7 +25,6 @@ import gg.essential.universal.ChatColor
 import xyz.qalcyo.mango.Strings
 import xyz.qalcyo.rysm.core.config.RysmConfig
 import xyz.qalcyo.rysm.core.listener.events.*
-import xyz.qalcyo.rysm.core.listener.events.entity.*
 import xyz.qalcyo.rysm.core.utils.ColorUtils
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
@@ -88,17 +87,20 @@ object Listener {
             e.cancelled = true
             return
         }
-        when (e.entity) {
-            is ArmorstandEntity -> e.cancelled = !RysmConfig.armorstandHitbox
-            is FireballEntity -> e.cancelled = !RysmConfig.fireballHitbox
-            is FireworkEntity -> e.cancelled = !RysmConfig.fireworkHitbox
-            is ItemEntity -> e.cancelled = !RysmConfig.itemHitbox
-            is LivingEntity -> e.cancelled = if (e.entity.isHostile) !RysmConfig.monsterHitbox else !RysmConfig.passiveHitbox
-            is MinecartEntity -> e.cancelled = !RysmConfig.minecartHitbox
-            is PlayerEntity -> e.cancelled = if (e.entity.isThePlayer) RysmConfig.disableForSelf || !RysmConfig.playerHitbox else !RysmConfig.playerHitbox
-            is ProjectileEntity -> e.cancelled = !RysmConfig.projectileHitbox
-            is WitherSkullEntity -> e.cancelled = !RysmConfig.witherSkullHitboxes
-            is XPEntity -> e.cancelled = !RysmConfig.xpOrbHitbox
+        e.cancelled = when (e.entity) {
+            Entity.ARMORSTAND -> !RysmConfig.armorstandHitbox
+            Entity.FIREBALL -> !RysmConfig.fireballHitbox
+            Entity.FIREWORK -> !RysmConfig.fireworkHitbox
+            Entity.ITEM -> !RysmConfig.itemHitbox
+            Entity.LIVING -> !RysmConfig.passiveHitbox
+            Entity.MONSTER -> !RysmConfig.monsterHitbox
+            Entity.MINECART -> !RysmConfig.minecartHitbox
+            Entity.PLAYER -> !RysmConfig.playerHitbox
+            Entity.SELF -> RysmConfig.disableForSelf || !RysmConfig.playerHitbox
+            Entity.PROJECTILE -> !RysmConfig.projectileHitbox
+            Entity.WITHERSKULL -> !RysmConfig.witherSkullHitboxes
+            Entity.XP -> !RysmConfig.xpOrbHitbox
+            Entity.UNDEFINED -> false
         }
         if (e.cancelled) return
         if (RysmConfig.hitboxBox) {

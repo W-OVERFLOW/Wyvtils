@@ -26,6 +26,7 @@ import net.minecraft.client.gui.GuiUtilRenderComponents
 import net.minecraft.util.IChatComponent
 import net.minecraftforge.common.MinecraftForge.EVENT_BUS
 import net.minecraftforge.fml.common.Loader
+import net.minecraftforge.fml.common.LoaderState.ModState
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
@@ -112,7 +113,7 @@ object Rysm {
         isNewToggleChat = run {
             for (mod in Loader.instance().activeModList) {
                 if (mod.modId == "togglechatmod") {
-                    return@run DefaultArtifactVersion(mod.version) > DefaultArtifactVersion("3.1.1")
+                    return@run DefaultArtifactVersion(mod.version) > DefaultArtifactVersion("3.1.1") && Loader.instance().getModState(mod) != ModState.DISABLED
                 }
             }
             return@run false

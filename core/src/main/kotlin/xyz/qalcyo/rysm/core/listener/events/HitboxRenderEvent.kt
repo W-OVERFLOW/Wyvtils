@@ -18,8 +18,6 @@
 
 package xyz.qalcyo.rysm.core.listener.events
 
-import xyz.qalcyo.rysm.core.listener.events.entity.Entity
-
 /**
  * Called when a hitbox is about to be rendered.
  */
