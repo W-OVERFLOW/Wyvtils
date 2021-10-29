@@ -44,9 +44,6 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import xyz.qalcyo.rysm.core.RysmCore;
 import xyz.qalcyo.rysm.core.config.RysmConfig;
 import xyz.qalcyo.rysm.core.listener.events.HitboxRenderEvent;
-import xyz.qalcyo.rysm.core.listener.events.entity.FireballEntity;
-import xyz.qalcyo.rysm.core.listener.events.entity.ProjectileEntity;
-import xyz.qalcyo.rysm.core.listener.events.entity.*;
 import xyz.qalcyo.rysm.core.utils.ColorUtils;
 
 import java.awt.*;
@@ -69,25 +66,25 @@ public abstract class EntityRenderDispatcherMixin {
     @Inject(method = "renderHitbox", at = @At("HEAD"), cancellable = true)
     private static void invokeHitboxEvent(MatrixStack matrices, VertexConsumer vertices, Entity entityIn, float tickDelta, CallbackInfo ci) {
         if (entityIn instanceof net.minecraft.entity.player.PlayerEntity) {
-            hitboxRenderEvent = new HitboxRenderEvent(new PlayerEntity(entityIn instanceof ClientPlayerEntity && ((net.minecraft.entity.player.PlayerEntity) entityIn).getGameProfile().getId() == (MinecraftClient.getInstance().player != null ? MinecraftClient.getInstance().player.getGameProfile().getId() : "null")), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent((entityIn instanceof ClientPlayerEntity && ((net.minecraft.entity.player.PlayerEntity) entityIn).getGameProfile().getId() == (MinecraftClient.getInstance().player != null ? MinecraftClient.getInstance().player.getGameProfile().getId() : "null")) ? xyz.qalcyo.rysm.core.listener.events.Entity.SELF : xyz.qalcyo.rysm.core.listener.events.Entity.PLAYER, (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
         } else if (entityIn instanceof MobEntity) {
-            hitboxRenderEvent = new HitboxRenderEvent(new LivingEntity(entityIn instanceof Monster), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent((entityIn instanceof Monster) ? xyz.qalcyo.rysm.core.listener.events.Entity.MONSTER : xyz.qalcyo.rysm.core.listener.events.Entity.LIVING, (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
         } else if (entityIn instanceof ArmorStandEntity) {
-            hitboxRenderEvent = new HitboxRenderEvent(new ArmorstandEntity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(xyz.qalcyo.rysm.core.listener.events.Entity.ARMORSTAND, (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
         } else if (entityIn instanceof net.minecraft.entity.projectile.FireballEntity) {
-            hitboxRenderEvent = new HitboxRenderEvent(new FireballEntity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(xyz.qalcyo.rysm.core.listener.events.Entity.FIREBALL, (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
         } else if (entityIn instanceof net.minecraft.entity.vehicle.MinecartEntity) {
-            hitboxRenderEvent = new HitboxRenderEvent(new MinecartEntity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(xyz.qalcyo.rysm.core.listener.events.Entity.MINECART, (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
         } else if (entityIn instanceof net.minecraft.entity.ItemEntity) {
-            hitboxRenderEvent = new HitboxRenderEvent(new ItemEntity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(xyz.qalcyo.rysm.core.listener.events.Entity.ITEM, (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
         } else if (entityIn instanceof FireworkRocketEntity) {
-            hitboxRenderEvent = new HitboxRenderEvent(new FireworkEntity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(xyz.qalcyo.rysm.core.listener.events.Entity.FIREWORK, (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
         } else if (entityIn instanceof ExperienceOrbEntity) {
-            hitboxRenderEvent = new HitboxRenderEvent(new XPEntity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(xyz.qalcyo.rysm.core.listener.events.Entity.XP, (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
         } else if (entityIn instanceof TridentEntity || entityIn instanceof ShulkerBulletEntity || entityIn instanceof FishingBobberEntity || entityIn instanceof LlamaSpitEntity || entityIn instanceof ArrowEntity || entityIn instanceof ThrownEntity || entityIn instanceof SpectralArrowEntity) {
-            hitboxRenderEvent = new HitboxRenderEvent(new ProjectileEntity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(xyz.qalcyo.rysm.core.listener.events.Entity.PROJECTILE, (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
         } else {
-            hitboxRenderEvent = new HitboxRenderEvent(new xyz.qalcyo.rysm.core.listener.events.entity.Entity(), (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
+            hitboxRenderEvent = new HitboxRenderEvent(xyz.qalcyo.rysm.core.listener.events.Entity.UNDEFINED, (!(MinecraftClient.getInstance().targetedEntity == null) && MinecraftClient.getInstance().targetedEntity == entityIn ? 2 : Integer.MAX_VALUE), Color.WHITE.getRGB(), Color.WHITE.getRGB(), Color.WHITE.getRGB(), false, false, false, false);
         }
         RysmCore.INSTANCE.getEventBus().post(hitboxRenderEvent);
         if (hitboxRenderEvent.getCancelled()) {
