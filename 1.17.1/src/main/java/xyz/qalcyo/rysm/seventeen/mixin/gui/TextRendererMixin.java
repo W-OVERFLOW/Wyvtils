@@ -22,6 +22,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,6 +33,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.qalcyo.rysm.core.RysmCore;
 import xyz.qalcyo.rysm.core.config.RysmConfig;
 import xyz.qalcyo.rysm.core.listener.events.StringRenderEvent;
+import xyz.qalcyo.rysm.seventeen.listener.TextCacheManager;
 
 /**
  * This mixin sends and handles the StringRenderEvent which is used
@@ -56,42 +58,60 @@ public class TextRendererMixin {
         RysmCore.INSTANCE.getEventBus().post(drawStringEvent);
     }
 
-    @Inject(method = "draw(Lnet/minecraft/text/Text;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I", at = @At("HEAD"))
-    private void onString(Text text, float x, float y, int color, boolean shadow, Matrix4f matrix, VertexConsumerProvider vertexConsumers, boolean seeThrough, int backgroundColor, int light, CallbackInfoReturnable<Integer> cir) {
-        drawStringEvent = new StringRenderEvent(text == null || text.asString() == null ? "" : text.asString(), MinecraftClient.getInstance().player == null ? null : MinecraftClient.getInstance().player.getName().asString());
-        RysmCore.INSTANCE.getEventBus().post(drawStringEvent);
-    }
-
-    @ModifyVariable(method = "draw(Lnet/minecraft/text/Text;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I", at = @At("HEAD"), argsOnly = true, ordinal = 0)
-    private Text onStringRendered_modifyText(Text original) {
-        return Text.of(drawStringEvent.getString());
-    }
-
-    @ModifyVariable(method = "draw(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I", at = @At("HEAD"), argsOnly = true, ordinal = 0)
-    private Text thefunny(Text original) {
-        return Text.of(drawStringEvent.getString());
-    }
-
-    @ModifyVariable(method = "drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I", at = @At("HEAD"), argsOnly = true, ordinal = 0)
-    private Text thefunny2(Text original) {
-        return Text.of(drawStringEvent.getString());
-    }
-
-    @Inject(method = "drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I", at = @At("HEAD"))
-    private void on(MatrixStack matrices, Text text, float x, float y, int color, CallbackInfoReturnable<Integer> cir) {
-        drawStringEvent = new StringRenderEvent(text == null || text.asString() == null ? "" : text.asString(), MinecraftClient.getInstance().player == null ? null : MinecraftClient.getInstance().player.getName().asString());
-        RysmCore.INSTANCE.getEventBus().post(drawStringEvent);
-    }
-
-    @Inject(method = "draw(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I", at = @At("HEAD"))
-    private void ona(MatrixStack matrices, Text text, float x, float y, int color, CallbackInfoReturnable<Integer> cir) {
-        drawStringEvent = new StringRenderEvent(text == null || text.asString() == null ? "" : text.asString(), MinecraftClient.getInstance().player == null ? null : MinecraftClient.getInstance().player.getName().asString());
-        RysmCore.INSTANCE.getEventBus().post(drawStringEvent);
-    }
-
     @ModifyVariable(method = "drawInternal(Ljava/lang/String;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZIIZ)I", at = @At("HEAD"), argsOnly = true, ordinal = 0)
     private String onStringRendered_modifyText(String original) {
         return drawStringEvent.getString();
+    }
+
+    @Inject(method = "drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I", at = @At("HEAD"))
+    private void onStringRendererd1(MatrixStack matrices, Text text, float x, float y, int color, CallbackInfoReturnable<Integer> cir) {
+        if (text instanceof LiteralText) {
+            drawStringEvent = new StringRenderEvent(text.asString() == null ? "" : text.asString(), MinecraftClient.getInstance().player == null ? null : MinecraftClient.getInstance().player.getName().asString());
+            RysmCore.INSTANCE.getEventBus().post(drawStringEvent);
+        }
+    }
+
+    @ModifyVariable(method = "drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I", at = @At("HEAD"), argsOnly = true, ordinal = 0)
+    private Text onStringRendered_modifyText(Text original) {
+        if (original instanceof LiteralText) {
+            return TextCacheManager.INSTANCE.handleCache(((LiteralText) original), drawStringEvent.getString());
+        } else {
+            return original;
+        }
+    }
+
+    @Inject(method = "draw(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I", at = @At("HEAD"))
+    private void onStringRendererd2(MatrixStack matrices, Text text, float x, float y, int color, CallbackInfoReturnable<Integer> cir) {
+        if (text instanceof LiteralText) {
+            drawStringEvent = new StringRenderEvent(text.asString() == null ? "" : text.asString(), MinecraftClient.getInstance().player == null ? null : MinecraftClient.getInstance().player.getName().asString());
+            RysmCore.INSTANCE.getEventBus().post(drawStringEvent);
+        }
+    }
+
+    @ModifyVariable(method = "draw(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I", at = @At("HEAD"), argsOnly = true, ordinal = 0)
+    private Text onStringRendered_modifyText2(Text original) {
+        if (original instanceof LiteralText) {
+            return TextCacheManager.INSTANCE.handleCache(((LiteralText) original), drawStringEvent.getString());
+        } else {
+            return original;
+        }
+    }
+
+    @Inject(method = "draw(Lnet/minecraft/text/Text;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I", at = @At("HEAD"))
+    private void onStringRendererd3(Text text, float x, float y, int color, boolean shadow, Matrix4f matrix, VertexConsumerProvider vertexConsumers, boolean seeThrough, int backgroundColor, int light, CallbackInfoReturnable<Integer> cir) {
+        if (text instanceof LiteralText) {
+            drawStringEvent = new StringRenderEvent(text.asString() == null ? "" : text.asString(), MinecraftClient.getInstance().player == null ? null : MinecraftClient.getInstance().player.getName().asString());
+            RysmCore.INSTANCE.getEventBus().post(drawStringEvent);
+        }
+    }
+
+    @ModifyVariable(method = "draw(Lnet/minecraft/text/Text;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I", at = @At("HEAD"), argsOnly = true, ordinal = 0)
+    private Text onStringRendered_modifyText3(Text original) {
+        if (original instanceof LiteralText) {
+            return TextCacheManager.INSTANCE.handleCache(((LiteralText) original), drawStringEvent.getString());
+        } else {
+            return original;
+        }
     }
 
 }
