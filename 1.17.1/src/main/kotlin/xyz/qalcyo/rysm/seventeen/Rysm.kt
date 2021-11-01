@@ -104,13 +104,14 @@ object Rysm : ClientModInitializer {
             }
             if (RysmConfig.firstTime) {
                 EssentialAPI.getNotifications().push(
-                    "Wyvtils",
+                    "Rysm",
                     "Hello! As this is your first time using this mod, click the key Z on your keyboard to configure the many features in Wyvtils!"
                 )
                 RysmConfig.firstTime = false
                 RysmConfig.markDirty()
                 RysmConfig.writeData()
             }
+
         }
         RysmCore.eventBus.register(this)
     }

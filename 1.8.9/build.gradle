@@ -102,6 +102,28 @@ dependencies {
 
     annotationProcessor("org.spongepowered:mixin:0.7.11-SNAPSHOT")
 }
+processResources {
+    if (duplicatesStrategy != DuplicatesStrategy.EXCLUDE) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include "mcmod.info"
+        //include "bundle.project.json"
+
+        expand(
+                "version": project.version,
+                "mcversion": project.minecraft.version
+        )
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude "mcmod.info"
+        //exclude "bundle.project.json"
+    }
+}
 
 tasks.reobfJar.dependsOn tasks.shadowJar
 
@@ -129,29 +151,6 @@ shadowJar {
     exclude "META-INF/com.android.tools/**"
 
     exclude "fabric.mod.json"
-}
-//TODO: fix process resources
-processResources {
-    if (duplicatesStrategy != DuplicatesStrategy.EXCLUDE) {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    }
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    from(sourceSets.main.resources.srcDirs) {
-        include "mcmod.info"
-        //include "bundle.project.json"
-
-        expand(
-                "version": project.version,
-                "mcversion": project.minecraft.version
-        )
-    }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "mcmod.info"
-        //exclude "bundle.project.json"
-    }
 }
 
 reobf {

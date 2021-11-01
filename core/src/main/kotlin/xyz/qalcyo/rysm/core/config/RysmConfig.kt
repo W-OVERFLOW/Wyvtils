@@ -416,11 +416,13 @@ object RysmConfig: Vigilant(
         hidePropertyIf("nametagTextShadow") {
             RysmCore.currentVersion == MinecraftVersions.EIGHT
         }
-        //TODO: IM SO CLOSE TO FIXING THIS FEATURE ON 1.17 JUST MAKE IT WORK IN CHAT
         hidePropertyIf("highlightName") {
             RysmCore.currentVersion == MinecraftVersions.SEVENTEEN
         }
         hidePropertyIf("textColor") {
+            RysmCore.currentVersion == MinecraftVersions.SEVENTEEN
+        }
+        hidePropertyIf("chatHightlight") {
             RysmCore.currentVersion == MinecraftVersions.SEVENTEEN
         }
         hidePropertyIf("leftHand") {

@@ -105,7 +105,7 @@ object Rysm {
 
     /**
      * Sets some variables which can only be set accurately
-     * when run during the post-initialization.
+     * when run during or after the post-initialization.
      */
     @Mod.EventHandler
     fun onPostInit(e: FMLPostInitializationEvent) {
