@@ -1,9 +1,9 @@
 # Rysm, the ultimate utility mod, for 1.8.9 and 1.17.1.
 
 
+[![Requisite](https://i.imgur.com/AcE3LIX.png)]
 <a href="https://github.com/Qalcyo/Wyvtils/releases" target="_blank">
 <img alt="downloads" src="https://img.shields.io/github/downloads/Qalcyo/Wyvtils/total?color=F5C400&style=for-the-badge" /> <img alt="downloads latest" src="https://img.shields.io/github/downloads-pre/Qalcyo/Wyvtils/latest/total?color=F5C400&style=for-the-badge" />
-[![Requisite](https://i.imgur.com/AcE3LIX.png)]
 
 ### [Discord invite (click to get support)](https://inv.wtf/qalcyo)
 
