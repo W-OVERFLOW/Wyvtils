@@ -34,17 +34,6 @@ buildConfig {
     buildConfigField("String", "ID", "\"${mod_id}\"")
 }
 
-repositories {
-    mavenCentral()
-    maven {
-        url = "https://jitpack.io/"
-    }
-    maven {
-        url = "http://maven.deftu.xyz/repository/maven-public/"
-        allowInsecureProtocol = true
-    }
-}
-
 dependencies {
     implementation ("gg.essential:essential-1.8.9-forge:1539+release-launch") {
         exclude(module: "keventbus")

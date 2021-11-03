@@ -68,6 +68,7 @@ object Updater {
      */
     fun download(url: String, file: File): Boolean {
         if (file.exists()) return true
+        if (file.parentFile.isDirectory && !file.parentFile.exists()) file.parentFile.mkdirs()
         var newUrl = url
         newUrl = newUrl.replace(" ", "%20")
         val downloadClient: HttpClient =
@@ -108,7 +109,7 @@ object Updater {
                     }
                 }
                 println("Using runtime $runtime")
-                val file = File("config/Qalcyo/Deleter-1.2.jar")
+                val file = File("Qalcyo/Libraries/Deleter-1.2.jar")
                 println("\"$runtime\" -jar \"${file.absolutePath}\" \"${RysmCore.jarFile.absolutePath}\"")
                 if (System.getProperty("os.name").lowercase(Locale.ENGLISH).containsAny("linux", "unix")) {
                     println("On Linux, giving Deleter jar execute permissions...")

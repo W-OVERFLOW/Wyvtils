@@ -22,7 +22,6 @@ import gg.essential.api.EssentialAPI
 import gg.essential.api.gui.buildConfirmationModal
 import gg.essential.elementa.WindowScreen
 import gg.essential.elementa.dsl.childOf
-import xyz.qalcyo.mango.Multithreading
 import xyz.qalcyo.rysm.core.RysmCore
 import xyz.qalcyo.rysm.core.RysmInfo
 import xyz.qalcyo.rysm.core.utils.Updater
@@ -44,13 +43,13 @@ class DownloadGui: WindowScreen(restoreCurrentGuiOnClose = true) {
             this.secondaryText = "(This will update from v${RysmInfo.VER} to ${Updater.latestTag})"
             this.onConfirm = {
                 restorePreviousScreen()
-                Multithreading.runAsync {
+                gg.essential.api.utils.Multithreading.runAsync {
                     if (Updater.download(
                             Updater.updateUrl,
                             File("mods/${RysmInfo.NAME} [${RysmCore.currentVersion.versionString}]-${Updater.latestTag.substringAfter("v")}.jar")
                         ) && Updater.download(
                             "https://github.com/Qalcyo/Deleter/releases/download/v1.2/Deleter-1.2.jar",
-                            File(RysmCore.modDir.parentFile.parentFile, "Deleter-1.2.jar")
+                            File(File(RysmCore.modDir.parentFile.parentFile, "Libraries"), "Deleter-1.2.jar")
                         )
                     ) {
                         EssentialAPI.getNotifications()

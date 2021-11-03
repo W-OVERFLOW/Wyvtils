@@ -77,8 +77,7 @@ object Rysm {
      */
     @Mod.EventHandler
     fun onPreInit(e: FMLPreInitializationEvent) {
-        RysmCore.modDir =
-            File(File(File(File(Minecraft.getMinecraft().mcDataDir, "config"), "Qalcyo"), RysmInfo.NAME), "1.8.9")
+        RysmCore.modDir = File(File(File(Minecraft.getMinecraft().mcDataDir, "Qalcyo"), RysmInfo.NAME), "1.8.9")
         if (!RysmCore.modDir.exists()) RysmCore.modDir.mkdirs()
         RysmCore.jarFile = e.sourceFile
     }
