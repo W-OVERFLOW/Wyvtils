@@ -68,7 +68,7 @@ object Updater {
      */
     fun download(url: String, file: File): Boolean {
         if (file.exists()) return true
-        if (file.parentFile.isDirectory && !file.parentFile.exists()) file.parentFile.mkdirs()
+        if (!file.parentFile.exists()) file.parentFile.mkdirs()
         var newUrl = url
         newUrl = newUrl.replace(" ", "%20")
         val downloadClient: HttpClient =
