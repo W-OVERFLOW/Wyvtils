@@ -35,6 +35,7 @@ version = mod_ver
 
 minecraft {
    refmapName = "mixins.rysm.refmap.json"
+   accessWidener = file("src/main/resources/rysm.accesswidener")
 }
 
 quiltflower {

@@ -371,6 +371,14 @@ object RysmConfig: Vigilant(
 
     @Property(
         type = PropertyType.SWITCH,
+        name = "Remove Pack GUI Background",
+        category = "Pack GUI Modifier",
+        description = "Remove the dirt background in the pack GUI.",
+    )
+    var transparentPackGUI = false
+
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Show Update Notification",
         description = "Show a notification when you start Minecraft informing you of new updates.",
         category = "Updater"

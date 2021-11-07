@@ -18,17 +18,14 @@
 
 package xyz.qalcyo.rysm.eight.mixin.renderer;
 
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
-import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xyz.qalcyo.rysm.core.config.RysmConfig;
+import xyz.qalcyo.rysm.eight.hooks.Sk1erOAMAnimationHandlerHookKt;
 
 /**
  * This mixin handles compatibility with the left hand
@@ -40,14 +37,13 @@ import xyz.qalcyo.rysm.core.config.RysmConfig;
 @Pseudo
 @Mixin(targets = "club.sk1er.oldanimations.AnimationHandler")
 public class Sk1erOAMAnimationHandlerMixin {
-    private boolean already = false;
 
     /**
      * Resets internal variables to their original value.
      */
     @Inject(method = "renderItemInFirstPerson", at = @At("HEAD"))
     private void resetInternalVariables(ItemRenderer renderer, ItemStack stack, float equipProgress, float partialTicks, CallbackInfoReturnable<Boolean> ci) {
-        already = false;
+        Sk1erOAMAnimationHandlerHookKt.setAlready(false);
     }
 
     /**
@@ -55,18 +51,6 @@ public class Sk1erOAMAnimationHandlerMixin {
      */
     @Inject(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;pushMatrix()V"), remap = true)
     protected void onItemInFirstPersonRendered(ItemRenderer renderer, ItemStack stack, float equipProgress, float partialTicks, CallbackInfoReturnable<Boolean> ci) {
-        if (RysmConfig.INSTANCE.getSwapBow() && stack != null && stack.getItemUseAction() == EnumAction.BOW) {
-            if (!RysmConfig.INSTANCE.getLeftHand() && !already) {
-                GL11.glScaled(-1.0d, 1.0d, 1.0d);
-                GlStateManager.disableCull();
-                already = true;
-            }
-        } else {
-            if (RysmConfig.INSTANCE.getLeftHand() && !already) {
-                GL11.glScaled(-1.0d, 1.0d, 1.0d);
-                GlStateManager.disableCull();
-                already = true;
-            }
-        }
+        Sk1erOAMAnimationHandlerHookKt.onSk1erItemInFirstPersonRendered(stack);
     }
 }

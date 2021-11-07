@@ -54,6 +54,8 @@ object Rysm : ClientModInitializer {
             "category.rysm.ok" // The translation key of the keybinding's category.
         )
     )
+    var packY: Int? = null
+    var packBottom: Int? = null
 
     /**
      * Handles the initialization of the mod.

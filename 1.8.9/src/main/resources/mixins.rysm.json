@@ -4,17 +4,22 @@
   "package": "xyz.qalcyo.rysm.eight.mixin",
   "refmap": "mixins.rysm.refmap.json",
   "mixins": [
+    "MinecraftMixin",
     "gui.FontRendererMixin",
+    "gui.GuiAccessor",
     "gui.GuiIngameAccessor",
     "gui.GuiIngameForgeMixin",
     "gui.GuiNewChatAccessor",
     "gui.GuiNewChatMixin",
+    "gui.GuiScreenResourcePacksMixin",
+    "gui.GuiSlotMixin",
+    "gui.ResourcePackListEntryMixin",
+    "gui.ResourcePackListEntryAccessor",
+    "gui.SkytilsChatTabsMixin",
     "renderer.ItemRendererMixin",
-    "MinecraftMixin",
     "renderer.RenderEntityItemMixin",
     "renderer.RenderManagerMixin",
-    "renderer.Sk1erOAMAnimationHandlerMixin",
-    "gui.SkytilsChatTabsMixin"
+    "renderer.Sk1erOAMAnimationHandlerMixin"
   ],
   "verbose": true
 }

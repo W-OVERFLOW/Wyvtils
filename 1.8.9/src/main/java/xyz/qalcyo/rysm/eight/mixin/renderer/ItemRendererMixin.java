@@ -29,6 +29,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.qalcyo.rysm.core.config.RysmConfig;
+import xyz.qalcyo.rysm.eight.hooks.ItemRendererHookKt;
 
 /**
  * This mixin handles the left hand and swap bow features
@@ -45,16 +46,6 @@ public class ItemRendererMixin {
      */
     @Inject(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;pushMatrix()V"))
     protected void onItemInFirstPersonRendered(float partialTicks, CallbackInfo ci) {
-        if (RysmConfig.INSTANCE.getSwapBow() && itemToRender != null && itemToRender.getItemUseAction() == EnumAction.BOW) {
-            if (!RysmConfig.INSTANCE.getLeftHand()) {
-                GL11.glScaled(-1.0d, 1.0d, 1.0d);
-                GlStateManager.disableCull();
-            }
-        } else {
-            if (RysmConfig.INSTANCE.getLeftHand()) {
-                GL11.glScaled(-1.0d, 1.0d, 1.0d);
-                GlStateManager.disableCull();
-            }
-        }
+        ItemRendererHookKt.onItemInFirstPersonRendered(itemToRender);
     }
 }

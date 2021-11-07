@@ -24,7 +24,7 @@ import net.minecraft.util.IChatComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import xyz.qalcyo.rysm.eight.Rysm;
+import xyz.qalcyo.rysm.eight.hooks.GuiNewChatHookKt;
 
 import java.util.List;
 
@@ -39,6 +39,6 @@ public class GuiNewChatMixin {
      */
     @Redirect(method = "setChatLine", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiUtilRenderComponents;splitText(Lnet/minecraft/util/IChatComponent;ILnet/minecraft/client/gui/FontRenderer;ZZ)Ljava/util/List;"))
     private List<IChatComponent> invokeMessageEvent(IChatComponent p_178908_0_, int p_178908_1_, FontRenderer p_178908_2_, boolean p_178908_3_, boolean p_178908_4_) {
-        return Rysm.INSTANCE.handleChatSent(p_178908_0_, p_178908_1_, p_178908_2_, p_178908_3_, p_178908_4_);
+        return GuiNewChatHookKt.handleChatSent(p_178908_0_, p_178908_1_, p_178908_2_, p_178908_3_, p_178908_4_);
     }
 }

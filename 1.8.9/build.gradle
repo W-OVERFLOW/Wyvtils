@@ -95,7 +95,7 @@ dependencies {
         transitive = false
     }
     implementation("xyz.qalcyo.requisite:Requisite-1.8.9:2.0-beta6")
-    shade("xyz.qalcyo.requisite:RequisiteInstaller-1.8.9:1.3.9") {
+    shade("xyz.qalcyo.requisite:RequisiteInstaller-1.8.9:1.3.10") {
         transitive = false
     }
     implementation "gg.essential:essential-1.8.9-forge:1539+release-launch"

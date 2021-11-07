@@ -26,6 +26,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.qalcyo.rysm.core.RysmCore;
 import xyz.qalcyo.rysm.core.listener.events.MessageRenderEvent;
+import xyz.qalcyo.rysm.eight.hooks.SkytilsChatTabsHookKt;
 
 /**
  * This mixin handles compatibility with the MessageRenderEvent and
@@ -42,8 +43,6 @@ public class SkytilsChatTabsMixin {
      */
     @Inject(method = "shouldAllow", at = @At("HEAD"))
     private void handleRysmChatEvent(IChatComponent chatComponent, CallbackInfoReturnable<Boolean> booleanCallbackInfoReturnable) {
-        MessageRenderEvent event = new MessageRenderEvent(chatComponent.getUnformattedText(), false);
-        RysmCore.INSTANCE.getEventBus().post(event);
-        if (event.getCancelled()) booleanCallbackInfoReturnable.setReturnValue(event.getCancelled());
+        SkytilsChatTabsHookKt.handleRysmChatEvent(chatComponent, booleanCallbackInfoReturnable);
     }
 }

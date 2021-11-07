@@ -21,9 +21,6 @@ package xyz.qalcyo.rysm.eight
 import gg.essential.lib.kbrewster.eventbus.Subscribe
 import gg.essential.universal.UDesktop
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.FontRenderer
-import net.minecraft.client.gui.GuiUtilRenderComponents
-import net.minecraft.util.IChatComponent
 import net.minecraftforge.common.MinecraftForge.EVENT_BUS
 import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.LoaderState.ModState
@@ -36,7 +33,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion
 import org.lwjgl.input.Keyboard
-import skytils.skytilsmod.features.impl.handlers.ChatTabs
 import xyz.qalcyo.mango.Multithreading
 import xyz.qalcyo.requisite.Requisite
 import xyz.qalcyo.requisite.core.keybinds.KeyBinds
@@ -45,16 +41,15 @@ import xyz.qalcyo.rysm.core.RysmCore.eventBus
 import xyz.qalcyo.rysm.core.RysmInfo
 import xyz.qalcyo.rysm.core.config.RysmConfig
 import xyz.qalcyo.rysm.core.listener.events.ChatRefreshEvent
-import xyz.qalcyo.rysm.core.listener.events.MessageRenderEvent
 import xyz.qalcyo.rysm.core.utils.MinecraftVersions
 import xyz.qalcyo.rysm.core.utils.Updater
 import xyz.qalcyo.rysm.eight.commands.RysmCommand
 import xyz.qalcyo.rysm.eight.gui.DownloadGui
+import xyz.qalcyo.rysm.eight.hooks.GuiScreenResourcePacksHook
 import xyz.qalcyo.rysm.eight.mixin.gui.GuiIngameAccessor
 import xyz.qalcyo.rysm.eight.mixin.gui.GuiNewChatAccessor
 import java.io.File
 import java.net.URI
-import java.util.*
 
 @Mod(
     modid = RysmInfo.ID,
@@ -68,6 +63,8 @@ object Rysm {
 
     var isSkytils = false
     var isNewToggleChat = false
+    var packY: Int? = null
+    var packBottom: Int? = null
 
     val mc: Minecraft
         get() = Minecraft.getMinecraft()
@@ -91,6 +88,7 @@ object Rysm {
         RysmCommand.register()
         eventBus.register(this)
         EVENT_BUS.register(this)
+        EVENT_BUS.register(GuiScreenResourcePacksHook)
         Requisite.getInstance().keyBindRegistry.register(
             KeyBinds.from(
                 "Clear Title",
@@ -178,22 +176,6 @@ object Rysm {
                 )
             }
         }
-    }
-
-    //TODO: Why is this here and not in the actual mixin in Java?
-    fun handleChatSent(p_178908_0_: IChatComponent, p_178908_1_: Int, p_178908_2_: FontRenderer, p_178908_3_: Boolean, p_178908_4_: Boolean): List<IChatComponent> {
-        if (isSkytils) {
-            if (!ChatTabs.shouldAllow(p_178908_0_)) return Collections.emptyList()
-        }
-        val event = MessageRenderEvent(p_178908_0_.unformattedText, false)
-        eventBus.post(event)
-        return if (event.cancelled) emptyList() else GuiUtilRenderComponents.splitText(
-            p_178908_0_,
-            p_178908_1_,
-            p_178908_2_,
-            p_178908_3_,
-            p_178908_4_
-        )
     }
 
 

@@ -27,6 +27,7 @@ import org.apache.http.impl.client.HttpClientBuilder
 import xyz.qalcyo.mango.Multithreading
 import xyz.qalcyo.rysm.core.RysmCore
 import xyz.qalcyo.rysm.core.RysmInfo
+import xyz.qalcyo.rysm.core.config.RysmConfig
 import java.awt.Desktop
 import java.io.File
 import java.io.FileOutputStream
@@ -57,7 +58,7 @@ object Updater {
             if (currentVersion < latestVersion) {
                 updateUrl = latestRelease["assets"].asJsonArray[0].asJsonObject["browser_download_url"].asString
                 shouldUpdate = true
-                shouldShowNotification = true
+                shouldShowNotification = RysmConfig.showUpdateNotification
             }
         }
     }

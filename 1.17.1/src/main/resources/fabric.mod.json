@@ -13,6 +13,7 @@
   },
   "license": "GNU Lesser General Public License version 3 (LGPLv3)",
   "environment": "client",
+  "accessWidener" : "rysm.accesswidener",
   "entrypoints": {
     "client": [
       {
