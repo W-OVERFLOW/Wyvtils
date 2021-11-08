@@ -116,7 +116,7 @@ object Listener {
         if (RysmConfig.hitboxLineOfSight) {
             e.lineOfSightColor = if (RysmConfig.hitboxLineOfSightChroma) ColorUtils.timeBasedChroma() else RysmConfig.hitboxLineOfSightColor.rgb
         } else {
-            e.cancelEyeLine = true
+            e.cancelLineOfSight = true
         }
     }
 
