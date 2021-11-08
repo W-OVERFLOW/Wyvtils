@@ -18,7 +18,9 @@
 
 package xyz.qalcyo.rysm.core.config
 
+import gg.essential.api.EssentialAPI
 import gg.essential.universal.ChatColor
+import gg.essential.universal.UResolution
 import gg.essential.vigilance.Vigilant
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
@@ -29,6 +31,9 @@ import xyz.qalcyo.rysm.core.utils.MinecraftVersions
 import java.awt.Color
 import java.io.File
 import xyz.qalcyo.rysm.core.RysmInfo
+import xyz.qalcyo.rysm.core.listener.events.BossBarResetEvent
+import xyz.qalcyo.rysm.core.listener.events.Gui
+import xyz.qalcyo.rysm.core.listener.events.RenderGuiEvent
 
 /**
  * The main configuration of the mod, powered by the Vigilance library.
@@ -139,6 +144,248 @@ object RysmConfig: Vigilant(
 
     @Property(
         type = PropertyType.SWITCH,
+        name = "Bossbar Customization",
+        description = "Toggle Bossbar customization",
+        category = "Bossbar"
+    )
+    var bossBarCustomization = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Bossbar",
+        description = "Toggle the bossbar.",
+        category = "Bossbar"
+    )
+    var bossBar = true
+
+    /*/
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Automatically Turn Off Bossbar When In Lobby",
+        description = "Automatically turn off the bossbar when the player goes into a lobby, and turn it back on when exiting it.",
+        category = "Bossbar"
+    )
+    var autoBossbarLobby = false
+
+     */
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Text",
+        description = "Toggle the text for the bossbar.",
+        category = "Bossbar"
+    )
+    var bossBarText = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Shadow",
+        description = "Toggle the text shadow for the bossbar.",
+        category = "Bossbar"
+    )
+    var bossBarShadow = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Bar",
+        description = "Toggle the bar for the bossbar.",
+        category = "Bossbar"
+    )
+    var bossBarBar = true
+
+    /*/
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Text Color",
+        description = "Change the text color of the bossbar.",
+        category = "Bossbar"
+    )
+    var bossbarTextColor: Color = Color.WHITE
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Bar Colour Customization",
+        description = "Change the bar colour of the bossbar.",
+        category = "Bossbar"
+    )
+    var bossbarBarColorOn = false
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Bar Color",
+        description = "Change the bar color of the bossbar.",
+        category = "Bossbar"
+    )
+    var bossbarBarColor: Color = Color.BLUE
+
+     */
+
+    @Property(
+        type = PropertyType.PERCENT_SLIDER,
+        name = "Bossbar Scale",
+        description = "Set the scale for the bossbar.",
+        category = "Bossbar"
+    )
+    var bossbarScale = 1.0F
+
+    @Property(
+        type = PropertyType.BUTTON,
+        name = "Bossbar Editor",
+        description = "Change the position of the bossbar.",
+        category = "Bossbar"
+    )
+    fun openBossHealthGui() {
+        if (bossBarCustomization) RysmCore.eventBus.post(RenderGuiEvent(Gui.BOSSBAR))
+        else EssentialAPI.getNotifications()
+            .push(RysmInfo.NAME, "You can't do that, you haven't enabled Bossbar Customization!")
+    }
+
+    @Property(
+        type = PropertyType.BUTTON,
+        name = "Reset Position",
+        description = "Reset the position of the bossbar to its original position.",
+        category = "Bossbar"
+    )
+    fun resetBossbar() {
+        RysmCore.eventBus.post(BossBarResetEvent())
+    }
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Bossbar X",
+        description = "X",
+        category = "Bossbar",
+        hidden = true
+    )
+    var bossBarX: Int = 0
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Bossbar Y",
+        description = "Y",
+        category = "Bossbar",
+        hidden = true
+    )
+    var bossBarY: Int = 12
+
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "bossbar first time",
+        description = "a",
+        category = "General",
+        hidden = true
+    )
+    var firstLaunchBossbar = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Action Bar Customization",
+        description = "Toggle customization of the action bar.",
+        category = "Action Bar"
+    )
+    var actionBarCustomization = false
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Action Bar",
+        description = "Toggle the action bar.",
+        category = "Action Bar"
+    )
+    var actionBar = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Action Bar Shadow",
+        description = "Toggle the action bar shadow.",
+        category = "Action Bar"
+    )
+    var actionBarShadow = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Action Bar Background",
+        description = "Add a background to the action bar.",
+        category = "Action Bar"
+    )
+    var actionBarBackground = false
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Action Bar Round Background",
+        description = "Make the background of the action bar rounded.",
+        category = "Action Bar"
+    )
+    var actionBarRound = false
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Rounded Background Radius",
+        description = "Set the corner radius of the rounded background.",
+        category = "Action Bar",
+        min = 0,
+        max = 10
+    )
+    var actionBarRoundRadius = 4
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Background Padding Amount",
+        description = "Change the amount of padding added to the background.",
+        category = "Action Bar",
+        min = 0,
+        max = 10
+    )
+    var actionBarPadding = 2
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Background Color",
+        description = "Change the text color for the HUD.",
+        category = "Action Bar"
+    )
+    var actionBarBackgroundColor: Color = Color(0, 0, 0, 128)
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Action Bar Position",
+        description = "Toggle the action bar position customization.",
+        category = "Action Bar"
+    )
+    var actionBarPosition = false
+
+    @Property(
+        type = PropertyType.BUTTON,
+        name = "Action Bar Editor",
+        description = "Change the position of the action bar.",
+        category = "Action Bar"
+    )
+    fun openActionBarGui() {
+        if (actionBarPosition && actionBarCustomization) RysmCore.eventBus.post(RenderGuiEvent(Gui.ACTIONBAR))
+        else EssentialAPI.getNotifications()
+            .push(RysmInfo.NAME, "You can't do that, you don't have Action Bar position enabled!")
+    }
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Action Bar X",
+        description = "X",
+        category = "Action Bar",
+        hidden = true
+    )
+    var actionBarX: Int = 0
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Action Bar Y",
+        description = "Y",
+        category = "Action Bar",
+        hidden = true
+    )
+    var actionBarY: Int = 12
+
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Toggle Title",
         description = "Toggle the title on or off.",
         category = "Titles"
@@ -168,6 +415,121 @@ object RysmConfig: Vigilant(
         category = "Titles"
     )
     var titleShadow = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Sidebar",
+        category = "Sidebar",
+        description = "Toggle the sidebar from rendering."
+    )
+    var sidebar = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Sidebar Text Shadow",
+        category = "Sidebar",
+        description = "Toggle the sidebar text's shadow from rendering."
+    )
+    var sidebarTextShadow = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Score Points",
+        category = "Sidebar",
+        description = "Toggle the sidebar score points (aka red numbers) from rendering."
+    )
+    var sidebarScorePoints = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Background",
+        category = "Sidebar",
+        description = "Toggle the background from rendering."
+    )
+    var sidebarBackground = true
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Sidebar Background Color",
+        category = "Sidebar",
+        description = "Change the text color for the sidebar."
+    )
+    var sidebarBackgroundColor: Color = Color(0, 0, 0, 50)
+
+    /*/
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Background Border",
+        category = "Sidebar",
+        description = "Enable a border to border the background."
+    )
+    var backgroundBorder = false
+
+    @Property(
+        type = PropertyType.COLOR,
+        name = "Border Color",
+        category = "Sidebar",
+        description = "Select a color to set for the background border."
+    )
+    var borderColor: Color = Color.WHITE
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Border Width",
+        category = "Sidebar",
+        description = "Set the width of the background border.",
+        min = 1,
+        max = 20
+    )
+    var borderNumber = 2
+
+     */
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Sidebar Position",
+        category = "Sidebar",
+        description = "Toggle the sidebar position editor."
+    )
+    var sidebarPosition = false
+
+    @Property(
+        type = PropertyType.BUTTON,
+        name = "Sidebar Editor",
+        description = "Change the position of the sidebar.",
+        category = "Sidebar"
+    )
+    fun openSidebarGui() {
+        if (sidebarPosition) RysmCore.eventBus.post(RenderGuiEvent(Gui.SIDEBAR))
+        else EssentialAPI.getNotifications()
+            .push(RysmInfo.NAME, "You can't do that, you don't have Sidebar position enabled!")
+    }
+
+    @Property(
+        type = PropertyType.PERCENT_SLIDER,
+        name = "Sidebar Scale",
+        description = "Set the scale for the sidebar.",
+        category = "Sidebar"
+    )
+    var sidebarScale = 1.0F
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Sidebar X",
+        description = "X",
+        category = "Sidebar",
+        hidden = true
+    )
+    var sidebarX: Int = 0
+
+    @Property(
+        type = PropertyType.NUMBER,
+        name = "Sidebar Y",
+        description = "Y",
+        category = "Sidebar",
+        hidden = true
+    )
+    var sidebarY: Int = 12
 
     @Property(
         type = PropertyType.SWITCH,
@@ -370,6 +732,22 @@ object RysmConfig: Vigilant(
     var hitboxLineOfSightChroma = false
 
     @Property(
+        type = PropertyType.COLOR,
+        name = "Debug HUD Color",
+        description = "Set the color of the Debug HUD background color.",
+        category = "Debug Screen"
+    )
+    var debugColor: Color = Color(-1873784752)
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Debug HUD Shadow",
+        description = "Turn on / off the shadow of Debug HUD text.",
+        category = "Debug Screen"
+    )
+    var debugShadow = false
+
+    @Property(
         type = PropertyType.SWITCH,
         name = "Remove Pack GUI Background",
         category = "Pack GUI Modifier",
@@ -412,6 +790,12 @@ object RysmConfig: Vigilant(
 
     init {
         initialize()
+        hidePropertyIf("debugColor") {
+            RysmCore.currentVersion == MinecraftVersions.EIGHT
+        }
+        hidePropertyIf("debugShadow") {
+            RysmCore.currentVersion == MinecraftVersions.EIGHT
+        }
         hidePropertyIf("disableTextShadow") {
             RysmCore.currentVersion == MinecraftVersions.EIGHT
         }

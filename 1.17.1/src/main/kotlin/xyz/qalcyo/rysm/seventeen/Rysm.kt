@@ -22,6 +22,7 @@ import gg.essential.api.EssentialAPI
 import gg.essential.lib.kbrewster.eventbus.Subscribe
 import gg.essential.universal.ChatColor
 import gg.essential.universal.UDesktop
+import gg.essential.universal.UResolution
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
@@ -35,10 +36,16 @@ import xyz.qalcyo.rysm.core.RysmCore
 import xyz.qalcyo.rysm.core.RysmInfo
 import xyz.qalcyo.rysm.core.config.RysmConfig
 import xyz.qalcyo.rysm.core.listener.Listener
+import xyz.qalcyo.rysm.core.listener.events.BossBarResetEvent
 import xyz.qalcyo.rysm.core.listener.events.ChatRefreshEvent
+import xyz.qalcyo.rysm.core.listener.events.Gui
+import xyz.qalcyo.rysm.core.listener.events.RenderGuiEvent
 import xyz.qalcyo.rysm.core.utils.MinecraftVersions
 import xyz.qalcyo.rysm.core.utils.Updater
+import xyz.qalcyo.rysm.seventeen.gui.ActionBarGui
+import xyz.qalcyo.rysm.seventeen.gui.BossHealthGui
 import xyz.qalcyo.rysm.seventeen.gui.DownloadGui
+import xyz.qalcyo.rysm.seventeen.gui.SidebarGui
 import xyz.qalcyo.rysm.seventeen.mixin.gui.ChatHudAccessor
 import java.io.File
 import java.net.URI
@@ -137,6 +144,25 @@ object Rysm : ClientModInitializer {
                 chat.invokeAddMessage(i.text, i.id, i.creationTick, true)
             }
         }
+    }
+
+    @Subscribe
+    fun onRenderGui(e: RenderGuiEvent) {
+        when (e.gui) {
+            Gui.BOSSBAR -> EssentialAPI.getGuiUtil().openScreen(BossHealthGui())
+            Gui.ACTIONBAR -> EssentialAPI.getGuiUtil().openScreen(ActionBarGui())
+            Gui.SIDEBAR -> EssentialAPI.getGuiUtil().openScreen(SidebarGui())
+        }
+    }
+
+    @Subscribe
+    fun onBossBarReset(e: BossBarResetEvent) {
+        EssentialAPI.getGuiUtil().openScreen(null)
+        RysmConfig.bossBarX = (UResolution.scaledWidth / 2)
+        RysmConfig.bossBarY = 12
+        RysmConfig.markDirty()
+        RysmConfig.writeData()
+        EssentialAPI.getGuiUtil().openScreen(RysmConfig.gui())
     }
 
 }

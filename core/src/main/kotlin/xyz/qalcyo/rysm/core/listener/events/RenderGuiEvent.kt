@@ -16,25 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.rysm.eight.mixin.gui;
+package xyz.qalcyo.rysm.core.listener.events
 
-import net.minecraft.client.gui.GuiIngame;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
-
-/**
- * This mixin allows code to access usually protected or private
- * variables in the GuiIngame class.
- */
-@Mixin(GuiIngame.class)
-public interface GuiIngameAccessor {
-
-    @Accessor
-    String getDisplayedTitle();
-
-    @Accessor
-    void setDisplayedTitle(String title);
-
-    @Accessor
-    void setDisplayedSubTitle(String title);
-}
+class RenderGuiEvent(val gui: Gui): Event(cancelled = false)

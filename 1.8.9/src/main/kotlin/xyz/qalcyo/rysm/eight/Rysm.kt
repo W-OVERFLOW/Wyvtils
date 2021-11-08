@@ -18,8 +18,10 @@
 
 package xyz.qalcyo.rysm.eight
 
+import gg.essential.api.EssentialAPI
 import gg.essential.lib.kbrewster.eventbus.Subscribe
 import gg.essential.universal.UDesktop
+import gg.essential.universal.UResolution
 import net.minecraft.client.Minecraft
 import net.minecraftforge.common.MinecraftForge.EVENT_BUS
 import net.minecraftforge.fml.common.Loader
@@ -40,13 +42,19 @@ import xyz.qalcyo.rysm.core.RysmCore
 import xyz.qalcyo.rysm.core.RysmCore.eventBus
 import xyz.qalcyo.rysm.core.RysmInfo
 import xyz.qalcyo.rysm.core.config.RysmConfig
+import xyz.qalcyo.rysm.core.listener.events.BossBarResetEvent
 import xyz.qalcyo.rysm.core.listener.events.ChatRefreshEvent
+import xyz.qalcyo.rysm.core.listener.events.Gui
+import xyz.qalcyo.rysm.core.listener.events.RenderGuiEvent
 import xyz.qalcyo.rysm.core.utils.MinecraftVersions
 import xyz.qalcyo.rysm.core.utils.Updater
 import xyz.qalcyo.rysm.eight.commands.RysmCommand
+import xyz.qalcyo.rysm.eight.gui.ActionBarGui
+import xyz.qalcyo.rysm.eight.gui.BossHealthGui
 import xyz.qalcyo.rysm.eight.gui.DownloadGui
+import xyz.qalcyo.rysm.eight.gui.SidebarGui
 import xyz.qalcyo.rysm.eight.hooks.GuiScreenResourcePacksHook
-import xyz.qalcyo.rysm.eight.mixin.gui.GuiIngameAccessor
+import xyz.qalcyo.rysm.eight.mixin.hud.GuiIngameAccessor
 import xyz.qalcyo.rysm.eight.mixin.gui.GuiNewChatAccessor
 import java.io.File
 import java.net.URI
@@ -176,6 +184,25 @@ object Rysm {
                 )
             }
         }
+    }
+
+    @Subscribe
+    fun onRenderGui(e: RenderGuiEvent) {
+        when (e.gui) {
+            Gui.BOSSBAR -> EssentialAPI.getGuiUtil().openScreen(BossHealthGui())
+            Gui.ACTIONBAR -> EssentialAPI.getGuiUtil().openScreen(ActionBarGui())
+            Gui.SIDEBAR -> EssentialAPI.getGuiUtil().openScreen(SidebarGui())
+        }
+    }
+
+    @Subscribe
+    fun onBossBarReset(e: BossBarResetEvent) {
+        EssentialAPI.getGuiUtil().openScreen(null)
+        RysmConfig.bossBarX = (UResolution.scaledWidth / 2)
+        RysmConfig.bossBarY = 12
+        RysmConfig.markDirty()
+        RysmConfig.writeData()
+        EssentialAPI.getGuiUtil().openScreen(RysmConfig.gui())
     }
 
 

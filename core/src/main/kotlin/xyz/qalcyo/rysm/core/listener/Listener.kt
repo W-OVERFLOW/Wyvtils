@@ -45,7 +45,7 @@ object Listener {
     ) { r ->
         Thread(
             r,
-            String.format("Rysm Highlight Thread %s", counter.incrementAndGet())
+            "Rysm Highlight Thread ${counter.incrementAndGet()}"
         )
     }
 
