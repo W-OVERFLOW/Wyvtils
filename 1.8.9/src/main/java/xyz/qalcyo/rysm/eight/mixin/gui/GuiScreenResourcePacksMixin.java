@@ -18,6 +18,7 @@
 
 package xyz.qalcyo.rysm.eight.mixin.gui;
 
+import gg.essential.universal.UResolution;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiResourcePackAvailable;
 import net.minecraft.client.gui.GuiScreenResourcePacks;
@@ -56,6 +57,21 @@ public class GuiScreenResourcePacksMixin {
     @Inject(method = "initGui", at = @At("HEAD"))
     private void addInputField(CallbackInfo ci) {
         GuiScreenResourcePacksHookKt.addInputField();
+    }
+
+    @Inject(method = "initGui", at = @At("TAIL"))
+    private void refresh(CallbackInfo ci) {
+        if (RysmConfig.INSTANCE.getHideIncompatiblePacks()) {
+            List<ResourcePackListEntry> newPacks = availableResourcePacks;
+            newPacks.removeIf(entry -> entry.func_183019_a() != 1);
+            availableResourcePacks.forEach(resourcePackListEntry -> System.out.println(resourcePackListEntry.func_148312_b()));
+            newPacks.forEach(resourcePackListEntry -> System.out.println(resourcePackListEntry.func_148312_b()));
+            if (newPacks.size() != availableResourcePacks.size()) {
+                this.availableResourcePacksList = new GuiResourcePackAvailable(Minecraft.getMinecraft(), 200, UResolution.getScaledHeight(), newPacks);
+                this.availableResourcePacksList.setSlotXBoundsFromLeft(UResolution.getScaledWidth() / 2 - 4 - 200);
+                this.availableResourcePacksList.registerScrollButtons(7, 8);
+            }
+        }
     }
 
     @Inject(method = "mouseClicked", at = @At("HEAD"))

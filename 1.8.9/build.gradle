@@ -123,6 +123,7 @@ processResources {
         exclude "mcmod.info"
         //exclude "bundle.project.json"
     }
+    rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
 tasks.reobfJar.dependsOn tasks.shadowJar
@@ -179,6 +180,7 @@ jar {
             "ForceLoadAsMod": true,
             "MixinConfigs": "mixins.${mod_id}.json",
             "TweakClass": "xyz.qalcyo.requisiteessentialloader.RequisiteEssentialTweaker",
+            'FMLAT': 'rysm_at.cfg',
             "TweakOrder": "0"
     )
 

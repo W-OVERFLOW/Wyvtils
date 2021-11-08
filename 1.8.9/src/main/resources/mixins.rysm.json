@@ -12,7 +12,6 @@
     "gui.GuiNewChatMixin",
     "gui.GuiScreenResourcePacksMixin",
     "gui.GuiSlotMixin",
-    "gui.ResourcePackListEntryAccessor",
     "gui.ResourcePackListEntryMixin",
     "gui.SkytilsChatTabsMixin",
     "hud.GuiIngameForgeMixin",

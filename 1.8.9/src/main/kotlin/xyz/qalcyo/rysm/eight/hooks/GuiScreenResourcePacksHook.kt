@@ -27,7 +27,6 @@ import net.minecraft.client.resources.ResourcePackListEntry
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import org.lwjgl.input.Keyboard
-import xyz.qalcyo.rysm.eight.mixin.gui.ResourcePackListEntryAccessor
 
 var inputField: GuiTextField? = null
 var sr: ScaledResolution? = null
@@ -55,7 +54,7 @@ fun addInputField() {
 fun filterPacks(list: List<ResourcePackListEntry?>?, text: String?): List<ResourcePackListEntry?>? {
     if (text.isNullOrBlank() || list == null) return list
     return list.filter {
-        it != null && UTextComponent.stripFormatting((it as ResourcePackListEntryAccessor).invokeFunc_148312_b()).lowercase().contains(text.lowercase())
+        it != null && UTextComponent.stripFormatting(it.func_148312_b()).lowercase().contains(text.lowercase())
     }
 }
 

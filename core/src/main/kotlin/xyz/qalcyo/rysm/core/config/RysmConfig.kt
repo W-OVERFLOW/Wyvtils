@@ -20,26 +20,27 @@ package xyz.qalcyo.rysm.core.config
 
 import gg.essential.api.EssentialAPI
 import gg.essential.universal.ChatColor
-import gg.essential.universal.UResolution
 import gg.essential.vigilance.Vigilant
+import gg.essential.vigilance.data.Category
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
+import gg.essential.vigilance.data.SortingBehavior
 import xyz.qalcyo.rysm.core.RysmCore
+import xyz.qalcyo.rysm.core.RysmInfo
 import xyz.qalcyo.rysm.core.listener.Listener
+import xyz.qalcyo.rysm.core.listener.events.BossBarResetEvent
 import xyz.qalcyo.rysm.core.listener.events.ChatRefreshEvent
+import xyz.qalcyo.rysm.core.listener.events.Gui
+import xyz.qalcyo.rysm.core.listener.events.RenderGuiEvent
 import xyz.qalcyo.rysm.core.utils.MinecraftVersions
 import java.awt.Color
 import java.io.File
-import xyz.qalcyo.rysm.core.RysmInfo
-import xyz.qalcyo.rysm.core.listener.events.BossBarResetEvent
-import xyz.qalcyo.rysm.core.listener.events.Gui
-import xyz.qalcyo.rysm.core.listener.events.RenderGuiEvent
 
 /**
  * The main configuration of the mod, powered by the Vigilance library.
  */
 object RysmConfig: Vigilant(
-    File(RysmCore.modDir, "${RysmInfo.ID}.toml")
+    File(RysmCore.modDir, "${RysmInfo.ID}.toml"), "${ChatColor.DARK_PURPLE}Rysm", sortingBehavior = ConfigSorting
 ) {
     @Property(
         type = PropertyType.SWITCH,
@@ -757,6 +758,14 @@ object RysmConfig: Vigilant(
 
     @Property(
         type = PropertyType.SWITCH,
+        name = "Hide Incompatible Packs",
+        category = "Pack GUI Modifier",
+        description = "Remove incompatible packs from the pack GUI.",
+    )
+    var hideIncompatiblePacks = false
+
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Show Update Notification",
         description = "Show a notification when you start Minecraft informing you of new updates.",
         category = "Updater"
@@ -850,6 +859,16 @@ object RysmConfig: Vigilant(
         registerListener("hideLocraw") { boolean: Boolean ->
             hideLocraw = boolean
             RysmCore.eventBus.post(ChatRefreshEvent())
+        }
+    }
+
+    private object ConfigSorting : SortingBehavior() {
+        override fun getCategoryComparator(): Comparator<in Category> = Comparator { o1, o2 ->
+            if (o1.name == "General") return@Comparator -1
+            if (o2.name == "General") return@Comparator 1
+            else compareValuesBy(o1, o2) {
+                it.name
+            }
         }
     }
 }
