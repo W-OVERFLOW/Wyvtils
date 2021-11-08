@@ -29,5 +29,7 @@ fun handleRysmChatEvent(
 ) {
     val event = MessageRenderEvent(chatComponent.unformattedText, false)
     eventBus.post(event)
-    booleanCallbackInfoReturnable.returnValue = !event.cancelled
+    if (event.cancelled) {
+        booleanCallbackInfoReturnable.returnValue = false
+    }
 }

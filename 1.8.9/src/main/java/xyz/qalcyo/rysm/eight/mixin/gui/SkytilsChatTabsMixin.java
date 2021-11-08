@@ -41,7 +41,7 @@ public class SkytilsChatTabsMixin {
      * Sends the MessageRenderEvent and makes the shouldAllow method return whether the event
      * was cancelled or not.
      */
-    @Inject(method = "shouldAllow", at = @At("HEAD"))
+    @Inject(method = "shouldAllow", at = @At("HEAD"), cancellable = true)
     private void handleRysmChatEvent(IChatComponent chatComponent, CallbackInfoReturnable<Boolean> booleanCallbackInfoReturnable) {
         SkytilsChatTabsHookKt.handleRysmChatEvent(chatComponent, booleanCallbackInfoReturnable);
     }
