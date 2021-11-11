@@ -99,9 +99,7 @@ public class GuiIngameForgeMixin {
         }
     }
 
-    /**
-     * Invokes the TitleEvent and cancels the title from rendering if asked.
-     */
+
     @Inject(method = "renderTitle", at = @At("HEAD"), cancellable = true)
     private void invokeAndCancelEvent(int width, int height, float partialTicks, CallbackInfo ci) {
         titleEvent = new TitleEvent(false, 1.0F, 1.0F, true);
@@ -109,9 +107,7 @@ public class GuiIngameForgeMixin {
         if (titleEvent.getCancelled()) ci.cancel();
     }
 
-    /**
-     * Modifies the title scale based on the invoked event.
-     */
+
     @Redirect(method = "renderTitle", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V"), remap = true)
     private void modifyTitleScale(float x, float y, float z) {
         if (x == 4.0F) {
@@ -125,9 +121,7 @@ public class GuiIngameForgeMixin {
         }
     }
 
-    /**
-     * Sets the shadow of the title and subtitle based on the invoked event.
-     */
+
     @ModifyArg(method = "renderTitle", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/FontRenderer;drawString(Ljava/lang/String;FFIZ)I"), index = 4, remap = true)
     private boolean setShadow(boolean shadow) {
         return titleEvent.getShadow();

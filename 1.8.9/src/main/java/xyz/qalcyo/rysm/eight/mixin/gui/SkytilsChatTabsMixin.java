@@ -24,8 +24,6 @@ import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xyz.qalcyo.rysm.core.RysmCore;
-import xyz.qalcyo.rysm.core.listener.events.MessageRenderEvent;
 import xyz.qalcyo.rysm.eight.hooks.SkytilsChatTabsHookKt;
 
 /**

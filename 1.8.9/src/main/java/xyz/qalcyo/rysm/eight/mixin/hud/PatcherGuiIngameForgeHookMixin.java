@@ -35,7 +35,7 @@ public class PatcherGuiIngameForgeHookMixin {
     @SuppressWarnings({"UnresolvedMixinReference", "DefaultAnnotationParam"})
     @Inject(remap = false, method = "drawActionbarText", at = @At(remap = true, value = "HEAD"), cancellable = true)
     private static void onActionBarTextDrawn(String recordPlaying, int color, CallbackInfo ci) {
-        if (recordPlaying.trim().isEmpty()) ci.cancel();
+        if (recordPlaying == null || recordPlaying.trim().isEmpty()) ci.cancel();
         if (!RysmConfig.INSTANCE.getActionBarCustomization()) return;
         int newX;
         int newY;

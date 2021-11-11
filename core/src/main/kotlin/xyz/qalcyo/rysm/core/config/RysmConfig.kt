@@ -766,6 +766,14 @@ object RysmConfig: Vigilant(
 
     @Property(
         type = PropertyType.SWITCH,
+        name = "Reverse Packs",
+        category = "Pack GUI Modifier",
+        description = "Reverse the order of packs in the pack GUI.",
+    )
+    var reversePacks = false
+
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Show Update Notification",
         description = "Show a notification when you start Minecraft informing you of new updates.",
         category = "Updater"

@@ -18,6 +18,7 @@
 
 package xyz.qalcyo.rysm.eight.mixin.hud;
 
+import gg.essential.universal.UResolution;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -40,7 +41,6 @@ import java.awt.*;
 
 @Mixin(GuiIngame.class)
 public abstract class GuiIngameMixin {
-
     @Shadow
     @Final
     protected Minecraft mc;
@@ -55,19 +55,21 @@ public abstract class GuiIngameMixin {
 
     @Inject(method = "renderBossHealth", at = @At("HEAD"), cancellable = true)
     protected void renderBossHealth(CallbackInfo ci) {
-        if (mc.currentScreen instanceof BossHealthGui) {
+        if (BossStatus.bossName == null || BossStatus.statusBarTime <= 0) {
             ci.cancel();
-            return;
-        }
-        if (RysmConfig.INSTANCE.getBossBarCustomization() && !RysmConfig.INSTANCE.getBossBar()) {
+        } else if (mc.currentScreen instanceof BossHealthGui) {
             ci.cancel();
-            return;
+        } else if (RysmConfig.INSTANCE.getBossBarCustomization() && ((!RysmConfig.INSTANCE.getBossBar()) || (!RysmConfig.INSTANCE.getBossBarBar() && !RysmConfig.INSTANCE.getBossBarText()))) {
+            ci.cancel();
+        } else if (RysmConfig.INSTANCE.getBossbarScale() == 0.0F) {
+            ci.cancel();
+        } else {
+            GlStateManager.pushMatrix();
+            float iHaveNoIdeaWhatToNameThisFloat = RysmConfig.INSTANCE.getBossbarScale() - 1.0f;
+            GlStateManager.translate(-RysmConfig.INSTANCE.getBossBarX() * iHaveNoIdeaWhatToNameThisFloat, -RysmConfig.INSTANCE.getBossBarY() * iHaveNoIdeaWhatToNameThisFloat, 0.0f);
+            GlStateManager.scale(RysmConfig.INSTANCE.getBossbarScale(), RysmConfig.INSTANCE.getBossbarScale(), 1.0F);
+            checkFirstTime();
         }
-        GlStateManager.pushMatrix();
-        float iHaveNoIdeaWhatToNameThisFloat = RysmConfig.INSTANCE.getBossbarScale() - 1.0f;
-        GlStateManager.translate(-RysmConfig.INSTANCE.getBossBarX() * iHaveNoIdeaWhatToNameThisFloat, -RysmConfig.INSTANCE.getBossBarY() * iHaveNoIdeaWhatToNameThisFloat, 0.0f);
-        GlStateManager.scale(RysmConfig.INSTANCE.getBossbarScale(), RysmConfig.INSTANCE.getBossbarScale(), 1.0F);
-        checkFirstTime();
     }
 
     @Inject(method = "renderBossHealth", at = @At("TAIL"))
@@ -79,14 +81,13 @@ public abstract class GuiIngameMixin {
     private int injected(FontRenderer fontRenderer, String text, float x, float y, int color) {
         if (RysmConfig.INSTANCE.getBossBarCustomization()) {
             if (RysmConfig.INSTANCE.getBossBarText()) {
-                fontRenderer.drawString(
-                        BossStatus.bossName,
-                        Float.parseFloat(String.valueOf(RysmConfig.INSTANCE.getBossBarX() - (fontRenderer.getStringWidth(text) / 2))), RysmConfig.INSTANCE.getBossBarY() - 10,
+                return fontRenderer.drawString(
+                        BossStatus.bossName, RysmConfig.INSTANCE.getBossBarX() - ((float) fontRenderer.getStringWidth(text) / 2), RysmConfig.INSTANCE.getBossBarY() - 10,
                         Color.WHITE.getRGB(), RysmConfig.INSTANCE.getBossBarShadow()
                 );
             }
         } else {
-            fontRenderer.drawStringWithShadow(text, x, y, color);
+            return fontRenderer.drawStringWithShadow(text, x, y, color);
         }
         return 1;
     }
@@ -101,7 +102,6 @@ public abstract class GuiIngameMixin {
             mc.ingameGUI.drawTexturedModalRect(x, y, textureX, textureY, width, height);
         }
     }
-
 
     @Inject(method = "renderScoreboard", at = @At(value = "HEAD"), cancellable = true)
     private void removeScoreboard(ScoreObjective objective, ScaledResolution scaledRes, CallbackInfo ci) {
@@ -167,7 +167,7 @@ public abstract class GuiIngameMixin {
     @Inject(method = "renderScoreboard", at = @At("TAIL"))
     private void popMatrix(ScoreObjective objective, ScaledResolution scaledRes, CallbackInfo ci) {
         if (RysmConfig.INSTANCE.getSidebar()) {
-            /*/
+        /*/
             if (RysmConfig.INSTANCE.getBackgroundBorder()) {
                 if (RysmConfig.INSTANCE.getSidebarPosition()) {
                     Requisite.getInstance().getRenderHelper().drawHollowRect(RysmConfig.INSTANCE.getSidebarX() - i - 2 - RysmConfig.INSTANCE.getBorderNumber(), RysmConfig.INSTANCE.getSidebarY() - (lines + 1) * getFontRenderer().FONT_HEIGHT - 1 - RysmConfig.INSTANCE.getBorderNumber(), i + RysmConfig.INSTANCE.getBorderNumber() * 2 + 2, (lines + 1) * getFontRenderer().FONT_HEIGHT + 1 + RysmConfig.INSTANCE.getBorderNumber() * 2, RysmConfig.INSTANCE.getBorderNumber(), RysmConfig.INSTANCE.getBorderColor().getRGB());
@@ -184,11 +184,12 @@ public abstract class GuiIngameMixin {
     private void checkFirstTime() {
         if (RysmConfig.INSTANCE.getFirstLaunchBossbar()) {
             RysmConfig.INSTANCE.setFirstLaunchBossbar(false);
-            RysmConfig.INSTANCE.setBossBarX(new ScaledResolution(mc).getScaledWidth() / 2);
+            RysmConfig.INSTANCE.setBossBarX(Math.round((float) UResolution.getScaledWidth() / 2));
             RysmConfig.INSTANCE.setBossBarY(12);
             RysmConfig.INSTANCE.markDirty();
             RysmConfig.INSTANCE.writeData();
         }
     }
+
 
 }

@@ -18,6 +18,7 @@
 
 package xyz.qalcyo.rysm.seventeen.mixin.gui;
 
+import com.google.common.collect.Lists;
 import net.minecraft.client.gui.screen.pack.ResourcePackOrganizer;
 import net.minecraft.resource.ResourcePackProfile;
 import org.spongepowered.asm.mixin.Final;
@@ -41,6 +42,13 @@ public class ResourcePackOrganizerMixin {
         if (RysmConfig.INSTANCE.getHideIncompatiblePacks()) {
             List<ResourcePackProfile> newList = disabledPacks;
             newList.removeIf((resourcePackProfile -> !(resourcePackProfile.getCompatibility().isCompatible())));
+            if (RysmConfig.INSTANCE.getReversePacks()) {
+                newList = Lists.reverse(newList);
+            }
+            cir.setReturnValue(newList.stream().map(pack -> ((ResourcePackOrganizer) (Object) this).new DisabledPack(pack)));
+        } else if (RysmConfig.INSTANCE.getReversePacks()) {
+            List<ResourcePackProfile> newList = disabledPacks;
+            newList = Lists.reverse(newList);
             cir.setReturnValue(newList.stream().map(pack -> ((ResourcePackOrganizer) (Object) this).new DisabledPack(pack)));
         }
     }
