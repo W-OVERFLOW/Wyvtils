@@ -19,17 +19,14 @@
 package xyz.qalcyo.rysm.eight.mixin.gui;
 
 import com.google.common.collect.Lists;
-import gg.essential.universal.UResolution;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiResourcePackAvailable;
-import net.minecraft.client.gui.GuiScreenResourcePacks;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.ResourcePackListEntry;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -44,8 +41,6 @@ import java.util.Objects;
 
 @Mixin(GuiScreenResourcePacks.class)
 public class GuiScreenResourcePacksMixin {
-    @Shadow private GuiResourcePackAvailable availableResourcePacksList;
-    @Shadow private List<ResourcePackListEntry> availableResourcePacks;
     float f = (float) (-1072689136 >> 24 & 255) / 255.0F;
     float f1 = (float) (-1072689136 >> 16 & 255) / 255.0F;
     float f2 = (float) (-1072689136 >> 8 & 255) / 255.0F;
@@ -54,36 +49,23 @@ public class GuiScreenResourcePacksMixin {
     float f5 = (float) (-804253680 >> 16 & 255) / 255.0F;
     float f6 = (float) (-804253680 >> 8 & 255) / 255.0F;
     float f7 = (float) (-804253680 & 255) / 255.0F;
+    @Shadow
+    private GuiResourcePackAvailable availableResourcePacksList;
+    @Shadow
+    private List<ResourcePackListEntry> availableResourcePacks;
+
+    @Shadow @Final private GuiScreen parentScreen;
 
     @Inject(method = "initGui", at = @At("HEAD"))
     private void addInputField(CallbackInfo ci) {
+        GuiScreenResourcePacksHookKt.setParentScreen(parentScreen);
         GuiScreenResourcePacksHookKt.addInputField();
     }
 
     @Inject(method = "initGui", at = @At("TAIL"))
     private void refresh(CallbackInfo ci) {
-        if (RysmConfig.INSTANCE.getHideIncompatiblePacks()) {
-                List<ResourcePackListEntry> newPacks = availableResourcePacks;
-                newPacks.removeIf(entry -> entry.func_183019_a() != 1);
-                if (newPacks.size() != availableResourcePacks.size()) {
-                    this.availableResourcePacksList = new GuiResourcePackAvailable(Minecraft.getMinecraft(), 200, UResolution.getScaledHeight(), newPacks);
-                    this.availableResourcePacksList.setSlotXBoundsFromLeft(UResolution.getScaledWidth() / 2 - 4 - 200);
-                    this.availableResourcePacksList.registerScrollButtons(7, 8);
-                } else {
-                    if (RysmConfig.INSTANCE.getReversePacks()) {
-                        newPacks = Lists.reverse(newPacks);
-                        this.availableResourcePacksList = new GuiResourcePackAvailable(Minecraft.getMinecraft(), 200, UResolution.getScaledHeight(), newPacks);
-                        this.availableResourcePacksList.setSlotXBoundsFromLeft(UResolution.getScaledWidth() / 2 - 4 - 200);
-                        this.availableResourcePacksList.registerScrollButtons(7, 8);
-                    }
-                }
-            } else if (RysmConfig.INSTANCE.getReversePacks()) {
-                List<ResourcePackListEntry> newPacks = availableResourcePacks;
-                newPacks = Lists.reverse(newPacks);
-                this.availableResourcePacksList = new GuiResourcePackAvailable(Minecraft.getMinecraft(), 200, UResolution.getScaledHeight(), newPacks);
-                this.availableResourcePacksList.setSlotXBoundsFromLeft(UResolution.getScaledWidth() / 2 - 4 - 200);
-                this.availableResourcePacksList.registerScrollButtons(7, 8);
-            }
+        GuiScreenResourcePacksHookKt.setOriginalPackSize(availableResourcePacks.size());
+        handlePacks();
     }
 
     @Inject(method = "mouseClicked", at = @At("HEAD"))
@@ -110,6 +92,31 @@ public class GuiScreenResourcePacksMixin {
             instance.drawBackground(i);
         } else {
             drawGradientRect(instance);
+        }
+    }
+
+    private void handlePacks() {
+        if (RysmConfig.INSTANCE.getHideIncompatiblePacks()) {
+            List<ResourcePackListEntry> newPacks = availableResourcePacks;
+            newPacks.removeIf(entry -> entry.func_183019_a() != 1);
+            if (newPacks.size() != availableResourcePacks.size()) {
+                this.availableResourcePacksList = new GuiResourcePackAvailable(Minecraft.getMinecraft(), 200, ((GuiScreenResourcePacks) (Object) this).height, newPacks);
+                this.availableResourcePacksList.setSlotXBoundsFromLeft(((GuiScreenResourcePacks) (Object) this).width / 2 - 4 - 200);
+                this.availableResourcePacksList.registerScrollButtons(7, 8);
+            } else {
+                if (RysmConfig.INSTANCE.getReversePacks()) {
+                    newPacks = Lists.reverse(newPacks);
+                    this.availableResourcePacksList = new GuiResourcePackAvailable(Minecraft.getMinecraft(), 200, ((GuiScreenResourcePacks) (Object) this).height, newPacks);
+                    this.availableResourcePacksList.setSlotXBoundsFromLeft(((GuiScreenResourcePacks) (Object) this).width / 2 - 4 - 200);
+                    this.availableResourcePacksList.registerScrollButtons(7, 8);
+                }
+            }
+        } else if (RysmConfig.INSTANCE.getReversePacks()) {
+            List<ResourcePackListEntry> newPacks = availableResourcePacks;
+            newPacks = Lists.reverse(newPacks);
+            this.availableResourcePacksList = new GuiResourcePackAvailable(Minecraft.getMinecraft(), 200, ((GuiScreenResourcePacks) (Object) this).height, newPacks);
+            this.availableResourcePacksList.setSlotXBoundsFromLeft(((GuiScreenResourcePacks) (Object) this).width / 2 - 4 - 200);
+            this.availableResourcePacksList.registerScrollButtons(7, 8);
         }
     }
 
