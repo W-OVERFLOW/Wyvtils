@@ -122,7 +122,7 @@ object Listener {
 
     @Subscribe
     fun onStringRendered(e: StringRenderEvent) {
-        if (e.username != null && !RysmConfig.chatHightlight && e.string.contains(
+        if ((e.username != null) && !RysmConfig.chatHightlight && e.string.contains(
                 e.username
             ) && RysmConfig.highlightName
         ) {

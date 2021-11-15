@@ -46,7 +46,10 @@ public abstract class EntryListWidgetMixin {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/EntryListWidget;renderBackground(Lnet/minecraft/client/util/math/MatrixStack;)V"))
     private void setBackground(EntryListWidget instance, MatrixStack matrices) {
-        if (MinecraftClient.getInstance().world == null && MinecraftClient.getInstance().isPaused()) return;
+        if (MinecraftClient.getInstance().world == null) {
+            renderBackground(matrices);
+            return;
+        }
         if (!RysmConfig.INSTANCE.getTransparentPackGUI() || !(instance instanceof PackListWidget)) {
             renderBackground(matrices);
         }
@@ -56,7 +59,7 @@ public abstract class EntryListWidgetMixin {
 
     @Inject(method = "render", at = @At("HEAD"))
     private void yeah(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        if (MinecraftClient.getInstance().world == null && MinecraftClient.getInstance().isPaused()) return;
+        if (MinecraftClient.getInstance().world == null) return;
         if (RysmConfig.INSTANCE.getTransparentPackGUI()) {
             Rysm.INSTANCE.setPackY(top);
             Rysm.INSTANCE.setPackBottom(bottom);
@@ -65,7 +68,7 @@ public abstract class EntryListWidgetMixin {
 
     @Inject(method = "render", at = @At("TAIL"))
     private void yea5h(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        if (MinecraftClient.getInstance().world == null && MinecraftClient.getInstance().isPaused()) return;
+        if (MinecraftClient.getInstance().world == null) return;
         if (RysmConfig.INSTANCE.getTransparentPackGUI()) {
             Rysm.INSTANCE.setPackY(null);
             Rysm.INSTANCE.setPackBottom(null);

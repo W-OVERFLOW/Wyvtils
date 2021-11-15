@@ -29,13 +29,13 @@ buildConfig {
     className("RysmInfo")
     packageName("xyz.qalcyo.rysm.core")
 
-    buildConfigField("String", "NAME", "\"${mod_name}\"")
-    buildConfigField("String", "VER", "\"${mod_ver}\"")
-    buildConfigField("String", "ID", "\"${mod_id}\"")
+    buildConfigField("String", "NAME", "\"${project_name}\"")
+    buildConfigField("String", "VER", "\"${project_ver}\"")
+    buildConfigField("String", "ID", "\"${project_id}\"")
 }
 
 dependencies {
-    implementation ("gg.essential:essential-1.8.9-forge:1539+release-launch") {
+    implementation ("gg.essential:essential-1.8.9-forge:1551+release-launch") {
         exclude(module: "keventbus")
     }
     implementation("com.github.Wyvest:keventbus:e8e05ea")

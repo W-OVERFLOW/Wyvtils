@@ -34,14 +34,13 @@ pluginManagement {
             name = 'Cotton'
             url = 'https://server.bbkr.space/artifactory/libs-release/'
         }
-
         gradlePluginPortal()
         mavenCentral()
         mavenLocal()
     }
 }
 
-rootProject.name = mod_name
+rootProject.name = project_name
 include(
         'core',
         '1.8.9',

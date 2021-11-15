@@ -18,8 +18,11 @@
 
 package xyz.qalcyo.rysm.eight.mixin.gui;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.ResourcePackListEntry;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -29,8 +32,11 @@ import xyz.qalcyo.rysm.eight.Rysm;
 @Mixin(ResourcePackListEntry.class)
 public class ResourcePackListEntryMixin {
 
+    @Shadow @Final protected Minecraft mc;
+
     @Inject(method = "drawEntry", at = @At("HEAD"), cancellable = true)
     private void cancel(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, CallbackInfo ci) {
+        if (mc.theWorld == null) return;
         if (RysmConfig.INSTANCE.getTransparentPackGUI()) {
             if ((Rysm.INSTANCE.getPackY() != null && Rysm.INSTANCE.getPackY() > y + slotHeight) || (Rysm.INSTANCE.getPackBottom() != null && Rysm.INSTANCE.getPackBottom() < y)) {
                 ci.cancel();

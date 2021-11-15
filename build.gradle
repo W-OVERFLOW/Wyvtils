@@ -20,6 +20,7 @@ plugins {
     id "com.github.johnrengelman.shadow" version "6.1.0"
     id "com.github.gmazzo.buildconfig" version "3.0.1"
     id "org.jetbrains.kotlin.jvm" version "1.5.31"
+    id "maven-publish"
     id "java"
 }
 
@@ -29,9 +30,10 @@ allprojects {
     apply plugin: "com.github.johnrengelman.shadow"
     apply plugin: "com.github.gmazzo.buildconfig"
     apply plugin: "org.jetbrains.kotlin.jvm"
+    apply plugin: "maven-publish"
     apply plugin: "java"
 
-    group = "xyz.qalcyo"
+    group = project_group
 
     configurations {
         compile
@@ -40,6 +42,7 @@ allprojects {
         shade
         implementation.extendsFrom(shade)
     }
+
     repositories {
         mavenCentral()
 
@@ -63,38 +66,54 @@ allprojects {
     jar {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         from {
-            "LICENSE"
+            'LICENSE'
         }
 
-        exclude "META-INF/INDEX.LIST", "META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA", "module-info.class"
+        exclude 'META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'module-info.class'
     }
 
     shadowJar {
-        archiveClassifier.set("")
+        archiveClassifier.set('')
         configurations = [project.configurations.shade]
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-        exclude("LICENSE.md")
-        exclude("pack.mcmeta")
-        exclude("dummyThing")
-        exclude("**/module-info.class")
-        exclude("*.so")
-        exclude("*.dylib")
-        exclude("*.dll")
-        exclude("*.jnilib")
-        exclude("ibxm/**")
-        exclude("com/jcraft/**")
-        exclude("org/lwjgl/**")
-        exclude("net/java/**")
+        exclude('LICENSE.md')
+        exclude('pack.mcmeta')
+        exclude('dummyThing')
+        exclude('**/module-info.class')
+        exclude('*.so')
+        exclude('*.dylib')
+        exclude('*.dll')
+        exclude('*.jnilib')
+        exclude('ibxm/**')
+        exclude('com/jcraft/**')
+        exclude('org/lwjgl/**')
+        exclude('net/java/**')
 
-        exclude("META-INF/proguard/**")
-        exclude("META-INF/maven/**")
-        exclude("META-INF/versions/**")
-        exclude("META-INF/com.android.tools/**")
+        exclude('META-INF/proguard/**')
+        exclude('META-INF/maven/**')
+        exclude('META-INF/versions/**')
+        exclude('META-INF/com.android.tools/**')
 
-        exclude("**/*.kotlin_metadata")
-        exclude("**/*.kotlin_module")
-        exclude("**/*.kotlin_builtins")
+        exclude('**/*.kotlin_metadata')
+        exclude('**/*.kotlin_module')
+        exclude('**/*.kotlin_builtins')
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                artifactId = "${project_name}-${project.name}"
+
+                artifact(shadowJar) {
+                    builtBy shadowJar
+                }
+
+                pom {
+                    name = "${project_name}-${project.name}"
+                }
+            }
+        }
     }
 
     jar.finalizedBy(shadowJar)

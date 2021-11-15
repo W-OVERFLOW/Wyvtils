@@ -18,9 +18,11 @@
 
 package xyz.qalcyo.rysm.eight.mixin.gui;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiResourcePackList;
 import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.renderer.Tessellator;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -40,8 +42,11 @@ public abstract class GuiSlotMixin {
 
     @Shadow public int bottom;
 
+    @Shadow @Final protected Minecraft mc;
+
     @Inject(method = "drawScreen", at = @At("HEAD"))
     private void yeah(int l1, int i, float j, CallbackInfo ci) {
+        if (mc.theWorld == null) return;
         if (RysmConfig.INSTANCE.getTransparentPackGUI()) {
             Rysm.INSTANCE.setPackY(top);
             Rysm.INSTANCE.setPackBottom(bottom);
@@ -50,6 +55,7 @@ public abstract class GuiSlotMixin {
 
     @Inject(method = "drawScreen", at = @At("TAIL"))
     private void yea5h(int l1, int i, float j, CallbackInfo ci) {
+        if (mc.theWorld == null) return;
         if (RysmConfig.INSTANCE.getTransparentPackGUI()) {
             Rysm.INSTANCE.setPackY(null);
             Rysm.INSTANCE.setPackBottom(null);
@@ -58,6 +64,10 @@ public abstract class GuiSlotMixin {
 
     @Redirect(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiSlot;drawContainerBackground(Lnet/minecraft/client/renderer/Tessellator;)V"))
     private void redirectBackground(GuiSlot instance, Tessellator tessellator) {
+        if (mc.theWorld == null) {
+            drawContainerBackground(tessellator);
+            return;
+        }
         if (!RysmConfig.INSTANCE.getTransparentPackGUI() || !(instance instanceof GuiResourcePackList)) {
             drawContainerBackground(tessellator);
         }
@@ -65,6 +75,10 @@ public abstract class GuiSlotMixin {
 
     @Redirect(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiSlot;overlayBackground(IIII)V"))
     private void redirectOverlay(GuiSlot instance, int startY, int endY, int startAlpha, int endAlpha) {
+        if (mc.theWorld == null) {
+            overlayBackground(startY, endY, startAlpha, endAlpha);
+            return;
+        }
         if (!RysmConfig.INSTANCE.getTransparentPackGUI() || !(instance instanceof GuiResourcePackList)) {
             overlayBackground(startY, endY, startAlpha, endAlpha);
         }

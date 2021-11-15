@@ -18,6 +18,7 @@
 
 plugins {
     id "fabric-loom" version "0.10-SNAPSHOT"
+    id "io.github.juuxel.loom-quiltflower-mini" version "1.1.0"
 }
 
 compileKotlin {
@@ -29,8 +30,8 @@ compileKotlin {
 
 sourceCompatibility = JavaVersion.VERSION_16
 targetCompatibility = JavaVersion.VERSION_16
-archivesBaseName = mod_name + " [1.17.1]"
-version = mod_ver
+archivesBaseName = project_name + " [1.17.1]"
+version = project_ver
 
 loom {
    accessWidenerPath = file("src/main/resources/rysm.accesswidener")
@@ -54,15 +55,18 @@ dependencies {
     }
     shade include ("xyz.qalcyo.mango:Mango:1.8")
     implementation("com.github.Wyvest:keventbus:e8e05ea")
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    minecraft "com.mojang:minecraft:1.17.1"
+    mappings "net.fabricmc:yarn:1.17.1+build.63:v2"
+    modImplementation "net.fabricmc:fabric-loader:0.12.5"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:0.42.1+1.17"
     modImplementation("com.terraformersmc:modmenu:2.0.4") {
         transitive = false
     }
-    implementation("gg.essential:essential-1.17.1-fabric:1540+release-launch-1.17") {
+    modImplementation("gg.essential:essential-1.17.1-fabric:1540+release-launch-1.17") {
         exclude(group: "net.fabricmc")
+        exclude(group: "net_fabricmc_yarn_1_17_1_1_17_1_build_39_v2.com.terraformersmc")
+        exclude(group: "net_fabricmc_yarn_1_17_1_1_17_1_build_39_v2.net.fabricmc.fabric-api")
+        exclude(group: "net_fabricmc_yarn_1_17_1_1_17_1_build_39_v2.net.fabricmc") // i hate everything
         exclude(module: "vigilance-1.17.1-fabric")
         exclude(module: "universalcraft-1.17.1-fabric")
         exclude(module: "elementa-1.17.1-fabric")

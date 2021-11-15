@@ -18,8 +18,6 @@
 
 package xyz.qalcyo.rysm.seventeen.mixin.gui;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.pack.PackListWidget;
 import net.minecraft.client.gui.screen.pack.PackScreen;
 import net.minecraft.client.gui.screen.pack.ResourcePackOrganizer;
@@ -55,7 +53,7 @@ public abstract class PackScreenMixin {
     @Inject(method = "init", at = @At("HEAD"))
     private void setTextField(CallbackInfo ci) {
         PackScreenHookKt.setupTextField();
-        ((Screen) (Object) this).addSelectableChild(PackScreenHookKt.getTextField());
+        ((PackScreen) (Object) this).addSelectableChild(PackScreenHookKt.getTextField());
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
@@ -75,7 +73,6 @@ public abstract class PackScreenMixin {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/pack/PackScreen;renderBackgroundTexture(I)V"))
     private void redirectBackground(PackScreen instance, int i, MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        if (MinecraftClient.getInstance().world == null && MinecraftClient.getInstance().isPaused()) return;
         if (RysmConfig.INSTANCE.getTransparentPackGUI()) {
             instance.renderBackground(matrices);
         } else {
@@ -83,8 +80,11 @@ public abstract class PackScreenMixin {
         }
     }
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;render(Lnet/minecraft/client/util/math/MatrixStack;IIF)V"))
+    @Inject(method = "render", at = @At("TAIL"))
     private void renderTextField(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        if (!Objects.requireNonNull(PackScreenHookKt.getTextField()).isVisible()) {
+            Objects.requireNonNull(PackScreenHookKt.getTextField()).setVisible(true);
+        }
         Objects.requireNonNull(PackScreenHookKt.getTextField()).render(matrices, mouseX, mouseY, delta);
     }
 }

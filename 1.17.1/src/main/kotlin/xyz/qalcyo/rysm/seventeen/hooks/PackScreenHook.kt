@@ -32,7 +32,7 @@ var hasChanged = false
 private var changedValue = ""
 
 fun setupTextField() {
-    textField = TextFieldWidget(MinecraftClient.getInstance().textRenderer, MinecraftClient.getInstance().window.x * 4 / 5 - 1, MinecraftClient.getInstance().window.y - 13, MinecraftClient.getInstance().window.x / 5, 12, Text.of(""))
+    textField = TextFieldWidget(MinecraftClient.getInstance().textRenderer, MinecraftClient.getInstance().window.x * 4 / 5 - 1, MinecraftClient.getInstance().window.y - 13, MinecraftClient.getInstance().window.x / 5, 12, Text.of("Hi"))
     textField!!.setMaxLength(100)
     textField!!.setChangedListener {
         hasChanged = true

@@ -32,7 +32,7 @@ import xyz.qalcyo.rysm.seventeen.Rysm;
 public class ResourcePackEntryMixin {
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     private void cancelRender(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta, CallbackInfo ci) {
-        if (MinecraftClient.getInstance().world == null && MinecraftClient.getInstance().isPaused()) return;
+        if (MinecraftClient.getInstance().world == null) return;
         if (RysmConfig.INSTANCE.getTransparentPackGUI()) {
             if ((Rysm.INSTANCE.getPackY() != null && Rysm.INSTANCE.getPackY() > y + entryHeight) || (Rysm.INSTANCE.getPackBottom() != null && Rysm.INSTANCE.getPackBottom() < y)) {
                 ci.cancel();
