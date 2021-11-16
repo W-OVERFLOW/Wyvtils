@@ -50,8 +50,14 @@ public abstract class InGameHudMixin {
     private int bottom;
     private int right;
 
+    private int funnyWidth;
+    private int funny;
+    private boolean yeah = false;
+
     @Shadow
     protected abstract void drawTextBackground(MatrixStack matrices, TextRenderer textRenderer, int yOffset, int width, int color);
+
+    @Shadow public abstract TextRenderer getTextRenderer();
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(DDD)V"))
     private void removeTranslation(MatrixStack matrixStack, double x, double y, double z) {
@@ -99,7 +105,28 @@ public abstract class InGameHudMixin {
             ci.cancel();
         } else {
             matrices.push();
+            funnyWidth = getTextRenderer().getWidth(": ");
+            yeah = false;
+            funny = 0;
         }
+    }
+
+    @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;getWidth(Ljava/lang/String;)I"))
+    private int yeah(TextRenderer instance, String text) {
+        ++funny;
+        if (funny == 1) {
+            yeah = true;
+            return funnyWidth;
+        }
+        if (yeah && !RysmConfig.INSTANCE.getSidebarScorePoints()) {
+            return -funnyWidth;
+        }
+        return instance.getWidth(text);
+    }
+
+    @Inject(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/GameOptions;getTextBackgroundColor(F)I"))
+    private void yeah2(MatrixStack matrices, ScoreboardObjective objective, CallbackInfo ci) {
+        yeah = false;
     }
 
     @Redirect(method = "renderScoreboardSidebar", at = @At(value = "INVOKE", target = "Ljava/lang/Math;max(II)I"))
