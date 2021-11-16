@@ -33,6 +33,8 @@ allprojects {
     apply plugin: "maven-publish"
     apply plugin: "java"
 
+    version = project_ver
+
     group = project_group
 
     configurations {

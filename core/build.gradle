@@ -16,6 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: "com.github.gmazzo.buildconfig"
+apply plugin: "org.jetbrains.kotlin.jvm"
+apply plugin: "maven-publish"
 apply plugin: "java"
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8

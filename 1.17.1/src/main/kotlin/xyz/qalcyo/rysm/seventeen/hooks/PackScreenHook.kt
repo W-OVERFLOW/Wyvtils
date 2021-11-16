@@ -20,7 +20,6 @@ package xyz.qalcyo.rysm.seventeen.hooks
 
 import gg.essential.universal.wrappers.message.UTextComponent
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gui.screen.pack.PackListWidget
 import net.minecraft.client.gui.screen.pack.ResourcePackOrganizer
 import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.text.Text

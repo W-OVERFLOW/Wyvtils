@@ -27,12 +27,13 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.boss.BossStatus;
 import net.minecraft.scoreboard.ScoreObjective;
+import net.minecraft.util.EnumChatFormatting;
+import org.apache.commons.lang3.StringUtils;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import xyz.qalcyo.requisite.Requisite;
 import xyz.qalcyo.rysm.core.config.RysmConfig;
 import xyz.qalcyo.rysm.eight.gui.BossHealthGui;
 import xyz.qalcyo.rysm.eight.gui.SidebarGui;
@@ -52,6 +53,9 @@ public abstract class GuiIngameMixin {
     private int bottom;
     private int lines;
     private int count;
+
+    private int the = 0;
+    private boolean theFunny = false;
 
     @Inject(method = "renderBossHealth", at = @At("HEAD"), cancellable = true)
     protected void renderBossHealth(CallbackInfo ci) {
@@ -111,6 +115,8 @@ public abstract class GuiIngameMixin {
             GlStateManager.pushMatrix();
             lines = 0;
             count = 0;
+            the = 0;
+            theFunny = false;
         }
     }
 
@@ -120,6 +126,25 @@ public abstract class GuiIngameMixin {
         this.i = Math.max(i, width);
         return i;
     }
+
+    @ModifyArg(method = "renderScoreboard", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/FontRenderer;getStringWidth(Ljava/lang/String;)I"), index = 0)
+    private String yes(String original) {
+        ++the;
+        if (the == 1) {
+            theFunny = true;
+            return original;
+        }
+        if (theFunny && !RysmConfig.INSTANCE.getSidebarScorePoints()) {
+            return StringUtils.substringBeforeLast(original, ": " + EnumChatFormatting.RED);
+        }
+        return original;
+    }
+
+    @Inject(method = "renderScoreboard", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/ScaledResolution;getScaledHeight()I"))
+    private void yeah(ScoreObjective p_renderScoreboard_1_, ScaledResolution p_renderScoreboard_2_, CallbackInfo ci) {
+        theFunny = false;
+    }
+
 
     @ModifyVariable(method = "renderScoreboard", at = @At("STORE"), ordinal = 2)
     private int modifyHeight(int x) {

@@ -35,6 +35,10 @@ buildscript {
 
 apply plugin: "net.minecraftforge.gradle.forge"
 apply plugin: "org.spongepowered.mixin"
+apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: "com.github.gmazzo.buildconfig"
+apply plugin: "org.jetbrains.kotlin.jvm"
+apply plugin: "maven-publish"
 apply plugin: "java"
 
 archivesBaseName = project_name + " [1.8.9]"
@@ -88,17 +92,50 @@ processResources {
     rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
+tasks.reobfJar.dependsOn tasks.shadowJar
+
+shadowJar {
+    archiveClassifier.set("")
+    configurations = [project.configurations.shade]
+    duplicatesStrategy DuplicatesStrategy.EXCLUDE
+
+    exclude "LICENSE.md"
+    exclude "pack.mcmeta"
+    exclude "dummyThing"
+    exclude "**/module-info.class"
+    exclude "*.so"
+    exclude "*.dylib"
+    exclude "*.dll"
+    exclude "*.jnilib"
+    exclude "ibxm/**"
+    exclude "com/jcraft/**"
+    exclude "org/lwjgl/**"
+    exclude "net/java/**"
+
+    exclude "META-INF/proguard/**"
+    exclude "META-INF/maven/**"
+    exclude "META-INF/versions/**"
+    exclude "META-INF/com.android.tools/**"
+
+    exclude "fabric.mod.json"
+}
+
+reobf {
+    shadowJar {
+        classpath = sourceSets.main.compileClasspath
+    }
+}
+
 mixin {
     disableRefMapWarning = true
     defaultObfuscationEnv searge
-    add sourceSets.main, "mixins.${project_id}.refmap.json"
+    add sourceSets.main, "mixins.rysm.refmap.json"
 }
 
 sourceSets {
     dummy
     main {
         compileClasspath += dummy.output
-        ext.refMap = "mixins.rysm.refmap.json"
     }
 }
 

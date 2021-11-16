@@ -18,10 +18,12 @@
 
 package xyz.qalcyo.rysm.seventeen.mixin.gui;
 
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.pack.PackListWidget;
 import net.minecraft.client.gui.screen.pack.PackScreen;
 import net.minecraft.client.gui.screen.pack.ResourcePackOrganizer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,11 +36,14 @@ import xyz.qalcyo.rysm.core.config.RysmConfig;
 import xyz.qalcyo.rysm.seventeen.hooks.PackScreenHookKt;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 @Mixin(PackScreen.class)
-public abstract class PackScreenMixin {
+public abstract class PackScreenMixin extends Screen {
+
+    protected PackScreenMixin(Text title) {
+        super(title);
+    }
 
     @Shadow protected abstract void updatePackList(PackListWidget widget, Stream<ResourcePackOrganizer.Pack> packs);
 
@@ -53,12 +58,14 @@ public abstract class PackScreenMixin {
     @Inject(method = "init", at = @At("HEAD"))
     private void setTextField(CallbackInfo ci) {
         PackScreenHookKt.setupTextField();
-        ((PackScreen) (Object) this).addSelectableChild(PackScreenHookKt.getTextField());
+        addSelectableChild(PackScreenHookKt.getTextField());
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void tick(CallbackInfo ci) {
-        Objects.requireNonNull(PackScreenHookKt.getTextField()).tick();
+        if (PackScreenHookKt.getTextField() != null) {
+            PackScreenHookKt.getTextField().tick();
+        }
     }
 
     @Inject(method = "render", at = @At("HEAD"))
@@ -82,9 +89,8 @@ public abstract class PackScreenMixin {
 
     @Inject(method = "render", at = @At("TAIL"))
     private void renderTextField(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        if (!Objects.requireNonNull(PackScreenHookKt.getTextField()).isVisible()) {
-            Objects.requireNonNull(PackScreenHookKt.getTextField()).setVisible(true);
+        if (PackScreenHookKt.getTextField() != null) {
+            PackScreenHookKt.getTextField().render(matrices, mouseX, mouseY, delta);
         }
-        Objects.requireNonNull(PackScreenHookKt.getTextField()).render(matrices, mouseX, mouseY, delta);
     }
 }
