@@ -18,6 +18,7 @@
 
 package xyz.qalcyo.rysm.seventeen.mixin.renderer;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
@@ -52,6 +53,13 @@ public abstract class EntityRenderDispatcherMixin {
     @Inject(method = "renderHitbox", at = @At("HEAD"), cancellable = true)
     private static void invokeHitboxEvent(MatrixStack matrices, VertexConsumer vertices, Entity entityIn, float tickDelta, CallbackInfo ci) {
         EntityRenderDispatcherHookKt.invokeHitboxEvent(entityIn, ci);
+    }
+
+    @Inject(method = "renderHitbox",at = @At("RETURN"))
+    private static void resetPrev(MatrixStack matrices, VertexConsumer vertices, Entity entity, float tickDelta, CallbackInfo ci) {
+        if (RysmConfig.INSTANCE.getHitboxWidth() != 1) {
+            RenderSystem.lineWidth(EntityRenderDispatcherHookKt.getPrevWidth());
+        }
     }
 
     /**

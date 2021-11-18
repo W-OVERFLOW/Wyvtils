@@ -18,6 +18,7 @@
 
 package xyz.qalcyo.rysm.seventeen.hooks
 
+import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.client.render.VertexConsumer
@@ -37,6 +38,7 @@ import net.minecraft.util.math.Box
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args
 import xyz.qalcyo.rysm.core.RysmCore.eventBus
+import xyz.qalcyo.rysm.core.config.RysmConfig
 import xyz.qalcyo.rysm.core.listener.events.HitboxRenderEvent
 import xyz.qalcyo.rysm.core.utils.ColorUtils.getAlpha
 import xyz.qalcyo.rysm.core.utils.ColorUtils.getBlue
@@ -45,6 +47,7 @@ import xyz.qalcyo.rysm.core.utils.ColorUtils.getRed
 import java.awt.Color
 
 private var hitboxRenderEvent: HitboxRenderEvent? = null
+var prevWidth = 0F
 
 fun invokeHitboxEvent(
     entityIn: Entity,
@@ -78,6 +81,11 @@ fun invokeHitboxEvent(
     eventBus.post(hitboxRenderEvent!!)
     if (hitboxRenderEvent!!.cancelled) {
         ci.cancel()
+    } else {
+        if (RysmConfig.hitboxWidth != 1) {
+            prevWidth = RenderSystem.getShaderLineWidth()
+            RenderSystem.lineWidth(RysmConfig.hitboxWidth.toFloat())
+        }
     }
 }
 

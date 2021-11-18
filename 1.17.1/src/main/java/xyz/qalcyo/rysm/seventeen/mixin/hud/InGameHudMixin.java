@@ -59,6 +59,14 @@ public abstract class InGameHudMixin {
 
     @Shadow public abstract TextRenderer getTextRenderer();
 
+    /*/
+    @Inject(method = "render", at = @At("RETURN"))
+    private void renderHud(MatrixStack stack, float partialTicks, CallbackInfo ci) {
+        HitboxManager.INSTANCE.render(stack);
+    }
+
+     */
+
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(DDD)V"))
     private void removeTranslation(MatrixStack matrixStack, double x, double y, double z) {
         if (y == (double) (scaledHeight - 68)) {

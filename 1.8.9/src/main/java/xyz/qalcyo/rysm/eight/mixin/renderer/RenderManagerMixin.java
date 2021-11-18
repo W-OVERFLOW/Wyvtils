@@ -22,6 +22,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
+import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -56,7 +57,7 @@ public class RenderManagerMixin {
      */
     @Inject(method = "renderDebugBoundingBox", at = @At(value = "HEAD"), cancellable = true)
     private void invokeHitboxEvent(Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
-        RenderManagerHookKt.invokeHitboxEvent(entityIn, ci);
+        RenderManagerHookKt.setup(entityIn, ci);
     }
 
     /**
@@ -74,6 +75,11 @@ public class RenderManagerMixin {
     @Inject(method = "renderDebugBoundingBox", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WorldRenderer;begin(ILnet/minecraft/client/renderer/vertex/VertexFormat;)V"), cancellable = true)
     private void cancelEyeLine(Entity entityIn, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
         RenderManagerHookKt.cancelEyeLine(entityIn, x, y, z, partialTicks, ci);
+    }
+
+    @Inject(method = "renderDebugBoundingBox", at = @At("RETURN"))
+    private void reset(Entity p_renderDebugBoundingBox_1_, double p_renderDebugBoundingBox_2_, double p_renderDebugBoundingBox_445y_, double p_renderDebugBoundingBox_4_, float p_renderDebugBoundingBox_6_, float p_render63DebugBoundingBox_6_, CallbackInfo ci) {
+        GL11.glLineWidth(1);
     }
 
 

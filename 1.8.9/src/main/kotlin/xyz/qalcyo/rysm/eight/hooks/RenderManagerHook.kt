@@ -33,8 +33,10 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.projectile.EntityFireball
 import net.minecraft.entity.projectile.EntityWitherSkull
 import net.minecraft.util.AxisAlignedBB
+import org.lwjgl.opengl.GL11
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 import xyz.qalcyo.rysm.core.RysmCore.eventBus
+import xyz.qalcyo.rysm.core.config.RysmConfig
 import xyz.qalcyo.rysm.core.config.RysmConfig.accurateHitbox
 import xyz.qalcyo.rysm.core.listener.events.HitboxRenderEvent
 import xyz.qalcyo.rysm.core.utils.ColorUtils.getAlpha
@@ -43,10 +45,10 @@ import xyz.qalcyo.rysm.core.utils.ColorUtils.getGreen
 import xyz.qalcyo.rysm.core.utils.ColorUtils.getRed
 import java.awt.Color
 
+
 private var hitboxRenderEvent: HitboxRenderEvent? = null
 
-
-fun invokeHitboxEvent(
+fun setup(
     entityIn: Entity,
     ci: CallbackInfo
 ) {
@@ -69,7 +71,11 @@ fun invokeHitboxEvent(
         cancelEyeLine = false
     )
     eventBus.post(hitboxRenderEvent!!)
-    if (hitboxRenderEvent!!.cancelled) ci.cancel()
+    if (hitboxRenderEvent!!.cancelled) {
+        ci.cancel()
+    } else {
+        GL11.glLineWidth(RysmConfig.hitboxWidth.toFloat())
+    }
 }
 
 fun cancelLineOfSightAndBox(
@@ -92,13 +98,15 @@ fun cancelLineOfSightAndBox(
             )
         }
     } else {
-        if (!hitboxRenderEvent!!.cancelLineOfSight) RenderGlobal.drawOutlinedBoundingBox(
-            boundingBox,
-            getRed(hitboxRenderEvent!!.lineOfSightColor),
-            getGreen(hitboxRenderEvent!!.lineOfSightColor),
-            getBlue(hitboxRenderEvent!!.lineOfSightColor),
-            getAlpha(hitboxRenderEvent!!.lineOfSightColor)
-        )
+        if (!hitboxRenderEvent!!.cancelLineOfSight) {
+            RenderGlobal.drawOutlinedBoundingBox(
+                boundingBox,
+                getRed(hitboxRenderEvent!!.lineOfSightColor),
+                getGreen(hitboxRenderEvent!!.lineOfSightColor),
+                getBlue(hitboxRenderEvent!!.lineOfSightColor),
+                getAlpha(hitboxRenderEvent!!.lineOfSightColor)
+            )
+        }
     }
 }
 

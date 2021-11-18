@@ -28,7 +28,7 @@ buildscript {
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath("com.github.Wyvest:ForgeGradle:364653e3cf:all")
+        classpath("com.github.Wyvest:ForgeGradle:3a31fe4359:all")
         classpath("dev.isXander:MixinGradle:0.6-SNAPSHOT")
     }
 }

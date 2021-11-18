@@ -637,6 +637,16 @@ object RysmConfig: Vigilant(
     var projectileHitbox = true
 
     @Property(
+        type = PropertyType.NUMBER,
+        name = "Hitbox Width",
+        category = "Hitbox",
+        description = "Change the width of hitboxes.",
+        min = 1,
+        max = 10
+    )
+    var hitboxWidth = 1
+
+    @Property(
         type = PropertyType.SWITCH,
         name = "Force Hitboxes",
         category = "Hitbox",

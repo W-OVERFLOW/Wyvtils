@@ -24,6 +24,7 @@
     "renderer.EntityRendererMixin",
     "renderer.LivingEntityRendererMixin",
     "renderer.TextRendererDrawerMixin",
-    "renderer.TextRendererMixin"
+    "renderer.TextRendererMixin",
+    "renderer.WorldRendererMixin"
   ]
 }

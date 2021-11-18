@@ -54,8 +54,8 @@ import xyz.qalcyo.rysm.eight.gui.BossHealthGui
 import xyz.qalcyo.rysm.eight.gui.DownloadGui
 import xyz.qalcyo.rysm.eight.gui.SidebarGui
 import xyz.qalcyo.rysm.eight.hooks.GuiScreenResourcePacksHook
-import xyz.qalcyo.rysm.eight.mixin.hud.GuiIngameAccessor
 import xyz.qalcyo.rysm.eight.mixin.gui.GuiNewChatAccessor
+import xyz.qalcyo.rysm.eight.mixin.hud.GuiIngameAccessor
 import java.io.File
 import java.net.URI
 
@@ -204,6 +204,5 @@ object Rysm {
         RysmConfig.writeData()
         EssentialAPI.getGuiUtil().openScreen(RysmConfig.gui())
     }
-
 
 }
