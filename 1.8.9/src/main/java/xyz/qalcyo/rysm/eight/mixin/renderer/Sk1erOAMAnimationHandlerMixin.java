@@ -20,6 +20,7 @@ package xyz.qalcyo.rysm.eight.mixin.renderer;
 
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.item.ItemStack;
+import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -33,7 +34,7 @@ import xyz.qalcyo.rysm.eight.hooks.Sk1erOAMAnimationHandlerHookKt;
  * Sk1er Old Animations, which is a mod which backports
  * 1.7 animations into 1.8.9.
  */
-@SuppressWarnings("UnresolvedMixinReference")
+
 @Pseudo
 @Mixin(targets = "club.sk1er.oldanimations.AnimationHandler")
 public class Sk1erOAMAnimationHandlerMixin {
@@ -41,6 +42,7 @@ public class Sk1erOAMAnimationHandlerMixin {
     /**
      * Resets internal variables to their original value.
      */
+    @Dynamic("Injecting into overwritten item render code from Sk1er Old Animations mod")
     @Inject(method = "renderItemInFirstPerson", at = @At("HEAD"))
     private void resetInternalVariables(ItemRenderer renderer, ItemStack stack, float equipProgress, float partialTicks, CallbackInfoReturnable<Boolean> ci) {
         Sk1erOAMAnimationHandlerHookKt.setAlready(false);
@@ -49,8 +51,9 @@ public class Sk1erOAMAnimationHandlerMixin {
     /**
      * Rotates the hand.
      */
-    @Inject(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;pushMatrix()V"), remap = true)
-    protected void onItemInFirstPersonRendered(ItemRenderer renderer, ItemStack stack, float equipProgress, float partialTicks, CallbackInfoReturnable<Boolean> ci) {
+    @Dynamic("Injecting into overwritten item render code from Sk1er Old Animations mod")
+    @Inject(method = "renderItemInFirstPerson", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;pushMatrix()V"))
+    private void onItemInFirstPersonRendered(ItemRenderer renderer, ItemStack stack, float equipProgress, float partialTicks, CallbackInfoReturnable<Boolean> ci) {
         Sk1erOAMAnimationHandlerHookKt.onSk1erItemInFirstPersonRendered(stack);
     }
 }

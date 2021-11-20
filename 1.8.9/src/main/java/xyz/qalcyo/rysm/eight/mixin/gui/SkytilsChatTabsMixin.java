@@ -19,6 +19,7 @@
 package xyz.qalcyo.rysm.eight.mixin.gui;
 
 import net.minecraft.util.IChatComponent;
+import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,7 +31,6 @@ import xyz.qalcyo.rysm.eight.hooks.SkytilsChatTabsHookKt;
  * This mixin handles compatibility with the MessageRenderEvent and
  * another mod called Skytils, a skyblock utility mod.
  */
-@SuppressWarnings("UnresolvedMixinReference")
 @Pseudo
 @Mixin(targets = "skytils.skytilsmod.features.impl.handlers.ChatTabs")
 public class SkytilsChatTabsMixin {
@@ -39,6 +39,7 @@ public class SkytilsChatTabsMixin {
      * Sends the MessageRenderEvent and makes the shouldAllow method return whether the event
      * was cancelled or not.
      */
+    @Dynamic("Skittles")
     @Inject(method = "shouldAllow", at = @At("HEAD"), cancellable = true)
     private void handleRysmChatEvent(IChatComponent chatComponent, CallbackInfoReturnable<Boolean> booleanCallbackInfoReturnable) {
         SkytilsChatTabsHookKt.handleRysmChatEvent(chatComponent, booleanCallbackInfoReturnable);

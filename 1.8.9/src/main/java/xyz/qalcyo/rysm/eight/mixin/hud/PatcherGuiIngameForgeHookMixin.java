@@ -20,6 +20,7 @@ package xyz.qalcyo.rysm.eight.mixin.hud;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,8 +33,8 @@ import xyz.qalcyo.rysm.core.config.RysmConfig;
 @Mixin(targets = "club.sk1er.patcher.hooks.GuiIngameForgeHook")
 public class PatcherGuiIngameForgeHookMixin {
 
-    @SuppressWarnings({"UnresolvedMixinReference", "DefaultAnnotationParam"})
-    @Inject(remap = false, method = "drawActionbarText", at = @At(remap = true, value = "HEAD"), cancellable = true)
+    @Dynamic("patcher")
+    @Inject(method = "drawActionbarText", at = @At(value = "HEAD"), cancellable = true)
     private static void onActionBarTextDrawn(String recordPlaying, int color, CallbackInfo ci) {
         if (recordPlaying == null || recordPlaying.trim().isEmpty()) ci.cancel();
         if (!RysmConfig.INSTANCE.getActionBarCustomization()) return;

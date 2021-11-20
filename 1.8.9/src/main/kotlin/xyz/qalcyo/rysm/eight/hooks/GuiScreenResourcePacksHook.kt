@@ -76,13 +76,18 @@ object GuiScreenResourcePacksHook {
                 while (Keyboard.next()) {
                     if (Keyboard.getEventKeyState() && !Keyboard.isRepeatEvent()) inputField!!.textboxKeyTyped(Keyboard.getEventCharacter(), Keyboard.getEventKey())
                 }
+                /*/
                 if (packFolder.exists() && packFolder.isDirectory && originalPackSize != null) {
                     val array = packFolder.list()
                     if (array != null && array.size != originalPackSize) {
-                        Minecraft.getMinecraft().currentScreen = parentScreen
+                        originalPackSize = array.size
+                        println(originalPackSize)
+                        println(array.size)
                         Requisite.getInstance().guiHelper.open(GuiScreenResourcePacks(parentScreen))
                     }
                 }
+
+                 */
             }
         }
     }

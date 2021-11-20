@@ -68,7 +68,7 @@ public class GuiScreenResourcePacksMixin {
         handlePacks();
     }
 
-    @Inject(method = "mouseClicked", at = @At("HEAD"))
+    @Inject(method = "mouseClicked", at = @At("TAIL"))
     private void handleInputMouse(int mouseX, int mouseY, int mouseButton, CallbackInfo ci) {
         Objects.requireNonNull(GuiScreenResourcePacksHookKt.getInputField()).mouseClicked(mouseX, mouseY, mouseButton);
     }
