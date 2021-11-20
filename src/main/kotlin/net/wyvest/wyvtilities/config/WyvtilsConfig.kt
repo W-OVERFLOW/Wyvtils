@@ -63,15 +63,7 @@ object WyvtilsConfig :
 
     @Property(
         type = PropertyType.SWITCH,
-        name = "Automatically Check Winstreak",
-        description = "Automatically check your winstreak after you win a Hypixel game. Requires an API Key.",
-        category = "Automatic"
-    )
-    var autoGetWinstreak = false
-
-    @Property(
-        type = PropertyType.SWITCH,
-        name = "Automatically get API Key",
+        name = "Automatically Get API Key",
         description = "Automatically get the API Key when /api new is sent.",
         category = "General"
     )
@@ -109,7 +101,7 @@ object WyvtilsConfig :
                 "1 will make the sound the same.",
         category = "Sound",
         min = 0,
-        max = 100
+        max = 15
     )
     var soundMultiplier = 1
 
@@ -120,7 +112,7 @@ object WyvtilsConfig :
                 "1 will make the sound the same.",
         category = "Sound",
         min = 0,
-        max = 100
+        max = 15
     )
     var soundDecrease = 1
 

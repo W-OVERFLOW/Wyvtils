@@ -33,7 +33,6 @@ import org.apache.http.client.HttpClient
 import org.apache.http.client.config.RequestConfig
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.HttpClientBuilder
-import xyz.matthewtgm.requisite.util.ApiHelper
 import java.awt.Desktop
 import java.io.File
 import java.io.FileOutputStream
@@ -52,7 +51,7 @@ object Updater {
     fun update() {
         CoroutineScope(Dispatchers.IO + CoroutineName("Wyvtilities-UpdateChecker")).launch {
             val latestRelease =
-                Wyvtilities.jsonParser.parse(ApiHelper.getJsonOnline("https://api.github.com/repos/Wyvest/Wyvtilities/releases/latest")).asJsonObject
+                APIUtil.getJSONResponse("https://api.github.com/repos/Wyvest/Wyvtilities/releases/latest")
             latestTag = latestRelease.get("tag_name").asString
 
             val currentVersion = DefaultArtifactVersion(Wyvtilities.VERSION.substringBefore("-"))

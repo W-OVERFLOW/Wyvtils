@@ -2,15 +2,15 @@
   {
     "modid": "wyvtilities",
     "name": "Wyvtilities",
-    "description": "Utilities, by Wyvest.",
+    "description": "Utilities.",
     "version": "${version}",
     "mcversion": "${mcversion}",
     "url": "https://github.com/Wyvest/Wyvtilities/releases/latest",
     "updateUrl": "https://github.com/Wyvest/Wyvtilities/releases/latest",
     "authorList": [
-      "Wyvest"
+      "Qalcyo"
     ],
-    "credits": "ModCore Inc. for Essential, TGMDevelopment for Requisite, and Skytils for many other things.",
+    "credits": "ModCore Inc. for Essential, and Skytils for many other things.",
     "logoFile": "",
     "screenshots": [],
     "dependencies": []

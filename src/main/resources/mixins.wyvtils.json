@@ -5,12 +5,14 @@
   "package": "net.wyvest.wyvtilities.mixin",
   "refmap": "mixins.wyvtils.refmap.json",
   "mixins": [
+    "AccessorPositionedSound",
     "AccessorGuiIngame",
     "MixinGuiIngame",
     "MixinGuiIngameForge",
     "MixinGuiIngameForgeHook",
     "MixinRenderManager",
-    "MixinSoundManager"
+    "MixinSoundManager",
+    "MixinFontRenderer"
   ],
   "verbose": true
 }

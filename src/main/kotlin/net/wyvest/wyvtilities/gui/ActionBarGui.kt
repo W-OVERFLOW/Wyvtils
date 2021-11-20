@@ -18,6 +18,7 @@
 
 package net.wyvest.wyvtilities.gui
 
+import gg.essential.api.EssentialAPI
 import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.GlStateManager
@@ -26,7 +27,6 @@ import net.wyvest.wyvtilities.config.WyvtilsConfig.actionBarX
 import net.wyvest.wyvtilities.config.WyvtilsConfig.actionBarY
 import net.wyvest.wyvtilities.mixin.AccessorGuiIngame
 import org.lwjgl.opengl.GL11
-import xyz.matthewtgm.requisite.util.GuiHelper
 import java.awt.Color
 import java.io.IOException
 
@@ -43,7 +43,7 @@ class ActionBarGui : GuiScreen() {
 
     override fun actionPerformed(button: GuiButton) {
         when (button.id) {
-            0 -> GuiHelper.open(WyvtilsConfig.gui())
+            0 -> EssentialAPI.getGuiUtil().openScreen(WyvtilsConfig.gui())
         }
     }
 

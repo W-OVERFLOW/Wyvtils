@@ -27,8 +27,8 @@ import gg.essential.api.utils.Multithreading
 import net.minecraft.util.EnumChatFormatting
 import net.wyvest.wyvtilities.Wyvtilities
 import net.wyvest.wyvtilities.config.WyvtilsConfig
+import net.wyvest.wyvtilities.utils.APIUtil
 import net.wyvest.wyvtilities.utils.HypixelUtils
-import xyz.matthewtgm.json.util.JsonApiHelper
 
 @Suppress("unused")
 object WyvtilsCommands : Command("wyvtilities", true) {
@@ -49,7 +49,7 @@ object WyvtilsCommands : Command("wyvtilities", true) {
     fun setKey(@DisplayName("api key") apiKey: String) {
         Multithreading.runAsync {
             try {
-                if (JsonApiHelper.getJsonObject("https://api.hypixel.net/key?key=$apiKey")
+                if (APIUtil.getJSONResponse("https://api.hypixel.net/key?key=$apiKey")
                         .get("success").asBoolean
                 ) {
                     WyvtilsConfig.apiKey = apiKey
@@ -88,57 +88,6 @@ object WyvtilsCommands : Command("wyvtilities", true) {
                         } else {
                             EssentialAPI.getNotifications()
                                 .push("Wyvtilities", "There was a problem trying to get your GEXP.")
-                        }
-                    }
-                }
-            } catch (e: NullPointerException) {
-                e.printStackTrace()
-            }
-
-        }
-    }
-
-    @SubCommand("winstreak", description = "Gets the winstreak of the player specified")
-    fun winstreak(@DisplayName("username") username: String?, @DisplayName("gamemode") gamemode: String?) {
-        if (WyvtilsConfig.apiKey.isEmpty()) {
-            Wyvtilities.sendMessage(EnumChatFormatting.RED.toString() + "You need to provide a valid API key to run this command! Type /api new to autoset a key.")
-        } else {
-            try {
-                Multithreading.runAsync {
-                    if (username != null) {
-                        if (gamemode != null) {
-                            if (HypixelUtils.getWinstreak(username, gamemode)) {
-                                EssentialAPI.getNotifications()
-                                    .push(
-                                        "Wyvtilities",
-                                        "$username currently has a " + HypixelUtils.winstreak + " winstreak in $gamemode."
-                                    )
-                            } else {
-                                EssentialAPI.getNotifications()
-                                    .push(
-                                        "Wyvtilities",
-                                        "There was a problem trying to get $username's winstreak in $gamemode."
-                                    )
-                            }
-                        } else {
-                            if (HypixelUtils.getWinstreak(username)) {
-                                EssentialAPI.getNotifications()
-                                    .push(
-                                        "Wyvtilities",
-                                        "$username currently has a " + HypixelUtils.winstreak + " winstreak."
-                                    )
-                            } else {
-                                EssentialAPI.getNotifications()
-                                    .push("Wyvtilities", "There was a problem trying to get $username's winstreak.")
-                            }
-                        }
-                    } else {
-                        if (HypixelUtils.getWinstreak()) {
-                            EssentialAPI.getNotifications()
-                                .push("Wyvtilities", "You currently have a " + HypixelUtils.winstreak + " winstreak.")
-                        } else {
-                            EssentialAPI.getNotifications()
-                                .push("Wyvtilities", "There was a problem trying to get your winstreak.")
                         }
                     }
                 }
