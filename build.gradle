@@ -53,8 +53,7 @@ minecraft {
 
     makeObfSourceJar = false
 
-    clientJvmArgs += '-Dfml.coreMods.load=net.wyvest.wyvtilities.mixin.WyvtilsLoadingPlugin'
-    clientRunArgs += '--tweakClass net.wyvest.wyvtilities.mixin.RequisiteEssentialTweaker'
+    clientRunArgs += '--tweakClass gg.essential.loader.stage0.EssentialSetupTweaker'
     clientRunArgs += '--mixin mixins.wyvtils.json'
 }
 
@@ -77,11 +76,9 @@ dependencies {
 jar {
     manifest.attributes(
             'ModSide': 'CLIENT',
-            'FMLCorePlugin': 'net.wyvest.wyvtilities.mixin.WyvtilsLoadingPlugin',
-            'FMLCorePluginContainsFMLMod': true,
             'ForceLoadAsMod': true,
             'MixinConfigs': 'mixins.wyvtils.json',
-            'TweakClass': 'net.wyvest.wyvtilities.mixin.RequisiteEssentialTweaker',
+            'TweakClass': 'gg.essential.loader.stage0.EssentialSetupTweaker',
             'TweakOrder': '0'
     )
 
