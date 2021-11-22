@@ -34,12 +34,12 @@ import java.util.List;
  */
 @Mixin(ChatHud.class)
 public interface ChatHudAccessor {
-    @Accessor
+    @Accessor("visibleMessages")
     List<ChatHudLine<OrderedText>> getVisibleMessages();
 
-    @Accessor
+    @Accessor("messages")
     List<ChatHudLine<Text>> getMessages();
 
-    @Invoker
+    @Invoker("addMessage")
     void invokeAddMessage(Text message, int messageId, int timestamp, boolean refresh);
 }

@@ -25,6 +25,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(PackListWidget.ResourcePackEntry.class)
 public interface ResourcePackEntryAccessor {
-    @Accessor
+    @Accessor("pack")
     ResourcePackOrganizer.Pack getPack();
 }
