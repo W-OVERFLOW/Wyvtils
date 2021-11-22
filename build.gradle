@@ -67,7 +67,7 @@ dependencies {
     include('gg.essential:loader-launchwrapper:1.1.0') {
         transitive = false
     }
-    implementation 'gg.essential:essential-1.8.9-forge:1539+release-launch'
+    implementation 'gg.essential:essential-1.8.9-forge:1571+release-launch'
 
 
     annotationProcessor 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
