@@ -18,30 +18,7 @@
 
 package xyz.qalcyo.rysm.eight.hooks
 
-import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.item.EnumAction
-import net.minecraft.item.ItemStack
-import org.lwjgl.opengl.GL11
-import xyz.qalcyo.rysm.core.config.RysmConfig.leftHand
-import xyz.qalcyo.rysm.core.config.RysmConfig.swapBow
+interface PackEntryFolder {
+    fun isRysmFolder(): Boolean
 
-var already = false
-
-
-fun onSk1erItemInFirstPersonRendered(
-    stack: ItemStack?
-) {
-    if (swapBow && stack != null && stack.itemUseAction == EnumAction.BOW) {
-        if (!leftHand && !already) {
-            GL11.glScaled(-1.0, 1.0, 1.0)
-            GlStateManager.disableCull()
-            already = true
-        }
-    } else {
-        if (leftHand && !already) {
-            GL11.glScaled(-1.0, 1.0, 1.0)
-            GlStateManager.disableCull()
-            already = true
-        }
-    }
 }

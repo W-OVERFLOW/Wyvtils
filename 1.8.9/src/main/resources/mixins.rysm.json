@@ -12,15 +12,15 @@
     "gui.GuiScreenResourcePacksMixin",
     "gui.GuiSlotMixin",
     "gui.ResourcePackListEntryMixin",
+    "gui.ResourcePackRepositoryMixin",
+    "gui.PackEntryAccessor",
     "gui.SkytilsChatTabsMixin",
     "hud.GuiIngameAccessor",
     "hud.GuiIngameForgeMixin",
     "hud.GuiIngameMixin",
     "hud.PatcherGuiIngameForgeHookMixin",
-    "renderer.ItemRendererMixin",
     "renderer.RenderEntityItemMixin",
-    "renderer.RenderManagerMixin",
-    "renderer.Sk1erOAMAnimationHandlerMixin"
+    "renderer.RenderManagerMixin"
   ],
   "verbose": true
 }

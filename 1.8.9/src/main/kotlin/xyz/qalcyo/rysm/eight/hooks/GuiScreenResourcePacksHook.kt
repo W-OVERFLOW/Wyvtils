@@ -29,15 +29,20 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import org.lwjgl.input.Keyboard
-import xyz.qalcyo.requisite.Requisite
 import xyz.qalcyo.rysm.eight.Rysm.mc
 import java.io.File
+import java.io.FileFilter
 
 var originalPackSize: Int? = null
 var inputField: GuiTextField? = null
 var sr: ScaledResolution? = null
 var prevText = ""
 var parentScreen: GuiScreen? = null
+val resourcePackFilter = FileFilter { p_accept_1_ ->
+    val zipCheck = p_accept_1_.isFile && p_accept_1_.name.endsWith(".zip")
+    val fileCheck = p_accept_1_.isDirectory && (File(p_accept_1_, "pack.mcmeta").isFile || File(p_accept_1_, "folder.json").isFile)
+    return@FileFilter zipCheck || fileCheck
+}
 
 fun addInputField() {
     sr = ScaledResolution(Minecraft.getMinecraft())

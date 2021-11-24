@@ -16,25 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package xyz.qalcyo.rysm.eight.hooks
+package xyz.qalcyo.rysm.eight.mixin.gui;
 
-import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.item.EnumAction
-import net.minecraft.item.ItemStack
-import org.lwjgl.opengl.GL11
-import xyz.qalcyo.rysm.core.config.RysmConfig.leftHand
-import xyz.qalcyo.rysm.core.config.RysmConfig.swapBow
+import net.minecraft.client.resources.ResourcePackRepository;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import xyz.qalcyo.rysm.eight.hooks.GuiScreenResourcePacksHookKt;
 
-fun onItemInFirstPersonRendered(itemToRender: ItemStack?) {
-    if (swapBow && itemToRender != null && itemToRender.itemUseAction == EnumAction.BOW) {
-        if (!leftHand) {
-            GL11.glScaled(-1.0, 1.0, 1.0)
-            GlStateManager.disableCull()
-        }
-    } else {
-        if (leftHand) {
-            GL11.glScaled(-1.0, 1.0, 1.0)
-            GlStateManager.disableCull()
-        }
+import java.io.FileFilter;
+
+@Mixin(ResourcePackRepository.class)
+public class ResourcePackRepositoryMixin {
+    @ModifyArg(method = "getResourcePackFiles", at = @At(value = "INVOKE", target = "Ljava/io/File;listFiles(Ljava/io/FileFilter;)[Ljava/io/File;"), index = 0)
+    private FileFilter modifyFilter(FileFilter original) {
+        return GuiScreenResourcePacksHookKt.getResourcePackFilter();
     }
 }

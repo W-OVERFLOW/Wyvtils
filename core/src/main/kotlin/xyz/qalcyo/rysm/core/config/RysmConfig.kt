@@ -58,6 +58,7 @@ object RysmConfig: Vigilant(
     )
     var hideLocraw = true
 
+    /*/
     @Property(
         type = PropertyType.SWITCH,
         name = "Left Hand",
@@ -73,6 +74,8 @@ object RysmConfig: Vigilant(
         category = "General"
     )
     var swapBow = false
+
+     */
 
     @Property(
         type = PropertyType.SWITCH,
