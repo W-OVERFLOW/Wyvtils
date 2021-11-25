@@ -9,6 +9,7 @@
 ### Features
 <details>
   <summary>General</summary>
+  
 # General
 - **Reverse Inventory Scrolling** - Reverse the direction of which the inventory scrolls to when scrolling on your mouse.
 - **Hide Locraw Messages** - Hide locraw messages in chat (e.g {"server": "something"}).
@@ -21,10 +22,11 @@
 
 <details>
   <summary>Bossbar</summary>
+  
 # Bossbar
 - **Bossbar Customization**
 - **Toggle Bossbar**
-- **"Toggle Text**
+- **Toggle Text**
 - **Toggle Shadow**
 - **Toggle Bar**
 - **Bossbar Scale**
@@ -32,6 +34,7 @@
   
 <details>
   <summary>Action Bar</summary>
+  
 # Action Bar
 - **Action Bar Customization**
 - **Toggle Action Bar**
@@ -46,6 +49,7 @@
   
 <details>
   <summary>Titles</summary>
+  
 # Titles
 - **Toggle Title**
 - **Title Scale Percentage**
@@ -55,6 +59,7 @@
   
 <details>
   <summary>Text</summary>
+  
 # Text
 - **Highlight Name** - Highlight your name. (1.8 only)
 - **Text Color** - Change the text color for the highlight. (1.8 only)
@@ -62,6 +67,7 @@
   
 <details>
   <summary>Sidebar</summary>
+  
 # Sidebar
 - **Toggle Sidebar**
 - **Toggle Sidebar Text Shadow**
@@ -74,6 +80,7 @@
   
 <details>
   <summary>Hitbox</summary>
+  
 # Hitbox
 - **Toggle Hitbox**
 - **Accurate Hitbox** - In vanilla, hitboxes are a bit smaller compared to their actual size. When this is on, it make the hitboxes accurate.
@@ -105,6 +112,7 @@
   
 <details>
   <summary>Debug Screen</summary>
+  
 # Debug Screen
 - **Debug HUD Color** (1.17 only)
 - **Debug HUD Shadow** (1.17 only)
@@ -112,6 +120,7 @@
   
 <details>
   <summary>Pack GUI Modifier</summary>
+  
 # Pack GUI Modifier
 - **Remove Pack GUI Background**
 - **Hide Incompatible Packs**
