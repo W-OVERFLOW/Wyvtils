@@ -19,24 +19,43 @@
 package xyz.qalcyo.rysm.eight.mixin.gui;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreenResourcePacks;
 import net.minecraft.client.resources.ResourcePackListEntry;
-import net.minecraft.client.resources.ResourcePackListEntryFound;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.qalcyo.rysm.core.config.RysmConfig;
 import xyz.qalcyo.rysm.eight.Rysm;
-import xyz.qalcyo.rysm.eight.hooks.PackEntryFolder;
-import xyz.qalcyo.rysm.eight.hooks.RysmPackKt;
 
 @Mixin(ResourcePackListEntry.class)
 public class ResourcePackListEntryMixin {
 
     @Shadow @Final protected Minecraft mc;
+
+    @Shadow @Final protected GuiScreenResourcePacks resourcePacksGUI;
+
+    @Unique private boolean isRysm = false;
+
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void ye412ah(GuiScreenResourcePacks p_i45051_1_, CallbackInfo ci) {
+        /*/
+        try {
+            if (RysmPackKt.containsFunnyMethod(this.getClass().getDeclaredMethods())) { //TODO: I can probably optimize this a bit
+                isRysm = ((PackEntryFolder) ((ResourcePackListEntryFound) (Object) this).func_148318_i()).isRysmFolder();
+            } else {
+                isRysm = false;
+            }
+        } catch (Exception ignored) {
+            isRysm = false;
+        }
+
+         */
+    }
 
     @Inject(method = "drawEntry", at = @At("HEAD"), cancellable = true)
     private void cancel(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, CallbackInfo ci) {
@@ -50,15 +69,19 @@ public class ResourcePackListEntryMixin {
 
     @Inject(method = "mousePressed", at = @At("HEAD"), cancellable = true)
     private void yeah(int p_mousePressed_1_, int p_mousePressed_2_, int p_mousePressed_3_, int p_mousePressed_4_, int p_mousePressed_5_, int p_mousePressed_6_, CallbackInfoReturnable<Boolean> cir) {
-        try {
-            if (RysmPackKt.containsMethod(getClass().getDeclaredMethods())) { //TODO: I can probably optimize this a bit
-                if (((PackEntryFolder) ((ResourcePackListEntryFound) (Object) this).func_148318_i()).isRysmFolder()) {
-                    cir.setReturnValue(true);
-                    //DO THE STUFF
+        /*/
+        if (isRysm) {
+            cir.setReturnValue(true);
+            for (int i = 0; i < resourcePacksGUI.getAvailableResourcePacks().size(); i++) {
+                if (resourcePacksGUI.getAvailableResourcePacks().get(i) instanceof ResourcePackListEntryFound) {
+                    ResourcePackListEntryFound entry = (ResourcePackListEntryFound) resourcePacksGUI.getAvailableResourcePacks().get(i);
+                    if (entry.func_148318_i().equals(((ResourcePackListEntryFound) (Object) this).func_148318_i())) {
+
+                    }
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
+         */
     }
 }

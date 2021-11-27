@@ -39,10 +39,10 @@ archivesBaseName = project_name + " [1.17.1]"
 version = project_ver
 
 loom {
-   accessWidenerPath = file("src/main/resources/rysm.accesswidener")
-   mixin {
-       defaultRefmapName = "mixins.rysm.refmap.json"
-   }
+    accessWidenerPath = file("src/main/resources/rysm.accesswidener")
+    mixin {
+        defaultRefmapName = "mixins.rysm.refmap.json"
+    }
 }
 
 dependencies {

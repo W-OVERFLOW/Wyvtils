@@ -18,25 +18,12 @@
 
 package xyz.qalcyo.rysm.eight.mixin.gui;
 
-import net.minecraft.client.resources.FileResourcePack;
-import net.minecraft.client.resources.FolderResourcePack;
-import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.ResourcePackRepository;
-import org.spongepowered.asm.lib.Opcodes;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xyz.qalcyo.rysm.eight.hooks.PackEntryFolder;
-import xyz.qalcyo.rysm.eight.hooks.RysmPack;
-
-import java.io.File;
 
 @Mixin(ResourcePackRepository.Entry.class)
-public class PackEntryAccessor implements PackEntryFolder {
+public class PackEntryAccessor {
+    /*/
 
     @Shadow @Final private File resourcePackFile;
 
@@ -69,4 +56,6 @@ public class PackEntryAccessor implements PackEntryFolder {
     public boolean isRysmFolder() {
         return resourcePackFile.isDirectory() && new File(resourcePackFile, "folder.json").isFile();
     }
+
+     */
 }

@@ -37,7 +37,7 @@ fun cacheResourceLocation() {
     image = ImageIO.read(Rysm.mc.resourceManager.getResource(yes).inputStream)
 }
 
-fun containsMethod(a: Array<Method>): Boolean {
+fun containsFunnyMethod(a: Array<Method>): Boolean {
     a.forEach {
         if (it.name == "func_148312_b") return true
     }

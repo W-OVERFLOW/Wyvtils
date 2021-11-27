@@ -28,8 +28,11 @@ import java.io.FileFilter;
 
 @Mixin(ResourcePackRepository.class)
 public class ResourcePackRepositoryMixin {
+    /*/
     @ModifyArg(method = "getResourcePackFiles", at = @At(value = "INVOKE", target = "Ljava/io/File;listFiles(Ljava/io/FileFilter;)[Ljava/io/File;"), index = 0)
     private FileFilter modifyFilter(FileFilter original) {
         return GuiScreenResourcePacksHookKt.getResourcePackFilter();
     }
+
+     */
 }
