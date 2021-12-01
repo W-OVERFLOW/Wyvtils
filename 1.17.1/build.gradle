@@ -28,13 +28,13 @@ apply plugin: "java"
 
 compileKotlin {
     kotlinOptions {
-        jvmTarget = "16"
+        jvmTarget = "17"
         freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
     }
 }
 
-sourceCompatibility = JavaVersion.VERSION_16
-targetCompatibility = JavaVersion.VERSION_16
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 archivesBaseName = project_name + " [1.17.1]"
 version = project_ver
 
@@ -60,31 +60,35 @@ dependencies {
     }
     shade include ("xyz.qalcyo.mango:Mango:1.8")
     implementation("com.github.Wyvest:keventbus:e8e05ea")
-    minecraft "com.mojang:minecraft:1.17.1"
-    mappings "net.fabricmc:yarn:1.17.1+build.63:v2"
-    modImplementation "net.fabricmc:fabric-loader:0.11.7"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:0.42.1+1.17"
+    minecraft "com.mojang:minecraft:1.18"
+    mappings "net.fabricmc:yarn:1.18+build.1:v2"
+    modImplementation "net.fabricmc:fabric-loader:0.12.6"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:0.43.1+1.18"
+    /*/
     modImplementation("com.terraformersmc:modmenu:2.0.4") {
         transitive = false
     }
-    modImplementation("gg.essential:essential-1.17.1-fabric:1540+release-launch-1.17") {
-        transitive = false
-    }
-    modImplementation("gg.essential:vigilance-1.17.1-fabric:179+next") {
+
+     */
+    modImplementation("gg.essential:essential-1.18-fabric:1596+release-1.1-phase1") {
         exclude(group: "net.fabricmc")
         exclude(group: "gg.essential")
     }
-    modImplementation("gg.essential:universalcraft-1.17.1-fabric:162+next") {
+    modImplementation("gg.essential:vigilance-1.18-fabric:191+mc-1.18") {
+        exclude(group: "net.fabricmc")
+        exclude(group: "gg.essential")
+    }
+    modImplementation("gg.essential:universalcraft-1.18-fabric:173+mc-1.18") {
         exclude(group: "net.fabricmc")
     }
-    modImplementation("gg.essential:elementa-1.17.1-fabric:384+next") {
+    modImplementation("gg.essential:elementa-1.18-fabric:395+mc-1.18") {
         exclude(group: "net.fabricmc")
         exclude(group: "gg.essential")
     }
     modImplementation include("gg.essential:loader-fabric:1.0.0") {
         transitive = false
     }
-    modImplementation("net.fabricmc:fabric-language-kotlin:1.6.4+kotlin.1.5.30")
+    //modImplementation("net.fabricmc:fabric-language-kotlin:1.6.4+kotlin.1.5.30")
 }
 
 processResources {
@@ -98,7 +102,7 @@ processResources {
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = "UTF-8"
 
-    it.options.release = 16
+    it.options.release = 17
 }
 
 java {
