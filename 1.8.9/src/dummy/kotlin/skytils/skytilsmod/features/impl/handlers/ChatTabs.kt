@@ -1,6 +1,6 @@
 /*
- * Rysm, a utility mod for 1.8.9.
- * Copyright (C) 2021 Rysm
+ * Wyvtils, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Wyvtils
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -22,6 +22,6 @@ import net.minecraft.util.IChatComponent
 
 object ChatTabs {
     fun shouldAllow(component: IChatComponent): Boolean {
-        throw AssertionError("Rysm dummy classes have crashed Minecraft! Please go to https://inv.wtf/qalcyo for support!")
+        throw AssertionError("Wyvtils dummy classes have crashed Minecraft! Please go to https://inv.wtf/w-overflow for support!")
     }
 }

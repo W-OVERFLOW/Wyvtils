@@ -1,42 +1,42 @@
 {
   "schemaVersion": 1,
-  "id": "rysm",
+  "id": "wyvtils",
   "version": "${version}",
-  "name": "Rysm",
+  "name": "Wyvtils",
   "description": "Utilities, for 1.17.1.",
   "authors": [
-    "Qalcyo"
+    "Wyvest"
   ],
   "contact": {
-    "issues": "https://github.com/Qalcyo/Rysm/issues/",
-    "sources": "https://github.com/Qalcyo/Rysm/"
+    "issues": "https://github.com/Wyvest/Wyvtils/issues/",
+    "sources": "https://github.com/Wyvest/Wyvtils/"
   },
   "license": "GNU Lesser General Public License version 3 (LGPLv3)",
   "environment": "client",
-  "accessWidener" : "rysm.accesswidener",
+  "accessWidener" : "wyvtils.accesswidener",
   "entrypoints": {
     "client": [
       {
         "adapter": "kotlin",
-        "value": "xyz.qalcyo.rysm.seventeen.Rysm"
+        "value": "net.wyvest.wyvtils.seventeen.Wyvtils"
       }
     ],
     "preLaunch": [
       "gg.essential.loader.stage0.EssentialSetupPreLaunch"
     ],
     "modmenu": [
-      "xyz.qalcyo.rysm.seventeen.config.RysmModMenu"
+      "net.wyvest.wyvtils.seventeen.config.WyvtilsModMenu"
     ]
   },
   "mixins": [
-    "mixins.rysm.json"
+    "mixins.wyvtils.json"
   ],
   "depends": {
     "fabricloader": ">=0.11.0",
     "fabric": "*",
     "fabric-language-kotlin": ">=1.6.4+kotlin.1.5.30",
-    "minecraft": "1.18.x",
-    "java": ">=17",
+    "minecraft": "1.17.x",
+    "java": ">=16",
     "fabric-key-binding-api-v1": "*"
   },
   "recommends": {

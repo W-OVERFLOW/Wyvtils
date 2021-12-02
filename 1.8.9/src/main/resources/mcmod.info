@@ -1,14 +1,14 @@
 [
   {
-    "modid": "rysm",
-    "name": "Rysm",
+    "modid": "wyvtils",
+    "name": "Wyvtils",
     "description": "Useful utilities for general usage.",
     "version": "${version}",
     "mcversion": "1.8.9",
-    "url": "https://github.com/Qalcyo/Rysm/releases/latest",
-    "updateUrl": "https://github.com/Qalcyo/Rysm/releases/latest",
+    "url": "https://github.com/Wyvest/Wyvtils/releases/latest",
+    "updateUrl": "https://github.com/Wyvest/Wyvtils/releases/latest",
     "authorList": [
-      "Qalcyo"
+      "Wyvest"
     ],
     "credits": "ModCore Inc. for Essential",
     "logoFile": "",

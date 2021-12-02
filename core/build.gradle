@@ -1,6 +1,6 @@
 /*
- * Rysm, a utility mod for 1.8.9.
- * Copyright (C) 2021 Rysm
+ * Wyvtils, a utility mod for 1.8.9.
+ * Copyright (C) 2021 Wyvtils
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -30,8 +30,8 @@ compileKotlin {
     }
 }
 buildConfig {
-    className("RysmInfo")
-    packageName("xyz.qalcyo.rysm.core")
+    className("WyvtilsInfo")
+    packageName("net.wyvest.wyvtils.core")
 
     buildConfigField("String", "NAME", "\"${project_name}\"")
     buildConfigField("String", "VER", "\"${project_ver}\"")
@@ -45,5 +45,4 @@ dependencies {
     implementation("com.github.Wyvest:keventbus:e8e05ea")
     implementation ("org.apache.httpcomponents:httpclient:4.3.3")
     implementation("org.apache.commons:commons-lang3:3.3.2")
-    implementation ("xyz.qalcyo.mango:Mango:1.8")
 }

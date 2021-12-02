@@ -1,0 +1,30 @@
+{
+  "required": true,
+  "refmap": "mixins.wyvtils.refmap.json",
+  "package": "net.wyvest.wyvtils.seventeen.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "MouseMixin",
+    "gui.ChatHudAccessor",
+    "gui.ChatHudMixin",
+    "gui.EntryListWidgetMixin",
+    "gui.PackAccessor",
+    "gui.PackScreenMixin",
+    "gui.PackScreenMixin1",
+    "gui.ResourcePackEntryAccessor",
+    "gui.ResourcePackEntryMixin",
+    "gui.ResourcePackOrganizerMixin",
+    "hud.BossBarHudMixin",
+    "hud.DebugHudMixin",
+    "hud.InGameHudMixin",
+    "renderer.EntityRenderDispatcherMixin",
+    "renderer.EntityRendererMixin",
+    "renderer.LivingEntityRendererMixin",
+    "renderer.TextRendererDrawerMixin",
+    "renderer.TextRendererMixin",
+    "renderer.WorldRendererMixin"
+  ]
+}

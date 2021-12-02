@@ -1,9 +1,9 @@
-# Rysm, the ultimate utility mod.
+# Wyvtils, the ultimate utility mod.
 
-<a href="https://github.com/Qalcyo/Rysm/releases" target="_blank">
-<img alt="downloads" src="https://img.shields.io/github/downloads/Qalcyo/Rysm/total?color=F5C400&style=for-the-badge" /> <img alt="downloads latest" src="https://img.shields.io/github/downloads-pre/Qalcyo/Rysm/latest/total?color=F5C400&style=for-the-badge" />
+<a href="https://github.com/Wyvest/Wyvtils/releases" target="_blank">
+<img alt="downloads" src="https://img.shields.io/github/downloads/Wyvest/Wyvtils/total?color=F5C400&style=for-the-badge" /> <img alt="downloads latest" src="https://img.shields.io/github/downloads-pre/Wyvest/Wyvtils/latest/total?color=F5C400&style=for-the-badge" />
 
-### [Discord invite (click to get support)](https://inv.wtf/qalcyo)
+### [Discord invite (click to get support)](https://inv.wtf/w-overflow)
 
 
 ### Features
