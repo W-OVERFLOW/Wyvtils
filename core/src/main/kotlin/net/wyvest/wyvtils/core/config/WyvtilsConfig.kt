@@ -829,12 +829,15 @@ object WyvtilsConfig: Vigilant(
         hidePropertyIf("chatHightlight") {
             WyvtilsCore.currentVersion == MinecraftVersions.SEVENTEEN
         }
+        /*/
         hidePropertyIf("leftHand") {
             WyvtilsCore.currentVersion == MinecraftVersions.SEVENTEEN
         }
         hidePropertyIf("swapBow") {
             WyvtilsCore.currentVersion == MinecraftVersions.SEVENTEEN
         }
+
+         */
         hidePropertyIf("itemPhysics") {
             WyvtilsCore.currentVersion == MinecraftVersions.SEVENTEEN
         }
