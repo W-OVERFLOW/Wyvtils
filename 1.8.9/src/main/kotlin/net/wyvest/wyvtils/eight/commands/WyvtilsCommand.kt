@@ -32,7 +32,8 @@ import net.wyvest.wyvtils.core.config.WyvtilsConfig
 object WyvtilsCommand : Command(WyvtilsInfo.ID, true) {
     override val commandAliases = setOf(
         Alias("wyvest"),
-        Alias("wyvtilities")
+        Alias("wyvtilities"),
+        Alias("wt")
     )
 
     @DefaultHandler
