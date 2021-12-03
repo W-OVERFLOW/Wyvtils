@@ -162,17 +162,6 @@ object WyvtilsConfig: Vigilant(
     )
     var bossBar = true
 
-    /*/
-    @Property(
-        type = PropertyType.SWITCH,
-        name = "Automatically Turn Off Bossbar When In Lobby",
-        description = "Automatically turn off the bossbar when the player goes into a lobby, and turn it back on when exiting it.",
-        category = "Bossbar"
-    )
-    var autoBossbarLobby = false
-
-     */
-
     @Property(
         type = PropertyType.SWITCH,
         name = "Toggle Text",
@@ -742,6 +731,14 @@ object WyvtilsConfig: Vigilant(
         category = "Debug Screen"
     )
     var debugShadow = false
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Pack Search Box",
+        category = "Pack GUI Modifier",
+        description = "Add a search box to search packs in the pack GUI.",
+    )
+    var packSearchBox = false
 
     @Property(
         type = PropertyType.SWITCH,

@@ -24,6 +24,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.pack.ResourcePackOrganizer
 import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.text.Text
+import net.wyvest.wyvtils.core.config.WyvtilsConfig
 import net.wyvest.wyvtils.seventeen.mixin.gui.PackAccessor
 import java.util.stream.Stream
 
@@ -43,7 +44,7 @@ fun setupTextField() {
 }
 
 fun filter(stream: Stream<ResourcePackOrganizer.Pack?>): Stream<ResourcePackOrganizer.Pack?> {
-    if (changedValue == "") return stream
+    if (changedValue == "" || !WyvtilsConfig.packSearchBox) return stream
     return stream.filter {
         @Suppress("USELESS_CAST")
         (it != null) && (it is ResourcePackOrganizer.AbstractPack) && UTextComponent.stripFormatting((it as ResourcePackOrganizer.AbstractPack as PackAccessor).invokeGetDisplayName().asString())

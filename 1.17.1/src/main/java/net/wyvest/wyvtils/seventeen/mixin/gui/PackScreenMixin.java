@@ -57,20 +57,24 @@ public abstract class PackScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("HEAD"))
     private void setTextField(CallbackInfo ci) {
-        PackScreenHookKt.setupTextField();
-        addSelectableChild(PackScreenHookKt.getTextField());
+        if (WyvtilsConfig.INSTANCE.getPackSearchBox()) {
+            PackScreenHookKt.setupTextField();
+            addSelectableChild(PackScreenHookKt.getTextField());
+        }
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void tick(CallbackInfo ci) {
-        if (PackScreenHookKt.getTextField() != null) {
-            PackScreenHookKt.getTextField().tick();
+        if (WyvtilsConfig.INSTANCE.getPackSearchBox()) {
+            if (PackScreenHookKt.getTextField() != null) {
+                PackScreenHookKt.getTextField().tick();
+            }
         }
     }
 
     @Inject(method = "render", at = @At("HEAD"))
     private void handleTextField(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        if (PackScreenHookKt.getHasChanged()) {
+        if (PackScreenHookKt.getHasChanged() && WyvtilsConfig.INSTANCE.getPackSearchBox()) {
             updatePackList(availablePackList, PackScreenHookKt.filter(organizer.getDisabledPacks()));
             PackScreenHookKt.setHasChanged(false);
             refreshTimeout = 0L;
@@ -89,7 +93,7 @@ public abstract class PackScreenMixin extends Screen {
 
     @Inject(method = "render", at = @At("TAIL"))
     private void renderTextField(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        if (PackScreenHookKt.getTextField() != null) {
+        if (PackScreenHookKt.getTextField() != null && WyvtilsConfig.INSTANCE.getPackSearchBox()) {
             PackScreenHookKt.getTextField().render(matrices, mouseX, mouseY, delta);
         }
     }

@@ -26,7 +26,6 @@ import gg.essential.universal.UResolution
 import net.minecraft.client.Minecraft
 import net.minecraftforge.common.MinecraftForge.EVENT_BUS
 import net.minecraftforge.fml.common.Loader
-import net.minecraftforge.fml.common.LoaderState.ModState
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
@@ -34,7 +33,6 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
-import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion
 import net.wyvest.wyvtils.core.WyvtilsCore
 import net.wyvest.wyvtils.core.WyvtilsCore.eventBus
 import net.wyvest.wyvtils.core.WyvtilsInfo
@@ -51,6 +49,7 @@ import net.wyvest.wyvtils.eight.gui.BossHealthGui
 import net.wyvest.wyvtils.eight.gui.DownloadGui
 import net.wyvest.wyvtils.eight.gui.SidebarGui
 import net.wyvest.wyvtils.eight.hooks.GuiScreenResourcePacksHook
+import net.wyvest.wyvtils.eight.hooks.PackRefresher
 import net.wyvest.wyvtils.eight.mixin.gui.GuiNewChatAccessor
 import java.io.File
 import java.net.URI
@@ -66,7 +65,6 @@ import java.net.URI
 object Wyvtils {
 
     var isSkytils = false
-    var isNewToggleChat = false
     var packY: Int? = null
     var packBottom: Int? = null
 
@@ -93,6 +91,7 @@ object Wyvtils {
         eventBus.register(this)
         EVENT_BUS.register(this)
         EVENT_BUS.register(GuiScreenResourcePacksHook)
+        PackRefresher.startWatchService()
     }
 
     /**
@@ -102,14 +101,6 @@ object Wyvtils {
     @Mod.EventHandler
     fun onPostInit(e: FMLPostInitializationEvent) {
         isSkytils = Loader.isModLoaded("skytils")
-        isNewToggleChat = run {
-            for (mod in Loader.instance().activeModList) {
-                if (mod.modId == "togglechatmod") {
-                    return@run DefaultArtifactVersion(mod.version) > DefaultArtifactVersion("3.1.1") && Loader.instance().getModState(mod) != ModState.DISABLED
-                }
-            }
-            return@run false
-        }
     }
 
     /**

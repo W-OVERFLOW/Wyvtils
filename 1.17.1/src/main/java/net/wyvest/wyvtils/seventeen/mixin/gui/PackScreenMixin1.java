@@ -18,7 +18,9 @@
 
 package net.wyvest.wyvtils.seventeen.mixin.gui;
 
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.pack.PackScreen;
+import net.wyvest.wyvtils.core.config.WyvtilsConfig;
 import net.wyvest.wyvtils.seventeen.hooks.PackScreenHookKt;
 import org.spongepowered.asm.mixin.Mixin;
 
@@ -26,11 +28,23 @@ import java.util.Objects;
 
 @Mixin(PackScreen.class)
 public class PackScreenMixin1 {
-    public boolean method_25404(int int_1, int int_2, int int_3) {
-        return Objects.requireNonNull(PackScreenHookKt.getTextField()).keyPressed(int_1, int_2, int_3);
+    public boolean method_25404(int keyCode, int scanCode, int modifiers) {
+        if (keyCode == 256 && ((PackScreen) (Object) this).shouldCloseOnEsc()) {
+            ((PackScreen) (Object) this).onClose();
+            return true;
+        } else if (keyCode == 258) {
+            boolean bl = !Screen.hasShiftDown();
+            if (!((PackScreen) (Object) this).changeFocus(bl)) {
+                ((PackScreen) (Object) this).changeFocus(bl);
+            }
+
+            return false;
+        } else {
+            return WyvtilsConfig.INSTANCE.getPackSearchBox() && Objects.requireNonNull(PackScreenHookKt.getTextField()).keyPressed(keyCode, scanCode, modifiers);
+        }
     }
 
     public boolean method_25400(char char_1, int int_1) {
-        return Objects.requireNonNull(PackScreenHookKt.getTextField()).charTyped(char_1, int_1);
+        return WyvtilsConfig.INSTANCE.getPackSearchBox() && Objects.requireNonNull(PackScreenHookKt.getTextField()).charTyped(char_1, int_1);
     }
 }

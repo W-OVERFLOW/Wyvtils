@@ -13,6 +13,7 @@
     "gui.GuiSlotMixin",
     "gui.ResourcePackListEntryMixin",
     "gui.ResourcePackRepositoryMixin",
+    "gui.GuiScreenResourcePacksAccessor",
     "gui.PackEntryAccessor",
     "gui.SkytilsChatTabsMixin",
     "hud.GuiIngameAccessor",

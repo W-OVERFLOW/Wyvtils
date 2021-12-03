@@ -20,7 +20,10 @@ package net.wyvest.wyvtils.eight.mixin.gui;
 
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.*;
+import net.minecraft.client.gui.GuiResourcePackAvailable;
+import net.minecraft.client.gui.GuiScreenResourcePacks;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -28,7 +31,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.ResourcePackListEntry;
 import net.wyvest.wyvtils.core.config.WyvtilsConfig;
 import net.wyvest.wyvtils.eight.hooks.GuiScreenResourcePacksHookKt;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -54,48 +56,15 @@ public class GuiScreenResourcePacksMixin {
     @Shadow
     private List<ResourcePackListEntry> availableResourcePacks;
 
-    @Shadow @Final private GuiScreen parentScreen;
-
     @Inject(method = "initGui", at = @At("HEAD"))
     private void addInputField(CallbackInfo ci) {
-        GuiScreenResourcePacksHookKt.setParentScreen(parentScreen);
-        GuiScreenResourcePacksHookKt.addInputField();
+        if (WyvtilsConfig.INSTANCE.getPackSearchBox()) {
+            GuiScreenResourcePacksHookKt.addInputField();
+        }
     }
 
     @Inject(method = "initGui", at = @At("TAIL"))
     private void refresh(CallbackInfo ci) {
-        GuiScreenResourcePacksHookKt.setOriginalPackSize(availableResourcePacks.size());
-        handlePacks();
-    }
-
-    @Inject(method = "mouseClicked", at = @At("TAIL"))
-    private void handleInputMouse(int mouseX, int mouseY, int mouseButton, CallbackInfo ci) {
-        Objects.requireNonNull(GuiScreenResourcePacksHookKt.getInputField()).mouseClicked(mouseX, mouseY, mouseButton);
-    }
-
-    @Inject(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiScreen;drawScreen(IIF)V"))
-    private void renderInputField(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
-        GuiTextField inputField = Objects.requireNonNull(GuiScreenResourcePacksHookKt.getInputField());
-        if (!inputField.getText().equalsIgnoreCase(GuiScreenResourcePacksHookKt.getPrevText())) {
-            ScaledResolution sr = Objects.requireNonNull(GuiScreenResourcePacksHookKt.getSr());
-            GuiScreenResourcePacksHookKt.setPrevText(inputField.getText());
-            this.availableResourcePacksList = new GuiResourcePackAvailable(Minecraft.getMinecraft(), 200, sr.getScaledHeight(), GuiScreenResourcePacksHookKt.filterPacks(availableResourcePacks, GuiScreenResourcePacksHookKt.getPrevText()));
-            this.availableResourcePacksList.setSlotXBoundsFromLeft(sr.getScaledWidth() / 2 - 4 - 200);
-            this.availableResourcePacksList.registerScrollButtons(7, 8);
-        }
-        inputField.drawTextBox();
-    }
-
-    @Redirect(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiScreenResourcePacks;drawBackground(I)V"))
-    private void redirectBackground(GuiScreenResourcePacks instance, int i) {
-        if (!WyvtilsConfig.INSTANCE.getTransparentPackGUI() || Minecraft.getMinecraft().theWorld == null) {
-            instance.drawBackground(i);
-        } else {
-            drawGradientRect(instance);
-        }
-    }
-
-    private void handlePacks() {
         if (WyvtilsConfig.INSTANCE.getHideIncompatiblePacks()) {
             List<ResourcePackListEntry> newPacks = availableResourcePacks;
             newPacks.removeIf(entry -> entry.func_183019_a() != 1);
@@ -117,6 +86,37 @@ public class GuiScreenResourcePacksMixin {
             this.availableResourcePacksList = new GuiResourcePackAvailable(Minecraft.getMinecraft(), 200, ((GuiScreenResourcePacks) (Object) this).height, newPacks);
             this.availableResourcePacksList.setSlotXBoundsFromLeft(((GuiScreenResourcePacks) (Object) this).width / 2 - 4 - 200);
             this.availableResourcePacksList.registerScrollButtons(7, 8);
+        }
+    }
+
+    @Inject(method = "mouseClicked", at = @At("TAIL"))
+    private void handleInputMouse(int mouseX, int mouseY, int mouseButton, CallbackInfo ci) {
+        if (WyvtilsConfig.INSTANCE.getPackSearchBox()) {
+            Objects.requireNonNull(GuiScreenResourcePacksHookKt.getInputField()).mouseClicked(mouseX, mouseY, mouseButton);
+        }
+    }
+
+    @Inject(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiScreen;drawScreen(IIF)V"))
+    private void renderInputField(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
+        if (WyvtilsConfig.INSTANCE.getPackSearchBox()) {
+            GuiTextField inputField = Objects.requireNonNull(GuiScreenResourcePacksHookKt.getInputField());
+            if (!inputField.getText().equalsIgnoreCase(GuiScreenResourcePacksHookKt.getPrevText())) {
+                ScaledResolution sr = Objects.requireNonNull(GuiScreenResourcePacksHookKt.getSr());
+                GuiScreenResourcePacksHookKt.setPrevText(inputField.getText());
+                this.availableResourcePacksList = new GuiResourcePackAvailable(Minecraft.getMinecraft(), 200, sr.getScaledHeight(), GuiScreenResourcePacksHookKt.filterPacks(availableResourcePacks, GuiScreenResourcePacksHookKt.getPrevText()));
+                this.availableResourcePacksList.setSlotXBoundsFromLeft(sr.getScaledWidth() / 2 - 4 - 200);
+                this.availableResourcePacksList.registerScrollButtons(7, 8);
+            }
+            inputField.drawTextBox();
+        }
+    }
+
+    @Redirect(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiScreenResourcePacks;drawBackground(I)V"))
+    private void redirectBackground(GuiScreenResourcePacks instance, int i) {
+        if (!WyvtilsConfig.INSTANCE.getTransparentPackGUI() || Minecraft.getMinecraft().theWorld == null) {
+            instance.drawBackground(i);
+        } else {
+            drawGradientRect(instance);
         }
     }
 
