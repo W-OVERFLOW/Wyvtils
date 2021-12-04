@@ -41,5 +41,13 @@
   },
   "recommends": {
     "modmenu": ">=2.0.0"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://inv.wtf/w-overflow"
+      },
+      "icon": "assets/wyvtils"
+    }
   }
 }

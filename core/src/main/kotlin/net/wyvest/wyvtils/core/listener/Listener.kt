@@ -91,6 +91,7 @@ object Listener {
             Entity.FIREBALL -> !WyvtilsConfig.fireballHitbox
             Entity.FIREWORK -> !WyvtilsConfig.fireworkHitbox
             Entity.ITEM -> !WyvtilsConfig.itemHitbox
+            Entity.ITEMFRAME -> !WyvtilsConfig.itemFrameHitbox
             Entity.LIVING -> !WyvtilsConfig.passiveHitbox
             Entity.MONSTER -> !WyvtilsConfig.monsterHitbox
             Entity.MINECART -> !WyvtilsConfig.minecartHitbox
@@ -121,7 +122,7 @@ object Listener {
 
     @Subscribe
     fun onStringRendered(e: StringRenderEvent) {
-        if ((e.username != null) && !WyvtilsConfig.chatHightlight && e.string.contains(
+        if ((e.username != null) && e.string.contains(
                 e.username
             ) && WyvtilsConfig.highlightName
         ) {

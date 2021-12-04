@@ -18,54 +18,9 @@
 
 package net.wyvest.wyvtils.eight.hooks
 
-import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiScreenResourcePacks
-import net.wyvest.wyvtils.eight.Wyvtils.mc
-import net.wyvest.wyvtils.eight.mixin.gui.GuiScreenResourcePacksAccessor
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
-import java.nio.file.*
-import java.util.concurrent.Executors
-
-
+/*/
 object PackRefresher {
-   private lateinit var watchService: WatchService
-   private val logger: Logger = LogManager.getLogger("Wyvtils Resource Pack Refresher")
 
-   fun startWatchService() {
-      Executors.newSingleThreadExecutor().execute {
-         try {
-            watchService = FileSystems.getDefault().newWatchService()
-            Minecraft.getMinecraft().resourcePackRepository.dirResourcepacks.toPath().register(
-               watchService,
-               StandardWatchEventKinds.ENTRY_CREATE,
-               StandardWatchEventKinds.ENTRY_DELETE,
-               StandardWatchEventKinds.ENTRY_MODIFY
-            )
-            var key: WatchKey
-            while (watchService.take().also { key = it } != null) {
-               val iterator: Iterator<*> = key.pollEvents().iterator()
-               while (iterator.hasNext()) {
-                  val event = iterator.next() as WatchEvent<*>
-                  if (mc.currentScreen is GuiScreenResourcePacks) {
-                     mc.addScheduledTask {
-                        logger.info(
-                           "Updating for event {} on file {}",
-                           event.kind(), event.context()
-                        )
-                        if (mc.currentScreen is GuiScreenResourcePacks) {
-                           Minecraft.getMinecraft()
-                              .displayGuiScreen(GuiScreenResourcePacks((mc.currentScreen as GuiScreenResourcePacks as GuiScreenResourcePacksAccessor).parentScreen))
-                        }
-                     }
-                  }
-               }
-               key.reset()
-            }
-         } catch (e: Exception) {
-            logger.error("An error occurred in the WatchService:")
-            e.printStackTrace()
-         }
-      }
-   }
 }
+
+ */

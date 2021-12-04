@@ -58,25 +58,6 @@ object WyvtilsConfig: Vigilant(
     )
     var hideLocraw = true
 
-    /*/
-    @Property(
-        type = PropertyType.SWITCH,
-        name = "Left Hand",
-        description = "Move the player's hand to the left in first-person.",
-        category = "General"
-    )
-    var leftHand = false
-
-    @Property(
-        type = PropertyType.SWITCH,
-        name = "Swap Bow Hand",
-        description = "Make the bow render in the opposite hand when equipped.",
-        category = "General"
-    )
-    var swapBow = false
-
-     */
-
     @Property(
         type = PropertyType.SWITCH,
         name = "Item Physics",
@@ -128,15 +109,6 @@ object WyvtilsConfig: Vigilant(
     )
     var highlightName = false
 
-    //TODO: actually make this work
-    @Property(
-        type = PropertyType.SWITCH,
-        name = "Only Highlight In Chat",
-        description = "Makes the name highlight only appear in chat.",
-        category = "Text"
-    )
-    var chatHightlight = false
-
     @Property(
         type = PropertyType.SELECTOR,
         name = "Text Color",
@@ -185,33 +157,6 @@ object WyvtilsConfig: Vigilant(
         category = "Bossbar"
     )
     var bossBarBar = true
-
-    /*/
-    @Property(
-        type = PropertyType.COLOR,
-        name = "Text Color",
-        description = "Change the text color of the bossbar.",
-        category = "Bossbar"
-    )
-    var bossbarTextColor: Color = Color.WHITE
-
-    @Property(
-        type = PropertyType.SWITCH,
-        name = "Bar Colour Customization",
-        description = "Change the bar colour of the bossbar.",
-        category = "Bossbar"
-    )
-    var bossbarBarColorOn = false
-
-    @Property(
-        type = PropertyType.COLOR,
-        name = "Bar Color",
-        description = "Change the bar color of the bossbar.",
-        category = "Bossbar"
-    )
-    var bossbarBarColor: Color = Color.BLUE
-
-     */
 
     @Property(
         type = PropertyType.PERCENT_SLIDER,
@@ -405,7 +350,7 @@ object WyvtilsConfig: Vigilant(
         category = "Sidebar",
         description = "Toggle the sidebar text's shadow from rendering."
     )
-    var sidebarTextShadow = true
+    var sidebarTextShadow = false
 
     @Property(
         type = PropertyType.SWITCH,
@@ -430,35 +375,6 @@ object WyvtilsConfig: Vigilant(
         description = "Change the text color for the sidebar."
     )
     var sidebarBackgroundColor: Color = Color(0, 0, 0, 50)
-
-    /*/
-    @Property(
-        type = PropertyType.SWITCH,
-        name = "Background Border",
-        category = "Sidebar",
-        description = "Enable a border to border the background."
-    )
-    var backgroundBorder = false
-
-    @Property(
-        type = PropertyType.COLOR,
-        name = "Border Color",
-        category = "Sidebar",
-        description = "Select a color to set for the background border."
-    )
-    var borderColor: Color = Color.WHITE
-
-    @Property(
-        type = PropertyType.NUMBER,
-        name = "Border Width",
-        category = "Sidebar",
-        description = "Set the width of the background border.",
-        min = 1,
-        max = 20
-    )
-    var borderNumber = 2
-
-     */
 
     @Property(
         type = PropertyType.SWITCH,
@@ -585,6 +501,14 @@ object WyvtilsConfig: Vigilant(
         category = "Hitbox"
     )
     var itemHitbox = true
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Toggle Item Frame Hitboxes",
+        description = "Turn on and off item frame hitboxes from displaying.",
+        category = "Hitbox"
+    )
+    var itemFrameHitbox = true
 
     @Property(
         type = PropertyType.SWITCH,
@@ -821,9 +745,6 @@ object WyvtilsConfig: Vigilant(
             WyvtilsCore.currentVersion == MinecraftVersions.SEVENTEEN
         }
         hidePropertyIf("textColor") {
-            WyvtilsCore.currentVersion == MinecraftVersions.SEVENTEEN
-        }
-        hidePropertyIf("chatHightlight") {
             WyvtilsCore.currentVersion == MinecraftVersions.SEVENTEEN
         }
         /*/

@@ -49,7 +49,6 @@ import net.wyvest.wyvtils.eight.gui.BossHealthGui
 import net.wyvest.wyvtils.eight.gui.DownloadGui
 import net.wyvest.wyvtils.eight.gui.SidebarGui
 import net.wyvest.wyvtils.eight.hooks.GuiScreenResourcePacksHook
-import net.wyvest.wyvtils.eight.hooks.PackRefresher
 import net.wyvest.wyvtils.eight.mixin.gui.GuiNewChatAccessor
 import java.io.File
 import java.net.URI
@@ -91,7 +90,6 @@ object Wyvtils {
         eventBus.register(this)
         EVENT_BUS.register(this)
         EVENT_BUS.register(GuiScreenResourcePacksHook)
-        PackRefresher.startWatchService()
     }
 
     /**

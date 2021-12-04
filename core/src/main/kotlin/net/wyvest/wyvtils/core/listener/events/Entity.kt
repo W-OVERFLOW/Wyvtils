@@ -23,6 +23,7 @@ enum class Entity {
     FIREBALL,
     FIREWORK,
     ITEM,
+    ITEMFRAME,
     LIVING,
     MONSTER,
     MINECART,
