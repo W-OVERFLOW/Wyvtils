@@ -19,7 +19,6 @@
 package net.wyvest.wyvtils.eight
 
 import gg.essential.api.EssentialAPI
-import gg.essential.api.utils.Multithreading
 import gg.essential.lib.kbrewster.eventbus.Subscribe
 import gg.essential.universal.UDesktop
 import gg.essential.universal.UResolution
@@ -28,7 +27,6 @@ import net.minecraftforge.common.MinecraftForge.EVENT_BUS
 import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
-import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -37,12 +35,8 @@ import net.wyvest.wyvtils.core.WyvtilsCore
 import net.wyvest.wyvtils.core.WyvtilsCore.eventBus
 import net.wyvest.wyvtils.core.WyvtilsInfo
 import net.wyvest.wyvtils.core.config.WyvtilsConfig
-import net.wyvest.wyvtils.core.listener.events.BossBarResetEvent
-import net.wyvest.wyvtils.core.listener.events.ChatRefreshEvent
-import net.wyvest.wyvtils.core.listener.events.Gui
-import net.wyvest.wyvtils.core.listener.events.RenderGuiEvent
+import net.wyvest.wyvtils.core.listener.events.*
 import net.wyvest.wyvtils.core.utils.MinecraftVersions
-import net.wyvest.wyvtils.core.utils.Updater
 import net.wyvest.wyvtils.eight.commands.WyvtilsCommand
 import net.wyvest.wyvtils.eight.gui.ActionBarGui
 import net.wyvest.wyvtils.eight.gui.BossHealthGui
@@ -85,9 +79,9 @@ object Wyvtils {
      */
     @Mod.EventHandler
     fun onInit(e: FMLInitializationEvent) {
+        eventBus.register(this)
         WyvtilsCore.onInitialization(MinecraftVersions.EIGHT)
         WyvtilsCommand.register()
-        eventBus.register(this)
         EVENT_BUS.register(this)
         EVENT_BUS.register(GuiScreenResourcePacksHook)
     }
@@ -99,26 +93,6 @@ object Wyvtils {
     @Mod.EventHandler
     fun onPostInit(e: FMLPostInitializationEvent) {
         isSkytils = Loader.isModLoaded("skytils")
-    }
-
-    /**
-     * Handles the ingame Updater.
-     */
-    @Mod.EventHandler
-    fun onLoadComplete(e: FMLLoadCompleteEvent) {
-        Multithreading.runAsync {
-            Updater.updateFuture!!.get()
-            if (Updater.shouldShowNotification) {
-                EssentialAPI.getNotifications()
-                    .push(
-                        "Mod Update",
-                        "${WyvtilsInfo.NAME} ${Updater.latestTag} is available!\nClick here to download it!"
-                    ) {
-                        EssentialAPI.getGuiUtil().openScreen(DownloadGui())
-                    }
-                Updater.shouldShowNotification = false
-            }
-        }
     }
 
     @SubscribeEvent
@@ -163,11 +137,24 @@ object Wyvtils {
     }
 
     @Subscribe
+    fun onNotification(e: UpdateEvent) {
+        EssentialAPI.getNotifications()
+            .push(
+                "Mod Update",
+                "${WyvtilsInfo.NAME} ${e.version} is available!\nClick here to download it!",
+                5f
+            ) {
+                EssentialAPI.getGuiUtil().openScreen(DownloadGui())
+            }
+    }
+
+    @Subscribe
     fun onRenderGui(e: RenderGuiEvent) {
         when (e.gui) {
             Gui.BOSSBAR -> EssentialAPI.getGuiUtil().openScreen(BossHealthGui())
             Gui.ACTIONBAR -> EssentialAPI.getGuiUtil().openScreen(ActionBarGui())
             Gui.SIDEBAR -> EssentialAPI.getGuiUtil().openScreen(SidebarGui())
+            Gui.UPDATER -> EssentialAPI.getGuiUtil().openScreen(DownloadGui())
         }
     }
 

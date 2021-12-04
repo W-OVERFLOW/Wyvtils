@@ -4,6 +4,7 @@
   "version": "${version}",
   "name": "Wyvtils",
   "description": "Utilities, for 1.17.1.",
+  "icon": "assets/wyvtils/wyvtils.png",
   "authors": [
     "Wyvest"
   ],
@@ -46,8 +47,7 @@
     "modmenu": {
       "links": {
         "modmenu.discord": "https://inv.wtf/w-overflow"
-      },
-      "icon": "assets/wyvtils"
+      }
     }
   }
 }

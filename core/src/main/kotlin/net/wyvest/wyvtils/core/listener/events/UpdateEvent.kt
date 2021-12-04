@@ -18,6 +18,4 @@
 
 package net.wyvest.wyvtils.core.listener.events
 
-enum class Gui {
-    BOSSBAR, ACTIONBAR, SIDEBAR, UPDATER
-}
+data class UpdateEvent(val version: String): Event(cancelled = false)

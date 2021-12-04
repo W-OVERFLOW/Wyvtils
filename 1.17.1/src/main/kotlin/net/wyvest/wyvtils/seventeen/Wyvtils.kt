@@ -35,10 +35,7 @@ import net.wyvest.wyvtils.core.WyvtilsCore
 import net.wyvest.wyvtils.core.WyvtilsInfo
 import net.wyvest.wyvtils.core.config.WyvtilsConfig
 import net.wyvest.wyvtils.core.listener.Listener
-import net.wyvest.wyvtils.core.listener.events.BossBarResetEvent
-import net.wyvest.wyvtils.core.listener.events.ChatRefreshEvent
-import net.wyvest.wyvtils.core.listener.events.Gui
-import net.wyvest.wyvtils.core.listener.events.RenderGuiEvent
+import net.wyvest.wyvtils.core.listener.events.*
 import net.wyvest.wyvtils.core.utils.MinecraftVersions
 import net.wyvest.wyvtils.core.utils.Updater
 import net.wyvest.wyvtils.seventeen.gui.ActionBarGui
@@ -68,6 +65,7 @@ object Wyvtils : ClientModInitializer {
      * Handles the initialization of the mod.
      */
     override fun onInitializeClient() {
+        WyvtilsCore.eventBus.register(this)
         WyvtilsCore.modDir =
             File(File(File(FabricLoader.getInstance().configDir.toFile(), "W-OVERFLOW"), "Wyvtils"), "1.17.1")
         if (!WyvtilsCore.modDir.exists()) {
@@ -100,17 +98,6 @@ object Wyvtils : ClientModInitializer {
             else -> ChatColor.WHITE.toString()
         }
         WorldRenderEvents.END.register {
-            if (Updater.shouldShowNotification) {
-                EssentialAPI.getNotifications()
-                    .push(
-                        "Mod Update",
-                        "${WyvtilsInfo.NAME} ${Updater.latestTag} is available!\nClick here to download it!",
-                        5f
-                    ) {
-                        EssentialAPI.getGuiUtil().openScreen(DownloadGui())
-                    }
-                Updater.shouldShowNotification = false
-            }
             if (WyvtilsConfig.firstTime) {
                 EssentialAPI.getNotifications().push(
                     "Wyvtils",
@@ -122,7 +109,6 @@ object Wyvtils : ClientModInitializer {
             }
 
         }
-        WyvtilsCore.eventBus.register(this)
     }
 
     @Subscribe
@@ -147,11 +133,24 @@ object Wyvtils : ClientModInitializer {
     }
 
     @Subscribe
+    fun onNotification(e: UpdateEvent) {
+        EssentialAPI.getNotifications()
+            .push(
+                "Mod Update",
+                "${WyvtilsInfo.NAME} ${e.version} is available!\nClick here to download it!",
+                5f
+            ) {
+                EssentialAPI.getGuiUtil().openScreen(DownloadGui())
+            }
+    }
+
+    @Subscribe
     fun onRenderGui(e: RenderGuiEvent) {
         when (e.gui) {
             Gui.BOSSBAR -> EssentialAPI.getGuiUtil().openScreen(BossHealthGui())
             Gui.ACTIONBAR -> EssentialAPI.getGuiUtil().openScreen(ActionBarGui())
             Gui.SIDEBAR -> EssentialAPI.getGuiUtil().openScreen(SidebarGui())
+            Gui.UPDATER -> EssentialAPI.getGuiUtil().openScreen(DownloadGui())
         }
     }
 

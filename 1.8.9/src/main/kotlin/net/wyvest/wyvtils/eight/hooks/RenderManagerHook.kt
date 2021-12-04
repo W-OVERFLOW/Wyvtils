@@ -60,6 +60,7 @@ fun setup(
             is EntityFireball -> if (entityIn is EntityWitherSkull) net.wyvest.wyvtils.core.listener.events.Entity.WITHERSKULL else net.wyvest.wyvtils.core.listener.events.Entity.FIREBALL
             is EntityMinecart -> net.wyvest.wyvtils.core.listener.events.Entity.MINECART
             is EntityItem -> net.wyvest.wyvtils.core.listener.events.Entity.ITEM
+            is EntityItemFrame -> net.wyvest.wyvtils.core.listener.events.Entity.ITEMFRAME
             is EntityFireworkRocket -> net.wyvest.wyvtils.core.listener.events.Entity.FIREWORK
             is EntityXPOrb -> net.wyvest.wyvtils.core.listener.events.Entity.XP
             is IProjectile -> net.wyvest.wyvtils.core.listener.events.Entity.PROJECTILE

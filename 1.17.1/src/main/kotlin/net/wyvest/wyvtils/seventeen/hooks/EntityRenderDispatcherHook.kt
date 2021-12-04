@@ -28,6 +28,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.ExperienceOrbEntity
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.decoration.ArmorStandEntity
+import net.minecraft.entity.decoration.ItemFrameEntity
 import net.minecraft.entity.mob.MobEntity
 import net.minecraft.entity.mob.Monster
 import net.minecraft.entity.player.PlayerEntity
@@ -61,6 +62,7 @@ fun invokeHitboxEvent(
             is FireballEntity -> net.wyvest.wyvtils.core.listener.events.Entity.FIREBALL
             is MinecartEntity -> net.wyvest.wyvtils.core.listener.events.Entity.MINECART
             is ItemEntity -> net.wyvest.wyvtils.core.listener.events.Entity.ITEM
+            is ItemFrameEntity -> net.wyvest.wyvtils.core.listener.events.Entity.ITEMFRAME
             is FireworkRocketEntity -> net.wyvest.wyvtils.core.listener.events.Entity.FIREWORK
             is ExperienceOrbEntity -> net.wyvest.wyvtils.core.listener.events.Entity.XP
             is TridentEntity, is ShulkerBulletEntity,

@@ -22,7 +22,7 @@ import gg.essential.api.EssentialAPI
 import gg.essential.api.utils.Multithreading
 import net.wyvest.wyvtils.core.WyvtilsCore
 import net.wyvest.wyvtils.core.WyvtilsInfo
-import net.wyvest.wyvtils.core.config.WyvtilsConfig
+import net.wyvest.wyvtils.core.listener.events.UpdateEvent
 import org.apache.http.HttpResponse
 import org.apache.http.client.HttpClient
 import org.apache.http.client.config.RequestConfig
@@ -38,7 +38,6 @@ import java.util.concurrent.Future
 object Updater {
     var latestTag = ""
     var shouldUpdate = false
-    var shouldShowNotification = false
     var updateUrl = ""
     var updateFuture: Future<*>? = null
 
@@ -58,7 +57,7 @@ object Updater {
             if (currentVersion < latestVersion) {
                 updateUrl = latestRelease["assets"].asJsonArray[0].asJsonObject["browser_download_url"].asString
                 shouldUpdate = true
-                shouldShowNotification = WyvtilsConfig.showUpdateNotification
+                WyvtilsCore.eventBus.post(UpdateEvent(latestTag))
             }
         }
     }

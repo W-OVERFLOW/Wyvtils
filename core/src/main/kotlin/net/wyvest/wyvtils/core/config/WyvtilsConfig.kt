@@ -33,6 +33,7 @@ import net.wyvest.wyvtils.core.listener.events.ChatRefreshEvent
 import net.wyvest.wyvtils.core.listener.events.Gui
 import net.wyvest.wyvtils.core.listener.events.RenderGuiEvent
 import net.wyvest.wyvtils.core.utils.MinecraftVersions
+import net.wyvest.wyvtils.core.utils.Updater
 import java.awt.Color
 import java.io.File
 
@@ -705,21 +706,16 @@ object WyvtilsConfig: Vigilant(
     )
     var firstTime = true
 
-    //TODO
-    /*/
     @Property(
         type = PropertyType.BUTTON,
         name = "Update Now",
-        description = "Update $NAME by clicking the button.",
+        description = "Update ${WyvtilsInfo.NAME} by clicking the button.",
         category = "Updater"
     )
     fun update() {
-        if (Updater.shouldUpdate) EssentialAPI.getGuiUtil()
-            .openScreen(DownloadGui(mc.currentScreen)) else EssentialAPI.getNotifications()
-            .push(MOD_NAME, "No update had been detected at startup, and thus the update GUI has not been shown.")
+        if (Updater.shouldUpdate) WyvtilsCore.eventBus.post(RenderGuiEvent(Gui.UPDATER)) else EssentialAPI.getNotifications()
+            .push(WyvtilsInfo.NAME, "No update had been detected at startup, and thus the update GUI has not been shown.")
     }
-
-     */
 
     init {
         initialize()
