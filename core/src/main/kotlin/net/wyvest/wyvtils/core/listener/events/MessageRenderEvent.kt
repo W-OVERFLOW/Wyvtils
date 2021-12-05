@@ -21,4 +21,4 @@ package net.wyvest.wyvtils.core.listener.events
 /**
  * Called when a message is about to be rendered.
  */
-data class MessageRenderEvent(val message: String, override var cancelled: Boolean = false): Event()
+data class MessageRenderEvent(val message: String, override var cancelled: Boolean = false) : Event()

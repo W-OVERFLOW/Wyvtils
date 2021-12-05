@@ -54,14 +54,20 @@ class WyvtilsVersion(val major: Int, val minor: Int, val patch: Int, val beta: I
 
     companion object {
         const val MAX_COMPONENT_VALUE = 255
-        val regex = Regex("^(?<major>[0|1-9\\d*])\\.(?<minor>[0|1-9\\d*])\\.(?<patch>[0|1-9\\d*])(?:-beta)?(?<beta>.*)?\$")
+        val regex =
+            Regex("^(?<major>[0|1-9\\d*])\\.(?<minor>[0|1-9\\d*])\\.(?<patch>[0|1-9\\d*])(?:-beta)?(?<beta>.*)?\$")
 
         val CURRENT: WyvtilsVersion = fromString(WyvtilsInfo.VER)
 
         fun fromString(version: String): WyvtilsVersion {
             val match = regex.matchEntire(version)
             if (match != null) {
-                return WyvtilsVersion(match.groups["major"]!!.value.toInt(), match.groups["minor"]!!.value.toInt(), match.groups["patch"]!!.value.toInt(), if (match.groups["beta"]?.value.isNullOrBlank()) 0 else match.groups["beta"]!!.value.toInt())
+                return WyvtilsVersion(
+                    match.groups["major"]!!.value.toInt(),
+                    match.groups["minor"]!!.value.toInt(),
+                    match.groups["patch"]!!.value.toInt(),
+                    if (match.groups["beta"]?.value.isNullOrBlank()) 0 else match.groups["beta"]!!.value.toInt()
+                )
             } else {
                 throw ParseException("The string ($version) provided did not match the Wyvtils Version regex!", -1)
             }

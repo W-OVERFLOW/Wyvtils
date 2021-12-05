@@ -44,7 +44,7 @@ fun containsFunnyMethod(a: Array<Method>): Boolean {
     return false
 }
 
-class RysmPack(file: File): FolderResourcePack(file) {
+class RysmPack(file: File) : FolderResourcePack(file) {
     override fun getPackImage(): BufferedImage? {
         if (image == null) {
             cacheResourceLocation()

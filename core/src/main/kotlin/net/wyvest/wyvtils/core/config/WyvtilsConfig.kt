@@ -125,7 +125,7 @@ object WyvtilsConfig: Vigilant(
         description = "Toggle Bossbar customization",
         category = "Bossbar"
     )
-    var bossBarCustomization = true
+    var bossBarCustomization = false
 
     @Property(
         type = PropertyType.SWITCH,

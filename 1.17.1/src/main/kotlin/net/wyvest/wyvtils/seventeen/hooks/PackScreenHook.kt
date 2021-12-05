@@ -33,7 +33,14 @@ var hasChanged = false
 private var changedValue = ""
 
 fun setupTextField() {
-    textField = TextFieldWidget(MinecraftClient.getInstance().textRenderer, UResolution.scaledWidth * 4 / 5 - 1, UResolution.scaledHeight - 13, UResolution.scaledWidth / 5, 12, Text.of("Hi"))
+    textField = TextFieldWidget(
+        MinecraftClient.getInstance().textRenderer,
+        UResolution.scaledWidth * 4 / 5 - 1,
+        UResolution.scaledHeight - 13,
+        UResolution.scaledWidth / 5,
+        12,
+        Text.of("Hi")
+    )
     textField!!.setMaxLength(100)
     textField!!.setChangedListener {
         hasChanged = true
@@ -47,7 +54,9 @@ fun filter(stream: Stream<ResourcePackOrganizer.Pack?>): Stream<ResourcePackOrga
     if (changedValue == "" || !WyvtilsConfig.packSearchBox) return stream
     return stream.filter {
         @Suppress("USELESS_CAST")
-        (it != null) && (it is ResourcePackOrganizer.AbstractPack) && UTextComponent.stripFormatting((it as ResourcePackOrganizer.AbstractPack as PackAccessor).invokeGetDisplayName().asString())
+        (it != null) && (it is ResourcePackOrganizer.AbstractPack) && UTextComponent.stripFormatting(
+            (it as ResourcePackOrganizer.AbstractPack as PackAccessor).invokeGetDisplayName().asString()
+        )
             .contains(changedValue.lowercase())
     }
 }

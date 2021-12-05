@@ -18,4 +18,4 @@
 
 package net.wyvest.wyvtils.core.utils
 
-class UnknownVersionException(reason: String): Exception(reason)
+class UnknownVersionException(reason: String) : Exception(reason)

@@ -69,7 +69,8 @@ object Wyvtils {
      */
     @Mod.EventHandler
     fun onPreInit(e: FMLPreInitializationEvent) {
-        WyvtilsCore.modDir = File(File(File(Minecraft.getMinecraft().mcDataDir, "W-OVERFLOW"), WyvtilsInfo.NAME), "1.8.9")
+        WyvtilsCore.modDir =
+            File(File(File(Minecraft.getMinecraft().mcDataDir, "W-OVERFLOW"), WyvtilsInfo.NAME), "1.8.9")
         if (!WyvtilsCore.modDir.exists()) WyvtilsCore.modDir.mkdirs()
         WyvtilsCore.jarFile = e.sourceFile
     }

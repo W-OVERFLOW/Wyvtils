@@ -21,4 +21,14 @@ package net.wyvest.wyvtils.core.listener.events
 /**
  * Called when a hitbox is about to be rendered.
  */
-data class HitboxRenderEvent(val entity: Entity, val distance: Double, var boxColor: Int, var lineOfSightColor: Int, var eyeLineColor: Int, override var cancelled: Boolean = false, var cancelBox: Boolean, var cancelLineOfSight: Boolean, var cancelEyeLine: Boolean): Event()
+data class HitboxRenderEvent(
+    val entity: Entity,
+    val distance: Double,
+    var boxColor: Int,
+    var lineOfSightColor: Int,
+    var eyeLineColor: Int,
+    override var cancelled: Boolean = false,
+    var cancelBox: Boolean,
+    var cancelLineOfSight: Boolean,
+    var cancelEyeLine: Boolean
+) : Event()

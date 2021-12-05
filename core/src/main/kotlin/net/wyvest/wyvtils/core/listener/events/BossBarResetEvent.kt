@@ -18,4 +18,4 @@
 
 package net.wyvest.wyvtils.core.listener.events
 
-class BossBarResetEvent: Event(cancelled = false)
+class BossBarResetEvent : Event(cancelled = false)

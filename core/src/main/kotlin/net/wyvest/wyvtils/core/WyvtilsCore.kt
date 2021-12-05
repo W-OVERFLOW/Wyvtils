@@ -34,11 +34,13 @@ object WyvtilsCore {
     var currentVersion: MinecraftVersions = MinecraftVersions.UNSET
     val eventBus = eventbus {
         invoker { LMFInvoker() }
-        exceptionHandler { exception -> println("Error occurred in method: ${exception.message}")  }
+        exceptionHandler { exception -> println("Error occurred in method: ${exception.message}") }
     }
 
     fun onInitialization(version: MinecraftVersions) {
-        if (version != MinecraftVersions.SEVENTEEN && version != MinecraftVersions.EIGHT) throw UnknownVersionException("This version is not supported by Wyvtils!")
+        if (version != MinecraftVersions.SEVENTEEN && version != MinecraftVersions.EIGHT) throw UnknownVersionException(
+            "This version is not supported by Wyvtils!"
+        )
         currentVersion = version
         WyvtilsConfig.preload()
         Updater.update()

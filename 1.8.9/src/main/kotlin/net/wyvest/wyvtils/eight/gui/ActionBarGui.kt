@@ -33,7 +33,8 @@ import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11
 import java.awt.Color
 
-class ActionBarGui : WindowScreen(restoreCurrentGuiOnClose = true, enableRepeatKeys = true, drawDefaultBackground = false) {
+class ActionBarGui :
+    WindowScreen(restoreCurrentGuiOnClose = true, enableRepeatKeys = true, drawDefaultBackground = false) {
 
     override fun initScreen(width: Int, height: Int) {
         window.onMouseDrag { mouseX, mouseY, mouseButton ->

@@ -31,7 +31,12 @@ import net.minecraft.util.Identifier
 import net.wyvest.wyvtils.core.config.WyvtilsConfig
 import java.util.*
 
-class BossHealthGui : WindowScreen(restoreCurrentGuiOnClose = true, enableRepeatKeys = true, drawDefaultBackground = false, version = ElementaVersion.V1) {
+class BossHealthGui : WindowScreen(
+    restoreCurrentGuiOnClose = true,
+    enableRepeatKeys = true,
+    drawDefaultBackground = false,
+    version = ElementaVersion.V1
+) {
     private val bossBar = ClientBossBar(
         UUID.fromString("cd899a14-de78-4de8-8d31-9d42fff31d7a"),
         Text.of("Wyvtils"),

@@ -25,7 +25,7 @@ import net.wyvest.wyvtils.core.config.WyvtilsConfig
 /**
  * Handles integration of the Mod Menu mod.
  */
-class WyvtilsModMenu: ModMenuApi {
+class WyvtilsModMenu : ModMenuApi {
     override fun getModConfigScreenFactory(): ConfigScreenFactory<*> {
         return ConfigScreenFactory {
             WyvtilsConfig.gui()

@@ -29,7 +29,8 @@ import net.wyvest.wyvtils.core.config.WyvtilsConfig.sidebarX
 import net.wyvest.wyvtils.core.config.WyvtilsConfig.sidebarY
 import org.lwjgl.input.Keyboard
 
-class SidebarGui : WindowScreen(restoreCurrentGuiOnClose = true, enableRepeatKeys = true, drawDefaultBackground = false) {
+class SidebarGui :
+    WindowScreen(restoreCurrentGuiOnClose = true, enableRepeatKeys = true, drawDefaultBackground = false) {
 
     override fun initScreen(width: Int, height: Int) {
         window.onMouseDrag { mouseX, mouseY, mouseButton ->

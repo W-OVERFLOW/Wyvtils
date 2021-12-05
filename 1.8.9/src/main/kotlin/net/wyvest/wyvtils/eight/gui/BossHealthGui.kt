@@ -34,7 +34,8 @@ import org.lwjgl.opengl.GL11
 import java.awt.Color
 
 
-class BossHealthGui : WindowScreen(restoreCurrentGuiOnClose = true, enableRepeatKeys = true, drawDefaultBackground = false) {
+class BossHealthGui :
+    WindowScreen(restoreCurrentGuiOnClose = true, enableRepeatKeys = true, drawDefaultBackground = false) {
     override fun initScreen(width: Int, height: Int) {
         window.onMouseDrag { mouseX, mouseY, mouseButton ->
             if (mouseButton == 0) {
@@ -87,9 +88,30 @@ class BossHealthGui : WindowScreen(restoreCurrentGuiOnClose = true, enableRepeat
             BossStatus.bossName
         }
         if (WyvtilsConfig.bossBarBar) {
-            Wyvtils.mc.ingameGUI?.drawTexturedModalRect(WyvtilsConfig.bossBarX - 91, WyvtilsConfig.bossBarY, 0, 74, 182, 5)
-            Wyvtils.mc.ingameGUI?.drawTexturedModalRect(WyvtilsConfig.bossBarX - 91, WyvtilsConfig.bossBarY, 0, 74, 182, 5)
-            Wyvtils.mc.ingameGUI?.drawTexturedModalRect(WyvtilsConfig.bossBarX - 91, WyvtilsConfig.bossBarY, 0, 79, 1, 5)
+            Wyvtils.mc.ingameGUI?.drawTexturedModalRect(
+                WyvtilsConfig.bossBarX - 91,
+                WyvtilsConfig.bossBarY,
+                0,
+                74,
+                182,
+                5
+            )
+            Wyvtils.mc.ingameGUI?.drawTexturedModalRect(
+                WyvtilsConfig.bossBarX - 91,
+                WyvtilsConfig.bossBarY,
+                0,
+                74,
+                182,
+                5
+            )
+            Wyvtils.mc.ingameGUI?.drawTexturedModalRect(
+                WyvtilsConfig.bossBarX - 91,
+                WyvtilsConfig.bossBarY,
+                0,
+                79,
+                1,
+                5
+            )
         }
         if (WyvtilsConfig.bossBarText) {
             fontrenderer.drawString(

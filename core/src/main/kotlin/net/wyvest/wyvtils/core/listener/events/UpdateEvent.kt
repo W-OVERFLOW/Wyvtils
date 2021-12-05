@@ -18,4 +18,4 @@
 
 package net.wyvest.wyvtils.core.listener.events
 
-data class UpdateEvent(val version: String): Event(cancelled = false)
+data class UpdateEvent(val version: String) : Event(cancelled = false)

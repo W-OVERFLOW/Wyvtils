@@ -33,7 +33,7 @@ import java.io.File
  * The GUI which is displayed when the user is asked for confirmation
  * of an update.
  */
-class DownloadGui: WindowScreen(restoreCurrentGuiOnClose = true, version = ElementaVersion.V1) {
+class DownloadGui : WindowScreen(restoreCurrentGuiOnClose = true, version = ElementaVersion.V1) {
 
     /**
      * Initializes the screen and builds an Essential Confirmation Modal.
@@ -48,7 +48,13 @@ class DownloadGui: WindowScreen(restoreCurrentGuiOnClose = true, version = Eleme
                 Multithreading.runAsync {
                     if (Updater.download(
                             Updater.updateUrl,
-                            File("mods/${WyvtilsInfo.NAME} [${WyvtilsCore.currentVersion.versionString}]-${Updater.latestTag.substringAfter("v")}.jar")
+                            File(
+                                "mods/${WyvtilsInfo.NAME} [${WyvtilsCore.currentVersion.versionString}]-${
+                                    Updater.latestTag.substringAfter(
+                                        "v"
+                                    )
+                                }.jar"
+                            )
                         ) && Updater.download(
                             "https://github.com/Wyvest/Deleter/releases/download/v1.2/Deleter-1.2.jar",
                             File(File(WyvtilsCore.modDir.parentFile.parentFile, "Libraries"), "Deleter-1.2.jar")

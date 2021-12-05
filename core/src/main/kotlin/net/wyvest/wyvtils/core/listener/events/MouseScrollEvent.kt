@@ -21,4 +21,4 @@ package net.wyvest.wyvtils.core.listener.events
 /**
  * Called when the mouse is scrolled.
  */
-data class MouseScrollEvent(var scroll: Double, override var cancelled: Boolean): Event()
+data class MouseScrollEvent(var scroll: Double, override var cancelled: Boolean) : Event()

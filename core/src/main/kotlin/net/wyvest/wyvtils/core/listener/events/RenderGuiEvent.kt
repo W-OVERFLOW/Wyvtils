@@ -18,4 +18,4 @@
 
 package net.wyvest.wyvtils.core.listener.events
 
-class RenderGuiEvent(val gui: Gui): Event(cancelled = false)
+class RenderGuiEvent(val gui: Gui) : Event(cancelled = false)

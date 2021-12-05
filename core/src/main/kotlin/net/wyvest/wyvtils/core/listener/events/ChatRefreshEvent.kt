@@ -21,4 +21,4 @@ package net.wyvest.wyvtils.core.listener.events
 /**
  * Called when a chat refresh needs to be handled.
  */
-class ChatRefreshEvent: Event(cancelled = false)
+class ChatRefreshEvent : Event(cancelled = false)

@@ -24,7 +24,12 @@ import gg.essential.universal.UMatrixStack
 import net.minecraft.client.util.InputUtil
 import net.wyvest.wyvtils.core.config.WyvtilsConfig
 
-class SidebarGui : WindowScreen(restoreCurrentGuiOnClose = true, enableRepeatKeys = true, drawDefaultBackground = false, version = ElementaVersion.V1) {
+class SidebarGui : WindowScreen(
+    restoreCurrentGuiOnClose = true,
+    enableRepeatKeys = true,
+    drawDefaultBackground = false,
+    version = ElementaVersion.V1
+) {
 
     override fun initScreen(width: Int, height: Int) {
         window.onMouseDrag { mouseX, mouseY, mouseButton ->

@@ -27,7 +27,13 @@ import net.wyvest.wyvtils.eight.Wyvtils
 import skytils.skytilsmod.features.impl.handlers.ChatTabs
 import java.util.*
 
-fun handleChatSent(p_178908_0_: IChatComponent, p_178908_1_: Int, p_178908_2_: FontRenderer, p_178908_3_: Boolean, p_178908_4_: Boolean): List<IChatComponent> {
+fun handleChatSent(
+    p_178908_0_: IChatComponent,
+    p_178908_1_: Int,
+    p_178908_2_: FontRenderer,
+    p_178908_3_: Boolean,
+    p_178908_4_: Boolean
+): List<IChatComponent> {
     if (Wyvtils.isSkytils) {
         if (!ChatTabs.shouldAllow(p_178908_0_)) return Collections.emptyList()
     }

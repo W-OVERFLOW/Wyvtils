@@ -30,7 +30,12 @@ import net.wyvest.wyvtils.core.config.WyvtilsConfig
 import java.awt.Color
 import java.util.*
 
-class ActionBarGui : WindowScreen(version = ElementaVersion.V1, restoreCurrentGuiOnClose = true, enableRepeatKeys = true, drawDefaultBackground = false) {
+class ActionBarGui : WindowScreen(
+    version = ElementaVersion.V1,
+    restoreCurrentGuiOnClose = true,
+    enableRepeatKeys = true,
+    drawDefaultBackground = false
+) {
 
     override fun initScreen(width: Int, height: Int) {
         window.onMouseDrag { mouseX, mouseY, mouseButton ->

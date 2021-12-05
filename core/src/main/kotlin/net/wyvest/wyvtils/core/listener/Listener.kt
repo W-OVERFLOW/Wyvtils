@@ -104,17 +104,21 @@ object Listener {
         }
         if (e.cancelled) return
         if (WyvtilsConfig.hitboxBox) {
-            e.boxColor = if (WyvtilsConfig.hitboxChroma) ColorUtils.timeBasedChroma() else { if (e.distance <= 3.0 && e.distance != -1.0) WyvtilsConfig.hitboxCrosshairColor.rgb else WyvtilsConfig.hitboxColor.rgb }
+            e.boxColor = if (WyvtilsConfig.hitboxChroma) ColorUtils.timeBasedChroma() else {
+                if (e.distance <= 3.0 && e.distance != -1.0) WyvtilsConfig.hitboxCrosshairColor.rgb else WyvtilsConfig.hitboxColor.rgb
+            }
         } else {
             e.cancelBox = true
         }
         if (WyvtilsConfig.hitboxEyeLine) {
-            e.eyeLineColor = if (WyvtilsConfig.hitboxLineChroma) ColorUtils.timeBasedChroma() else WyvtilsConfig.hitboxEyelineColor.rgb
+            e.eyeLineColor =
+                if (WyvtilsConfig.hitboxLineChroma) ColorUtils.timeBasedChroma() else WyvtilsConfig.hitboxEyelineColor.rgb
         } else {
             e.cancelEyeLine = true
         }
         if (WyvtilsConfig.hitboxLineOfSight) {
-            e.lineOfSightColor = if (WyvtilsConfig.hitboxLineOfSightChroma) ColorUtils.timeBasedChroma() else WyvtilsConfig.hitboxLineOfSightColor.rgb
+            e.lineOfSightColor =
+                if (WyvtilsConfig.hitboxLineOfSightChroma) ColorUtils.timeBasedChroma() else WyvtilsConfig.hitboxLineOfSightColor.rgb
         } else {
             e.cancelLineOfSight = true
         }
