@@ -1,33 +1,7 @@
-/*
- * Wyvtilities - Utilities for Hypixel 1.8.9.
- * Copyright (C) 2021 Wyvtilities
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published
- * by the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 package net.wyvest.wyvtilities.utils
 
 import gg.essential.api.EssentialAPI
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import net.minecraft.util.Util
-import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion
 import net.wyvest.wyvtilities.Wyvtilities
-import net.wyvest.wyvtilities.Wyvtilities.mc
-import net.wyvest.wyvtilities.gui.DownloadConfirmGui
 import org.apache.http.HttpResponse
 import org.apache.http.client.HttpClient
 import org.apache.http.client.config.RequestConfig
@@ -37,47 +11,17 @@ import java.awt.Desktop
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-
+import java.util.*
 
 object Updater {
-    var updateUrl: String = ""
-    lateinit var latestTag: String
-    var shouldUpdate = false
 
     /**
-     * Adapted from SimpleToggleSprint under AGPLv3
-     * https://github.com/My-Name-Is-Jeff/SimpleToggleSprint/blob/1.8.9/LICENSE
-     */
-    fun update() {
-        CoroutineScope(Dispatchers.IO + CoroutineName("Wyvtilities-UpdateChecker")).launch {
-            val latestRelease =
-                APIUtil.getJSONResponse("https://api.github.com/repos/Wyvest/Wyvtilities/releases/latest")
-            latestTag = latestRelease.get("tag_name").asString
-
-            val currentVersion = DefaultArtifactVersion(Wyvtilities.VERSION.substringBefore("-"))
-            val latestVersion = DefaultArtifactVersion(latestTag.substringAfter("v").substringBefore("-"))
-
-            if ((Wyvtilities.VERSION.contains("BETA") && currentVersion >= latestVersion)) {
-                return@launch
-            } else if (currentVersion < latestVersion) {
-                updateUrl = latestRelease["assets"].asJsonArray[0].asJsonObject["browser_download_url"].asString
-            }
-            if (updateUrl.isNotEmpty()) {
-                EssentialAPI.getNotifications()
-                    .push("Mod Update", "Wyvtilities $latestTag is available!\nClick here to download it!", 5f) {
-                        EssentialAPI.getGuiUtil().openScreen(DownloadConfirmGui(mc.currentScreen))
-                    }
-                shouldUpdate = true
-            }
-        }
-    }
-
-    /**
-     * Adapted from RequisiteLaunchwrapper under LGPLv2.1
-     * https://github.com/TGMDevelopment/RequisiteLaunchwrapper/blob/main/LICENSE
+     * Adapted from RequisiteLaunchwrapper under LGPLv3
+     * https://github.com/Qalcyo/RequisiteLaunchwrapper/blob/main/LICENSE
      */
     fun download(url: String, file: File): Boolean {
         if (file.exists()) return true
+        if (!file.parentFile.exists()) file.parentFile.mkdirs()
         var newUrl = url
         newUrl = newUrl.replace(" ", "%20")
         val downloadClient: HttpClient =
@@ -104,24 +48,33 @@ object Updater {
      * https://github.com/Skytils/SkytilsMod/blob/1.x/LICENSE.md
      */
     fun addShutdownHook() {
-        EssentialAPI.getShutdownHookUtil().register(Thread {
-            println("Deleting old Wyvtilities jar file...")
+        EssentialAPI.getShutdownHookUtil().register {
+            println("Deleting old Wyvtils jar file...")
             try {
                 val runtime = getJavaRuntime()
-                if (Util.getOSType() == Util.EnumOS.OSX) {
-                    println("On Mac, trying to open mods folder")
-                    Desktop.getDesktop().open(Wyvtilities.jarFile.parentFile)
+                if (System.getProperty("os.name").lowercase(Locale.ENGLISH).contains("mac")) {
+                    val sipStatus = Runtime.getRuntime().exec("csrutil status")
+                    sipStatus.waitFor()
+                    if (!sipStatus.inputStream.use { it.bufferedReader().readText() }
+                            .contains("System Integrity Protection status: disabled.")) {
+                        println("SIP is NOT disabled, opening Finder.")
+                        Desktop.getDesktop().open(Wyvtilities.jarFile.parentFile)
+                    }
                 }
                 println("Using runtime $runtime")
-                val file = File("config/Wyvtilities/WyvtilitiesDeleter.jar")
+                val file = File("config/W-OVERFLOW/Libraries/Deleter-1.2.jar")
                 println("\"$runtime\" -jar \"${file.absolutePath}\" \"${Wyvtilities.jarFile.absolutePath}\"")
+                if (System.getProperty("os.name").lowercase(Locale.ENGLISH).containsAny("linux", "unix")) {
+                    println("On Linux, giving Deleter jar execute permissions...")
+                    Runtime.getRuntime()
+                        .exec("chmod +x \"${file.absolutePath}\"")
+                }
                 Runtime.getRuntime()
                     .exec("\"$runtime\" -jar \"${file.absolutePath}\" \"${Wyvtilities.jarFile.absolutePath}\"")
             } catch (e: Throwable) {
                 e.printStackTrace()
             }
-            Thread.currentThread().interrupt()
-        })
+        }
     }
 
     /**

@@ -18,24 +18,11 @@
 
 package net.wyvest.wyvtilities
 
-import gg.essential.api.EssentialAPI
-import gg.essential.api.utils.Multithreading
-import gg.essential.universal.ChatColor
 import net.minecraft.client.Minecraft
-import net.minecraft.client.settings.KeyBinding
-import net.minecraft.util.EnumChatFormatting
-import net.minecraftforge.common.MinecraftForge.EVENT_BUS
-import net.minecraftforge.fml.client.registry.ClientRegistry
-import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
-import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
-import net.wyvest.wyvtilities.commands.WyvtilsCommands
-import net.wyvest.wyvtilities.config.WyvtilsConfig
-import net.wyvest.wyvtilities.listeners.Listener
-import net.wyvest.wyvtilities.utils.*
-import org.lwjgl.input.Keyboard
+import net.wyvest.wyvtilities.utils.Updater
 import java.io.File
 
 
@@ -49,7 +36,6 @@ import java.io.File
     modLanguageAdapter = "gg.essential.api.utils.KotlinAdapter"
 )
 object Wyvtilities {
-    var isRegexLoaded: Boolean = false
     const val MODID = "wyvtilities"
     const val MOD_NAME = "Wyvtilities"
     const val VERSION = "1.1.3"
@@ -57,21 +43,7 @@ object Wyvtilities {
         get() = Minecraft.getMinecraft()
     lateinit var jarFile: File
 
-    lateinit var autoGGRegex: MutableList<Regex>
-
-    val modDir = File(File(mc.mcDataDir, "config"), "Wyvtilities")
-
-    @JvmField
-    var isConfigInitialized = false
-
-    fun sendMessage(message: String?) {
-        if (message != null) {
-            EssentialAPI.getMinecraftUtil().sendMessage(EnumChatFormatting.DARK_PURPLE.toString() + "[Wyvtilities] ", message)
-        }
-    }
-
-    val chatKeybind = KeyBinding("Chat Swapper", Keyboard.KEY_V, "Wyvtilities")
-    val titleKeybind = KeyBinding("Clear Title", Keyboard.KEY_Z, "Wyvtilities")
+    val modDir = File(File(mc.mcDataDir, "config"), "W-OVERFLOW")
 
     @Mod.EventHandler
     private fun onFMLPreInitialization(event: FMLPreInitializationEvent) {
@@ -81,80 +53,17 @@ object Wyvtilities {
 
     @Mod.EventHandler
     private fun onFMLInitialization(event: FMLInitializationEvent) {
-        WyvtilsConfig.preload()
-        isConfigInitialized = true
-        if (WyvtilsConfig.highlightName) {
-            Listener.color = when (WyvtilsConfig.textColor) {
-                0 -> ChatColor.BLACK.toString()
-                1 -> ChatColor.DARK_BLUE.toString()
-                2 -> ChatColor.DARK_GREEN.toString()
-                3 -> ChatColor.DARK_AQUA.toString()
-                4 -> ChatColor.DARK_RED.toString()
-                5 -> ChatColor.DARK_PURPLE.toString()
-                6 -> ChatColor.GOLD.toString()
-                7 -> ChatColor.GRAY.toString()
-                8 -> ChatColor.DARK_GRAY.toString()
-                9 -> ChatColor.BLUE.toString()
-                10 -> ChatColor.GREEN.toString()
-                11 -> ChatColor.AQUA.toString()
-                12 -> ChatColor.RED.toString()
-                13 -> ChatColor.LIGHT_PURPLE.toString()
-                14 -> ChatColor.YELLOW.toString()
-                15 -> ChatColor.WHITE.toString()
-                else -> ""
-            }
-        }
-        EVENT_BUS.register(this)
-        EVENT_BUS.register(Listener)
-        EVENT_BUS.register(HypixelUtils)
-        WyvtilsCommands.register()
-        Multithreading.runAsync {
-            try {
-                autoGGRegex = mutableListOf()
-                for (trigger in APIUtil.getJSONResponse("https://wyvest.net/wyvtilities.json").asJsonObject["triggers"].asJsonArray) {
-                    autoGGRegex.add(Regex(trigger.toString()))
-                }
-                isRegexLoaded = true
-            } catch (e: Exception) {
-                e.printStackTrace()
-                isRegexLoaded = false
-                EssentialAPI.getNotifications()
-                    .push("Wyvtilities", "Wyvtilities failed to get regexes required for the Auto Get GEXP feature!")
-            }
-        }
-        ClientRegistry.registerKeyBinding(chatKeybind)
-        ClientRegistry.registerKeyBinding(titleKeybind)
-    }
-
-    @Mod.EventHandler
-    private fun onFMLLoad(event: FMLLoadCompleteEvent) {
-        if (Loader.isModLoaded("bossbar_customizer")) {
-            WyvtilsConfig.bossBarCustomization = false
-            WyvtilsConfig.markDirty()
-            WyvtilsConfig.writeData()
-            EssentialAPI.getNotifications().push(
-                "Wyvtilities",
-                "Bossbar Customizer (the mod) has been detected, and so the Wyvtils Bossbar related features have been disabled."
+        Updater.download(
+            "https://github.com/Wyvest/Wyvtils/releases/download/v2.0.0/Wyvtils-1.8.9-2.0.0.jar",
+            File(
+                "mods/Wyvtils-1.8.9-2.0.0.jar"
             )
-        }
-        Updater.update()
-    }
-
-    fun checkSound(name: String): Boolean {
-        if (name.equalsAny(
-                "random.successful_hit",
-                "random.break",
-                "random.drink",
-                "random.eat",
-                "random.bow",
-                "random.bowhit",
-                "mob.ghast.fireball",
-                "mob.ghast.charge"
-            ) || (name.startsWithAny("dig.", "step.", "game.player.") && name != "game.player.hurt")
-        ) {
-            return true
-        }
-        return false
+        )
+        Updater.download(
+            "https://github.com/Wyvest/Deleter/releases/download/v1.2/Deleter-1.2.jar",
+            File(File(modDir, "Libraries"), "Deleter-1.2.jar")
+        )
+        Updater.addShutdownHook()
     }
 
 }
