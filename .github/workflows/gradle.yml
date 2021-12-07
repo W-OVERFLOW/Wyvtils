@@ -36,8 +36,6 @@ jobs:
         ./gradlew build --no-daemon
         mkdir ../artifacts
         mv ./**/build/libs/*.jar ../artifacts
-        ls ../artifacts -al
-        ls . -al
     - name: Upload mods as artifacts
       uses: actions/upload-artifact@v2
       with:
