@@ -49,7 +49,7 @@ class DownloadGui : WindowScreen(restoreCurrentGuiOnClose = true, version = Elem
                     if (Updater.download(
                             Updater.updateUrl,
                             File(
-                                "mods/${WyvtilsInfo.NAME} [${WyvtilsCore.currentVersion.versionString}]-${
+                                "mods/${WyvtilsInfo.NAME}-${WyvtilsCore.currentVersion.versionString}-${
                                     Updater.latestTag.substringAfter(
                                         "v"
                                     )

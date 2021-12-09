@@ -28,7 +28,7 @@ buildscript {
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath("com.github.Wyvest:ForgeGradle:3a31fe4359:all")
+        classpath("com.github.ReplayMod:ForgeGradle:ceb83c0:all")
         classpath("dev.isXander:MixinGradle:0.6-SNAPSHOT")
     }
 }
@@ -41,7 +41,7 @@ apply plugin: "org.jetbrains.kotlin.jvm"
 apply plugin: "maven-publish"
 apply plugin: "java"
 
-archivesBaseName = project_name + " [1.8.9]"
+archivesBaseName = project_name + "-1.8.9"
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
 minecraft {
