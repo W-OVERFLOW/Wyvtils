@@ -131,4 +131,8 @@
   
   
 ### Commands
-TO BE UPDATED.
+(1.8.9 only)
+  
+/wyvtils - Opens the config GUI
+  
+/wyvtils config - Opens the config GUI
