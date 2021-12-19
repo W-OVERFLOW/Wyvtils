@@ -68,7 +68,7 @@ dependencies {
         exclude(module: "Mango")
     }
     implementation("com.github.Wyvest:keventbus:e8e05ea")
-    shade ("gg.essential:loader-launchwrapper:1.1.1") {
+    shade ("gg.essential:loader-launchwrapper:1.1.2") {
         transitive = false
     }
     implementation "gg.essential:essential-1.8.9-forge:1551+release-launch"
