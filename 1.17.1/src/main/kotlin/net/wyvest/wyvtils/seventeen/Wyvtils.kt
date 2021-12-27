@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.seventeen
+package cc.woverflow.wyvtils.seventeen
 
 import com.mojang.blaze3d.systems.RenderSystem
 import gg.essential.api.EssentialAPI
@@ -35,17 +35,17 @@ import net.minecraft.client.render.*
 import net.minecraft.client.util.InputUtil
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.Matrix4f
-import net.wyvest.wyvtils.core.WyvtilsCore
-import net.wyvest.wyvtils.core.WyvtilsInfo
-import net.wyvest.wyvtils.core.config.WyvtilsConfig
-import net.wyvest.wyvtils.core.listener.Listener
-import net.wyvest.wyvtils.core.listener.events.*
-import net.wyvest.wyvtils.core.utils.MinecraftVersions
-import net.wyvest.wyvtils.seventeen.gui.ActionBarGui
-import net.wyvest.wyvtils.seventeen.gui.BossHealthGui
-import net.wyvest.wyvtils.seventeen.gui.DownloadGui
-import net.wyvest.wyvtils.seventeen.gui.SidebarGui
-import net.wyvest.wyvtils.seventeen.mixin.gui.ChatHudAccessor
+import cc.woverflow.wyvtils.core.WyvtilsCore
+import cc.woverflow.wyvtils.core.WyvtilsInfo
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig
+import cc.woverflow.wyvtils.core.listener.Listener
+import cc.woverflow.wyvtils.core.listener.events.*
+import cc.woverflow.wyvtils.core.utils.MinecraftVersions
+import cc.woverflow.wyvtils.seventeen.gui.ActionBarGui
+import cc.woverflow.wyvtils.seventeen.gui.BossHealthGui
+import cc.woverflow.wyvtils.seventeen.gui.DownloadGui
+import cc.woverflow.wyvtils.seventeen.gui.SidebarGui
+import cc.woverflow.wyvtils.seventeen.mixin.gui.ChatHudAccessor
 import org.lwjgl.glfw.GLFW
 import java.io.File
 import java.net.URI

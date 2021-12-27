@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.seventeen.mixin.renderer;
+package cc.woverflow.wyvtils.seventeen.mixin.renderer;
 
 import net.minecraft.client.render.WorldRenderer;
 import org.spongepowered.asm.mixin.Mixin;

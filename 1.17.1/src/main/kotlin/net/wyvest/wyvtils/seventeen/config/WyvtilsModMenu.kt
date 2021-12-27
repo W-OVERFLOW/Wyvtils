@@ -16,11 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.seventeen.config
+package cc.woverflow.wyvtils.seventeen.config
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory
 import com.terraformersmc.modmenu.api.ModMenuApi
-import net.wyvest.wyvtils.core.config.WyvtilsConfig
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig
 
 /**
  * Handles integration of the Mod Menu mod.

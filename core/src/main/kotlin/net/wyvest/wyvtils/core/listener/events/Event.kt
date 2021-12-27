@@ -16,6 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.core.listener.events
+package cc.woverflow.wyvtils.core.listener.events
 
 open class Event(open var cancelled: Boolean = false)

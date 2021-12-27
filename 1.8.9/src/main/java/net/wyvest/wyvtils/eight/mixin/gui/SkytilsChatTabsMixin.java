@@ -16,10 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.eight.mixin.gui;
+package cc.woverflow.wyvtils.eight.mixin.gui;
 
 import net.minecraft.util.IChatComponent;
-import net.wyvest.wyvtils.eight.hooks.SkytilsChatTabsHookKt;
+import cc.woverflow.wyvtils.eight.hooks.SkytilsChatTabsHookKt;
 import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;

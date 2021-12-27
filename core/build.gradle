@@ -31,7 +31,7 @@ compileKotlin {
 }
 buildConfig {
     className("WyvtilsInfo")
-    packageName("net.wyvest.wyvtils.core")
+    packageName("cc.woverflow.wyvtils.core")
 
     buildConfigField("String", "NAME", "\"${project_name}\"")
     buildConfigField("String", "VER", "\"${project_ver}\"")

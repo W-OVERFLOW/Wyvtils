@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.eight
+package cc.woverflow.wyvtils.eight
 
 import gg.essential.api.EssentialAPI
 import gg.essential.lib.kbrewster.eventbus.Subscribe
@@ -31,19 +31,19 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
-import net.wyvest.wyvtils.core.WyvtilsCore
-import net.wyvest.wyvtils.core.WyvtilsCore.eventBus
-import net.wyvest.wyvtils.core.WyvtilsInfo
-import net.wyvest.wyvtils.core.config.WyvtilsConfig
-import net.wyvest.wyvtils.core.listener.events.*
-import net.wyvest.wyvtils.core.utils.MinecraftVersions
-import net.wyvest.wyvtils.eight.commands.WyvtilsCommand
-import net.wyvest.wyvtils.eight.gui.ActionBarGui
-import net.wyvest.wyvtils.eight.gui.BossHealthGui
-import net.wyvest.wyvtils.eight.gui.DownloadGui
-import net.wyvest.wyvtils.eight.gui.SidebarGui
-import net.wyvest.wyvtils.eight.hooks.GuiScreenResourcePacksHook
-import net.wyvest.wyvtils.eight.mixin.gui.GuiNewChatAccessor
+import cc.woverflow.wyvtils.core.WyvtilsCore
+import cc.woverflow.wyvtils.core.WyvtilsCore.eventBus
+import cc.woverflow.wyvtils.core.WyvtilsInfo
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig
+import cc.woverflow.wyvtils.core.listener.events.*
+import cc.woverflow.wyvtils.core.utils.MinecraftVersions
+import cc.woverflow.wyvtils.eight.commands.WyvtilsCommand
+import cc.woverflow.wyvtils.eight.gui.ActionBarGui
+import cc.woverflow.wyvtils.eight.gui.BossHealthGui
+import cc.woverflow.wyvtils.eight.gui.DownloadGui
+import cc.woverflow.wyvtils.eight.gui.SidebarGui
+import cc.woverflow.wyvtils.eight.hooks.GuiScreenResourcePacksHook
+import cc.woverflow.wyvtils.eight.mixin.gui.GuiNewChatAccessor
 import java.io.File
 import java.net.URI
 

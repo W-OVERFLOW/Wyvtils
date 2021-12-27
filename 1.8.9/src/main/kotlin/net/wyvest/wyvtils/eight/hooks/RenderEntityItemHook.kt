@@ -16,13 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.eight.hooks
+package cc.woverflow.wyvtils.eight.hooks
 
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms
 import net.minecraft.client.resources.model.IBakedModel
 import net.minecraft.entity.item.EntityItem
-import net.wyvest.wyvtils.core.config.WyvtilsConfig.itemPhysics
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig.itemPhysics
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
 
 fun onRender(

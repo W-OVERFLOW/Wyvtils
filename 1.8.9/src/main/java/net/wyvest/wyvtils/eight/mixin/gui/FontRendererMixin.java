@@ -16,12 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.eight.mixin.gui;
+package cc.woverflow.wyvtils.eight.mixin.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.wyvest.wyvtils.core.WyvtilsCore;
-import net.wyvest.wyvtils.core.listener.events.StringRenderEvent;
+import cc.woverflow.wyvtils.core.WyvtilsCore;
+import cc.woverflow.wyvtils.core.listener.events.StringRenderEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

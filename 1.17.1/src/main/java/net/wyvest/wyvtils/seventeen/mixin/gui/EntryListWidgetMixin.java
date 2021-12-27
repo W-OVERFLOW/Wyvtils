@@ -16,14 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.seventeen.mixin.gui;
+package cc.woverflow.wyvtils.seventeen.mixin.gui;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.pack.PackListWidget;
 import net.minecraft.client.gui.widget.EntryListWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.wyvest.wyvtils.core.config.WyvtilsConfig;
-import net.wyvest.wyvtils.seventeen.Wyvtils;
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig;
+import cc.woverflow.wyvtils.seventeen.Wyvtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

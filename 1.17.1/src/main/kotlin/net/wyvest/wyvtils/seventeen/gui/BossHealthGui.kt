@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.seventeen.gui
+package cc.woverflow.wyvtils.seventeen.gui
 
 import com.mojang.blaze3d.systems.RenderSystem
 import gg.essential.elementa.ElementaVersion
@@ -28,7 +28,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.boss.BossBar
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
-import net.wyvest.wyvtils.core.config.WyvtilsConfig
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig
 import java.util.*
 
 class BossHealthGui : WindowScreen(

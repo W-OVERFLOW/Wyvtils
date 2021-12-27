@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.eight.mixin.hud;
+package cc.woverflow.wyvtils.eight.mixin.hud;
 
 import gg.essential.universal.UResolution;
 import net.minecraft.client.Minecraft;
@@ -28,9 +28,9 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.boss.BossStatus;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.util.EnumChatFormatting;
-import net.wyvest.wyvtils.core.config.WyvtilsConfig;
-import net.wyvest.wyvtils.eight.gui.BossHealthGui;
-import net.wyvest.wyvtils.eight.gui.SidebarGui;
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig;
+import cc.woverflow.wyvtils.eight.gui.BossHealthGui;
+import cc.woverflow.wyvtils.eight.gui.SidebarGui;
 import org.apache.commons.lang3.StringUtils;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

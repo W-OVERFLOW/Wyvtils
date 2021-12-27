@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.eight.hooks
+package cc.woverflow.wyvtils.eight.hooks
 
 import net.minecraft.client.Minecraft
 import net.minecraft.client.entity.EntityPlayerSP
@@ -33,14 +33,14 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.projectile.EntityFireball
 import net.minecraft.entity.projectile.EntityWitherSkull
 import net.minecraft.util.AxisAlignedBB
-import net.wyvest.wyvtils.core.WyvtilsCore.eventBus
-import net.wyvest.wyvtils.core.config.WyvtilsConfig
-import net.wyvest.wyvtils.core.config.WyvtilsConfig.accurateHitbox
-import net.wyvest.wyvtils.core.listener.events.HitboxRenderEvent
-import net.wyvest.wyvtils.core.utils.ColorUtils.getAlpha
-import net.wyvest.wyvtils.core.utils.ColorUtils.getBlue
-import net.wyvest.wyvtils.core.utils.ColorUtils.getGreen
-import net.wyvest.wyvtils.core.utils.ColorUtils.getRed
+import cc.woverflow.wyvtils.core.WyvtilsCore.eventBus
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig.accurateHitbox
+import cc.woverflow.wyvtils.core.listener.events.HitboxRenderEvent
+import cc.woverflow.wyvtils.core.utils.ColorUtils.getAlpha
+import cc.woverflow.wyvtils.core.utils.ColorUtils.getBlue
+import cc.woverflow.wyvtils.core.utils.ColorUtils.getGreen
+import cc.woverflow.wyvtils.core.utils.ColorUtils.getRed
 import org.lwjgl.opengl.GL11
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 import java.awt.Color
@@ -54,17 +54,17 @@ fun setup(
 ) {
     hitboxRenderEvent = HitboxRenderEvent(
         when (entityIn) {
-            is EntityPlayer -> if (entityIn is EntityPlayerSP && (entityIn as EntityPlayer).gameProfile.id == Minecraft.getMinecraft().thePlayer.gameProfile.id) net.wyvest.wyvtils.core.listener.events.Entity.SELF else net.wyvest.wyvtils.core.listener.events.Entity.PLAYER
-            is EntityLiving -> if (entityIn is IMob) net.wyvest.wyvtils.core.listener.events.Entity.MONSTER else net.wyvest.wyvtils.core.listener.events.Entity.LIVING
-            is EntityArmorStand -> net.wyvest.wyvtils.core.listener.events.Entity.ARMORSTAND
-            is EntityFireball -> if (entityIn is EntityWitherSkull) net.wyvest.wyvtils.core.listener.events.Entity.WITHERSKULL else net.wyvest.wyvtils.core.listener.events.Entity.FIREBALL
-            is EntityMinecart -> net.wyvest.wyvtils.core.listener.events.Entity.MINECART
-            is EntityItem -> net.wyvest.wyvtils.core.listener.events.Entity.ITEM
-            is EntityItemFrame -> net.wyvest.wyvtils.core.listener.events.Entity.ITEMFRAME
-            is EntityFireworkRocket -> net.wyvest.wyvtils.core.listener.events.Entity.FIREWORK
-            is EntityXPOrb -> net.wyvest.wyvtils.core.listener.events.Entity.XP
-            is IProjectile -> net.wyvest.wyvtils.core.listener.events.Entity.PROJECTILE
-            else -> net.wyvest.wyvtils.core.listener.events.Entity.UNDEFINED
+            is EntityPlayer -> if (entityIn is EntityPlayerSP && (entityIn as EntityPlayer).gameProfile.id == Minecraft.getMinecraft().thePlayer.gameProfile.id) cc.woverflow.wyvtils.core.listener.events.Entity.SELF else cc.woverflow.wyvtils.core.listener.events.Entity.PLAYER
+            is EntityLiving -> if (entityIn is IMob) cc.woverflow.wyvtils.core.listener.events.Entity.MONSTER else cc.woverflow.wyvtils.core.listener.events.Entity.LIVING
+            is EntityArmorStand -> cc.woverflow.wyvtils.core.listener.events.Entity.ARMORSTAND
+            is EntityFireball -> if (entityIn is EntityWitherSkull) cc.woverflow.wyvtils.core.listener.events.Entity.WITHERSKULL else cc.woverflow.wyvtils.core.listener.events.Entity.FIREBALL
+            is EntityMinecart -> cc.woverflow.wyvtils.core.listener.events.Entity.MINECART
+            is EntityItem -> cc.woverflow.wyvtils.core.listener.events.Entity.ITEM
+            is EntityItemFrame -> cc.woverflow.wyvtils.core.listener.events.Entity.ITEMFRAME
+            is EntityFireworkRocket -> cc.woverflow.wyvtils.core.listener.events.Entity.FIREWORK
+            is EntityXPOrb -> cc.woverflow.wyvtils.core.listener.events.Entity.XP
+            is IProjectile -> cc.woverflow.wyvtils.core.listener.events.Entity.PROJECTILE
+            else -> cc.woverflow.wyvtils.core.listener.events.Entity.UNDEFINED
         }, getReachDistanceFromEntity(entityIn), Color.WHITE.rgb, Color.WHITE.rgb, Color.WHITE.rgb,
         cancelled = false,
         cancelBox = false,

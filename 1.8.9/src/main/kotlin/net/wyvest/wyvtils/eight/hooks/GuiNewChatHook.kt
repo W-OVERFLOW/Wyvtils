@@ -16,14 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.eight.hooks
+package cc.woverflow.wyvtils.eight.hooks
 
 import net.minecraft.client.gui.FontRenderer
 import net.minecraft.client.gui.GuiUtilRenderComponents
 import net.minecraft.util.IChatComponent
-import net.wyvest.wyvtils.core.WyvtilsCore
-import net.wyvest.wyvtils.core.listener.events.MessageRenderEvent
-import net.wyvest.wyvtils.eight.Wyvtils
+import cc.woverflow.wyvtils.core.WyvtilsCore
+import cc.woverflow.wyvtils.core.listener.events.MessageRenderEvent
+import cc.woverflow.wyvtils.eight.Wyvtils
 import skytils.skytilsmod.features.impl.handlers.ChatTabs
 import java.util.*
 

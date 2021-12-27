@@ -16,6 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.core.listener.events
+package cc.woverflow.wyvtils.core.listener.events
 
 class RenderGuiEvent(val gui: Gui) : Event(cancelled = false)

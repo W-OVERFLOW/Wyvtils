@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.eight.mixin.gui;
+package cc.woverflow.wyvtils.eight.mixin.gui;
 
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
@@ -29,8 +29,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.ResourcePackListEntry;
-import net.wyvest.wyvtils.core.config.WyvtilsConfig;
-import net.wyvest.wyvtils.eight.hooks.GuiScreenResourcePacksHookKt;
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig;
+import cc.woverflow.wyvtils.eight.hooks.GuiScreenResourcePacksHookKt;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

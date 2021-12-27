@@ -16,15 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.core.listener
+package cc.woverflow.wyvtils.core.listener
 
 import gg.essential.lib.caffeine.cache.Cache
 import gg.essential.lib.caffeine.cache.Caffeine
 import gg.essential.lib.kbrewster.eventbus.Subscribe
 import gg.essential.universal.ChatColor
-import net.wyvest.wyvtils.core.config.WyvtilsConfig
-import net.wyvest.wyvtils.core.listener.events.*
-import net.wyvest.wyvtils.core.utils.ColorUtils
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig
+import cc.woverflow.wyvtils.core.listener.events.*
+import cc.woverflow.wyvtils.core.utils.ColorUtils
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit

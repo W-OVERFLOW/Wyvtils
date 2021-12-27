@@ -16,14 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.eight.mixin.renderer;
+package cc.woverflow.wyvtils.eight.mixin.renderer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
-import net.wyvest.wyvtils.core.config.WyvtilsConfig;
-import net.wyvest.wyvtils.eight.hooks.RenderManagerHookKt;
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig;
+import cc.woverflow.wyvtils.eight.hooks.RenderManagerHookKt;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

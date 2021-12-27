@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.seventeen.gui
+package cc.woverflow.wyvtils.seventeen.gui
 
 import gg.essential.api.EssentialAPI
 import gg.essential.api.gui.buildConfirmationModal
@@ -24,9 +24,9 @@ import gg.essential.api.utils.Multithreading
 import gg.essential.elementa.ElementaVersion
 import gg.essential.elementa.WindowScreen
 import gg.essential.elementa.dsl.childOf
-import net.wyvest.wyvtils.core.WyvtilsCore
-import net.wyvest.wyvtils.core.WyvtilsInfo
-import net.wyvest.wyvtils.core.utils.Updater
+import cc.woverflow.wyvtils.core.WyvtilsCore
+import cc.woverflow.wyvtils.core.WyvtilsInfo
+import cc.woverflow.wyvtils.core.utils.Updater
 import java.io.File
 
 /**

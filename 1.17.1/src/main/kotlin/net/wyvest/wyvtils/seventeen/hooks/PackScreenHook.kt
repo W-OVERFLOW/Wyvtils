@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.seventeen.hooks
+package cc.woverflow.wyvtils.seventeen.hooks
 
 import gg.essential.universal.UResolution
 import gg.essential.universal.wrappers.message.UTextComponent
@@ -24,8 +24,8 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.pack.ResourcePackOrganizer
 import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.text.Text
-import net.wyvest.wyvtils.core.config.WyvtilsConfig
-import net.wyvest.wyvtils.seventeen.mixin.gui.PackAccessor
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig
+import cc.woverflow.wyvtils.seventeen.mixin.gui.PackAccessor
 import java.util.stream.Stream
 
 var textField: TextFieldWidget? = null

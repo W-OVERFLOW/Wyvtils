@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.eight.gui
+package cc.woverflow.wyvtils.eight.gui
 
 import gg.essential.api.EssentialAPI
 import gg.essential.elementa.WindowScreen
@@ -27,8 +27,8 @@ import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.boss.BossStatus
-import net.wyvest.wyvtils.core.config.WyvtilsConfig
-import net.wyvest.wyvtils.eight.Wyvtils
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig
+import cc.woverflow.wyvtils.eight.Wyvtils
 import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11
 import java.awt.Color

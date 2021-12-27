@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.core.config
+package cc.woverflow.wyvtils.core.config
 
 import gg.essential.api.EssentialAPI
 import gg.essential.universal.ChatColor
@@ -25,15 +25,15 @@ import gg.essential.vigilance.data.Category
 import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
 import gg.essential.vigilance.data.SortingBehavior
-import net.wyvest.wyvtils.core.WyvtilsCore
-import net.wyvest.wyvtils.core.WyvtilsInfo
-import net.wyvest.wyvtils.core.listener.Listener
-import net.wyvest.wyvtils.core.listener.events.BossBarResetEvent
-import net.wyvest.wyvtils.core.listener.events.ChatRefreshEvent
-import net.wyvest.wyvtils.core.listener.events.Gui
-import net.wyvest.wyvtils.core.listener.events.RenderGuiEvent
-import net.wyvest.wyvtils.core.utils.MinecraftVersions
-import net.wyvest.wyvtils.core.utils.Updater
+import cc.woverflow.wyvtils.core.WyvtilsCore
+import cc.woverflow.wyvtils.core.WyvtilsInfo
+import cc.woverflow.wyvtils.core.listener.Listener
+import cc.woverflow.wyvtils.core.listener.events.BossBarResetEvent
+import cc.woverflow.wyvtils.core.listener.events.ChatRefreshEvent
+import cc.woverflow.wyvtils.core.listener.events.Gui
+import cc.woverflow.wyvtils.core.listener.events.RenderGuiEvent
+import cc.woverflow.wyvtils.core.utils.MinecraftVersions
+import cc.woverflow.wyvtils.core.utils.Updater
 import java.awt.Color
 import java.io.File
 

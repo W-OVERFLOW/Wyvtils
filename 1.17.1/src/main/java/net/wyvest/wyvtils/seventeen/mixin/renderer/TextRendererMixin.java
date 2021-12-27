@@ -16,10 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.seventeen.mixin.renderer;
+package cc.woverflow.wyvtils.seventeen.mixin.renderer;
 
 import net.minecraft.client.font.TextRenderer;
-import net.wyvest.wyvtils.core.config.WyvtilsConfig;
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;

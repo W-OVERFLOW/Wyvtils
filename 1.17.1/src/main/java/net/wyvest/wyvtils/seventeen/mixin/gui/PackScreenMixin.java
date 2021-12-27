@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.seventeen.mixin.gui;
+package cc.woverflow.wyvtils.seventeen.mixin.gui;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.pack.PackListWidget;
@@ -25,8 +25,8 @@ import net.minecraft.client.gui.screen.pack.ResourcePackOrganizer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.wyvest.wyvtils.core.config.WyvtilsConfig;
-import net.wyvest.wyvtils.seventeen.hooks.PackScreenHookKt;
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig;
+import cc.woverflow.wyvtils.seventeen.hooks.PackScreenHookKt;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

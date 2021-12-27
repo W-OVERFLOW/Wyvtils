@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.seventeen.mixin.hud;
+package cc.woverflow.wyvtils.seventeen.mixin.hud;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -25,10 +25,10 @@ import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.text.Text;
-import net.wyvest.wyvtils.core.WyvtilsCore;
-import net.wyvest.wyvtils.core.config.WyvtilsConfig;
-import net.wyvest.wyvtils.core.listener.events.TitleEvent;
-import net.wyvest.wyvtils.seventeen.gui.SidebarGui;
+import cc.woverflow.wyvtils.core.WyvtilsCore;
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig;
+import cc.woverflow.wyvtils.core.listener.events.TitleEvent;
+import cc.woverflow.wyvtils.seventeen.gui.SidebarGui;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;

@@ -16,17 +16,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.eight.gui
+package cc.woverflow.wyvtils.eight.gui
 
 import gg.essential.api.EssentialAPI
 import gg.essential.elementa.WindowScreen
 import net.minecraft.client.gui.GuiButton
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.util.EnumChatFormatting
-import net.wyvest.wyvtils.core.config.WyvtilsConfig
-import net.wyvest.wyvtils.core.config.WyvtilsConfig.sidebarScale
-import net.wyvest.wyvtils.core.config.WyvtilsConfig.sidebarX
-import net.wyvest.wyvtils.core.config.WyvtilsConfig.sidebarY
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig.sidebarScale
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig.sidebarX
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig.sidebarY
 import org.lwjgl.input.Keyboard
 
 class SidebarGui :

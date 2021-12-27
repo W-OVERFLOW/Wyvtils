@@ -1,7 +1,7 @@
 {
   "compatibilityLevel": "JAVA_8",
   "minVersion": "0.7",
-  "package": "net.wyvest.wyvtils.eight.mixin",
+  "package": "cc.woverflow.wyvtils.eight.mixin",
   "refmap": "mixins.wyvtils.refmap.json",
   "mixins": [
     "MinecraftMixin",

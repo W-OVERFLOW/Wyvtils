@@ -16,13 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.core.utils
+package cc.woverflow.wyvtils.core.utils
 
 import gg.essential.api.EssentialAPI
 import gg.essential.api.utils.Multithreading
-import net.wyvest.wyvtils.core.WyvtilsCore
-import net.wyvest.wyvtils.core.WyvtilsInfo
-import net.wyvest.wyvtils.core.listener.events.UpdateEvent
+import cc.woverflow.wyvtils.core.WyvtilsCore
+import cc.woverflow.wyvtils.core.WyvtilsInfo
+import cc.woverflow.wyvtils.core.listener.events.UpdateEvent
 import org.apache.http.HttpResponse
 import org.apache.http.client.HttpClient
 import org.apache.http.client.config.RequestConfig

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.eight.hooks
+package cc.woverflow.wyvtils.eight.hooks
 
 import gg.essential.universal.wrappers.message.UTextComponent
 import net.minecraft.client.Minecraft
@@ -27,8 +27,8 @@ import net.minecraft.client.resources.ResourcePackListEntry
 import net.minecraftforge.fml.common.eventhandler.EventPriority
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
-import net.wyvest.wyvtils.core.config.WyvtilsConfig
-import net.wyvest.wyvtils.eight.Wyvtils.mc
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig
+import cc.woverflow.wyvtils.eight.Wyvtils.mc
 import org.lwjgl.input.Keyboard
 
 var inputField: GuiTextField? = null

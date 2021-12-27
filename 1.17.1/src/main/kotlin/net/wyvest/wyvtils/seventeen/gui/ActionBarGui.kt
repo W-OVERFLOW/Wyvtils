@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.seventeen.gui
+package cc.woverflow.wyvtils.seventeen.gui
 
 import com.mojang.blaze3d.systems.RenderSystem
 import gg.essential.elementa.ElementaVersion
@@ -26,7 +26,7 @@ import net.minecraft.client.font.TextRenderer
 import net.minecraft.client.gui.hud.BackgroundHelper
 import net.minecraft.client.util.InputUtil
 import net.minecraft.client.util.math.MatrixStack
-import net.wyvest.wyvtils.core.config.WyvtilsConfig
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig
 import java.awt.Color
 import java.util.*
 

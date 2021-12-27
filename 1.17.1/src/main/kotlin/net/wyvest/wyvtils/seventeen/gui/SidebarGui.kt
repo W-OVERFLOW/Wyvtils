@@ -16,13 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.seventeen.gui
+package cc.woverflow.wyvtils.seventeen.gui
 
 import gg.essential.elementa.ElementaVersion
 import gg.essential.elementa.WindowScreen
 import gg.essential.universal.UMatrixStack
 import net.minecraft.client.util.InputUtil
-import net.wyvest.wyvtils.core.config.WyvtilsConfig
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig
 
 class SidebarGui : WindowScreen(
     restoreCurrentGuiOnClose = true,

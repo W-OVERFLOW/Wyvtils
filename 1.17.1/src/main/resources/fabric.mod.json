@@ -19,14 +19,14 @@
     "client": [
       {
         "adapter": "kotlin",
-        "value": "net.wyvest.wyvtils.seventeen.Wyvtils"
+        "value": "cc.woverflow.wyvtils.seventeen.Wyvtils"
       }
     ],
     "preLaunch": [
       "gg.essential.loader.stage0.EssentialSetupPreLaunch"
     ],
     "modmenu": [
-      "net.wyvest.wyvtils.seventeen.config.WyvtilsModMenu"
+      "cc.woverflow.wyvtils.seventeen.config.WyvtilsModMenu"
     ]
   },
   "mixins": [

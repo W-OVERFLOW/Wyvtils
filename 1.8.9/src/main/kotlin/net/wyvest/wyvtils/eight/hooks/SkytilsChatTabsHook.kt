@@ -16,11 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.eight.hooks
+package cc.woverflow.wyvtils.eight.hooks
 
 import net.minecraft.util.IChatComponent
-import net.wyvest.wyvtils.core.WyvtilsCore.eventBus
-import net.wyvest.wyvtils.core.listener.events.MessageRenderEvent
+import cc.woverflow.wyvtils.core.WyvtilsCore.eventBus
+import cc.woverflow.wyvtils.core.listener.events.MessageRenderEvent
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
 
 fun handleWyvtilsChatEvent(

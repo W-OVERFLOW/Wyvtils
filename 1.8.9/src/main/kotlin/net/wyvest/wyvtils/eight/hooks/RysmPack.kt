@@ -16,13 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.eight.hooks
+package cc.woverflow.wyvtils.eight.hooks
 
 import net.minecraft.client.resources.FolderResourcePack
 import net.minecraft.client.resources.data.IMetadataSection
 import net.minecraft.client.resources.data.IMetadataSerializer
 import net.minecraft.util.ResourceLocation
-import net.wyvest.wyvtils.eight.Wyvtils
+import cc.woverflow.wyvtils.eight.Wyvtils
 import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException

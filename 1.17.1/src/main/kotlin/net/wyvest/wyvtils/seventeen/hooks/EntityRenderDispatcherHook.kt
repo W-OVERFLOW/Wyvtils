@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.seventeen.hooks
+package cc.woverflow.wyvtils.seventeen.hooks
 
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
@@ -36,13 +36,13 @@ import net.minecraft.entity.projectile.*
 import net.minecraft.entity.projectile.thrown.ThrownEntity
 import net.minecraft.entity.vehicle.MinecartEntity
 import net.minecraft.util.math.Box
-import net.wyvest.wyvtils.core.WyvtilsCore.eventBus
-import net.wyvest.wyvtils.core.config.WyvtilsConfig
-import net.wyvest.wyvtils.core.listener.events.HitboxRenderEvent
-import net.wyvest.wyvtils.core.utils.ColorUtils.getAlpha
-import net.wyvest.wyvtils.core.utils.ColorUtils.getBlue
-import net.wyvest.wyvtils.core.utils.ColorUtils.getGreen
-import net.wyvest.wyvtils.core.utils.ColorUtils.getRed
+import cc.woverflow.wyvtils.core.WyvtilsCore.eventBus
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig
+import cc.woverflow.wyvtils.core.listener.events.HitboxRenderEvent
+import cc.woverflow.wyvtils.core.utils.ColorUtils.getAlpha
+import cc.woverflow.wyvtils.core.utils.ColorUtils.getBlue
+import cc.woverflow.wyvtils.core.utils.ColorUtils.getGreen
+import cc.woverflow.wyvtils.core.utils.ColorUtils.getRed
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args
 import java.awt.Color
@@ -56,20 +56,20 @@ fun invokeHitboxEvent(
 ) {
     hitboxRenderEvent = HitboxRenderEvent(
         when (entityIn) {
-            is PlayerEntity -> if (entityIn is ClientPlayerEntity && (entityIn as PlayerEntity).gameProfile.id === if (MinecraftClient.getInstance().player != null) MinecraftClient.getInstance().player!!.gameProfile.id else "null") net.wyvest.wyvtils.core.listener.events.Entity.SELF else net.wyvest.wyvtils.core.listener.events.Entity.PLAYER
-            is MobEntity -> if (entityIn is Monster) net.wyvest.wyvtils.core.listener.events.Entity.MONSTER else net.wyvest.wyvtils.core.listener.events.Entity.LIVING
-            is ArmorStandEntity -> net.wyvest.wyvtils.core.listener.events.Entity.ARMORSTAND
-            is FireballEntity -> net.wyvest.wyvtils.core.listener.events.Entity.FIREBALL
-            is MinecartEntity -> net.wyvest.wyvtils.core.listener.events.Entity.MINECART
-            is ItemEntity -> net.wyvest.wyvtils.core.listener.events.Entity.ITEM
-            is ItemFrameEntity -> net.wyvest.wyvtils.core.listener.events.Entity.ITEMFRAME
-            is FireworkRocketEntity -> net.wyvest.wyvtils.core.listener.events.Entity.FIREWORK
-            is ExperienceOrbEntity -> net.wyvest.wyvtils.core.listener.events.Entity.XP
+            is PlayerEntity -> if (entityIn is ClientPlayerEntity && (entityIn as PlayerEntity).gameProfile.id === if (MinecraftClient.getInstance().player != null) MinecraftClient.getInstance().player!!.gameProfile.id else "null") cc.woverflow.wyvtils.core.listener.events.Entity.SELF else cc.woverflow.wyvtils.core.listener.events.Entity.PLAYER
+            is MobEntity -> if (entityIn is Monster) cc.woverflow.wyvtils.core.listener.events.Entity.MONSTER else cc.woverflow.wyvtils.core.listener.events.Entity.LIVING
+            is ArmorStandEntity -> cc.woverflow.wyvtils.core.listener.events.Entity.ARMORSTAND
+            is FireballEntity -> cc.woverflow.wyvtils.core.listener.events.Entity.FIREBALL
+            is MinecartEntity -> cc.woverflow.wyvtils.core.listener.events.Entity.MINECART
+            is ItemEntity -> cc.woverflow.wyvtils.core.listener.events.Entity.ITEM
+            is ItemFrameEntity -> cc.woverflow.wyvtils.core.listener.events.Entity.ITEMFRAME
+            is FireworkRocketEntity -> cc.woverflow.wyvtils.core.listener.events.Entity.FIREWORK
+            is ExperienceOrbEntity -> cc.woverflow.wyvtils.core.listener.events.Entity.XP
             is TridentEntity, is ShulkerBulletEntity,
             is FishingBobberEntity, is LlamaSpitEntity,
             is ArrowEntity, is ThrownEntity,
-            is SpectralArrowEntity -> net.wyvest.wyvtils.core.listener.events.Entity.PROJECTILE
-            else -> net.wyvest.wyvtils.core.listener.events.Entity.UNDEFINED
+            is SpectralArrowEntity -> cc.woverflow.wyvtils.core.listener.events.Entity.PROJECTILE
+            else -> cc.woverflow.wyvtils.core.listener.events.Entity.UNDEFINED
         },
         (if (MinecraftClient.getInstance().targetedEntity != null && MinecraftClient.getInstance().targetedEntity === entityIn) 2 else Int.MAX_VALUE).toDouble(),
         Color.WHITE.rgb,

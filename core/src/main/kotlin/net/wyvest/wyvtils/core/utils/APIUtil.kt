@@ -16,11 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.core.utils
+package cc.woverflow.wyvtils.core.utils
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import net.wyvest.wyvtils.core.WyvtilsInfo
+import cc.woverflow.wyvtils.core.WyvtilsInfo
 import org.apache.http.HttpRequest
 import org.apache.http.HttpResponse
 import org.apache.http.HttpVersion

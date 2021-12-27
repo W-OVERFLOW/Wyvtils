@@ -16,11 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.eight.mixin;
+package cc.woverflow.wyvtils.eight.mixin;
 
 import net.minecraft.client.Minecraft;
-import net.wyvest.wyvtils.core.WyvtilsCore;
-import net.wyvest.wyvtils.core.listener.events.MouseScrollEvent;
+import cc.woverflow.wyvtils.core.WyvtilsCore;
+import cc.woverflow.wyvtils.core.listener.events.MouseScrollEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;

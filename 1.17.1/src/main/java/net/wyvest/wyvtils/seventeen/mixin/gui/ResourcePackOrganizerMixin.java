@@ -16,12 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.seventeen.mixin.gui;
+package cc.woverflow.wyvtils.seventeen.mixin.gui;
 
 import com.google.common.collect.Lists;
 import net.minecraft.client.gui.screen.pack.ResourcePackOrganizer;
 import net.minecraft.resource.ResourcePackProfile;
-import net.wyvest.wyvtils.core.config.WyvtilsConfig;
+import cc.woverflow.wyvtils.core.config.WyvtilsConfig;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

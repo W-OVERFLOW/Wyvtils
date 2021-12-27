@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.core.utils
+package cc.woverflow.wyvtils.core.utils
 
 /**
  * A set of enums that represent versions of Minecraft.

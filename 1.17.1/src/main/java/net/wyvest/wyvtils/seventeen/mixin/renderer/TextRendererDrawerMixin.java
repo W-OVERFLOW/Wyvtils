@@ -16,9 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package net.wyvest.wyvtils.seventeen.mixin.renderer;
+package cc.woverflow.wyvtils.seventeen.mixin.renderer;
 
-import net.wyvest.wyvtils.seventeen.Wyvtils;
+import cc.woverflow.wyvtils.seventeen.Wyvtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
