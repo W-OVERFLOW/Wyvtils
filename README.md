@@ -1,9 +1,11 @@
 # Wyvtils, the ultimate utility mod.
 
-<a href="https://github.com/Wyvest/Wyvtils/releases" target="_blank">
-<img alt="downloads" src="https://img.shields.io/github/downloads/Wyvest/Wyvtils/total?color=F5C400&style=for-the-badge" /> <img alt="downloads latest" src="https://img.shields.io/github/downloads-pre/Wyvest/Wyvtils/latest/total?color=F5C400&style=for-the-badge" />
+ 
+ 
+# Wyvtils is no longer supported and has been replaced with other mods. Click [here](https://woverflow.cc/wyvtils) to find alternatives.
 
-### [Discord invite (click to get support)](https://discord.gg/woverflow)
+  <a href="https://github.com/Wyvest/Wyvtils/releases" target="_blank">
+<img alt="downloads" src="https://img.shields.io/github/downloads/Wyvest/Wyvtils/total?color=F5C400&style=for-the-badge" /> <img alt="downloads latest" src="https://img.shields.io/github/downloads-pre/Wyvest/Wyvtils/latest/total?color=F5C400&style=for-the-badge" />
 
 
 ### Features
